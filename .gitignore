@@ -1,0 +1,7 @@
+library/raw/
+library/download.log
+output/
+__pycache__/
+*.pyc
+.env
+library/index.json
