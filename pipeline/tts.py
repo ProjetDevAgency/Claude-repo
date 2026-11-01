@@ -42,7 +42,6 @@ def synthesize_elevenlabs(script: str, out_path, voice_id=None, model="eleven_mu
     body = json.dumps({
         "text": prepare_text(script),
         "model_id": model,
-        "language_code": "fr",
         "voice_settings": {"stability": stability, "similarity_boost": similarity,
                            "style": style, "use_speaker_boost": True},
     }).encode()
