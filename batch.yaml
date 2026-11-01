@@ -1,0 +1,31 @@
+# Une ligne par vidéo à fabriquer :  python batch.py batch.yaml
+- script: scripts/genisses_marchand.txt
+  video: library/raw/7210002213681548590.mp4
+  title: "Il a payé 60 000 € pour 20 génisses déjà malades, mais j'avais la preuve ..."
+- script: scripts/vis_dix_centimes.txt
+  video: library/raw/7229523313947708714.mp4
+  title: "Cette vache allait partir à l'abattoir à cause d'un détail que personne n'avait vu ..."
+- script: scripts/gamine_tirelire.txt
+  video: library/raw/7234539422241393962.mp4
+  title: "Une fille de 14 ans m'a payé en pièces pour sauver sa vache ..."
+- script: scripts/salon_paris.txt
+  video: library/raw/7252517014823111979.mp4
+  title: "Elle devait monter au Salon de l'Agriculture dans 4 jours mais elle ne marchait plus ..."
+- script: scripts/mauvaise_vache.txt
+  video: library/raw/7263271760856927530.mp4
+  title: "J'ai paré la mauvaise vache et je ne lui ai jamais dit ..."
+- script: scripts/ancien_patron.txt
+  video: library/raw/7273636694493220142.mp4
+  title: "J'ai facturé le double à l'homme qui m'avait viré ..."
+- script: scripts/cameras_voisin.txt
+  video: library/raw/7285537643335617835.mp4
+  title: "Il accusait son voisin de blesser ses vaches mais la vraie raison était sous ses pieds ..."
+- script: scripts/salarie_prime.txt
+  video: library/raw/7302254518048165162.mp4
+  title: "Son salarié m'a payé de sa poche pour cacher ça à son patron ..."
+- script: scripts/mon_pere.txt
+  video: library/raw/7328918066178346282.mp4
+  title: "Mon père disait que mon métier n'en était pas un, ce matin il m'a appelé ..."
+- script: scripts/reveillon.txt
+  video: library/raw/7376393267212209454.mp4
+  title: "Il m'a appelé le soir de Noël pour une vache, mais ce n'était pas la vraie raison ..."
