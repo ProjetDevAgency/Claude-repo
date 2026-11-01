@@ -19,10 +19,10 @@ voice:
   mode: "tts"
   # "edge" = voix Microsoft gratuite, "elevenlabs" = ta voix ElevenLabs
   # (la clé se met dans la variable d'environnement ELEVENLABS_API_KEY, jamais ici)
-  provider: "edge"
+  provider: "elevenlabs"
   elevenlabs:
     voice_id: ""                # vide = lu dans ELEVENLABS_VOICE_ID
-    model: "eleven_multilingual_v2"
+    model: "eleven_v4"            # eleven_v4_turbo = plus rapide, eleven_multilingual_v2 = ancien
   tts_voice: "fr-FR-RemyMultilingualNeural"   # alternatives : fr-FR-HenriNeural, fr-FR-VivienneMultilingualNeural
   tts_rate: "+0%"
   # Suppression des silences
