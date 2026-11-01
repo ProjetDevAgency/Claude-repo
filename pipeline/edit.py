@@ -3,7 +3,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-from .common import ROOT, duration, run
+from .common import ROOT, duration, run, video_size
 
 
 def render_title(text, out_path, width, font_file, font_size):
@@ -35,6 +35,32 @@ def render_title(text, out_path, width, font_file, font_size):
     return out_path
 
 
+def detect_bars(video, start, length):
+    """Repère les bandes noires incrustées dans la source (cropdetect).
+
+    Si une partie de la vidéo a des bandes, on garde la zone utile la plus
+    petite : les passages plein écran sont simplement un peu plus zoomés.
+    """
+    import re
+    import subprocess
+    from collections import Counter
+    res = subprocess.run(["ffmpeg", "-v", "info", "-ss", f"{start:.2f}", "-t", f"{length:.2f}",
+                          "-i", str(video), "-vf", "fps=4,cropdetect=24:2:0", "-f", "null", "-"],
+                         capture_output=True, text=True)
+    crops = Counter(re.findall(r"crop=(\d+):(\d+):(\d+):(\d+)", res.stderr))
+    total = sum(crops.values())
+    if not total:
+        return None
+    frequent = [tuple(map(int, c)) for c, n in crops.items() if n >= 0.08 * total]
+    w = min(c[0] for c in frequent)
+    h = min(c[1] for c in frequent)
+    best = min(frequent, key=lambda c: c[0] * c[1])
+    W, H = video_size(video)
+    if w >= W - 8 and h >= H - 8:
+        return None
+    return f"crop={best[0]}:{best[1]}:{best[2]}:{best[3]}"
+
+
 def build(video, voice, ass, out, cfg, final_dur, title_png=None, music=None):
     e = cfg["edit"]
     W, H, fps = e["width"], e["height"], e["fps"]
@@ -53,7 +79,11 @@ def build(video, voice, ass, out, cfg, final_dur, title_png=None, music=None):
 
     c = e["color"]
     z = e.get("zoom", 1.0)
-    vf = [f"setpts={stretch:.5f}*(PTS-STARTPTS)" if stretch != 1 else "setpts=PTS-STARTPTS",
+    bars = detect_bars(video, start, min(avail, final_dur))
+    if bars:
+        print(f"   bandes noires retirées ({bars})")
+    vf = ([bars] if bars else []) + [
+          f"setpts={stretch:.5f}*(PTS-STARTPTS)" if stretch != 1 else "setpts=PTS-STARTPTS",
           f"scale={int(W * z)}:{int(H * z)}:force_original_aspect_ratio=increase:flags=lanczos",
           f"crop={W}:{H}"]
     if e.get("mirror", True):
