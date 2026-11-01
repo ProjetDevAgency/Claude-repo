@@ -17,6 +17,12 @@ script:
 voice:
   # "tts" = voix générée, "file" = ton propre fichier audio (--voice-file)
   mode: "tts"
+  # "edge" = voix Microsoft gratuite, "elevenlabs" = ta voix ElevenLabs
+  # (la clé se met dans la variable d'environnement ELEVENLABS_API_KEY, jamais ici)
+  provider: "edge"
+  elevenlabs:
+    voice_id: ""                # vide = lu dans ELEVENLABS_VOICE_ID
+    model: "eleven_multilingual_v2"
   tts_voice: "fr-FR-RemyMultilingualNeural"   # alternatives : fr-FR-HenriNeural, fr-FR-VivienneMultilingualNeural
   tts_rate: "+0%"
   # Suppression des silences

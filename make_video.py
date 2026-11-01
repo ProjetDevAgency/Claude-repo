@@ -55,6 +55,7 @@ def main():
     ap.add_argument("--video", help="vidéo source")
     ap.add_argument("--random-video", action="store_true")
     ap.add_argument("--voice-file", help="ta propre voix (wav/mp3) à la place de la voix IA")
+    ap.add_argument("--elevenlabs", action="store_true", help="forcer la voix ElevenLabs")
     ap.add_argument("--title", help="texte du bandeau du haut (par défaut : début du hook)")
     ap.add_argument("--no-title", action="store_true")
     ap.add_argument("--skip-start", type=float, help="secondes à sauter au début de la source")
@@ -91,6 +92,12 @@ def main():
     if args.voice_file:
         raw_voice = Path(args.voice_file)
         print(f"▶ voix : fichier {raw_voice}")
+    elif cfg["voice"].get("provider") == "elevenlabs" or args.elevenlabs:
+        print("▶ voix IA : ElevenLabs")
+        el = cfg["voice"].get("elevenlabs", {})
+        raw_voice = tts.synthesize_elevenlabs(script, work / "voice_raw.mp3",
+                                              el.get("voice_id") or None,
+                                              el.get("model", "eleven_multilingual_v2"))
     else:
         print(f"▶ voix IA : {cfg['voice']['tts_voice']}")
         raw_voice = tts.synthesize(script, work / "voice_raw.mp3",
