@@ -1,0 +1,30 @@
+- script: scripts/footballeur_grandmere.txt
+  video: library/raw/7216338168126180651.mp4
+  title: "Un joueur de l'équipe de France m'a payé pour soigner les vaches de sa grand-mère ..."
+- script: scripts/beau_frere.txt
+  video: library/raw/7255822452075351338.mp4
+  title: "Il a facturé 4 000 € à une veuve pour des vaches qu'il n'avait jamais touchées ..."
+- script: scripts/pari_cinquante.txt
+  video: library/raw/7274027250033593642.mp4
+  title: "Il était sûr que sa vache faisait semblant de boiter ..."
+- script: scripts/vente_ferme.txt
+  video: library/raw/7292219084916165931.mp4
+  title: "Une seule vache qui boite pouvait lui faire perdre 30 000 € ..."
+- script: scripts/mon_ex.txt
+  video: library/raw/7347816196995140907.mp4
+  title: "Mon ex m'a appelé pour soigner la vache de son nouveau mec ..."
+- script: scripts/week_end_chasse.txt
+  video: library/raw/7387155683789049119.mp4
+  title: "Sa femme m'a payé pour mentir à son mari, mais je n'ai pas eu besoin ..."
+- script: scripts/canicule.txt
+  video: library/raw/7415357484900109598.mp4
+  title: "40 vaches se sont mises à boiter en même temps et il accusait le mauvais coupable ..."
+- script: scripts/enveloppe_pareur.txt
+  video: library/raw/7441347120981888287.mp4
+  title: "Ses vaches n'avaient pas été parées depuis 4 ans, son fils a compris pourquoi à l'enterrement ..."
+- script: scripts/grand_patron.txt
+  video: library/raw/7496928085892287775.mp4
+  title: "Un ancien grand patron m'a fait signer un contrat avant de toucher à ses vaches ..."
+- script: scripts/derniere_rosette.txt
+  video: library/raw/7569056131138538783.mp4
+  title: "J'ai reconnu la vache de mon grand-père chez un inconnu ..."

@@ -134,7 +134,8 @@ def build(video, voice, ass, out, cfg, final_dur, title_png=None, music=None):
 
     cmd = ["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", graph,
            "-map", f"[{vlabel}]", "-map", "[aout]", "-t", f"{final_dur:.3f}",
-           "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
+           "-c:v", "libx264", "-preset", "medium", "-crf", "21", "-maxrate", "2M", "-bufsize", "4M",
+           "-pix_fmt", "yuv420p",
            "-profile:v", "high", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart",
            str(out)]
     run(cmd)
