@@ -98,6 +98,8 @@ def check(script: str, duration_target=60, real_voice=False):
     if negs:
         issues.append(f"négation avec « ne » : {negs[:3]} (une seule tolérée pour caractériser)")
     sentences = [s for s in re.split(r"(?<=[.?!])\s+", text) if s]
+    if sentences and len(sentences[0].split()) > 18:
+        issues.append(f"hook trop long : {len(sentences[0].split())} mots (18 maximum)")
     long_ones = [s for s in sentences if len(s.split()) > 25]
     if len(long_ones) > 1:
         issues.append(f"{len(long_ones)} phrases de plus de 25 mots (1 maximum)")
