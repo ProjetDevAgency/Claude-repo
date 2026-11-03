@@ -147,7 +147,8 @@ def _ask(system_text, user_content, model, max_tokens=16000):
 
 def write_script(hook, sujet, video=None, description=None, cfg=None):
     cfg = cfg or load_config()["script"]
-    system = (PROMPTS / "moteur_script.txt").read_text(encoding="utf-8") + APP_MODE
+    system = ((PROMPTS / "moteur_script.txt").read_text(encoding="utf-8") + APP_MODE
+              + "\n\n" + (PROMPTS / "consignes_compte.md").read_text(encoding="utf-8"))
     lines = [f"[HOOK] {hook}" if hook else "[HOOK] aucun, choisis le meilleur gabarit de l'annexe A",
              f"[SUJET] {sujet}",
              f"[NICHE] {cfg['niche']}",
@@ -179,7 +180,8 @@ def write_script(hook, sujet, video=None, description=None, cfg=None):
 
 def subjects(niche_description, cfg=None):
     cfg = cfg or load_config()["script"]
-    system = (PROMPTS / "machine_a_sujets.txt").read_text(encoding="utf-8")
+    system = ((PROMPTS / "machine_a_sujets.txt").read_text(encoding="utf-8") + "\n\n"
+              + (PROMPTS / "consignes_compte.md").read_text(encoding="utf-8"))
     return _ask(system, [{"type": "text", "text": niche_description}], cfg["model"])
 
 
