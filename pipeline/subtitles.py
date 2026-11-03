@@ -109,7 +109,8 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         end = words[i + 1]["start"] if i + 1 < len(words) else min(end_time, w["end"] + 0.4)
         if end - start < 0.05:
             end = start + 0.05
-        txt = w["text"].upper() if cfg.get("uppercase", True) else w["text"]
+        txt = re.sub(r"\b([Pp])lu\b", r"\1lus", w["text"])  # « plu » écrit pour la voix IA, « plus » à l'écran
+        txt = txt.upper() if cfg.get("uppercase", True) else txt
         txt = txt.replace("{", "(").replace("}", ")")
         color = ""
         if _norm(w["text"]) in _NUMBER_WORDS or re.search(r"\d", w["text"]):
