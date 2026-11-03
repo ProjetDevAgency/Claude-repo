@@ -1,0 +1,22 @@
+# Série 4 : patrons, État, ami, voisin, arnaque
+- script: scripts/ancien_patron.txt
+  video: library/raw/7273636694493220142.mp4
+  title: "Mon patron m'a viré la veille de Noël, 6 ans après il m'a appelé ..."
+- script: scripts/salarie_prime.txt
+  video: library/raw/7302254518048165162.mp4
+  title: "Il a vidé son compte pour que son patron ne le vire pas ..."
+- script: scripts/amende_etat.txt
+  video: library/raw/7367835991366798635.mp4
+  title: "4 000 € d'amende à un homme de 79 ans pour une seule vache ..."
+- script: scripts/video_virale.txt
+  video: library/raw/7215014288803532074.mp4
+  title: "Une passante a filmé sa vache, 2 jours après les gendarmes étaient chez lui ..."
+- script: scripts/meilleur_ami.txt
+  video: library/raw/7533421971925716279.mp4
+  title: "Mon meilleur ami m'a volé mon plus gros client ..."
+- script: scripts/marchand_retraitee.txt
+  video: library/raw/7411650919839943966.mp4
+  title: "Le marchand a arnaqué une retraitée avec une vache malade ..."
+- script: scripts/voisin_ferraille.txt
+  video: library/raw/7485159093318061343.mp4
+  title: "Son voisin blessait ses vaches pour récupérer ses terres ..."
