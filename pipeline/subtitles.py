@@ -35,7 +35,15 @@ def transcribe_words(audio_path, model_size="small"):
     for s in segs:
         for w in s.words or []:
             words.append({"text": w.word.strip(), "start": w.start, "end": w.end})
-    return words
+    # Whisper colle parfois plusieurs mots sur le même instant (timing faux) :
+    # on les retire, l'alignement les répartira entre leurs voisins fiables.
+    clean = []
+    for k, w in enumerate(words):
+        same_prev = k > 0 and abs(words[k - 1]["start"] - w["start"]) < 0.01
+        same_next = k + 1 < len(words) and abs(words[k + 1]["start"] - w["start"]) < 0.01
+        if not (same_prev or same_next):
+            clean.append(w)
+    return clean
 
 
 def align(script_text, whisper_words):
@@ -54,6 +62,9 @@ def align(script_text, whisper_words):
         elif tag == "replace" and j2 > j1:
             # répartit la plage Whisper sur les mots du script
             t0, t1 = whisper_words[j1]["start"], whisper_words[j2 - 1]["end"]
+            # Whisper a sauté des mots : on étale sur tout le trou depuis le mot précédent
+            if j1 > 0 and (i2 - i1) > 1.5 * (j2 - j1):
+                t0 = min(t0, whisper_words[j1 - 1]["end"])
             n = i2 - i1
             for k in range(n):
                 times[i1 + k] = (t0 + (t1 - t0) * k / n, t0 + (t1 - t0) * (k + 1) / n)
