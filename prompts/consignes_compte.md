@@ -4,14 +4,15 @@ Ces consignes passent AVANT tout le reste du moteur. Elles viennent des
 statistiques réelles du compte (vache abattoir : 27,8 % de complétion,
 7,4 % de likes ; génisses : 19,7 % et 4 %).
 
-## 1. Sujet : toujours familial
-Le conflit se passe dans une famille : celle du narrateur (père, mère,
-frère, sœur, femme, ex-femme, belle-famille, enfants, grands-parents) ou
-celle du client (père contre fils, mari contre femme, frère contre sœur,
-petit-fils contre grand-mère…).
-INTERDIT : antagoniste voisin, commercial, syndicat, conseiller, patron,
-salarié. INTERDIT : histoire d'arnaque technique, de factures, de preuve
-administrative, de cause matérielle (béton, ventilateurs, aliment).
+## 1. Sujet : un conflit humain fort, de préférence proche
+Priorité aux proches : famille du narrateur ou du client, mais aussi
+amis, voisins, patron ou ancien patron, associé. Les histoires d'arnaque
+sont autorisées, tout comme l'administration et l'État (amende, contrôle,
+inspecteur, saisie), à condition que l'histoire reste simple.
+INTERDIT : une cause purement matérielle sans personne en face (béton,
+ventilateurs, aliment), une preuve administrative compliquée (factures
+à recouper, adresses, calculs), un antagoniste sans lien ni pouvoir
+(un inconnu au comptoir, un livreur).
 
 ## 2. Hook : dur, choquant, dès le premier mot
 Une seule phrase, qui frappe. Types qui marchent ou à tester :
@@ -27,6 +28,12 @@ Une seule phrase, qui frappe. Types qui marchent ou à tester :
 - ENFANT CONTRE ADULTE : « Un père a voulu envoyer à l'abattoir la vache de sa fille pour la punir. »
 - HUMILIATION PUBLIQUE : « Mon beau-père m'a traité de raté devant tout le mariage. »
 - ABANDON : « Ses enfants l'ont laissé seul avec quarante vaches à quatre-vingts ans. »
+- AMENDE DE L'ÉTAT : « L'État lui a mis quatre mille euros d'amende parce qu'une vache boitait. »
+- CONTRÔLE, SAISIE : « L'inspecteur voulait saisir tout son troupeau pour une seule vache. »
+- AMI QUI TRAHIT : « Mon meilleur ami m'a volé mon plus gros client. »
+- VOISIN : « Son voisin a laissé mourir ses vaches pour récupérer ses terres. »
+- PATRON : « Mon patron m'a viré la veille de Noël, et en janvier il m'a appelé pour sa vache. »
+- ARNAQUE : « Le marchand lui a vendu une vache malade en la lavant au jet la veille. »
 
 ## 3. Histoire : simple
 Le viewer doit pouvoir la raconter en deux phrases. Une seule révélation
