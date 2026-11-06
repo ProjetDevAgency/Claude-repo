@@ -1,0 +1,18 @@
+# Mode respiration (rythme « Nate ») : chaque segment démarre à `t` secondes.
+# Entre les segments, la voix se tait et on entend le bruit de travail de la vidéo.
+video: library/raw/7393446236759674142.mp4
+title: "J'ai découvert que ma femme me trompait en soignant la vache de son amant ..."
+duration: 62.0
+segments:
+  - t: 0.0
+    text: "J'ai découvert que ma femme me trompait en parant les vaches de son amant."
+  - t: 4.2
+    text: "Quinze ans de mariage. Le jeudi soir, elle part au yoga. Ce jeudi-là, on m'appelle en urgence dans une ferme à vingt minutes. Sur la porte de la laiterie, l'écharpe que je lui ai offerte à Noël."
+  - t: 17.0   # le couteau gratte la sole (16 → 26 s)
+    text: "Je gratte la corne, une fine couche à la fois."
+  - t: 26.0   # gros plan sur les points rouges (26 → 34 s)
+    text: "Là, des petits points rouges. Un bleu sous la corne. L'éleveur me voit fixer l'écharpe et il me fait, c'est à ma copine, elle est à l'étage. Et il ajoute, fais vite, on a un resto ce soir. Je dis rien. On a un resto ce soir."
+  - t: 42.5   # on retire la corne autour (40 → 56 s)
+    text: "Un bleu, je creuse pas. Je soulage autour, pour que le poids parte ailleurs."
+  - t: 50.5
+    text: "Je fais la facture dans le camion. À son nom à elle, avec notre adresse. Je la glisse sous l'essuie-glace de sa voiture. Quatre-vingts euros. Elle est rentrée de son yoga à minuit, la facture à la main."

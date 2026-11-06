@@ -96,7 +96,7 @@ def _ts(t):
 _NUMBER_WORDS = {"euros", "euro", "cent", "cents", "mille", "million", "millions"}
 
 
-def write_ass(words, out_path, cfg, width, height, end_time):
+def write_ass(words, out_path, cfg, width, height, end_time, hold_max=None):
     size = cfg["size"]
     y = int(height * cfg["position_y"])
     header = f"""[Script Info]
@@ -118,6 +118,8 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         start = w["start"]
         # le mot reste affiché jusqu'au suivant (pas de trou à l'écran)
         end = words[i + 1]["start"] if i + 1 < len(words) else min(end_time, w["end"] + 0.4)
+        if hold_max is not None:  # mode respiration : l'écran se vide pendant les pauses
+            end = min(end, w["end"] + hold_max)
         if end - start < 0.05:
             end = start + 0.05
         txt = re.sub(r"\b([Pp])lu\b", r"\1lus", w["text"])  # « plu » écrit pour la voix IA, « plus » à l'écran
