@@ -55,6 +55,19 @@ complétion, vache abattoir (fils qui paie pour mentir à son père) 27 %,
 - Première image : de l'action (sang, sale, geste en cours), jamais un plan
   calme et propre.
 
+## 2 ter. La référence : le début d'un drama coréen
+Les 5 premières secondes = la première scène d'un drama coréen.
+Une injustice, un méchant, un enjeu. Jamais un deuil tranquille, toujours
+ce que le drame provoque (trahison, héritage volé, humiliation, argent).
+- Injustice dès la première scène → le hook.
+- Un méchant clair, qu'on déteste tout de suite → la réplique choc.
+- Le héros encaisse en silence → « Je dis rien. Je monte la vache. »
+- Une relance avant chaque coupure → « Et pourtant », « Mais alors pourquoi ? »
+  juste avant chaque pause du mode respiration.
+- Le retournement et la revanche à la fin → la vache marche, le méchant se tait,
+  le chiffre revient en chute.
+- L'émotion en récompense, jamais en ouverture.
+
 ## 3. Histoire : simple
 Le viewer doit pouvoir la raconter en deux phrases. Une seule révélation
 à la fin, émotionnelle, compréhensible sans explication. Pas de
