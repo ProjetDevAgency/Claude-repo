@@ -147,9 +147,11 @@ def _ask(system_text, user_content, model, max_tokens=16000):
     return "".join(b.text for b in msg.content if b.type == "text").strip()
 
 
-def write_script(hook, sujet, video=None, description=None, cfg=None):
+def write_script(hook, sujet, video=None, description=None, cfg=None, moteur=None):
     cfg = cfg or load_config()["script"]
-    system = ((PROMPTS / "moteur_script.txt").read_text(encoding="utf-8") + APP_MODE
+    moteur = moteur or cfg.get("moteur", "h1")
+    base = "moteur_doc.md" if moteur == "doc" else "moteur_script.txt"
+    system = ((PROMPTS / base).read_text(encoding="utf-8") + APP_MODE
               + "\n\n" + (PROMPTS / "consignes_compte.md").read_text(encoding="utf-8"))
     lines = [f"[HOOK] {hook}" if hook else "[HOOK] aucun, choisis le meilleur gabarit de l'annexe A",
              f"[SUJET] {sujet}",

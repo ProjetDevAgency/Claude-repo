@@ -10,6 +10,7 @@ script:
   # Génération auto via l'API Claude (nécessite ANTHROPIC_API_KEY).
   # Sinon, écris/colle ton script dans scripts/<nom>.txt
   model: "claude-opus-5-5"
+  moteur: "doc"                 # "doc" = narration animalière, "h1" = histoires du pareur
   niche: "maréchal-ferrant, parage et soin des sabots de chevaux"
   audience: "public mixte, 25 à 44 ans"
   voice_type: "Une voix IA d'homme"
