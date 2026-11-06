@@ -1,0 +1,17 @@
+# Mode respiration — même vidéo que le pilote (points rouges = bleu sous la corne)
+video: library/raw/7393446236759674142.mp4
+title: "Ma mère est morte en me faisant promettre de garder sa dernière vache ..."
+duration: 62.0
+segments:
+  - t: 0.0
+    text: "Ma mère est morte en me faisant promettre une seule chose. Garder sa dernière vache."
+  - t: 4.8
+    text: "Trois mois après, la vache boite. Mon frère veut la vendre au marchand. Il me fait, elle vaut plu rien, comme la ferme. Et il ajoute, maman est plu là pour la défendre."
+  - t: 17.0   # le couteau gratte la sole (16 → 26 s)
+    text: "Je gratte la sole, une fine couche à la fois."
+  - t: 26.0   # gros plan sur les points rouges (26 → 34 s)
+    text: "Et là, des points rouges. Du sang sous la corne. Elle est pas malade, elle a un bleu. Mais alors pourquoi ? Depuis l'enterrement, elle reste debout devant la barrière, toute la journée, sur le béton. Elle attend ma mère."
+  - t: 42.5   # on soulage autour (40 → 56 s)
+    text: "Un bleu, je creuse pas. Je soulage autour, pour que le poids parte ailleurs."
+  - t: 50.5
+    text: "Le soir, je pose un tapis de caoutchouc devant la barrière. Mon frère dit rien. Il reste à côté d'elle, longtemps. Elle attend toujours. Mais elle a plu mal."
