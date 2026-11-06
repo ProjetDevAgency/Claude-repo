@@ -68,6 +68,24 @@ ce que le drame provoque (trahison, héritage volé, humiliation, argent).
   le chiffre revient en chute.
 - L'émotion en récompense, jamais en ouverture.
 
+## 2 quater. La voix décrit ce qu'on voit (prioritaire sur le moteur)
+TikTok a signalé deux vidéos pour « sons / sous-titres non pertinents ».
+Cette règle REMPLACE l'interdit du moteur « ne jamais décrire un geste que
+l'image montre déjà ».
+- Format : 62 secondes, voix continue, 1 400 à 1 500 caractères.
+- 4 à 5 phrases techniques par script, chacune dite AU MOMENT où le geste
+  est à l'image (vérifier avec `python -m pipeline.trame <vidéo>` : la
+  voix lit ~23 caractères par seconde, une phrase placée au caractère N
+  tombe vers N / 23 secondes).
+- Ces phrases nomment exactement ce qu'on voit : la partie du pied
+  (onglon, sole, talon, ergot), l'outil (couteau, meuleuse, pince, colle,
+  talonnette, spray), le geste (dégager, meuler, rincer, ouvrir, coller).
+  Jamais une partie ou un objet qui n'est pas à l'image.
+- Au moins une phrase technique dans les 5 premières secondes, dans ou
+  juste après le hook, pour poser l'image tout de suite.
+- La légende TikTok contient aussi une ligne qui décrit le soin
+  (« Parage : ergot infecté nettoyé à la meuleuse et au couteau »).
+
 ## 3. Histoire : simple
 Le viewer doit pouvoir la raconter en deux phrases. Une seule révélation
 à la fin, émotionnelle, compréhensible sans explication. Pas de
