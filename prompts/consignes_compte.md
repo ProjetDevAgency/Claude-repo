@@ -35,6 +35,26 @@ Une seule phrase, qui frappe. Types qui marchent ou à tester :
 - PATRON : « Mon patron m'a viré la veille de Noël, et en janvier il m'a appelé pour sa vache. »
 - ARNAQUE : « Le marchand lui a vendu une vache malade en la lavant au jet la veille. »
 
+
+## 2 bis. Conflit obligatoire dans le hook, zone grise si possible
+Données du compte : client mort (mort + argent + injustice) 28 % de
+complétion, vache abattoir (fils qui paie pour mentir à son père) 27 %,
+« La promesse » (émotion triste sans méchant) 4,7 % et 7 s de temps moyen.
+- Le hook contient TOUJOURS un conflit : quelqu'un fait quelque chose
+  d'injuste, de choquant ou d'interdit. Pas de méchant ou pas d'acte
+  choquant dans la première phrase = hook refusé.
+- L'émotion seule (deuil, tristesse, nostalgie) ne sert jamais de hook.
+  Elle vient à la fin, comme récompense, une fois le conflit installé.
+- Formule : une personne précise + un acte choquant ou injuste + un enjeu
+  (argent, mort, animal).
+- Bonus fortement conseillé : une ZONE GRISE où le viewer prend parti
+  (le pro qui ment, triche, se venge, facture le double, désobéit au
+  client). Une question que le viewer tranche dans sa tête fait commenter.
+- Clivant sur la morale, jamais sur la politique, la religion ou un groupe
+  de personnes.
+- Première image : de l'action (sang, sale, geste en cours), jamais un plan
+  calme et propre.
+
 ## 3. Histoire : simple
 Le viewer doit pouvoir la raconter en deux phrases. Une seule révélation
 à la fin, émotionnelle, compréhensible sans explication. Pas de

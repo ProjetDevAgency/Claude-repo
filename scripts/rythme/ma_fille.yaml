@@ -1,13 +1,17 @@
-# BROUILLON en attente de validation — écrit dans la trame output/trames/7621673039805123870.md
+# BROUILLON en attente de validation — trame output/trames/7621673039805123870.md (--start 8)
+# Hook : conflit + zone grise (le pareur désobéit au propriétaire). Ouverture sur le couteau en action.
 video: library/raw/7621673039805123870.mp4
-title: "Ma fille de 8 ans a sauvé une vache condamnée par 3 adultes ..."
+skip_start: 8.0
+title: "J'ai soigné sa vache en cachette, elle partait à l'abattoir le lendemain ..."
 duration: 62.0
 segments:
-  - t: 0.2    # PAROLE 0.2 → 7.9 (~119 car.) — gros plan sur les points
-    text: "Ma fille de huit ans a sauvé une vache que trois adultes avaient condamnée. Elle partait à l'abattoir vendredi."
-  - t: 14.5   # PAROLE 14.5 → 22.2 (~119 car.) — le couteau travaille près des points
-    text: "C'est elle qui me tire la manche. Des petits points, serrés sur la sole. Le vieux rigole et il me fait, c'est rien, ça."
-  - t: 26.6   # PAROLE 26.6 → 36.8 (~158 car.) — on retire la corne autour des points
-    text: "Sauf que des points serrés comme ça, dessous, ça souffre depuis longtemps. J'enlève de la corne pour retirer du poids, et je cherche une poche."
-  - t: 43.8   # PAROLE 43.8 → 62 (~282 car.) — l'encoche vers l'extérieur
-    text: "Pas de poche. Une semaine de plus, et elle était là. Je descends sans aller trop profond, et je taille une petite sortie vers l'extérieur, pour que la saleté s'en aille. L'éleveur regarde ma fille, longtemps. Il annule le camion. Elle a eu dix euros. Ils sont scotchés dans mon camion."
+  - t: 0.0    # couteau en action dès la première image
+    text: "J'ai soigné une vache en cachette, contre l'avis de son propriétaire. Elle partait à l'abattoir le lendemain."
+  - t: 7.6    # PAROLE 6.5 → 14.2
+    text: "Ma fille de huit ans avait vu les points. Le vieux m'a fait, touche pas, elle part demain. Puis il est allé chercher le café."
+  - t: 18.6   # PAROLE 18.6 → 28.8
+    text: "Dix minutes. Des points serrés comme ça, dessous, ça souffre depuis longtemps. J'enlève de la corne pour retirer du poids, et je cherche une poche."
+  - t: 35.8   # PAROLE 35.8 → 53 — l'encoche vers l'extérieur
+    text: "Pas de poche. Je descends sans aller trop profond, et je taille une petite sortie vers l'extérieur, pour que la saleté s'en aille. Le lendemain, la vache marche droit devant le chauffeur du camion."
+  - t: 53.0
+    text: "Le vieux a annulé. Il m'a plu jamais rappelé. Ma fille, elle, a eu dix euros."
