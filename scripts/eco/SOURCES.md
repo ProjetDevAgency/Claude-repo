@@ -29,3 +29,11 @@
 - franceinfo, 03/11/2026 : baromètre du Médiateur de l'énergie (2 000 personnes ; 34 % en difficulté ; 55 % des moins de 35 ans ;
   77 % des commerçants ; près de 3 ménages sur 4 ont baissé le chauffage ; la moitié a eu froid au moins 24 h ;
   18 % en 2020 ; 12 millions de foyers en précarité énergétique ; hausses « au moins jusqu'au début de l'année prochaine »)
+
+## huile.txt (pour le lundi 9 novembre 2026)
+- L'Indépendant, 07/11/2026 : résolution du 6 novembre ; moulins obligés de retirer 12 % de leur production (~188 000 t) jusqu'au
+  30 septembre 2027 ; récolte ~1,6 Mt (+23 %), 4e de l'histoire ; stocks initiaux ~357 000 t ; ~3 €/kg extra vierge début novembre
+  contre ~4 € un an plus tôt ; première application du mécanisme, sans compensation pour les moulins ; Espagne 1er producteur mondial
+- Presse-citron, 06/11/2026 : entrée en vigueur le vendredi 6 novembre ; syndicats et coopératives favorables, industriels, négociants
+  et exportateurs inquiets pour leur compétitivité ; hausse possible des prix en rayon
+- Google Trends France, 7 novembre : « huile olive espagne » 2 000+ recherches
