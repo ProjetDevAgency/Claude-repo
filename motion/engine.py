@@ -120,6 +120,7 @@ class Video:
         self.work = ROOT / "output" / f"_work_{name}"
         self.work.mkdir(parents=True, exist_ok=True)
         self.scenes = []
+        self.hook_head_start = 3.0  # secondes « d'avance » de la 1re scène à l'image 0
 
     def voice(self, voice_file=None):
         cfg = load_config()
@@ -187,8 +188,20 @@ class Video:
                 t0, fn = cur[-1]
                 nxt = [s0 for s0, _ in self.scenes if s0 > t0]
                 end = nxt[0] if nxt else self.dur
-                fn(d, img, t - t0, end - t0)
+                lt = t - t0
+                # 1re scène : déjà construite dès la 1re image (pas d'écran vide = pas de swipe)
+                if t0 == self.scenes[0][0]:
+                    lt += self.hook_head_start
+                fn(d, img, lt, end - t0)
+            elif self.scenes:
+                self.scenes[0][1](d, img, self.hook_head_start, 1.0)
             header(d, self.date_label, self.topic)
+            # coup de zoom sur la 1re seconde : mouvement immédiat dans le feed
+            if t < 0.9:
+                z = 1 + 0.10 * (1 - ease(t / 0.9))
+                w2, h2 = int(W * z), int(H * z)
+                big = img.resize((w2, h2))
+                img = big.crop(((w2 - W) // 2, (h2 - H) // 2, (w2 - W) // 2 + W, (h2 - H) // 2 + H))
             ff.stdin.write(img.tobytes())
         ff.stdin.close()
         ff.wait()
