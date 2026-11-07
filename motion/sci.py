@@ -112,13 +112,13 @@ def s_transmettre(d, img, lt, dur):
 
 def s_prix(d, img, lt, dur):
     pop_text(d, (540, CY - 360), "LE PRIX À PAYER", 64, RED, lt)
-    for j, (s, d0) in enumerate([("STATUTS À RÉDIGER", 0.3), ("ASSEMBLÉE GÉNÉRALE CHAQUE ANNÉE", 1.0),
+    for j, (s, d0) in enumerate([("STATUTS À RÉDIGER", 0.3), ("ASSEMBLÉE GÉNÉRALE ANNUELLE", 1.0),
                                   ("COMPTES À TENIR", 1.9)]):
         if lt > d0:
             y = CY - 180 + j * 160
             d.rounded_rectangle([110, y - 55, 970, y + 55], radius=26, fill=PANEL)
             d.ellipse([140, y - 22, 184, y + 22], fill=RED)
-            text(d, (220, y), s, 40, WHITE, anchor="lm")
+            text(d, (220, y), s, 36, WHITE, anchor="lm")
 
 
 def s_papier(d, img, lt, dur):
