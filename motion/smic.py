@@ -154,7 +154,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--voice-file")
     a = ap.parse_args()
-    v = Video("eco_smic", "scripts/eco/smic.txt", "DIM. 8 NOV. 2026", "SMIC")
+    v = Video("eco_smic", "scripts/eco/smic.txt", "SAM. 7 NOV. 2026", "SMIC")
     v.voice(a.voice_file)
     v.scene("Depuis deux mille douze", s_2012)
     v.scene("Aujourd'hui, le SMIC", s_paie)
