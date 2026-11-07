@@ -134,7 +134,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--voice-file")
     a = ap.parse_args()
-    v = Video("eco_shein", "scripts/eco/shein.txt", "LUN. 9 NOV. 2026", "COLIS")
+    v = Video("eco_shein", "scripts/eco/shein.txt", "JEU. 12 NOV. 2026", "COLIS")
     v.voice(a.voice_file)
     v.scene("L'Europe a taxé", s_hook)
     v.scene("Depuis le premier juillet", s_taxes)
