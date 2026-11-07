@@ -27,3 +27,12 @@ Deux rubriques, même style visuel (motion design 2D noir / rouge / jaune), mêm
 
 ## Rythme conseillé
 5 actus + 2 éducation par semaine (éducation le mercredi et le dimanche), à ajuster selon les stats.
+
+## Fin de script (règle 0.4 du moteur, validée le 7 novembre 2026)
+- Par défaut : AUCUNE question au viewer. Le script finit sur une chute (chiffre ou fait), dernier mot = fin du récit.
+- Question finale d'arbitrage autorisée UNIQUEMENT si toute la vidéo repose sur un prix ou un jugement
+  à rendre (actu avec enjeu : « juste ou pas ? »). Elle remplace la chute, jamais deux questions.
+- Éducation financière : chute sans question. La mention « Ceci n'est pas un conseil en investissement »
+  est affichée à l'écran et mise en légende, PAS dite par la voix (ce n'est pas un CTA).
+- Hook mythe (Machine à sujets n°1) : poser la croyance, puis « Et pourtant » / « C'est faux » en couche 2.
+  Chaîne : Et pourtant, Mais alors (2 max), Sauf que, Sur le papier, Ce que peu de gens savent (1 max).
