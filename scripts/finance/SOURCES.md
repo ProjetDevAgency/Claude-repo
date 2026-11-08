@@ -44,3 +44,11 @@ Cas TYPES présentés comme tels (« Prenons… »), aucun particulier réel. «
 - C. civ. art. 768 : accepter purement et simplement, renoncer, ou accepter à concurrence de l'actif net ✅
 - C. civ. art. 771 : aucune contrainte à opter avant 4 mois ✅ ; art. 780 : option prescrite par 10 ans, réputé renonçant ✅
 - Nuance non dite : art. 786, décharge possible d'une dette qu'on avait des motifs légitimes d'ignorer 🔎
+
+### Réécriture selon le moteur H1 (8 novembre 2026) — épisodes 2 à 6
+Personnages fictifs nommés (cas types), structure moteur : hook 3 couches, montée, coup 1 / coup 2, silence + écho,
+bloc technique (la règle de droit), demi-raison, twist qui ferme le verrou, chute en 2 phrases courtes.
+Versions précédentes conservées dans scripts/finance/v1/.
+- famille_6 : C. civ. art. 786 al. 2 vérifié : l'héritier acceptant purement et simplement peut demander à être
+  déchargé d'une dette qu'il avait des motifs légitimes d'ignorer, si son paiement obère gravement son patrimoine
+  personnel ; action dans les cinq mois de la connaissance de la dette ✅
