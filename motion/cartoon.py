@@ -7,11 +7,20 @@ et on pose ensuite les éléments graphiques (chiffres, étiquettes, cartes) à 
 import math
 import subprocess
 
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 from engine import FPS, H, W, F, ROOT, Video, load_config, subtitles
 
 SS = 2
+_fa = {}
+
+
+def FA(size):
+    """Police étroite et épaisse (Anton) pour les gros textes."""
+    if size not in _fa:
+        _fa[size] = ImageFont.truetype(str(ROOT / "assets/fonts/Anton-Regular.ttf"), size)
+    return _fa[size]
+
 WALL = (44, 52, 104)
 WALL2 = (38, 45, 92)
 FLOOR = (92, 58, 40)
@@ -78,7 +87,8 @@ def room(kind="appart"):
 # ───────────── personnages ─────────────
 
 def character(d, cx, base, sc=1.0, shirt=TEAL, pants=(40, 60, 120), hair=(60, 36, 26), long_hair=False,
-              tie=False, glasses=False, mouth="smile", arm=0.0, phone=False, clipboard=False, brows=None):
+              tie=False, glasses=False, mouth="smile", arm=0.0, phone=False, clipboard=False, brows=None,
+              hold=None, arms_up=False):
     """Personnage en aplat, pieds en (cx, base) en coordonnées finales. arm : bras droit levé (0 à 1)."""
     s = SS * sc
 
@@ -113,11 +123,24 @@ def character(d, cx, base, sc=1.0, shirt=TEAL, pants=(40, 60, 120), hair=(60, 36
     else:
         d.rounded_rectangle([X(-130), Y(-540), X(-82), Y(-300)], radius=int(24 * s), fill=shirt)
         d.ellipse([X(-134), Y(-320), X(-80), Y(-266)], fill=SKIN)
-    a = math.radians(10 + 120 * arm)
-    ex, ey = X(106), Y(-520)
-    hx, hy = ex + math.sin(a) * 230 * s, ey + math.cos(a) * 230 * s
-    d.line([ex, ey, hx, hy], fill=shirt, width=int(50 * s))
-    d.ellipse([hx - 27 * s, hy - 27 * s, hx + 27 * s, hy + 27 * s], fill=SKIN)
+    if arms_up:  # les deux bras levés (choc ou joie)
+        for sx in (-1, 1):
+            ex, ey = X(sx * 100), Y(-520)
+            hx, hy = X(sx * 150), Y(-860)
+            d.line([ex, ey, hx, hy], fill=shirt, width=int(50 * s))
+            d.ellipse([hx - 30 * s, hy - 30 * s, hx + 30 * s, hy + 30 * s], fill=SKIN)
+    else:
+        a = math.radians(10 + 120 * arm)
+        ex, ey = X(106), Y(-520)
+        hx, hy = ex + math.sin(a) * 230 * s, ey + math.cos(a) * 230 * s
+        d.line([ex, ey, hx, hy], fill=shirt, width=int(50 * s))
+        if hold == "carte":
+            d.rounded_rectangle([hx - 10 * s, hy - 60 * s, hx + 80 * s, hy], radius=int(8 * s), fill=(60, 110, 230))
+            d.rectangle([hx, hy - 48 * s, hx + 26 * s, hy - 32 * s], fill=YEL)
+        if hold == "permis":
+            d.rounded_rectangle([hx - 10 * s, hy - 70 * s, hx + 100 * s, hy], radius=int(8 * s), fill=(240, 150, 190))
+            d.rectangle([hx + 4 * s, hy - 58 * s, hx + 34 * s, hy - 20 * s], fill=WHITE)
+        d.ellipse([hx - 27 * s, hy - 27 * s, hx + 27 * s, hy + 27 * s], fill=SKIN)
     d.rounded_rectangle([X(-22), Y(-600), X(22), Y(-550)], radius=int(10 * s), fill=SKIN2)
     d.ellipse([X(-95), Y(-800), X(95), Y(-590)], fill=SKIN)
     d.ellipse([X(-110), Y(-720), X(-80), Y(-670)], fill=SKIN)
@@ -153,11 +176,15 @@ NADIA = dict(shirt=TEAL, pants=(40, 60, 120), hair=(40, 26, 20), long_hair=True)
 PROPRIO = dict(shirt=SUIT, pants=SUIT, hair=(30, 30, 30), tie=True, glasses=True)
 
 
-def shot(big, z=1.0, fy=0.33):
-    """Cadre la toile x2 avec un zoom z (1 = plan large) et la réduit en 1080x1920."""
+def shot(big, z=1.0, fy=0.33, center=None):
+    """Cadre la toile x2 avec un zoom z (1 = plan large) et la réduit en 1080x1920.
+    center : point (x, y) en coordonnées finales à placer au centre du cadre (gros plans)."""
     w2, h2 = int(W * SS / z), int(H * SS / z)
     x0 = (W * SS - w2) // 2
     y0 = int((H * SS - h2) * fy)
+    if center:
+        x0 = int(min(max(center[0] * SS - w2 / 2, 0), W * SS - w2))
+        y0 = int(min(max(center[1] * SS - h2 / 2, 0), H * SS - h2))
     return big.crop((x0, y0, x0 + w2, y0 + h2)).resize((W, H), Image.LANCZOS)
 
 
@@ -177,15 +204,15 @@ def big_number(img, xy, txt, size, col, sub=None, k=1.0, strike=0.0, rot=0, subc
     sz = max(10, int(size * (0.5 + 0.5 * back(k))))
     lay = Image.new("RGBA", (W, 460), (0, 0, 0, 0))
     d = ImageDraw.Draw(lay)
-    d.text((W // 2 + 6, 156), txt, font=F(sz), fill=(0, 0, 0, 120), anchor="mm")
-    d.text((W // 2, 150), txt, font=F(sz), fill=col + (255,), anchor="mm")
+    d.text((W // 2 + 7, 157), txt, font=FA(sz), fill=(0, 0, 0, 140), anchor="mm")
+    d.text((W // 2, 150), txt, font=FA(sz), fill=col + (255,), anchor="mm")
     if strike > 0:
-        w = F(sz).getlength(txt)
+        w = FA(sz).getlength(txt)
         d.line([W // 2 - w / 2 - 10, 175, W // 2 - w / 2 - 10 + (w + 20) * min(1, strike), 175 - 55 * min(1, strike)],
                fill=RED + (255,), width=16)
     if sub:
-        d.text((W // 2 + 3, 153 + sz * 0.66), sub, font=F(int(size * 0.3)), fill=(0, 0, 0, 120), anchor="mm")
-        d.text((W // 2, 150 + sz * 0.66), sub, font=F(int(size * 0.3)), fill=subcol + (255,), anchor="mm")
+        d.text((W // 2 + 3, 153 + sz * 0.72), sub, font=FA(int(size * 0.34)), fill=(0, 0, 0, 140), anchor="mm")
+        d.text((W // 2, 150 + sz * 0.72), sub, font=FA(int(size * 0.34)), fill=subcol + (255,), anchor="mm")
     if rot:
         lay = lay.rotate(rot, resample=Image.BICUBIC)
     img.paste(lay, (int(xy[0] - W // 2), int(xy[1] - 150)), lay)
@@ -194,7 +221,7 @@ def big_number(img, xy, txt, size, col, sub=None, k=1.0, strike=0.0, rot=0, subc
 def tag(img, x, y, txt, size, bg=YEL, fg=INK, rot=-4, k=1.0):
     if k <= 0:
         return
-    f = F(size)
+    f = FA(int(size * 1.1))
     w = f.getlength(txt)
     pad = size * 0.55
     lay = Image.new("RGBA", (int(w + 2 * pad + 40), int(size * 2 + 40)), (0, 0, 0, 0))
@@ -352,3 +379,28 @@ class CartoonVideo(Video):
         ff.wait()
         print("✅", out)
         return out
+
+
+def shock_lines(img, cx, cy, r, lt, col=YEL):
+    """Traits de choc autour d'un point (tête en gros plan), qui vibrent."""
+    d = ImageDraw.Draw(img)
+    j = 8 * math.sin(lt * 40)
+    for i in range(8):
+        a = math.radians(-160 + i * 20 + (180 if i >= 4 else 0) - (80 if i >= 4 else 0))
+        a = math.radians([-165, -140, -115, -65, -40, -15, 200, 340][i])
+        r0, r1 = r + j, r + 90 + j
+        d.line([cx + r0 * math.cos(a), cy + r0 * math.sin(a), cx + r1 * math.cos(a), cy + r1 * math.sin(a)],
+               fill=col, width=14)
+
+
+def counter(start, end, lt, dur=0.5, fmt="{:,} €"):
+    """Compteur qui défile de start à end (avec un léger dépassement)."""
+    v = start + (end - start) * back(lt / dur)
+    return fmt.format(int(round(v))).replace(",", " ")
+
+
+def flash(img, lt, dur=0.12):
+    """Petit flash blanc au changement de plan."""
+    if lt >= dur:
+        return img
+    return Image.blend(img, Image.new("RGB", img.size, WHITE), 0.5 * (1 - lt / dur))
