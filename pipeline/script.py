@@ -98,6 +98,14 @@ def check(script: str, duration_target=60, real_voice=False):
     if negs:
         issues.append(f"négation avec « ne » : {negs[:3]} (une seule tolérée pour caractériser)")
     sentences = [s for s in re.split(r"(?<=[.?!])\s+", text) if s]
+    NUM = {"zéro", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix", "onze", "douze",
+           "quinze", "vingt", "trente", "quarante", "cinquante", "soixante", "cent", "cents", "mille",
+           "million", "millions", "milliard", "milliards"}
+    if sentences:
+        hw = [re.sub(r"[^a-zàâçéèêëîïôûùüÿœ0-9-]", "", w.lower()) for w in sentences[0].split()]
+        pos = [i for i, w in enumerate(hw) if w in NUM or re.search(r"\d", w) or w.split("-")[0] in NUM]
+        if pos and pos[0] > 3:
+            issues.append(f"hook : le chiffre arrive au mot {pos[0] + 1}, il doit ouvrir la phrase (règle du prix, moteur 3.2)")
     if sentences and len(sentences[0].split()) > 18:
         issues.append(f"hook trop long : {len(sentences[0].split())} mots (18 maximum)")
     long_ones = [s for s in sentences if len(s.split()) > 25]

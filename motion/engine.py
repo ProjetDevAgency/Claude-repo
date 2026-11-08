@@ -105,6 +105,31 @@ def load_country(code):
     return [g["coordinates"][0]] if g["type"] == "Polygon" else [p[0] for p in g["coordinates"]]
 
 
+def hook_card(img, hook, alpha=1.0):
+    """Couche 1 (le choc) écrite en grand, dans un cadre blanc, dès la 1re image."""
+    d = ImageDraw.Draw(img)
+    f = F(62)
+    words, lines, cur = hook.upper().split(), [], ""
+    for w in words:
+        test = f"{cur} {w}".strip()
+        if f.getlength(test) <= 880:
+            cur = test
+        else:
+            lines.append(cur)
+            cur = w
+    if cur:
+        lines.append(cur)
+    lh = 74
+    h = lh * len(lines) + 60
+    y0 = 190
+    box = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    bd = ImageDraw.Draw(box)
+    bd.rounded_rectangle([60, y0, W - 60, y0 + h], radius=28, fill=(255, 255, 255, int(255 * alpha)))
+    for j, l in enumerate(lines):
+        bd.text((W / 2, y0 + 30 + lh / 2 + j * lh), l, font=f, fill=(16, 16, 18, int(255 * alpha)), anchor="mm")
+    img.paste(box, (0, 0), box)
+
+
 def header(d, date_label, topic):
     d.rectangle([0, 0, W, 150], fill=(8, 8, 10))
     text(d, (50, 75), date_label, 34, WHITE, anchor="lm")
@@ -121,6 +146,9 @@ class Video:
         self.work.mkdir(parents=True, exist_ok=True)
         self.scenes = []
         self.hook_head_start = 3.0  # secondes « d'avance » de la 1re scène à l'image 0
+        # couche 1 du moteur = 1re phrase du script, affichée en grand de 0 à sa fin (≈ 3 s)
+        import re as _re
+        self.hook_text = _re.split(r"(?<=[.?!])\s+", self.text)[0]
 
     def voice(self, voice_file=None):
         cfg = load_config()
@@ -162,6 +190,8 @@ class Video:
 
     def render(self):
         self.scenes.sort(key=lambda s: s[0])
+        n_hook = len(self.hook_text.split())
+        self.hook_end = max(2.5, self.words[min(n_hook, len(self.words)) - 1]["end"])
         cfg = load_config()
         sub_cfg = dict(cfg["subtitles"], position_y=0.80, size=84)
         ass = subtitles.write_ass(self.words, self.work / "subs.ass", sub_cfg, W, H, self.dur)
@@ -196,6 +226,10 @@ class Video:
             elif self.scenes:
                 self.scenes[0][1](d, img, self.hook_head_start, 1.0)
             header(d, self.date_label, self.topic)
+            if t < self.hook_end + 0.4:
+                a = 1.0 if t < self.hook_end else 1 - (t - self.hook_end) / 0.4
+                hook_card(img, self.hook_text, a)
+                d = ImageDraw.Draw(img)
             # coup de zoom sur la 1re seconde : mouvement immédiat dans le feed
             if t < 0.9:
                 z = 1 + 0.10 * (1 - ease(t / 0.9))

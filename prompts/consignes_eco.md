@@ -36,3 +36,10 @@ Deux rubriques, même style visuel (motion design 2D noir / rouge / jaune), mêm
   est affichée à l'écran et mise en légende, PAS dite par la voix (ce n'est pas un CTA).
 - Hook mythe (Machine à sujets n°1) : poser la croyance, puis « Et pourtant » / « C'est faux » en couche 2.
   Chaîne : Et pourtant, Mais alors (2 max), Sauf que, Sur le papier, Ce que peu de gens savent (1 max).
+
+## Ouverture (moteur 3.1-3.2, corrigé le 8 novembre 2026)
+Données : SMIC et SCI, ~50 % de départs à 0:01, courbe plate ensuite → le contenu tient, l'ouverture non.
+- Couche 1 (0 à 3 s) = la 1re phrase, écrite EN GRAND à l'écran dès la 1re image (cadre blanc), en plus de la voix.
+- La 1re scène d'animation est déjà construite à l'image 0 (aucun fondu sur écran vide).
+- Le choc ouvre la phrase : chiffre ou prix en premier (« Zéro coup de pouce depuis quatorze ans »),
+  jamais une date ou un contexte (« Depuis deux mille douze… »). Le vérificateur le signale.
