@@ -53,10 +53,6 @@ def ellipse_pts(cx, cy, rx, ry, n=48, start=-1.75, turns=1.04):
              cy + ry * math.sin(start + 2 * math.pi * turns * i / n) * rnd.uniform(.97, 1.03)) for i in range(n + 1)]
 
 
-def _set_tip(lt_key, p):
-    _STATE["tip"] = p
-
-
 class Pen:
     """Dessine des traits qui se révèlent dans le temps. dx, dy décalent le dessin déjà tracé."""
 
@@ -234,9 +230,10 @@ def _hand_sprite():
 class WhiteboardVideo(Video):
     """Même logique que Video (voix, timing, sous-titres), rendu façon tableau blanc."""
 
-    def __init__(self, *a, hook_lines=None, **k):
+    def __init__(self, *a, hook_lines=None, hook_size=72, **k):
         super().__init__(*a, **k)
         self.hook_lines = hook_lines  # [(texte, couleur), …] ; par défaut la 1re phrase du script
+        self.hook_size = hook_size
 
     def hook_box(self, img, alpha):
         lines = self.hook_lines
@@ -258,7 +255,7 @@ class WhiteboardVideo(Video):
         box = _wobble([(60, y0), (W - 60, y0), (W - 60, y0 + h), (60, y0 + h), (60, y0 - 3)], amp=1.2)
         ld.line(box, fill=INK + (A,), width=8, joint="curve")
         for j, (s, col) in enumerate(lines):
-            ld.text((W / 2, y0 + 30 + lh / 2 + j * lh), s, font=F(72), fill=col + (A,), anchor="mm")
+            ld.text((W / 2, y0 + 30 + lh / 2 + j * lh), s, font=F(self.hook_size), fill=col + (A,), anchor="mm")
         img.paste(lay, (0, 0), lay)
 
     def header(self, d):
