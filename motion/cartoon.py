@@ -88,7 +88,7 @@ def room(kind="appart"):
 
 def character(d, cx, base, sc=1.0, shirt=TEAL, pants=(40, 60, 120), hair=(60, 36, 26), long_hair=False,
               tie=False, glasses=False, mouth="smile", arm=0.0, phone=False, clipboard=False, brows=None,
-              hold=None, arms_up=False):
+              hold=None, arms_up=False, cap=None, hood=None, blink=False, step=0.0):
     """Personnage en aplat, pieds en (cx, base) en coordonnées finales. arm : bras droit levé (0 à 1)."""
     s = SS * sc
 
@@ -100,10 +100,11 @@ def character(d, cx, base, sc=1.0, shirt=TEAL, pants=(40, 60, 120), hair=(60, 36
 
     if long_hair:
         d.rounded_rectangle([X(-108), Y(-790), X(108), Y(-540)], radius=int(60 * s), fill=hair)
-    d.rounded_rectangle([X(-55), Y(-260), X(-8), Y(-10)], radius=int(18 * s), fill=pants)
-    d.rounded_rectangle([X(8), Y(-260), X(55), Y(-10)], radius=int(18 * s), fill=pants)
-    d.ellipse([X(-75), Y(-30), X(-5), Y(8)], fill=INK)
-    d.ellipse([X(5), Y(-30), X(75), Y(8)], fill=INK)
+    st = 28 * step  # marche : les jambes se croisent
+    d.rounded_rectangle([X(-55 + st), Y(-260), X(-8 + st), Y(-10)], radius=int(18 * s), fill=pants)
+    d.rounded_rectangle([X(8 - st), Y(-260), X(55 - st), Y(-10)], radius=int(18 * s), fill=pants)
+    d.ellipse([X(-75 + st), Y(-30), X(-5 + st), Y(8)], fill=INK)
+    d.ellipse([X(5 - st), Y(-30), X(75 - st), Y(8)], fill=INK)
     d.rounded_rectangle([X(-90), Y(-560), X(90), Y(-240)], radius=int(60 * s), fill=shirt)
     if tie:
         d.polygon([(X(-40), Y(-560)), (X(40), Y(-560)), (X(0), Y(-470))], fill=WHITE)
@@ -141,15 +142,28 @@ def character(d, cx, base, sc=1.0, shirt=TEAL, pants=(40, 60, 120), hair=(60, 36
             d.rounded_rectangle([hx - 10 * s, hy - 70 * s, hx + 100 * s, hy], radius=int(8 * s), fill=(240, 150, 190))
             d.rectangle([hx + 4 * s, hy - 58 * s, hx + 34 * s, hy - 20 * s], fill=WHITE)
         d.ellipse([hx - 27 * s, hy - 27 * s, hx + 27 * s, hy + 27 * s], fill=SKIN)
+    if hood:  # capuche posée sur les épaules + cordons
+        d.rounded_rectangle([X(-105), Y(-625), X(105), Y(-525)], radius=int(45 * s), fill=hood)
+        d.line([X(-22), Y(-540), X(-26), Y(-440)], fill=WHITE, width=int(7 * s))
+        d.line([X(22), Y(-540), X(26), Y(-440)], fill=WHITE, width=int(7 * s))
     d.rounded_rectangle([X(-22), Y(-600), X(22), Y(-550)], radius=int(10 * s), fill=SKIN2)
     d.ellipse([X(-95), Y(-800), X(95), Y(-590)], fill=SKIN)
     d.ellipse([X(-110), Y(-720), X(-80), Y(-670)], fill=SKIN)
     d.ellipse([X(80), Y(-720), X(110), Y(-670)], fill=SKIN)
     d.chord([X(-100), Y(-830), X(100), Y(-660)], 180, 360, fill=hair)
     d.ellipse([X(-100), Y(-790), X(-40), Y(-700)], fill=hair)
+    if cap:  # casquette, visière vers la droite
+        d.chord([X(-102), Y(-850), X(102), Y(-700)], 180, 360, fill=cap)
+        d.rounded_rectangle([X(30), Y(-790), X(165), Y(-762)], radius=int(12 * s), fill=cap)
+        d.ellipse([X(-12), Y(-862), X(12), Y(-838)], fill=cap)
     for ex_ in (-38, 38):
-        d.ellipse([X(ex_ - 11), Y(-712), X(ex_ + 11), Y(-686)], fill=INK)
-        d.ellipse([X(ex_ - 3), Y(-708), X(ex_ + 4), Y(-700)], fill=WHITE)
+        if blink:
+            d.line([X(ex_ - 12), Y(-699), X(ex_ + 12), Y(-699)], fill=INK, width=int(6 * s))
+        else:
+            d.ellipse([X(ex_ - 11), Y(-712), X(ex_ + 11), Y(-686)], fill=INK)
+            d.ellipse([X(ex_ - 3), Y(-708), X(ex_ + 4), Y(-700)], fill=WHITE)
+        if brows == "haut":
+            d.arc([X(ex_ - 22), Y(-765), X(ex_ + 22), Y(-730)], 200, 340, fill=INK, width=int(7 * s))
         if glasses:
             d.ellipse([X(ex_ - 30), Y(-728), X(ex_ + 30), Y(-670)], outline=INK, width=int(6 * s))
         if brows == "colere":
@@ -404,3 +418,63 @@ def flash(img, lt, dur=0.12):
     if lt >= dur:
         return img
     return Image.blend(img, Image.new("RGB", img.size, WHITE), 0.5 * (1 - lt / dur))
+
+
+# ───────────── Kévin, le héros récurrent ─────────────
+
+KEVIN = dict(shirt=(46, 150, 90), pants=(40, 50, 90), hair=(60, 40, 28), cap=(28, 28, 34), hood=(36, 122, 72))
+POSES = ("neutre", "choc", "telephone", "triste", "victoire", "parle", "marche", "carte", "permis")
+
+
+def kevin(d, x, base, pose, t, **extra):
+    """Dessine Kévin dans une des poses fixes. t = temps local (pour respiration, clignement, bouche, marche)."""
+    bob = math.sin(t * 2.6) * 4
+    blink = (t % 3.3) < 0.1
+    p = dict(KEVIN, blink=blink)
+    if pose == "choc":
+        p.update(arms_up=True, mouth="o", brows="haut")
+        bob = math.sin(t * 30) * 6          # il tremble
+    elif pose == "telephone":
+        p.update(phone=True, mouth="flat")
+    elif pose == "triste":
+        p.update(mouth="sad", brows="triste")
+        base += 12
+    elif pose == "victoire":
+        p.update(arm=0.95, mouth="grin")
+        bob = -abs(math.sin(t * 7)) * 30     # il saute
+    elif pose == "parle":
+        p.update(arm=0.35 + 0.12 * math.sin(t * 5), mouth="o" if int(t * 7) % 2 else "smile")
+    elif pose == "marche":
+        p.update(step=math.sin(t * 11), mouth="smile")
+        bob = -abs(math.sin(t * 11)) * 10
+    elif pose == "carte":
+        p.update(arm=0.45, hold="carte", mouth="flat", brows="triste")
+    elif pose == "permis":
+        p.update(arm=0.95, hold="permis", mouth="grin")
+        bob = -abs(math.sin(t * 7)) * 30
+    else:
+        p.update(mouth="smile")
+    p.update(extra)
+    character(d, x, base + bob, **p)
+
+
+def idle(t, seed=0.0):
+    """Respiration et clignement pour les personnages secondaires : renvoie (décalage vertical, clignement)."""
+    return math.sin(t * 2.3 + seed) * 4, ((t + seed) % 3.7) < 0.1
+
+
+def push(lt, dur, z0=1.0, z1=1.12):
+    """Poussée lente de caméra sur la durée du plan."""
+    return z0 + (z1 - z0) * ease(lt / max(dur, 0.1))
+
+
+def shake(img, lt, dur=0.35, amp=18):
+    """Tremblement de caméra au début d'un plan (chiffre choc)."""
+    if lt >= dur:
+        return img
+    a = amp * (1 - lt / dur)
+    dx = int(a * math.sin(lt * 90))
+    dy = int(a * math.cos(lt * 70))
+    out = Image.new("RGB", img.size, (0, 0, 0))
+    out.paste(img, (dx, dy))
+    return out
