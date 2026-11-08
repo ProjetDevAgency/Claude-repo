@@ -37,3 +37,12 @@
 - Presse-citron, 06/11/2026 : entrée en vigueur le vendredi 6 novembre ; syndicats et coopératives favorables, industriels, négociants
   et exportateurs inquiets pour leur compétitivité ; hausse possible des prix en rayon
 - Google Trends France, 7 novembre : « huile olive espagne » 2 000+ recherches
+
+## TVA à 5,5 % sur l'électricité (dim. 8 nov. 2026, remplace Shein)
+- Vote du 2 nov. 2026, amendements I-3692 et I-3959 (GDR + RN), 43 pour, 13 contre, 4 abst. ; 5,5 % sur abonnement, kWh et accise ; compensation taxe tabac ; 269 € = tout électrique 9 kVA 10 000 kWh, studio 53,86 € :
+  https://selectra.info/energie/actualites/marche/tva-5-5-electricite-abonnement-kwh-vote-2-nov (06/11)
+  https://bourseinside.fr/economie/facture-delectricite-ce-vote-sur-la-tva-qui-promet-269e-deconomies-par-an-est-deja-en-grand-danger/ (06/11)
+- Rejet de la partie recettes le 4 nov. (458 contre, 0 pour, 2 abst.) ; texte transmis au Sénat dans sa version initiale ; Sénat : amendements jusqu'au 19 nov., vote recettes ~28 nov. :
+  https://bourseinside.fr/economie/tva-a-55-sur-lelectricite-pourquoi-les-269e-deconomies-promis-sur-votre-facture-ont-disparu-a-cause-dune-procedure-parlementaire/ (08/11)
+- Abonnement passé de 5,5 % à 20 % le 1er août 2025 ; vote de 2025 sur l'abonnement resté sans effet : Selectra (06/11).
+- 🔎 Chiffre du scrutin du 2 nov. donné par une seule source (Bourse Inside) ; à recouper sur assemblee-nationale.fr si possible.
