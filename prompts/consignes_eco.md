@@ -41,5 +41,8 @@ Deux rubriques, même style visuel (motion design 2D noir / rouge / jaune), mêm
 Données : SMIC et SCI, ~50 % de départs à 0:01, courbe plate ensuite → le contenu tient, l'ouverture non.
 - Couche 1 (0 à 3 s) = la 1re phrase, écrite EN GRAND à l'écran dès la 1re image (cadre blanc), en plus de la voix.
 - La 1re scène d'animation est déjà construite à l'image 0 (aucun fondu sur écran vide).
-- Le choc ouvre la phrase : chiffre ou prix en premier (« Zéro coup de pouce depuis quatorze ans »),
-  jamais une date ou un contexte (« Depuis deux mille douze… »). Le vérificateur le signale.
+- Règle du prix (moteur 3.2) : le prix est le premier ÉLÉMENT, avant la description de l'objet,
+  pas forcément le premier mot. ✓ « J'ai vendu mille huit cents euros ce sac à dos. »
+  ✓ « Kévin ouvre son appli et la CAF lui réclame trois mille euros. » (personnage + action + prix)
+  ✗ « Trois mille euros à rembourser à la CAF. » (chiffre nu, sans personnage ni action)
+  Jamais une date ou un contexte en ouverture (« Depuis deux mille douze… »).
