@@ -359,6 +359,11 @@ class CartoonVideo(Video):
     def __init__(self, *a, corner="", **k):
         super().__init__(*a, **k)
         self.corner = corner
+        self.sfx_events = []
+
+    def sfx(self, t, name, gain=1.0):
+        """Pose un bruitage (voir sfx.BANK) à l'instant t (secondes)."""
+        self.sfx_events.append((max(0.0, t), name, gain))
 
     def render(self):
         self.scenes.sort(key=lambda s: s[0])
@@ -367,9 +372,17 @@ class CartoonVideo(Video):
         ass = subtitles.write_ass(self.words, self.work / "subs.ass", sub_cfg, W, H, self.dur)
         out = ROOT / "output" / f"{self.name}.mp4"
         fonts = str(ROOT / "assets" / "fonts")
+        audio_path = self.voice_path
+        if self.sfx_events:
+            import sfx
+            from pipeline import audio
+            mixed = sfx.mix(audio.load(self.voice_path), self.sfx_events)
+            audio_path = self.work / "voice_sfx.wav"
+            audio.save(mixed, audio_path)
+            print(f"   {len(self.sfx_events)} bruitages mixés")
         ff = subprocess.Popen(
             ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
-             "-r", str(FPS), "-i", "-", "-i", str(self.voice_path), "-af", "apad", "-t", f"{self.dur:.2f}",
+             "-r", str(FPS), "-i", "-", "-i", str(audio_path), "-af", "apad", "-t", f"{self.dur:.2f}",
              "-vf", f"ass='{ass}':fontsdir='{fonts}'", "-c:v", "libx264", "-preset", "medium", "-crf", "20",
              "-maxrate", "2M", "-bufsize", "4M", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k",
              "-movflags", "+faststart", str(out)], stdin=subprocess.PIPE)
@@ -409,7 +422,8 @@ def shock_lines(img, cx, cy, r, lt, col=YEL):
 
 def counter(start, end, lt, dur=0.5, fmt="{:,} €"):
     """Compteur qui défile de start à end (avec un léger dépassement)."""
-    v = start + (end - start) * back(lt / dur)
+    k = max(0.0, min(1.0, lt / dur))
+    v = start + (end - start) * (1 - (1 - k) ** 3)   # ralentit à l'arrivée, sans dépasser
     return fmt.format(int(round(v))).replace(",", " ")
 
 
