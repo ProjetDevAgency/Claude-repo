@@ -138,6 +138,10 @@ def character(d, cx, base, sc=1.0, shirt=TEAL, pants=(40, 60, 120), hair=(60, 36
         if hold == "carte":
             d.rounded_rectangle([hx - 10 * s, hy - 60 * s, hx + 80 * s, hy], radius=int(8 * s), fill=(60, 110, 230))
             d.rectangle([hx, hy - 48 * s, hx + 26 * s, hy - 32 * s], fill=YEL)
+        if hold == "lettre":
+            d.rectangle([hx - 20 * s, hy - 130 * s, hx + 80 * s, hy - 4 * s], fill=WHITE, outline=GREY, width=int(3 * s))
+            for j in range(4):
+                d.line([hx - 8 * s, hy - (112 - 24 * j) * s, hx + 66 * s, hy - (112 - 24 * j) * s], fill=GREY, width=int(4 * s))
         if hold == "permis":
             d.rounded_rectangle([hx - 10 * s, hy - 70 * s, hx + 100 * s, hy], radius=int(8 * s), fill=(240, 150, 190))
             d.rectangle([hx + 4 * s, hy - 58 * s, hx + 34 * s, hy - 20 * s], fill=WHITE)
