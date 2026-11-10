@@ -163,16 +163,17 @@ class Video:
         s = audio.remove_silences(audio.load(raw), v["silence_threshold_db"], v["min_silence"], v["keep_silence"])
         audio.save(s, self.work / "voice_tight.wav")
         dur = len(s) / audio.SR
-        target = 61.6
+        # durée cible (61-63 s par défaut ; les formats courts règlent self.length = (mini, cible, maxi))
+        lo, target, hi = getattr(self, "length", (61.0, 61.6, 63.0))
         src = self.work / "voice_tight.wav"
-        if dur > target or dur < 60.5:
+        if dur > target or dur < lo - 0.5:
             f = max(0.94, min(1.25, dur / target))
             audio.speed_up(src, self.work / "voice_fit.wav", f)
             src = self.work / "voice_fit.wav"
             print(f"   vitesse voix x{f:.3f}")
         self.voice_path = audio.normalize(src, self.work / "voice.wav")
         self.vdur = len(audio.load(self.voice_path)) / audio.SR
-        self.dur = min(63.0, max(61.0, self.vdur + 0.4))
+        self.dur = min(hi, max(lo, self.vdur + 0.4))
         self.words = subtitles.align(self.text, subtitles.transcribe_words(self.voice_path))
         print(f"   voix {self.vdur:.1f}s → vidéo {self.dur:.1f}s")
 
