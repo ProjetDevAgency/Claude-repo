@@ -53,14 +53,13 @@ def panneau(d, x, y, nom, s=SS):
     d.text((x * s, (y + 10) * s), nom, font=FA(86 * s), fill=INK, anchor="mm")
 
 
-def maire(d, x, base, t, **pose):
-    """Le maire : costume, écharpe tricolore, moustache."""
+def maire(d, x, base, t, sc=1.0, **pose):
+    """Le maire : costume, écharpe tricolore, moustache. sc : échelle (gros plan > 1)."""
     bob, blink = idle(t, 0.2)
     p = {**MAIRE, "blink": blink, "mouth": "smile", **pose}
-    character(d, x, base + bob, **p)
-    s = SS
-    X = lambda v: x * s + v * s  # noqa: E731
-    Y = lambda v: (base + bob) * s + v * s  # noqa: E731
+    character(d, x, base + bob * sc, sc=sc, **p)
+    X = lambda v: x * SS + v * SS * sc  # noqa: E731
+    Y = lambda v: (base + bob * sc) * SS + v * SS * sc  # noqa: E731
     for k, col in enumerate((BLEU, BLANC, ROUGE)):   # écharpe en diagonale
         o = (k - 1) * 22
         d.polygon([(X(-80 + o), Y(-560)), (X(-50 + o), Y(-560)), (X(90 + o), Y(-300)), (X(60 + o), Y(-300))], fill=col)
@@ -345,6 +344,203 @@ def e1_vote(lt, dur):
     tf = T["abo_fin"] - T["e1_vote"]
     tag(img, 540, 1330, "ABONNE-TOI POUR VOIR LE VILLAGE GRANDIR", 44, ROUGE, WHITE, rot=-2, k=(lt - tf) / 0.25)
     return shake(img, lt - 1.6)
+
+
+
+# ───────────── épisode 1 : plans repris des comptes qui marchent (sonigz37, paum.les.bains) ─────────────
+# Titre en deux lignes en haut (petite ligne blanche + grosse ligne jaune), comme chez eux.
+
+def titre2(img, petit, gros, k=1.0, y=170):
+    if k <= 0:
+        return
+    d = ImageDraw.Draw(img)
+    s = 0.7 + 0.3 * back(k)
+    for txt, size, col, yy in ((petit, int(54 * s), WHITE, y), (gros, int(104 * s), YEL, y + 95 * s)):
+        f = FA(size)
+        for dx, dy in [(-5, 0), (5, 0), (0, -5), (0, 5), (-4, -4), (4, 4), (-4, 4), (4, -4)]:
+            d.text((540 + dx, yy + dy), txt, font=f, fill=INK, anchor="mm")
+        d.text((540, yy), txt, font=f, fill=col, anchor="mm")
+
+
+def gros_plan_maire(img, lt, **pose):
+    """Le maire en très gros plan (buste), posé sur le décor, comme le « mais maintenant il t'a toi »."""
+    lay = Image.new("RGBA", (W * SS, H * SS), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    maire(d, 540, 2350, lt, sc=2.1, **pose)
+    lay = lay.resize((W, H), Image.LANCZOS)
+    img.paste(lay, (0, 0), lay)
+
+
+def foule(lt, n=14):
+    """Habitants qui marchent sur les routes."""
+    out = []
+    for q in range(n):
+        v = ((q * 0.37 + lt * 0.5) % 1.0)
+        if q % 2:
+            out.append((-0.4, -6 + 12 * v, [(200, 60, 60), (60, 120, 200), (240, 180, 40), (120, 200, 120)][q % 4]))
+        else:
+            out.append((-6 + 12 * v, -0.4, [(60, 120, 200), (200, 60, 60), (120, 200, 120), (240, 180, 40)][q % 4]))
+    return [(round(i, 2), round(j, 2), c) for i, j, c in out]
+
+
+def bouton_abonner(img, x, y, k=1.0):
+    if k <= 0:
+        return
+    s = 0.6 + 0.4 * back(k)
+    d = ImageDraw.Draw(img)
+    w, h = 300 * s, 80 * s
+    d.rounded_rectangle([x - w / 2, y - h / 2, x + w / 2, y + h / 2], radius=int(h / 2), fill=(235, 40, 60))
+    d.text((x, y), "S'ABONNER", font=FA(int(48 * s)), fill=WHITE, anchor="mm")
+
+
+def p_jour(lt, dur):                     # sonigz : la carte vide, le maire tout petit au carrefour
+    img, _ = vue(dict(maire=(0.6, 0.6)), push(lt, dur, 1.0, 1.12), (540, 1020))
+    titre2(img, "JOUR 1", "FAUCHÉ-LES-OIES", k=1.0)
+    return shake(img, lt)
+
+
+def p_fauche(lt, dur):                   # paum : un lieu du village avec son étiquette moqueuse
+    bx, by = iso.iso(iso.RIVIERE_I + 1, iso.ROUTE_J + 0.5)
+    img, to = vue(BASE_ETAT, push(lt, dur, 1.9, 2.1), (bx + 40, by - 60))
+    titre2(img, "LE VILLAGE LE PLUS", "FAUCHÉ DE FRANCE", k=lt / 0.25)
+    x, y = to(iso.RIVIERE_I + 1, iso.ROUTE_J + 0.5, 30)
+    tag(img, x, y - 60, "PONT CASSÉ", 52, ROUGE, WHITE, rot=-4, k=(lt - 0.6) / 0.25)
+    return flash(img, lt)
+
+
+def p_un(lt, dur):                       # sonigz : gros plan du maire
+    img, _ = vue(BASE_ETAT, 1.4, (600, 900))
+    img = dim(img, 0.35, blur=8, dark=0.85)
+    gros_plan_maire(img, lt, arm=0.9, mouth="grin" if lt < 1.0 else "smile")
+    titre2(img, "POUR L'INSTANT", "1 SEUL HABITANT", k=lt / 0.25)
+    if lt > 0.9:
+        tag(img, 820, 760, "MOI", 80, YEL, INK, rot=-8, k=(lt - 0.9) / 0.25)
+    return flash(img, lt)
+
+
+def p_regles(lt, dur):                   # « les règles sont simples » : le maire face caméra
+    img, _ = vue(BASE_ETAT, 1.4, (600, 900))
+    img = dim(img, 0.35, blur=8, dark=0.85)
+    gros_plan_maire(img, lt, arm=0.5, mouth="o" if int(lt * 7) % 2 else "smile")
+    titre2(img, "LES RÈGLES", "SONT SIMPLES", k=lt / 0.25)
+    return flash(img, lt)
+
+
+def p_abonne(lt, dur):                   # sonigz : la foule qui arrive sur les routes
+    img, _ = iso.camera(iso.carte(dict(BASE_ETAT, habitants=foule(lt))), push(lt, dur, 1.25, 1.35), (500, 980))
+    titre2(img, "1 ABONNÉ", "= 1 HABITANT", k=lt / 0.25)
+    return flash(img, lt)
+
+
+def p_commente(lt, dur):                 # sonigz : les maisons qui poussent, une avec ton pseudo
+    n = len(iso.TERRAINS["maisons"])
+    mk = [round(min(1.0, max(0.0, (lt - 0.25 * q) / 0.5)), 1) for q in range(n)]
+    img, to = vue(dict(BASE_ETAT, maisons=mk), push(lt, dur, 1.3, 1.4), (420, 1080))
+    titre2(img, "1 COMMENTAIRE", "= TA MAISON", k=lt / 0.25)
+    if lt > 0.6:
+        x, y = to(*iso.TERRAINS["maisons"][0], 80)
+        tag(img, x + 30, y - 40, "@TON_PSEUDO", 46, WHITE, INK, rot=-3, k=(lt - 0.6) / 0.25)
+    return flash(img, lt)
+
+
+def p_decide(lt, dur):                   # sonigz : « toi qui décides », le maire montre la caméra
+    img, _ = vue(BASE_ETAT, 1.4, (600, 900))
+    img = dim(img, 0.35, blur=8, dark=0.85)
+    gros_plan_maire(img, lt, arm=0.75, mouth="o" if int(lt * 7) % 2 else "grin")
+    titre2(img, "C'EST TOI", "QUI DÉCIDES", k=lt / 0.25)
+    tag(img, 540, 520, "VOTE EN COMMENTAIRE", 56, WHITE, INK, rot=-3, k=(lt - 0.8) / 0.25)
+    return flash(img, lt)
+
+
+def p_surprise(lt, dur):                 # sonigz : le monolithe noir mystère
+    big = iso.carte_cache(BASE_ETAT).copy()
+    d = ImageDraw.Draw(big)
+    mi, mj = iso.TERRAINS["mystere"]
+    k = ease(lt / 1.0)
+    iso.box(d, mi - 0.3, mj - 0.3, 1.6, 1.6, 300 * k + 2, (24, 24, 30))
+    x, y = iso.iso(mi + 0.5, mj + 0.5, 300 * k + 2)
+    d.text((x * SS, (y + 6) * SS), "?", font=FA(int(90 * SS)), fill=WHITE, anchor="mm")
+    cx, cy = iso.iso(mi + 0.5, mj + 0.5, 120)
+    img, _ = iso.camera(big, 1.7, (cx, cy))
+    titre2(img, "100 ABONNÉS", "UNE SURPRISE", k=lt / 0.25)
+    return shake(img, lt, dur=0.6, amp=10)
+
+
+def p_caisse(lt, dur):                   # paum : le budget de la mairie, billets qui volent
+    mx, my = iso.iso(1.6, -2.0)
+    img, _ = vue(BASE_ETAT, push(lt, dur, 1.6, 1.75), (mx, my + 40))
+    img = dim(img, 0.3, blur=6, dark=0.9)
+    d = ImageDraw.Draw(img)
+    for q in range(8):
+        a = q * 0.8 + lt * 2
+        x = 540 + math.cos(a) * (180 + 60 * q % 3) * ease(lt / 0.6)
+        y = 760 + math.sin(a) * 140 * ease(lt / 0.6)
+        d.rounded_rectangle([x - 50, y - 26, x + 50, y + 26], radius=6, fill=(90, 180, 110), outline=(40, 110, 60), width=4)
+    titre2(img, "PREMIER VOTE", "CAISSE DE LA MAIRIE", k=lt / 0.25)
+    big_number(img, (540, 760), counter(0, 1000, lt, 0.7, "{:,} €"), 220, GREEN, k=1.0)
+    return flash(img, lt)
+
+
+def p_choix(lt, dur):                    # sonigz : les projets apparaissent sur leurs terrains, numérotés
+    t2, t3 = T["deux"] - T["un"], T["trois"] - T["un"]
+    etat = dict(BASE_ETAT, pont=lt > 0.3,
+                epicerie=round(min(1.0, max(0.0, (lt - t2) / 0.6)), 1),
+                fete=round(min(1.0, max(0.0, (lt - t3) / 0.6)), 1))
+    img, to = vue(etat, 1.15, (420, 1010))
+    titre2(img, "ON CONSTRUIT QUOI", "EN PREMIER ?", k=lt / 0.25)
+    pins(img, to, lt, [0.0, t2, t3])
+    return img
+
+
+def p_gagne(lt, dur):                    # sonigz : le plus voté gagne
+    etat = dict(BASE_ETAT, pont=True, epicerie=1.0, fete=1.0)
+    img, to = vue(etat, push(lt, dur, 1.15, 1.22), (420, 1010))
+    pins(img, to, 9.0, [0, 0, 0], labels=False)
+    titre2(img, "LE CHOIX LE PLUS VOTÉ", "GAGNE", k=lt / 0.25)
+    tag(img, 540, 1300, "RÉSULTAT DEMAIN", 70, ROUGE, WHITE, rot=-3, k=(lt - 0.9) / 0.25)
+    return flash(img, lt)
+
+
+def p_fin(lt, dur):                      # sonigz : gros plan maire + bouton S'abonner
+    img, _ = vue(dict(BASE_ETAT, pont=True, epicerie=1.0, fete=1.0), 1.4, (500, 950))
+    img = dim(img, 0.35, blur=8, dark=0.85)
+    gros_plan_maire(img, lt, arm=0.95, mouth="grin")
+    titre2(img, "1, 2 OU 3 ?", "VOTE EN COMMENTAIRE", k=lt / 0.25)
+    tf = T["abo_fin"] - T["p_fin"]
+    if lt > tf:
+        titre2(img, "ABONNE-TOI POUR VOIR", "LE VILLAGE GRANDIR", k=(lt - tf) / 0.25, y=560)
+        bouton_abonner(img, 540, 1250, (lt - tf - 0.3) / 0.25)
+    return shake(img, lt)
+
+
+def episode1(voice_file=None):
+    v = CartoonVideo("village_ep01", "scripts/village/ep01.txt", "", "", corner="")
+    v.length = (29.0, 30.0, 31.0)
+    v.hook_head_start = 0.0
+    v.voice(voice_file or "output/_work_village_ep01/voice_raw.mp3")
+    sc = [("Jour un", p_jour), ("le village le plus fauché", p_fauche), ("Pour l'instant", p_un),
+          ("Les règles sont simples", p_regles), ("Tu t'abonnes", p_abonne), ("Tu commentes", p_commente),
+          ("Et chaque décision", p_decide), ("À cent abonnés", p_surprise), ("Premier vote", p_caisse),
+          ("Un, réparer", p_choix), ("Le choix le plus voté", p_gagne), ("Vote un, deux", p_fin)]
+    for phrase, fn in sc:
+        v.scene(phrase, fn)
+        T[fn.__name__] = v.at(phrase)
+    T["un"], T["deux"], T["trois"] = v.at("Un, réparer"), v.at("Deux, ouvrir"), v.at("Trois, la fête")
+    T["abo_fin"] = v.at("et abonne-toi")
+    v.sfx(0.0, "impact", 1.0)
+    v.sfx(T["p_fauche"], "whoosh", 0.5)
+    v.sfx(T["p_un"], "pop", 0.8)
+    v.sfx(T["p_abonne"], "pop", 0.8)
+    v.sfx(T["p_commente"], "pop", 0.8)
+    v.sfx(T["p_surprise"], "impact", 0.9)
+    v.sfx(T["p_caisse"], "ticks", 0.7)
+    for k in ("un", "deux", "trois"):
+        v.sfx(T[k], "pop", 0.8)
+    v.sfx(T["p_gagne"], "whoosh", 0.5)
+    v.sfx(T["abo_fin"], "succes", 0.8)
+    for t0, fn in sorted(v.scenes, key=lambda x: x[0]):
+        print(f"   {t0:5.1f}s {fn.__name__}")
+    v.render()
 
 
 
