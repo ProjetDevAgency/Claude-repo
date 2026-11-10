@@ -130,40 +130,44 @@ def e1_fauche(lt, dur):
     return flash(img, lt)
 
 
-def e1_zero(lt, dur):
-    img = scene(lt, sign=False, mx=440, mpose=dict(mouth="flat"), z=1.1, center=(540, 1050),
-                extra=lambda d: pigeon(d, 760, BASE - 110, lt))
-    big_number(img, (540, 300), "0 HABITANT", 170, WHITE, k=lt / 0.25)
+def e1_un(lt, dur):
+    img = scene(lt, sign=False, mx=540, mpose=dict(arm=0.95, mouth="grin"), z=1.1, center=(540, 1050))
+    big_number(img, (540, 300), "1 HABITANT", 180, WHITE, k=lt / 0.25)
     if lt > 1.0:
-        tag(img, 760, 1160, "+ 1 PIGEON", 50, YEL, INK, rot=-4, k=(lt - 1.0) / 0.25)
+        tag(img, 760, 700, "MOI", 70, YEL, INK, rot=-6, k=(lt - 1.0) / 0.25)
     return flash(img, lt)
 
 
-def e1_mairie(lt, dur):
-    img = scene(lt, sign=False, mx=360, mpose=dict(arm=0.5, mouth="grin"), z=1.1, center=(540, 1050),
-                extra=lambda d: cabine(d, 780, BASE))
-    tag(img, 540, 280, "LA MAIRIE", 90, WHITE, INK, rot=-4, k=lt / 0.25)
-    return flash(img, lt)
+REGLES = [("ABONNÉ", "= HABITANT"), ("COMMENTAIRE", "= TA MAISON À TON PSEUDO"),
+          ("CHAQUE DÉCISION", "= TU VOTES EN COMMENTAIRE"), ("100 ABONNÉS", "= UNE SURPRISE")]
 
 
-def e1_abonne(lt, dur):
+def regles_panel(img, lt, t0s, y0=480):
+    tag(img, 540, y0 - 210, "LES RÈGLES", 90, YEL, INK, rot=-3, k=lt / 0.25)
+    for j, ((a, b), t0) in enumerate(zip(REGLES, t0s)):
+        on = lt >= t0
+        y = y0 + j * 215
+        lay = Image.new("RGBA", (960, 200), (0, 0, 0, 0))
+        dl = ImageDraw.Draw(lay)
+        dl.rounded_rectangle([0, 0, 959, 199], radius=30, fill=(WHITE if on else (215, 215, 222)) + (255,))
+        dl.ellipse([24, 40, 144, 160], fill=(YEL if on else (180, 180, 188)) + (255,))
+        dl.text((84, 100), str(j + 1), font=FA(80), fill=INK + (255,), anchor="mm")
+        dl.text((176, 68), a, font=FA(62), fill=(INK if on else (150, 150, 160)) + (255,), anchor="lm")
+        dl.text((176, 142), b, font=FA(50), fill=((40, 140, 70) if on else (160, 160, 170)) + (255,), anchor="lm")
+        sc = 1.0 + 0.08 * max(0.0, 1 - (lt - t0) / 0.25) if on else 0.94
+        lay = lay.resize((int(960 * sc), int(200 * sc)))
+        img.paste(lay, (540 - lay.width // 2, y - lay.height // 2), lay)
+
+
+def e1_regles(lt, dur):
     def maisons(d):
-        for j, (x, c) in enumerate([(160, (240, 200, 120)), (320, (200, 220, 250)), (900, (250, 180, 180))]):
-            if lt > 0.3 + 0.35 * j:
-                maison(d, x, 1080, 130, c)
-    img = scene(lt, sign=False, mpose=dict(arm=0.95, mouth="grin"), z=1.0, center=(540, 960), extra=maisons)
-    tag(img, 540, 300, "1 ABONNÉ = 1 HABITANT", 76, YEL, INK, rot=-4, k=lt / 0.25)
-    return flash(img, lt)
-
-
-def e1_maison(lt, dur):
-    big = campagne().copy()
-    d = ImageDraw.Draw(big)
-    maison(d, 540, 1350, 520, (240, 200, 120), plaque="@TON_PSEUDO")
-    img = shot(big, push(lt, dur, 1.0, 1.1), center=(540, 1000))
-    tag(img, 540, 280, "TA MAISON", 90, WHITE, INK, rot=-4, k=lt / 0.25)
-    tag(img, 540, 440, "À TON NOM", 80, GREEN, INK, rot=3, k=(lt - 0.5) / 0.25)
-    return flash(img, lt)
+        if lt > T["comment"] - T["e1_regles"]:
+            maison(d, 900, 1120, 150, (240, 200, 120), plaque="@TOI")
+    img = dim(scene(lt, sign=False, mx=200, mpose=dict(arm=0.5, mouth="o" if int(lt * 7) % 2 else "smile"),
+                    extra=maisons), 0.45, blur=6, dark=0.75)
+    t0s = [T[k] - T["e1_regles"] for k in ("abonne", "comment", "decision", "palier")]
+    regles_panel(img, lt, t0s)
+    return img
 
 
 def e1_caisse(lt, dur):
@@ -201,32 +205,38 @@ def e1_choix(lt, dur):
 
 
 def e1_vote(lt, dur):
-    img = scene(lt, mpose=dict(arm=0.95, mouth="o" if int(lt * 7) % 2 else "grin"), z=1.05, center=(600, 1000))
-    big_number(img, (540, 320), "1, 2 OU 3 ?", 190, YEL, "VOTE EN COMMENTAIRE", k=lt / 0.25)
-    tag(img, 540, 640, "ABONNE-TOI = DEVIENS HABITANT", 50, ROUGE, WHITE, rot=-3, k=(lt - 0.8) / 0.25)
-    return shake(img, lt)
+    img = scene(lt, sign=False, mpose=dict(arm=0.95, mouth="o" if int(lt * 7) % 2 else "grin"), z=1.05,
+                center=(600, 1000))
+    tag(img, 540, 240, "LE PLUS VOTÉ GAGNE", 70, WHITE, INK, rot=-3, k=lt / 0.25)
+    tag(img, 540, 380, "RÉSULTAT DEMAIN", 64, ROUGE, WHITE, rot=3, k=(lt - 0.8) / 0.25)
+    big_number(img, (540, 600), "1, 2 OU 3 ?", 190, YEL, "VOTE EN COMMENTAIRE", k=(lt - 1.6) / 0.25)
+    tf = T["abo_fin"] - T["e1_vote"]
+    tag(img, 540, 1250, "ABONNE-TOI POUR VOIR LE VILLAGE GRANDIR", 44, ROUGE, WHITE, rot=-2, k=(lt - tf) / 0.25)
+    return shake(img, lt - 1.6)
 
 
 def episode1(voice_file=None):
     v = CartoonVideo("village_ep01", "scripts/village/ep01.txt", "", "", corner="LE VILLAGE DES ABONNÉS")
-    v.length = (27.5, 28.6, 30.0)
+    v.length = (29.0, 30.0, 31.0)
     v.hook_head_start = 0.0
     v.voice(voice_file or "output/_work_village_ep01/voice_raw.mp3")
-    sc = [("Jour un", e1_jour), ("le village le plus fauché", e1_fauche), ("Ici, zéro habitant", e1_zero),
-          ("La mairie", e1_mairie), ("Mais chaque abonné", e1_abonne), ("Et ceux qui commentent", e1_maison),
-          ("Dans la caisse", e1_caisse), ("Un, on répare", e1_choix), ("C'est toi qui décides", e1_vote)]
+    sc = [("Jour un", e1_jour), ("le village le plus fauché", e1_fauche), ("Pour l'instant", e1_un),
+          ("Les règles sont simples", e1_regles), ("Premier vote", e1_caisse), ("Un, réparer", e1_choix),
+          ("Le choix le plus voté", e1_vote)]
     for phrase, fn in sc:
         v.scene(phrase, fn)
         T[fn.__name__] = v.at(phrase)
-    T["un"], T["deux"], T["trois"] = v.at("Un, on répare"), v.at("Deux, on ouvre"), v.at("Trois, on fait")
+    T["abonne"], T["comment"], T["decision"] = v.at("Tu t'abonnes"), v.at("Tu commentes"), v.at("Et chaque décision")
+    T["palier"], T["abo_fin"] = v.at("À cent abonnés"), v.at("et abonne-toi")
+    T["un"], T["deux"], T["trois"] = v.at("Un, réparer"), v.at("Deux, ouvrir"), v.at("Trois, la fête")
     v.sfx(0.0, "impact", 1.0)
     v.sfx(T["e1_fauche"], "whoosh", 0.5)
-    v.sfx(T["e1_zero"], "rate", 0.7)
-    v.sfx(T["e1_abonne"], "pop", 0.8)
+    for k in ("abonne", "comment", "decision", "palier"):
+        v.sfx(T[k], "pop", 0.8)
     v.sfx(T["e1_caisse"], "ticks", 0.7)
     for k in ("un", "deux", "trois"):
         v.sfx(T[k], "pop", 0.8)
-    v.sfx(T["e1_vote"], "impact", 0.9)
+    v.sfx(T["e1_vote"] + 1.6, "impact", 0.9)
     for t0, fn in sorted(v.scenes, key=lambda x: x[0]):
         print(f"   {t0:5.1f}s {fn.__name__}")
     v.render()
