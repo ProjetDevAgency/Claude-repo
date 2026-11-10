@@ -242,6 +242,112 @@ def episode1(voice_file=None):
     v.render()
 
 
+# ───────────── épisode 1 en fausse 3D (vue isométrique du village) ─────────────
+import iso  # noqa: E402
+
+BASE_ETAT = dict(maire=(0.6, -1.2))
+PROJETS = {"1": (iso.RIVIERE_I + 1.0, iso.ROUTE_J + 0.5), "2": (2.8, 1.8), "3": (-2.0, -2.0)}
+
+
+def vue(etat, z=1.0, center=(540, 960)):
+    return iso.camera(iso.carte_cache(etat), z, center)
+
+
+def pin(img, xy, n, label=None, k=1.0):
+    """Repère numéroté planté sur la carte (au-dessus d'un projet)."""
+    if k <= 0:
+        return
+    d = ImageDraw.Draw(img)
+    x, y = xy
+    s = 0.6 + 0.4 * back(k)
+    d.line([x, y, x, y - 130 * s], fill=INK, width=8)
+    d.ellipse([x - 66 * s, y - 262 * s, x + 66 * s, y - 130 * s], fill=YEL, outline=INK, width=8)
+    d.text((x, y - 196 * s), n, font=FA(int(90 * s)), fill=INK, anchor="mm")
+    if label:
+        tag(img, min(max(x, 250), 830), y + 45, label, 42, WHITE, INK, rot=0, k=k)
+
+
+def e1_jour(lt, dur):
+    img, _ = vue(BASE_ETAT, push(lt, dur, 1.0, 1.12), (560, 930))
+    big_number(img, (540, 300), "JOUR 1", 210, YEL, k=1.0)
+    tag(img, 540, 520, "FAUCHÉ-LES-OIES", 70, WHITE, ROUGE, rot=-3, k=(lt + 0.3) / 0.3)
+    return shake(img, lt)
+
+
+def e1_fauche(lt, dur):
+    bx, by = iso.iso(iso.RIVIERE_I + 1, iso.ROUTE_J + 0.5)
+    img, _ = vue(BASE_ETAT, push(lt, dur, 1.9, 2.1), (bx + 40, by - 40))
+    tag(img, 540, 260, "LE VILLAGE LE PLUS", 66, WHITE, INK, rot=-4, k=lt / 0.25)
+    tag(img, 540, 400, "FAUCHÉ DE FRANCE", 80, ROUGE, WHITE, rot=3, k=(lt - 0.4) / 0.25)
+    tag(img, 540, 1250, "PONT CASSÉ", 56, YEL, INK, rot=-4, k=(lt - 0.8) / 0.25)
+    return flash(img, lt)
+
+
+def e1_un(lt, dur):
+    mx, my = iso.iso(1.1, -0.7)
+    img, to = vue(BASE_ETAT, push(lt, dur, 2.1, 2.3), (mx, my - 60))
+    big_number(img, (540, 320), "1 HABITANT", 180, WHITE, k=lt / 0.25)
+    if lt > 0.9:
+        x, y = to(1.1, -0.7, 60)
+        tag(img, x, y - 40, "MOI", 64, YEL, INK, rot=-6, k=(lt - 0.9) / 0.25)
+    return flash(img, lt)
+
+
+def e1_regles(lt, dur):
+    t_ab, t_co, t_de, t_pa = (T[k] - T["e1_regles"] for k in ("abonne", "comment", "decision", "palier"))
+    etat = dict(BASE_ETAT)
+    if lt > t_ab:
+        n = min(6, int((lt - t_ab) / 0.25) + 1)
+        etat["habitants"] = [(0.0, 1.5 + 0.9 * q, (200, 60, 60)) if q % 2 else (1.5 + 0.9 * q, 0.0, (60, 120, 200))
+                             for q in range(n)]
+    if lt > t_co:
+        etat["maisons"] = [round(min(1.0, (lt - t_co) / 0.6), 1)]
+    if lt > t_pa:
+        etat["mystere"] = round(min(1.0, (lt - t_pa) / 0.5), 1)
+    img, to = vue(etat, 1.25, (560, 700))
+    if lt > t_co + 0.5:
+        x, y = to(*iso.TERRAINS["maisons"][0], 75)
+        tag(img, x + 20, y - 30, "@TON_PSEUDO", 36, WHITE, INK, rot=0, k=(lt - t_co - 0.5) / 0.25)
+    regles_panel(img, lt, [t_ab, t_co, t_de, t_pa], y0=430)
+    return img
+
+
+def e1_caisse(lt, dur):
+    mx, my = iso.iso(1.6, -2.0)
+    img, _ = vue(BASE_ETAT, push(lt, dur, 1.6, 1.75), (mx, my + 40))
+    tag(img, 540, 260, "CAISSE DE LA MAIRIE", 60, WHITE, INK, rot=-3, k=lt / 0.25)
+    big_number(img, (540, 520), counter(0, 1000, lt, 0.7, "{:,} €"), 210, GREEN, k=1.0)
+    return flash(img, lt)
+
+
+def pins(img, to, lt, t0s, labels=True):
+    for q, ((n, lab, prix), t0) in enumerate(zip(CHOIX, t0s)):
+        i, j = PROJETS[n]
+        pin(img, to(i, j), n, None, (lt - t0) / 0.25)
+        if labels:   # légende sous la carte, une ligne par choix
+            tag(img, 540, 1265 + q * 98, f"{n}  ·  {lab}  ·  {prix}", 44, WHITE, INK, rot=0, k=(lt - t0) / 0.25)
+
+
+def e1_choix(lt, dur):
+    t0s = [0.0, T["deux"] - T["un"], T["trois"] - T["un"]]
+    img, to = vue(BASE_ETAT, 1.15, (420, 1010))
+    tag(img, 540, 230, "ON FAIT QUOI ?", 80, YEL, INK, rot=-4, k=lt / 0.25)
+    pins(img, to, lt, t0s)
+    return img
+
+
+def e1_vote(lt, dur):
+    img, to = vue(BASE_ETAT, push(lt, dur, 1.1, 1.18), (420, 800))
+    pins(img, to, 9.0, [0, 0, 0], labels=False)
+    tag(img, 540, 200, "LE PLUS VOTÉ GAGNE", 64, WHITE, INK, rot=-3, k=lt / 0.25)
+    tag(img, 540, 330, "RÉSULTAT DEMAIN", 58, ROUGE, WHITE, rot=3, k=(lt - 0.8) / 0.25)
+    big_number(img, (540, 540), "1, 2 OU 3 ?", 180, YEL, "VOTE EN COMMENTAIRE", k=(lt - 1.6) / 0.25)
+    tf = T["abo_fin"] - T["e1_vote"]
+    tag(img, 540, 1330, "ABONNE-TOI POUR VOIR LE VILLAGE GRANDIR", 44, ROUGE, WHITE, rot=-2, k=(lt - tf) / 0.25)
+    return shake(img, lt - 1.6)
+
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--ep", type=int, default=1)
