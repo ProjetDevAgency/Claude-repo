@@ -13,7 +13,7 @@ from engine import H, W
 from village import (BLANC, BLEU, ROUGE, bouton_abonner, foule, gros_plan_maire, panneau, pin, titre2)
 
 GOLD = (235, 185, 40)
-iso.TW, iso.TH = 112, 56
+iso.TW, iso.TH = 92, 46
 iso.HK = iso.TW / 96
 iso.OY = 960
 SKIN_D = (150, 100, 70)
@@ -72,7 +72,7 @@ def _reserve():
 
 
 def _visible(i, j):
-    return abs(i - j) <= 8 and -14 <= i + j <= 22
+    return abs(i - j) <= 9 and -16 <= i + j <= 24
 
 
 def _cases(ci, cj, w, d):
@@ -94,7 +94,7 @@ def _placer(items, occ):
             cs = _cases(ci, cj, w, d)
             if all(c not in occ and _visible(*c) for c in cs):
                 out[nom] = (ci, cj)
-                occ.update(_cases(ci - 1, cj - 1, w + 2, d + 2))   # une case libre tout autour
+                occ.update(_cases(ci - 2, cj - 2, w + 4, d + 4))   # deux cases libres tout autour
                 for k in range(-14, 15):                           # les routes restent des routes
                     occ.discard((0, k)) if False else None
                 break
@@ -147,7 +147,7 @@ def villa(d, i, j, toit=(250, 250, 250), k=1.0, piscine=True, palmiers=True):
 
 
 def ps5(d, i, j, k=1.0):
-    """La maison PS5 : console debout, deux coques blanches, cœur noir, liseré bleu."""
+    """La maison PS5 : console debout, deux coques blanches, cœur noir, liseré bleu (sans socle)."""
     h = 150 * k
     iso.box(d, i, j, 0.35, 1.0, h, (248, 248, 252))
     iso.box(d, i + 0.35, j + 0.08, 0.2, 0.84, h * 0.95, (25, 25, 32))
@@ -155,7 +155,6 @@ def ps5(d, i, j, k=1.0):
     x, y = iso.iso(i + 0.45, j + 1.0, h * 0.55)
     q = iso.HK
     d.line([x * SS, (y - 40 * q) * SS, x * SS, (y + 40 * q) * SS], fill=(80, 170, 255), width=int(6 * q * SS))
-    iso.box(d, i - 0.1, j - 0.05, 1.1, 1.1, 6, (40, 40, 48))
 
 
 def voiture(d, i, j, k=1.0):
@@ -174,18 +173,27 @@ def voiture(d, i, j, k=1.0):
 
 
 def grotte(d, i, j, t=0.0):
-    pts = [iso.iso(i, j + 1.4), iso.iso(i - 0.1, j + 0.3, 50), iso.iso(i + 0.7, j, 120), iso.iso(i + 1.5, j + 0.1, 70),
-           iso.iso(i + 1.7, j + 1.4)]
-    d.polygon([(x * SS, y * SS) for x, y in pts], fill=(125, 120, 115))
-    pts2 = [iso.iso(i + 0.3, j + 1.4), iso.iso(i + 0.6, j + 0.6, 90), iso.iso(i + 1.3, j + 0.5, 60), iso.iso(i + 1.5, j + 1.4)]
-    d.polygon([(x * SS, y * SS) for x, y in pts2], fill=(150, 145, 138))
-    ex, ey = iso.iso(i + 0.85, j + 1.4)
-    q = iso.HK
-    d.chord([(ex - 30 * q) * SS, (ey - 60 * q) * SS, (ex + 30 * q) * SS, (ey + 10 * q) * SS], 180, 360, fill=(35, 30, 28))
-    fx, fy = iso.iso(i + 0.9, j + 2.0)                       # feu de camp
+    """Grotte : un amas de gros rochers arrondis, entrée sombre en arche face à la caméra, feu devant."""
+    q, S = iso.HK, SS
+    cx, cy = iso.iso(i + 1.0, j + 1.0)
+    rochers = [(-70, -40, 75, (120, 115, 110)), (60, -45, 80, (128, 122, 116)), (0, -95, 90, (138, 132, 125)),
+               (-40, -150, 60, (150, 144, 136)), (45, -140, 55, (145, 139, 131)), (-100, 5, 45, (110, 105, 100)),
+               (100, 0, 50, (115, 110, 104))]
+    for dx, dy, r, col in rochers:
+        x, y, rr = cx + dx * q, cy + dy * q, r * q
+        d.ellipse([(x - rr) * S, (y - rr * 0.85) * S, (x + rr) * S, (y + rr * 0.85) * S], fill=col)
+        d.ellipse([(x - rr * 0.6) * S, (y - rr * 0.75) * S, (x + rr * 0.1) * S, (y - rr * 0.25) * S],
+                  fill=tuple(min(255, c + 25) for c in col))
+    ex, ey = cx, cy + 10 * q                                  # entrée de la grotte
+    d.chord([(ex - 48 * q) * S, (ey - 95 * q) * S, (ex + 48 * q) * S, (ey + 40 * q) * S], 180, 360, fill=(30, 26, 24))
+    d.rectangle([(ex - 48 * q) * S, (ey - 28 * q) * S, (ex + 48 * q) * S, ey * S], fill=(30, 26, 24))
+    fx, fy = iso.iso(i + 1.3, j + 2.2)                        # feu de camp
     fl = 1 + 0.15 * math.sin(t * 12)
-    d.polygon([(fx - 14 * q) * SS, fy * SS, fx * SS, (fy - 40 * q * fl) * SS, (fx + 14 * q) * SS, fy * SS], fill=(250, 140, 30))
-    d.polygon([(fx - 7 * q) * SS, fy * SS, fx * SS, (fy - 22 * q * fl) * SS, (fx + 7 * q) * SS, fy * SS], fill=(255, 220, 60))
+    for a in (-1, 1):
+        d.line([(fx - 18 * q) * S, (fy + 4 * q * a) * S, (fx + 18 * q) * S, (fy - 4 * q * a) * S],
+               fill=(110, 70, 40), width=int(6 * q * S))
+    d.polygon([(fx - 16 * q) * S, fy * S, fx * S, (fy - 46 * q * fl) * S, (fx + 16 * q) * S, fy * S], fill=(250, 140, 30))
+    d.polygon([(fx - 8 * q) * S, fy * S, fx * S, (fy - 26 * q * fl) * S, (fx + 8 * q) * S, fy * S], fill=(255, 220, 60))
 
 
 def drapeau(d, i, j, kind, z=95):
@@ -210,11 +218,14 @@ def boulangerie(d, i, j, k=1.0):
 
 
 def club_boxe(d, i, j, k=1.0):
-    iso.box(d, i, j, 1.2, 1.2, 46 * k, (60, 60, 70))
+    iso.box(d, i, j, 1.2, 1.2, 52 * k, (235, 235, 240))
     if k > 0.6:
-        x, y = iso.iso(i + 0.6, j + 1.2, 30)
+        iso.box(d, i - 0.05, j - 0.05, 1.3, 1.3, 8, (200, 30, 40), z0=52 * k)
+        x, y = iso.iso(i + 0.6, j + 1.2, 34)
         q = iso.HK
-        d.ellipse([(x - 16 * q) * SS, (y - 14 * q) * SS, (x + 16 * q) * SS, (y + 14 * q) * SS], fill=(210, 30, 40))
+        d.rounded_rectangle([(x - 34 * q) * SS, (y - 12 * q) * SS, (x + 34 * q) * SS, (y + 12 * q) * SS],
+                            radius=int(4 * q * SS), fill=(200, 30, 40))
+        d.text((x * SS, y * SS), "BOXE", font=FA(int(16 * q * SS)), fill=WHITE, anchor="mm")
 
 
 def stade(d, i, j, k=1.0):
