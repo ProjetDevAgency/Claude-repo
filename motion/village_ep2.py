@@ -13,6 +13,9 @@ from engine import H, W
 from village import (BLANC, BLEU, ROUGE, bouton_abonner, foule, gros_plan_maire, panneau, pin, titre2)
 
 GOLD = (235, 185, 40)
+iso.TW, iso.TH = 112, 56
+iso.HK = iso.TW / 96
+iso.OY = 960
 SKIN_D = (150, 100, 70)
 T = {}
 
@@ -45,6 +48,78 @@ VILLA_T0 = (2.0, 5.6)
 VILLA_OUMAR = (4.4, 5.8)
 PS5 = (0.6, 6.0)
 VOITURE = (4.9, 3.0)
+
+
+# ───────────── lotissement : chaque bâtiment sur sa parcelle, sans chevauchement ─────────────
+# La carte est découpée en cases de 1×1. Les routes (i = 0, j = 0), la rivière, la mairie et l'épicerie
+# sont réservées. Chaque bâtiment prend des cases libres et visibles à l'écran, au plus près du carrefour.
+
+def _reserve():
+    occ = set()
+    for k in range(-15, 16):
+        occ.add((0, k))
+        occ.add((k, 0))
+        for r in range(iso.RIVIERE_I, iso.RIVIERE_I + 2):
+            occ.add((r, k))
+    for i in range(1, 5):
+        for j in range(-4, 0):
+            occ.add((i, j))                      # mairie + son parvis
+    for i in range(1, 5):
+        for j in range(1, 4):
+            occ.add((i, j))                      # épicerie + son trottoir
+    occ.add((0, -1))
+    return occ
+
+
+def _visible(i, j):
+    return abs(i - j) <= 8 and -14 <= i + j <= 22
+
+
+def _cases(ci, cj, w, d):
+    return [(ci + a, cj + b) for a in range(w) for b in range(d)]
+
+
+def _placer(items, occ):
+    """items : [(nom, largeur, profondeur)] → {nom: (ci, cj)}.
+    Les bâtiments s'alignent le long des deux routes (comme un vrai village), en partant du carrefour,
+    avec une case vide entre deux bâtiments pour que chacun se voie bien."""
+    def cle(c):
+        i, j = c
+        d_route = min(abs(i - 0.5), abs(j - 0.5))
+        return (round(d_route), abs(i - 0.5) + abs(j - 0.5), j, i)
+    cand = sorted(((i, j) for i in range(-14, 15) for j in range(-14, 15)), key=cle)
+    out = {}
+    for nom, w, d in items:
+        for ci, cj in cand:
+            cs = _cases(ci, cj, w, d)
+            if all(c not in occ and _visible(*c) for c in cs):
+                out[nom] = (ci, cj)
+                occ.update(_cases(ci - 1, cj - 1, w + 2, d + 2))   # une case libre tout autour
+                for k in range(-14, 15):                           # les routes restent des routes
+                    occ.discard((0, k)) if False else None
+                break
+    return out
+
+
+_OCC = _reserve()
+_PETITS = _placer([(p, 1, 1) for p in MAISONS], _OCC)
+_GRANDS = _placer([("ps5", 1, 1), ("voiture", 2, 1), ("villa_t0", 4, 2), ("villa_oumar", 4, 2), ("grotte", 2, 3),
+                   ("foot", 2, 2), ("boulangerie", 2, 2), ("boxe", 2, 2)], _OCC)
+for _p, (_ci, _cj) in _PETITS.items():
+    _case, _col, _toit, _fl = MAISONS[_p]
+    MAISONS[_p] = ((float(_ci), float(_cj)), _col, _toit, _fl)
+FOOT = (_GRANDS["foot"][0] + 0.2, _GRANDS["foot"][1] + 0.2)
+BOULANGERIE = (_GRANDS["boulangerie"][0] + 0.4, _GRANDS["boulangerie"][1] + 0.4)
+BOXE = (_GRANDS["boxe"][0] + 0.4, _GRANDS["boxe"][1] + 0.4)
+GROTTE = (_GRANDS["grotte"][0] + 0.15, _GRANDS["grotte"][1])
+VILLA_T0 = (_GRANDS["villa_t0"][0] + 0.3, _GRANDS["villa_t0"][1] + 0.3)
+VILLA_OUMAR = (_GRANDS["villa_oumar"][0] + 0.3, _GRANDS["villa_oumar"][1] + 0.3)
+VOITURE = (_GRANDS["voiture"][0] + 0.2, _GRANDS["voiture"][1])
+PS5 = (_GRANDS["ps5"][0] + 0.05, _GRANDS["ps5"][1])
+_libres = sorted(((i, j) for i in range(-12, 13) for j in range(-12, 13)
+                  if (i, j) not in _OCC and _visible(i, j) and abs(i - 0.5) + abs(j - 0.5) > 6),
+                 key=lambda c: (c[0] * 7 + c[1] * 13) % 11)
+iso.ARBRES = [(i + 0.1, j + 0.1) for (i, j) in _libres[:26]]
 
 
 def villa(d, i, j, toit=(250, 250, 250), k=1.0, piscine=True, palmiers=True):
@@ -157,13 +232,13 @@ def village_j2(etat=None, t=0.0, extra=None):
     d = ImageDraw.Draw(big)
     objs = []
     for pseudo, ((i, j), col, toit, flag) in MAISONS.items():
-        objs.append((i + j, lambda i=i, j=j, c=col, r=toit, f=flag: (
+        objs.append((i + j + 1, lambda i=i, j=j, c=col, r=toit, f=flag: (
             iso.maison(d, i, j, 1.0, c, r), f and drapeau(d, i, j, f))))
-    objs.append((sum(VILLA_T0) + 2, lambda: villa(d, *VILLA_T0, toit=GOLD)))
-    objs.append((sum(VILLA_OUMAR) + 2, lambda: villa(d, *VILLA_OUMAR)))
+    objs.append((sum(VILLA_T0) + 2.4, lambda: villa(d, *VILLA_T0, toit=GOLD)))
+    objs.append((sum(VILLA_OUMAR) + 2.4, lambda: villa(d, *VILLA_OUMAR)))
     objs.append((sum(PS5) + 1, lambda: ps5(d, *PS5)))
-    objs.append((sum(VOITURE) + 1.5, lambda: voiture(d, *VOITURE)))
-    objs.append((sum(GROTTE) + 2, lambda: grotte(d, *GROTTE, t)))
+    objs.append((sum(VOITURE) + 1.3, lambda: voiture(d, *VOITURE)))
+    objs.append((sum(GROTTE) + 1.8, lambda: grotte(d, *GROTTE, t)))
     for name, fn, pos in (("foot", stade, FOOT), ("boulangerie", boulangerie, BOULANGERIE), ("boxe", club_boxe, BOXE)):
         if extra and name in extra:
             objs.append((sum(pos) + 1.5, lambda fn=fn, pos=pos: fn(d, *pos)))
