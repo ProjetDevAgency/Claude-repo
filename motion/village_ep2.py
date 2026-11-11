@@ -12,6 +12,7 @@ from cartoon import (FA, GREEN, INK, RED, SS, WHITE, YEL, CartoonVideo, back, bi
 from engine import H, W
 from village import (BLANC, BLEU, ROUGE, bouton_abonner, foule, gros_plan_maire, panneau, pin, titre2)
 import rue
+import facades
 
 GOLD = (235, 185, 40)
 iso.TW, iso.TH = 76, 38
@@ -669,7 +670,7 @@ def perso(img, pseudo, lt, x=540, base=2050, sc=1.45):
     p.setdefault("blink", blink)
     character(d, x, base, sc=sc, **p)
     accessoires(d, x, base, sc, acc, lt)
-    lay = lay.resize((W, H), Image.LANCZOS)
+    lay = rue.contour(lay.resize((W, H), Image.LANCZOS), 4)
     img.paste(lay, (0, 0), lay)
 
 
@@ -725,23 +726,77 @@ def construction(lt, nom, z, dx=230, dz=-60, t0=0.15, duree=0.7):
     return iso.camera(big, z, (x + dx / z, y + dz / z))   # dx, dz en pixels d'écran
 
 
-def fiche(lt, dur, pseudo, case=None, z=3.6, nom=None, role=None, x=770, sc=1.3, bat=None):
-    """Moment de l'habitant : sa maison sort de terre, son pseudo s'affiche, son personnage arrive."""
-    bat = bat or pseudo
-    img, to = construction(lt, bat, push(lt, dur, z, z + 0.15))
-    perso(img, pseudo, max(0.0, lt - 0.9), x=x, sc=sc, base=2000) if lt > 0.9 else None
-    img = rue.contour_aretes(img, seuil=70, w=3)
+FACADE = {
+    "vendeuse": ("epicerie", {}),
+    "T_0": ("villa", {"toit": GOLD}),
+    "oumar dansoko": ("villa", {}),
+    "kova.zfr": ("voiture", {}),
+    "ps5": ("ps5", {}),
+    "pkmoi": ("grotte", {}),
+}
+
+
+def facade_de(pseudo, cx=540, w=620):
+    if pseudo in FACADE:
+        kind, kw = FACADE[pseudo]
+        return facades.calque(kind, **kw)
+    (_, col, toit, flag) = MAISONS[pseudo]
+    return facades.calque("maison", cx=cx, w=w, col=col, toit=toit, flag=flag)
+
+
+def pop_k(lt, t0=0.1, duree=0.5):
+    if lt < t0:
+        return 0.0
+    return back((lt - t0) / duree) if lt - t0 < duree else 1.0
+
+
+def poussiere(img, lt, cx=540, t0=0.1, duree=0.5):
+    a = (lt - t0 - duree * 0.6) / 0.6
+    if not 0 < a < 1:
+        return
+    d = ImageDraw.Draw(img)
+    for n in range(9):
+        side = -1 if n % 2 else 1
+        px = cx + side * (120 + 260 * a) * (0.6 + 0.1 * n)
+        r = 30 + 40 * a
+        g = int(225 + 20 * a)
+        d.ellipse([px - r, facades.BASE + 20 - r * 0.6, px + r, facades.BASE + 20 + r * 0.6], fill=(g, g - 8, g - 20))
+
+
+def etiquette(img, x, y, txt):
+    tag(img, x, y, txt, 34, WHITE, INK, rot=0, k=1.0)
+
+
+def fiche(lt, dur, pseudo, case=None, z=None, nom=None, role=None, x=770, sc=0.95, bat=None):
+    """Moment de l'habitant (comme la vidéo modèle) : sa maison en façade derrière lui, son personnage devant."""
+    img = facades.decor().copy()
+    facades.poser(img, facade_de(pseudo), pop_k(lt))
+    poussiere(img, lt)
+    if lt > 0.85:
+        perso(img, pseudo, lt - 0.85, x=x, sc=sc, base=1900)
+        etiquette(img, x, 1900 - 900 * sc - 40, "@" + pseudo)
     titre2(img, "HABITANT DE FAUCHÉ-LES-OIES" if nom is None else "", "@" + pseudo.upper() if nom is None else nom,
            k=lt / 0.25, y=190)
     r = role if role is not None else PERSOS[pseudo][2]
     if r:
         tag(img, 540, 420, r, 50, ROUGE, WHITE, rot=-3, k=(lt - 0.5) / 0.25)
-    i, j = case_de(bat)
-    hx, hy = to(i + 0.5, j + 0.5, 140)
-    if lt > 0.8:
-        tag(img, hx, hy, "@" + (pseudo if nom is None else pseudo), 34, WHITE, INK, rot=0, k=(lt - 0.8) / 0.2)
-    return shake(flash(img, lt), lt - 0.85, dur=0.25, amp=10)
+    return shake(flash(img, lt), lt - 0.55, dur=0.25, amp=12)
 
+
+def duo(lt, dur, a, b, titre_petit, titre_gros):
+    img = facades.decor().copy()
+    facades.poser(img, facade_de(a, cx=285, w=430), pop_k(lt), cx=285)
+    facades.poser(img, facade_de(b, cx=800, w=430), pop_k(lt, t0=0.35), cx=800)
+    poussiere(img, lt, cx=285)
+    poussiere(img, lt, cx=800, t0=0.35)
+    if lt > 0.85:
+        perso(img, a, lt - 0.85, x=285, sc=0.8, base=1900)
+        etiquette(img, 285, 1900 - 720 - 40, "@" + a)
+    if lt > 1.1:
+        perso(img, b, lt - 1.1, x=800, sc=0.8, base=1900)
+        etiquette(img, 800, 1900 - 720 - 40, "@" + b)
+    titre2(img, titre_petit, titre_gros, k=lt / 0.25, y=190)
+    return img
 
 
 # ───────────── scènes ─────────────
@@ -812,16 +867,11 @@ def s_alexis(lt, dur):
 
 
 def s_adjoint(lt, dur):
-    img, _ = construction(lt, "Maël", push(lt, dur, 3.2, 3.4), dx=0, dz=300)
-    if lt > 0.9:
-        perso(img, "Maël", lt - 0.9, x=290, sc=1.15)
-        perso(img, "Michael", max(0, lt - 1.3), x=790, sc=1.15)
-    img = rue.contour_aretes(img, seuil=70, w=3)
-    titre2(img, "POSTE D'ADJOINT", "@MAËL VS @MICHAEL", k=lt / 0.25, y=190)
-    big_number(img, (540, 900), "VS", 170, RED, k=(lt - 1.4) / 0.25)
+    img = duo(lt, dur, "Maël", "Michael", "POSTE D'ADJOINT", "@MAËL VS @MICHAEL")
+    big_number(img, (540, 1250), "VS", 150, RED, k=(lt - 1.3) / 0.25)
     if lt > dur - 1.6:
-        tag(img, 540, 520, "ÇA SE JOUERA AU VOTE", 56, YEL, INK, rot=-3, k=(lt - (dur - 1.6)) / 0.25)
-    return shake(flash(img, lt), lt - 0.85, dur=0.25, amp=10)
+        tag(img, 540, 420, "ÇA SE JOUERA AU VOTE", 56, YEL, INK, rot=-3, k=(lt - (dur - 1.6)) / 0.25)
+    return shake(flash(img, lt), lt - 0.55, dur=0.25, amp=12)
 
 
 def s_koko(lt, dur):
@@ -862,13 +912,8 @@ def s_pkmoi(lt, dur):
 
 
 def s_drapeaux(lt, dur):
-    img, _ = construction(lt, "You", push(lt, dur, 3.2, 3.4), dx=0, dz=300)
-    if lt > 0.9:
-        perso(img, "You", lt - 0.9, x=290, sc=1.15)
-        perso(img, "ghb_s91", max(0, lt - 1.3), x=780, sc=1.15)
-    img = rue.contour_aretes(img, seuil=70, w=3)
-    titre2(img, "MAROC ET TUNISIE", "@YOU & @GHB_S91", k=lt / 0.25, y=190)
-    return shake(flash(img, lt), lt - 0.85, dur=0.25, amp=10)
+    img = duo(lt, dur, "You", "ghb_s91", "MAROC ET TUNISIE", "@YOU & @GHB_S91")
+    return shake(flash(img, lt), lt - 0.55, dur=0.25, amp=12)
 
 
 def s_waillox(lt, dur):
@@ -948,9 +993,9 @@ def main():
     for k in ("s_amine", "s_alexis", "s_adjoint", "s_koko", "s_fille", "s_t0", "s_oumar", "s_kova", "s_ps5",
               "s_pkmoi", "s_drapeaux", "s_waillox", "s_kuromi", "s_skr"):
         v.sfx(T[k], "whoosh", 0.45)
-        v.sfx(T[k] + 0.15, "marteau", 0.7)
-        v.sfx(T[k] + 0.85, "impact", 0.6)
-        v.sfx(T[k] + 0.95, "pop", 0.6)
+        v.sfx(T[k] + 0.05, "marteau", 0.7)
+        v.sfx(T[k] + 0.55, "impact", 0.7)
+        v.sfx(T[k] + 0.9, "pop", 0.6)
     v.sfx(T["sarrete"], "impact", 0.8)
     for k in ("c1", "c2", "c3"):
         v.sfx(T[k], "pop", 0.7)
