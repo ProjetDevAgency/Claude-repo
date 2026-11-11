@@ -72,7 +72,7 @@ def _reserve():
 
 
 def _visible(i, j):
-    return abs(i - j) <= 12 and -20 <= i + j <= 30
+    return abs(i - j) <= 13 and -20 <= i + j <= 30
 
 
 def _cases(ci, cj, w, d):
@@ -102,8 +102,28 @@ def _placer(items, occ, marge=2):
 
 
 _OCC = _reserve()
+# Paysage autour du village : un lac, des champs et des collines dans les zones libres de la périphérie.
+def _zone(w, d, rmin, strict=False, marge=0):
+    cand = sorted(((i, j) for i in range(-16, 17) for j in range(-16, 17)),
+                  key=lambda c: (abs(c[0] - 0.5) + abs(c[1] - 0.5)))
+    for ci, cj in cand:
+        if abs(ci - 0.5) + abs(cj - 0.5) < rmin:
+            continue
+        cs = _cases(ci, cj, w, d)
+        ok = (lambda c: _visible(*c)) if strict else (lambda c: abs(c[0] - c[1]) <= 15 and -22 <= c[0] + c[1] <= 32)
+        if all(c not in _OCC and ok(c) for c in cs):
+            _OCC.update(_cases(ci - marge, cj - marge, w + 2 * marge, d + 2 * marge))
+            return (ci, cj)
+    return None
+
+
+
+_VT = _zone(7, 3, 6, strict=True, marge=2)
+_VO = _zone(7, 3, 6, strict=True, marge=2)
+VILLA_T0 = (_VT[0] + 0.5, _VT[1] + 0.4)
+VILLA_OUMAR = (_VO[0] + 0.5, _VO[1] + 0.4)
 _PETITS = _placer([(p, 1, 1) for p in MAISONS], _OCC)
-_GRANDS = _placer([("ps5", 1, 1), ("voiture", 2, 1), ("villa_t0", 4, 2), ("villa_oumar", 4, 2), ("grotte", 2, 3),
+_GRANDS = _placer([("ps5", 1, 1), ("voiture", 2, 1), ("grotte", 2, 3),
                    ("foot", 2, 2), ("boulangerie", 2, 2), ("boxe", 2, 2)], _OCC)
 for _p, (_ci, _cj) in _PETITS.items():
     _case, _col, _toit, _fl = MAISONS[_p]
@@ -117,12 +137,18 @@ _TOITS = [(205, 75, 60), (180, 90, 50), (90, 100, 140), (60, 120, 80), (150, 60,
 _GEN = _placer([("hab%d" % n, 1, 1) for n in range(max(0, NB_ABONNES - _NOMMES))], _OCC, marge=1)
 GENERIQUES = [((float(ci), float(cj)), _COUL[n % len(_COUL)], _TOITS[n % len(_TOITS)])
               for n, (ci, cj) in enumerate(_GEN.values())]
+LAC = _zone(4, 3, 7, strict=True)
+CHAMPS = [z + (w, d, kind) for (w, d, kind) in ((3, 2, "ble"), (2, 3, "colza"), (3, 2, "vigne"), (2, 2, "labour"),
+                                                 (3, 2, "colza"), (2, 3, "ble"), (3, 2, "labour"), (2, 2, "vigne"))
+          for z in [_zone(w, d, 8)] if z]
+COLLINES = [(-16, -16, 8, 7), (-21, -10, 7, 7), (-10, -21, 7, 7),
+            (20, 20, 8, 8), (26, 14, 7, 7), (14, 26, 7, 7), (19, 9, 5, 5), (9, 19, 5, 5)]
+
+
 FOOT = (_GRANDS["foot"][0] + 0.2, _GRANDS["foot"][1] + 0.2)
 BOULANGERIE = (_GRANDS["boulangerie"][0] + 0.4, _GRANDS["boulangerie"][1] + 0.4)
 BOXE = (_GRANDS["boxe"][0] + 0.4, _GRANDS["boxe"][1] + 0.4)
 GROTTE = (_GRANDS["grotte"][0] + 0.15, _GRANDS["grotte"][1])
-VILLA_T0 = (_GRANDS["villa_t0"][0] + 0.3, _GRANDS["villa_t0"][1] + 0.3)
-VILLA_OUMAR = (_GRANDS["villa_oumar"][0] + 0.3, _GRANDS["villa_oumar"][1] + 0.3)
 VOITURE = (_GRANDS["voiture"][0] + 0.2, _GRANDS["voiture"][1])
 PS5 = (_GRANDS["ps5"][0] + 0.05, _GRANDS["ps5"][1])
 _libres = sorted(((i, j) for i in range(-12, 13) for j in range(-12, 13)
@@ -131,23 +157,27 @@ _libres = sorted(((i, j) for i in range(-12, 13) for j in range(-12, 13)
 iso.ARBRES = [(i + 0.1, j + 0.1) for (i, j) in _libres[:26]]
 
 
-def villa(d, i, j, toit=(250, 250, 250), k=1.0, piscine=True, palmiers=True):
-    """Villa sur deux étages, toit-terrasse, grande piscine et palmiers : se voit de loin."""
-    iso.box(d, i, j, 1.6, 1.2, 50 * k, (250, 250, 245))
+def villa(d, i, j, toit=(250, 250, 250), k=1.0, piscine=True, palmiers=True, e=1.6):
+    """Grande villa sur deux étages, toit-terrasse, grande piscine avec plage et palmiers."""
+    iso.box(d, i, j, 1.6 * e, 1.2 * e, 50 * k * e, (250, 250, 245))
     if k > 0.5:
-        iso.box(d, i + 0.2, j + 0.1, 1.2, 0.9, 40 * k, (240, 240, 235), z0=50 * k)
-        iso.box(d, i + 0.15, j + 0.05, 1.3, 1.0, 6, toit, z0=90 * k)
-        for q in range(3):                      # baies vitrées
-            a = i + 0.25 + q * 0.42
-            d.polygon([iso.P(a, j + 1.2, 12), iso.P(a + 0.3, j + 1.2, 12), iso.P(a + 0.3, j + 1.2, 40),
-                       iso.P(a, j + 1.2, 40)], fill=(150, 200, 240))
+        iso.box(d, i + 0.2 * e, j + 0.1 * e, 1.2 * e, 0.9 * e, 40 * k * e, (240, 240, 235), z0=50 * k * e)
+        iso.box(d, i + 0.15 * e, j + 0.05 * e, 1.3 * e, 1.0 * e, 6 * e, toit, z0=90 * k * e)
+        for q in range(4):                      # baies vitrées sur deux niveaux
+            a = i + (0.2 + q * 0.34) * e
+            for z0, z1 in ((10, 40), (60, 82)):
+                d.polygon([iso.P(a, j + 1.2 * e, z0 * e), iso.P(a + 0.24 * e, j + 1.2 * e, z0 * e),
+                           iso.P(a + 0.24 * e, j + 1.2 * e, z1 * e), iso.P(a, j + 1.2 * e, z1 * e)], fill=(150, 200, 240))
     if piscine:
-        iso.tile(d, i + 1.7, j - 0.1, (250, 250, 250), 1.4, 1.4)
-        iso.tile(d, i + 1.8, j, (60, 180, 245), 1.2, 1.2)
+        iso.tile(d, i + 1.75 * e, j - 0.15 * e, (245, 235, 210), 1.7 * e, 1.6 * e)       # plage en bois clair
+        iso.tile(d, i + 1.9 * e, j, (250, 250, 250), 1.4 * e, 1.3 * e)
+        iso.tile(d, i + 1.97 * e, j + 0.07 * e, (60, 180, 245), 1.26 * e, 1.16 * e)
+        for q in range(2):                                                         # transats
+            iso.box(d, i + (2.05 + q * 0.4) * e, j + 1.32 * e, 0.28 * e, 0.12 * e, 5, (250, 120, 90))
     if palmiers:
-        for (a, b) in ((i - 0.3, j + 1.3), (i + 3.1, j + 1.3)):
+        for (a, b) in ((i - 0.3 * e, j + 1.3 * e), (i + 3.5 * e, j + 1.4 * e), (i + 3.5 * e, j - 0.1 * e)):
             x, y = iso.iso(a, b)
-            q = iso.HK
+            q = iso.HK * e
             d.line([x * SS, y * SS, (x + 8 * q) * SS, (y - 90 * q) * SS], fill=(130, 90, 50), width=int(7 * q * SS))
             for ang in range(0, 360, 60):
                 r = math.radians(ang)
@@ -411,6 +441,48 @@ def habillage(d, objs, maisons_cases):
         objs.append((i + j, lambda i=i, j=j, f=f: oie(d, i, j, f)))
 
 
+def champ(d, i, j, w, dd, kind):
+    base = {"ble": (235, 205, 90), "colza": (245, 225, 40), "vigne": (150, 190, 90), "labour": (165, 120, 80)}[kind]
+    ligne = {"ble": (215, 180, 70), "colza": (220, 200, 30), "vigne": (70, 130, 60), "labour": (130, 90, 60)}[kind]
+    iso.tile(d, i + 0.1, j + 0.1, base, w - 0.2, dd - 0.2)
+    q = iso.HK
+    for k in range(1, int((dd - 0.2) * 4)):
+        b = j + 0.1 + k * 0.25
+        d.line([iso.P(i + 0.15, b), iso.P(i + w - 0.15, b)], fill=ligne, width=int((5 if kind == "vigne" else 3) * q * SS))
+
+
+def lac(d, i, j, w, dd, t=0.0):
+    cx, cj = i + w / 2, j + dd / 2
+    pts_bord = [iso.P(cx + (w / 2) * math.cos(a), cj + (dd / 2) * math.sin(a)) for a in [x * math.pi / 12 for x in range(24)]]
+    pts_eau = [iso.P(cx + (w / 2 - 0.25) * math.cos(a), cj + (dd / 2 - 0.25) * math.sin(a))
+               for a in [x * math.pi / 12 for x in range(24)]]
+    d.polygon(pts_bord, fill=(225, 210, 160))
+    d.polygon(pts_eau, fill=(70, 160, 230))
+    for k in range(3):                                   # reflets
+        x, y = iso.iso(cx - 0.8 + k * 0.6, cj - 0.3 + k * 0.3)
+        q = iso.HK
+        d.line([(x - 14 * q) * SS, y * SS, (x + 14 * q) * SS, y * SS], fill=(160, 210, 250), width=int(3 * q * SS))
+    iso.box(d, cx - 0.4, cj + 0.1, 0.6, 0.25, 8, (150, 100, 60))   # barque
+    for (a, b, f) in ((cx + 0.6, cj - 0.4, False), (cx + 0.9, cj - 0.1, True), (cx - 1.0, cj - 0.6, False)):
+        oie(d, a, b, f)
+
+
+def colline(d, i, j, w, dd):
+    cx, cj = i + w / 2, j + dd / 2
+    h = 60 * min(w, dd) / 3
+    for n in range(8):                                   # dôme : ellipses empilées qui rétrécissent
+        k = n / 8
+        rw, rd, z = (w / 2) * (1 - k * 0.85), (dd / 2) * (1 - k * 0.85), h * math.sin(k * math.pi / 2)
+        g = int(150 + 50 * k)
+        pts = [iso.P(cx + rw * math.cos(a), cj + rd * math.sin(a), z) for a in [x * math.pi / 10 for x in range(20)]]
+        d.polygon(pts, fill=(int(g * 0.55), g, int(g * 0.45)))
+    for (a, b) in ((cx - 0.6, cj - 0.4), (cx + 0.5, cj + 0.3), (cx - 0.1, cj + 0.8)):
+        x, y = iso.iso(a, b, h * 0.7)
+        q = iso.HK
+        d.rectangle([(x - 3 * q) * SS, (y - 18 * q) * SS, (x + 3 * q) * SS, y * SS], fill=(110, 75, 50))
+        d.ellipse([(x - 14 * q) * SS, (y - 46 * q) * SS, (x + 14 * q) * SS, (y - 14 * q) * SS], fill=(50, 135, 60))
+
+
 def village_j2(etat=None, t=0.0, extra=None):
     """Carte complète du jour 2 (toutes les maisons construites). extra : bâtiments du vote à montrer."""
     etat = etat or {}
@@ -418,14 +490,20 @@ def village_j2(etat=None, t=0.0, extra=None):
                          habitants=etat.get("habitants", [])))
     d = ImageDraw.Draw(big)
     objs = []
+    for (i, j, w, dd, kind) in CHAMPS:
+        champ(d, i, j, w, dd, kind)
+    if LAC:
+        lac(d, *LAC, 4, 3)
+    for (i, j, w, dd) in COLLINES:
+        objs.append((i + j + w / 2 + dd / 2, lambda i=i, j=j, w=w, dd=dd: colline(d, i, j, w, dd)))
     habillage(d, objs, [c for (c, _, _, _) in MAISONS.values()] + [c for (c, _, _) in GENERIQUES])
     for (i, j), col, toit in GENERIQUES:
         objs.append((i + j + 1, lambda i=i, j=j, c=col, r=toit: iso.maison(d, i, j, 1.0, c, r)))
     for pseudo, ((i, j), col, toit, flag) in MAISONS.items():
         objs.append((i + j + 1, lambda i=i, j=j, c=col, r=toit, f=flag: (
             iso.maison(d, i, j, 1.0, c, r), f and drapeau(d, i, j, f))))
-    objs.append((sum(VILLA_T0) + 2.4, lambda: villa(d, *VILLA_T0, toit=GOLD)))
-    objs.append((sum(VILLA_OUMAR) + 2.4, lambda: villa(d, *VILLA_OUMAR)))
+    objs.append((sum(VILLA_T0) + 3.6, lambda: villa(d, *VILLA_T0, toit=GOLD)))
+    objs.append((sum(VILLA_OUMAR) + 3.6, lambda: villa(d, *VILLA_OUMAR)))
     objs.append((sum(PS5) + 1, lambda: ps5(d, *PS5)))
     objs.append((sum(VOITURE) + 1.3, lambda: voiture(d, *VOITURE)))
     objs.append((sum(GROTTE) + 1.8, lambda: grotte(d, *GROTTE, t)))
