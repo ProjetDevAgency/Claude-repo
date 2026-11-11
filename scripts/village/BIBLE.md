@@ -1,53 +1,45 @@
-# Fauché-les-Oies — la bible du feuilleton
+# Fauché-les-Oies — la bible du feuilleton (ville hyper-accélérée)
 
 ## Le principe
-Chaque vote a une conséquence visible dans l'épisode suivant. Le village peut devenir une ville parfaite
-ou sombrer dans la catastrophe : ce sont les habitants qui décident, le maire ne fait qu'appliquer.
+Un hameau fauché qui devient, en 30 jours, une ville délirante : du pont cassé à la conquête de la Lune,
+jusqu'à la fin du monde. Chaque épisode = un jour. Les habitants (abonnés) votent, et chaque vote change
+la ville dans l'épisode suivant.
 
-## Les 4 jauges du village (affichées à l'écran à chaque épisode)
-| Jauge | Ce qui la fait monter | Ce qui la fait baisser |
+## L'argent du village
+- **Revenus des bâtiments** : l'épicerie rapporte 5 € par habitant et par jour (puis chaque commerce voté
+  ajoute son revenu).
+- **Les dons des commentaires** : quand un habitant écrit en commentaire qu'il donne de l'argent au village
+  (« je donne 500 € », « je finance le pont »), on fait comme si c'était vrai : son don entre dans la caisse
+  à l'épisode suivant, avec son pseudo à l'écran (« DON DE @T_0 : +500 € »). Sans montant, on fixe un
+  montant drôle et crédible.
+  - Argent 100 % fictif, dans le jeu : on ne demande jamais de vrai argent, ni cadeau TikTok, ni lien.
+- **Les dons servent à construire ce qui a perdu un vote** (ex. le pont, la fête, les projets perdants du
+  vote précédent) : « grâce au don de @X, on construit quand même le pont ! ». Le perdant n'est jamais
+  vraiment perdant, ça pousse tout le monde à donner en commentaire.
+
+## L'accélération (les grandes étapes)
+| Jours | Étape | Ce qui se passe |
 |---|---|---|
-| 💰 Caisse | Commerces (épicerie +5 €/habitant/jour), dons, impôts | Constructions, réparations, catastrophes |
-| 😀 Bonheur | Fêtes, sport, commerces, beaux bâtiments | Impôts, pannes, catastrophes, promesses non tenues |
-| 🏗️ Infrastructures | Pont, routes, eau, électricité | Usure, catastrophes, oubli d'entretien |
-| 👥 Habitants | = abonnés (réel) | (jamais : c'est le vrai compteur) |
+| 1-3 | Le hameau | Épicerie, maisons, élections, premiers dons. |
+| 4-6 | Le bourg | Commerces, sport, école, gare. Le village grossit vite (1 abonné = 1 maison). |
+| 7-9 | La petite ville | Immeubles, zone industrielle, aéroport ou port. Premiers signes bizarres : une oie disparaît, des bruits la nuit près de la grotte, une lueur verte… |
+| **10** | **ATTAQUE DE ZOMBIES** | Les zombies sortent (de la grotte ? du cimetière ?). Vote : **une armée de poussins**, **une armée d'humains**, ou **faire la paix avec les zombies**. Chaque choix a des conséquences sur les épisodes 11-13 (poussins géants incontrôlables, ville militarisée, zombies devenus habitants avec leurs maisons). |
+| 11-19 | La métropole | Reconstruction, gratte-ciels, technologie, la ville devient une puissance. Rivalité avec une autre ville, élection du maire contestée, inventions folles votées par les habitants. |
+| **20** | **CONQUÊTE DE LA LUNE** | Vote de la fusée (financement par les dons). Lancement en direct : réussite → base sur la Lune avec des maisons d'habitants ; échec → explosion, la ville doit tout payer. |
+| 21-29 | L'empire | Colonie lunaire, la ville devient un pays, puis attire l'attention… Signaux venant de l'espace, ovnis aperçus au-dessus du lac. |
+| **30** | **ATTAQUE ALIEN — FIN** | Les aliens attaquent. Dernier vote pour l'honneur (se battre, fuir sur la Lune, se rendre) : quoi qu'on choisisse, **tout le monde meurt**. Épisode final : le dernier plan du village détruit, le panneau « FAUCHÉ-LES-OIES » à terre, une seule oie qui survit. Possible saison 2 (« ils ont recréé un village sur une autre planète »). |
 
-Règles simples, toujours les mêmes :
-- Bonheur sous 30 % → les habitants manifestent devant la mairie (épisode « crise »).
-- Infrastructures sous 30 % → une catastrophe arrive (pont, inondation, panne…).
-- Caisse à 0 € → la mairie est en faillite : il faut voter une solution (impôt, vente, prêt du riche…).
-- Les trois jauges au-dessus de 80 % → « village modèle » : un événement positif (touristes, télé, prix).
-
-## Les conséquences en chaîne (exemples prêts à l'emploi)
-- **Le pont cassé n'est jamais réparé** → au bout de 3 épisodes, un camion de livraison tombe dans la rivière :
-  l'épicerie n'est plus livrée, elle ferme 1 épisode, la caisse ne rentre plus.
-- **Fête du village** → bonheur +20, mais la place est saccagée (−50 € de nettoyage) et le bruit réveille
-  l'homme des cavernes, qui sort de sa grotte.
-- **Terrain de foot** → bonheur +15, S2Z crée le club, premier match contre le village voisin
-  (« Riche-sur-Mer ») : victoire = bonus de caisse, défaite = rivalité qui revient plus tard.
-- **Boulangerie** → +3 €/habitant/jour, mais Kuromi n'a pas d'agriculteur : sans champ de blé
-  voté rapidement, la farine coûte cher et la boulangerie perd de l'argent.
-- **Club de boxe** → bonheur +10 chez les jeunes, SKR junior organise un tournoi ; si le club n'a
-  pas de vestiaire, bagarre générale et plainte des voisins.
-- **Le don promis de T_0** n'arrive jamais → rumeur au village, vote « on lui fait payer un impôt
-  sur la villa ? » : s'il refuse, il menace de quitter le village avec sa villa.
-- **L'adjoint élu** applique son programme (Maël : la fête, puis le pont). S'il ne tient pas sa
-  promesse, le bonheur baisse et l'autre candidat réclame une nouvelle élection.
-
-## L'arc des premiers épisodes (léger → tendu → catastrophe ou triomphe)
-1. **Épisodes 1-3 — l'insouciance.** On construit, on s'installe, tout va bien. Une seule petite alerte :
-   le pont cassé grince, une fissure apparaît (on la montre sans la commenter).
-2. **Épisodes 4-6 — les ennuis.** Les choix commencent à coûter : caisse basse, rivalités
-   (Maël/Michael, T_0 et son don), premier incident lié au pont.
-3. **Épisode 7-8 — le grand moment.** Selon les jauges : catastrophe (pont effondré, inondation,
-   faillite) ou triomphe (village modèle, la télé débarque, prix du plus beau village).
-4. **La suite.** Après une catastrophe : reconstruction votée par les habitants. Après un triomphe :
-   un village rival jaloux, ou la question « on devient une ville ? ».
+## Les jauges (simples, montrées quand elles bougent)
+- 💰 **Caisse** (revenus + dons − constructions).
+- 😀 **Bonheur** (fêtes, sport, commerces ↑ / pannes, promesses non tenues ↓).
+- 🛡️ **Défense** (à partir du jour 7 : elle décide de l'issue de l'attaque zombie).
+- 👥 **Habitants** = vrais abonnés.
 
 ## Format de chaque épisode
-1. Ouverture sur un événement (jamais « Jour X ») : résultat surprise, crise, ou chiffre qui monte.
-2. Conséquences des votes précédents, avec les jauges qui bougent à l'écran.
-3. Les nouveaux habitants (maison en façade + personnage + pseudo).
-4. Un rebondissement lié aux choix (bon ou mauvais).
-5. Le nouveau vote, avec ses risques annoncés à demi-mot (« construire sans vestiaire… on verra »).
-6. Fin : « Résultat demain » + palier d'abonnés.
+1. **Ouverture sur un événement**, jamais « Jour X » (le numéro est écrit sur le panneau) :
+   le résultat surprise, un don énorme, une catastrophe, un chiffre qui explose.
+2. **Les dons du jour** : pseudos + montants, et ce qu'on construit avec.
+3. **Le résultat du vote** et sa construction (bâtiment qui sort de terre).
+4. **Les nouveaux habitants** : maison en façade + personnage + pseudo + rôle demandé.
+5. **Un indice de la suite** (fissure, lueur verte, bruit dans la grotte…).
+6. **Le nouveau vote** (2 ou 3 choix), « résultat demain », palier d'abonnés.
