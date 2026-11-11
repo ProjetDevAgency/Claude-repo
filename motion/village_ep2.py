@@ -61,9 +61,9 @@ def _reserve():
         occ.add((k, 0))
         for r in range(iso.RIVIERE_I, iso.RIVIERE_I + 2):
             occ.add((r, k))
-    for i in range(1, 5):
-        for j in range(-4, 0):
-            occ.add((i, j))                      # mairie + son parvis
+    for i in range(1, 7):
+        for j in range(-6, 0):
+            occ.add((i, j))                      # mairie + son parvis + sa fontaine + de l'air autour
     for i in range(1, 5):
         for j in range(1, 4):
             occ.add((i, j))                      # épicerie + son trottoir
@@ -235,6 +235,72 @@ def stade(d, i, j, k=1.0):
             iso.box(d, i + a, j + 0.6, 0.05, 0.4, 24, WHITE)
 
 
+# ───────────── la mairie, version grandiose ─────────────
+
+PIERRE = (240, 232, 214)
+ARDOISE = (70, 85, 120)
+
+
+def _face_j(d, jf, i0, i1, z0, z1, col):
+    """Rectangle sur la façade avant (plan j = jf), de i0 à i1 et de z0 à z1."""
+    d.polygon([iso.P(i0, jf, z0), iso.P(i1, jf, z0), iso.P(i1, jf, z1), iso.P(i0, jf, z1)], fill=col)
+
+
+def mairie_grande(d, i, j):
+    w, dd = 2.8, 1.8
+    jf = j + dd                                                   # façade principale, tournée vers la route
+    iso.tile(d, i - 0.3, jf, (215, 210, 200), w + 0.6, 1.2)      # parvis pavé
+    for k in range(3):                                             # marches
+        iso.box(d, i + 0.9 - 0.1 * k, jf + 0.05 * k, 1.0 + 0.2 * k, 0.12, 6 * (3 - k), (225, 220, 210))
+    iso.box(d, i, j, w, dd, 78, PIERRE)                            # corps du bâtiment
+    iso.box(d, i - 0.05, j - 0.05, w + 0.1, dd + 0.1, 8, (220, 210, 190), z0=78)   # corniche
+    iso.box(d, i + 0.1, j + 0.1, w - 0.2, dd - 0.2, 26, ARDOISE, z0=86)            # toit mansardé
+    iso.box(d, i + 0.95, j + dd - 0.05, 0.9, 0.25, 104, (248, 242, 228))           # avant-corps central
+    # fronton triangulaire avec horloge
+    a, b = i + 0.95, i + 1.85
+    jf2 = j + dd + 0.2
+    d.polygon([iso.P(a, jf2, 104), iso.P(b, jf2, 104), iso.P((a + b) / 2, jf2, 140)], fill=(248, 242, 228))
+    cx, cy = iso.iso((a + b) / 2, jf2, 118)
+    q = iso.HK
+    r = 11 * q
+    d.ellipse([(cx - r) * SS, (cy - r) * SS, (cx + r) * SS, (cy + r) * SS], fill=WHITE, outline=INK, width=int(2 * q * SS))
+    d.line([cx * SS, cy * SS, cx * SS, (cy - r * 0.7) * SS], fill=INK, width=int(2 * q * SS))
+    d.line([cx * SS, cy * SS, (cx + r * 0.5) * SS, cy * SS], fill=INK, width=int(2 * q * SS))
+    # colonnes et porte
+    for k in range(4):
+        c0 = a + 0.08 + k * 0.23
+        _face_j(d, jf2, c0, c0 + 0.07, 0, 96, (255, 252, 245))
+    _face_j(d, jf2, a + 0.36, a + 0.54, 0, 42, (110, 75, 50))
+    # fenêtres hautes de chaque côté
+    for c0 in (i + 0.2, i + 0.55, i + 2.05, i + 2.4):
+        _face_j(d, jf, c0, c0 + 0.2, 14, 40, (150, 200, 240))
+        _face_j(d, jf, c0, c0 + 0.2, 50, 72, (150, 200, 240))
+    # bandeau MAIRIE + devise
+    x, y = iso.iso((a + b) / 2, jf2, 72)
+    d.text((x * SS, y * SS), "MAIRIE", font=FA(int(15 * q * SS)), fill=INK, anchor="mm")
+    x, y = iso.iso(i + w / 2, jf, 6)
+    d.text((x * SS, (y - 2 * q) * SS), "LIBERTÉ · ÉGALITÉ · FRATERNITÉ", font=FA(int(7 * q * SS)), fill=(90, 80, 70),
+           anchor="mm")
+    # drapeaux tricolores sur le toit
+    for (u, v) in ((i + 0.6, j + 0.9), (i + 2.2, j + 0.9)):
+        x, y = iso.iso(u, v, 112)
+        d.line([x * SS, y * SS, x * SS, (y - 55 * q) * SS], fill=INK, width=int(3 * q * SS))
+        for k, c in enumerate((BLEU, BLANC, ROUGE)):
+            d.rectangle([(x + k * 9 * q) * SS, (y - 55 * q) * SS, (x + (k + 1) * 9 * q) * SS, (y - 38 * q) * SS], fill=c)
+    # fontaine sur la place
+    fx, fy = iso.iso(i + w + 0.2, jf + 0.75)
+    for rx, ry, col in ((34, 17, (200, 195, 185)), (28, 13, (90, 170, 235))):
+        d.ellipse([(fx - rx * q) * SS, (fy - ry * q) * SS, (fx + rx * q) * SS, (fy + ry * q) * SS], fill=col)
+    d.rectangle([(fx - 4 * q) * SS, (fy - 30 * q) * SS, (fx + 4 * q) * SS, fy * SS], fill=(200, 195, 185))
+    for dx in (-10, 0, 10):
+        d.line([fx * SS, (fy - 30 * q) * SS, (fx + dx * q) * SS, (fy - 12 * q) * SS], fill=(150, 210, 250),
+               width=int(3 * q * SS))
+
+
+iso.MAIRIE = (1.2, -3.6)
+iso.mairie = mairie_grande
+
+
 # ───────────── habillage « grandiose » : jardins, lampadaires, voitures, oies, fleurs, montagnes ─────────────
 
 def jardin(d, i, j):
@@ -326,7 +392,8 @@ def habillage(d, objs, maisons_cases):
     for k in range(-12, 13, 3):                              # lampadaires le long des routes
         if k not in (0,):
             objs.append((k + 1.0, lambda k=k: lampadaire(d, k + 0.5, 1.05)))
-            objs.append((k + 1.0, lambda k=k: lampadaire(d, 1.05, k + 0.5)))
+            if not -7 <= k <= 0:                               # pas de lampadaire devant la mairie
+                objs.append((k + 1.0, lambda k=k: lampadaire(d, 1.05, k + 0.5)))
     for (i, j, c, sn) in ((-7.0, 0.1, (60, 120, 220), "i"), (5.5, 0.55, (240, 180, 40), "i"),
                           (0.1, 6.5, (230, 60, 60), "j"), (0.55, -8.0, (250, 250, 250), "j")):
         objs.append((i + j + 1, lambda i=i, j=j, c=c, sn=sn: auto(d, i, j, c, sn)))
