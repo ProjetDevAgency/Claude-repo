@@ -356,6 +356,8 @@ def titre2(img, petit, gros, k=1.0, y=170):
     d = ImageDraw.Draw(img)
     s = 0.7 + 0.3 * back(k)
     for txt, size, col, yy in ((petit, int(54 * s), WHITE, y), (gros, int(104 * s), YEL, y + 95 * s)):
+        while size > 20 and FA(size).getlength(txt) > 1000:   # le texte tient toujours dans l'écran
+            size -= 4
         f = FA(size)
         for dx, dy in [(-5, 0), (5, 0), (0, -5), (0, 5), (-4, -4), (4, 4), (-4, 4), (4, -4)]:
             d.text((540 + dx, yy + dy), txt, font=f, fill=INK, anchor="mm")

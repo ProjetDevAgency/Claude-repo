@@ -1,0 +1,553 @@
+"""Le village des abonnés, épisode 2 : résultat, revenu de l'épicerie, chaque habitant avec SON personnage.
+
+    python motion/village_ep2.py
+"""
+import math
+
+from PIL import Image, ImageDraw
+
+import iso
+from cartoon import (FA, GREEN, INK, RED, SS, WHITE, YEL, CartoonVideo, back, big_number, character, counter, dim,
+                     ease, flash, push, shake, tag)
+from engine import H, W
+from village import (BLANC, BLEU, ROUGE, bouton_abonner, foule, gros_plan_maire, panneau, pin, titre2)
+
+GOLD = (235, 185, 40)
+SKIN_D = (150, 100, 70)
+T = {}
+
+# ───────────── la carte du jour 2 ─────────────
+# (case i, j) : routes sur i = 0 et j = 0, rivière sur i = -5 / -4.
+EPICERIE = (2.0, 1.2)
+FOOT = (-3.6, -3.4)
+BOULANGERIE = (3.6, -1.6)
+BOXE = (-3.4, -1.4)
+GROTTE = (5.6, 1.6)
+
+MAISONS = {  # pseudo : (case, couleur, toit, drapeau)
+    "Amine.6919": ((1.3, 3.0), (245, 215, 150), (205, 75, 60), None),
+    "Nelio": ((2.5, 3.0), (90, 140, 230), (205, 75, 60), None),
+    "Mskoww_91": ((3.7, 3.0), (60, 110, 210), (205, 75, 60), None),
+    "Alexis": ((1.3, 4.3), (210, 240, 200), (60, 80, 150), None),
+    "Maël": ((2.5, 4.3), (250, 190, 190), (205, 75, 60), None),
+    "Michael": ((3.7, 4.3), (230, 210, 250), (205, 75, 60), None),
+    "You": ((-2.0, 1.4), (250, 250, 250), (205, 75, 60), "maroc"),
+    "ghb_s91": ((-3.2, 1.4), (245, 225, 190), (205, 75, 60), "tunisie"),
+    "kokoljii": ((-2.0, 2.6), (150, 90, 200), (90, 50, 140), None),
+    "Waillox": ((-3.2, 2.6), (250, 230, 200), (205, 75, 60), None),
+    "Kuromi": ((-1.6, -1.6), (250, 235, 200), (190, 130, 60), None),
+    "SKR junior": ((-1.6, -3.0), (240, 200, 200), (205, 75, 60), None),
+    "S2Z": ((-1.6, -4.4), (230, 245, 230), (40, 140, 70), None),
+    "rph.49": ((-3.0, -4.6), (200, 225, 250), (205, 75, 60), None),
+    "S'": ((1.4, -4.2), (110, 200, 110), (60, 140, 60), None),
+}
+VILLA_T0 = (2.0, 5.6)
+VILLA_OUMAR = (4.4, 5.8)
+PS5 = (0.6, 6.0)
+VOITURE = (4.9, 3.0)
+
+
+def villa(d, i, j, toit=(250, 250, 250), k=1.0, piscine=True, palmiers=True):
+    """Villa sur deux étages, toit-terrasse, grande piscine et palmiers : se voit de loin."""
+    iso.box(d, i, j, 1.6, 1.2, 50 * k, (250, 250, 245))
+    if k > 0.5:
+        iso.box(d, i + 0.2, j + 0.1, 1.2, 0.9, 40 * k, (240, 240, 235), z0=50 * k)
+        iso.box(d, i + 0.15, j + 0.05, 1.3, 1.0, 6, toit, z0=90 * k)
+        for q in range(3):                      # baies vitrées
+            a = i + 0.25 + q * 0.42
+            d.polygon([iso.P(a, j + 1.2, 12), iso.P(a + 0.3, j + 1.2, 12), iso.P(a + 0.3, j + 1.2, 40),
+                       iso.P(a, j + 1.2, 40)], fill=(150, 200, 240))
+    if piscine:
+        iso.tile(d, i + 1.7, j - 0.1, (250, 250, 250), 1.4, 1.4)
+        iso.tile(d, i + 1.8, j, (60, 180, 245), 1.2, 1.2)
+    if palmiers:
+        for (a, b) in ((i - 0.3, j + 1.3), (i + 3.1, j + 1.3)):
+            x, y = iso.iso(a, b)
+            q = iso.HK
+            d.line([x * SS, y * SS, (x + 8 * q) * SS, (y - 90 * q) * SS], fill=(130, 90, 50), width=int(7 * q * SS))
+            for ang in range(0, 360, 60):
+                r = math.radians(ang)
+                d.line([(x + 8 * q) * SS, (y - 90 * q) * SS, (x + 8 * q + 40 * q * math.cos(r)) * SS,
+                        (y - 90 * q + 22 * q * math.sin(r)) * SS], fill=(50, 160, 70), width=int(9 * q * SS))
+
+
+def ps5(d, i, j, k=1.0):
+    """La maison PS5 : console debout, deux coques blanches, cœur noir, liseré bleu."""
+    h = 150 * k
+    iso.box(d, i, j, 0.35, 1.0, h, (248, 248, 252))
+    iso.box(d, i + 0.35, j + 0.08, 0.2, 0.84, h * 0.95, (25, 25, 32))
+    iso.box(d, i + 0.55, j, 0.35, 1.0, h, (248, 248, 252))
+    x, y = iso.iso(i + 0.45, j + 1.0, h * 0.55)
+    q = iso.HK
+    d.line([x * SS, (y - 40 * q) * SS, x * SS, (y + 40 * q) * SS], fill=(80, 170, 255), width=int(6 * q * SS))
+    iso.box(d, i - 0.1, j - 0.05, 1.1, 1.1, 6, (40, 40, 48))
+
+
+def voiture(d, i, j, k=1.0):
+    """Maison-voiture rouge, grande comme une maison."""
+    iso.box(d, i, j, 1.6, 1.0, 40 * k, (220, 35, 45))
+    if k > 0.5:
+        iso.box(d, i + 0.35, j + 0.1, 0.9, 0.8, 32, (230, 50, 60), z0=40 * k)
+        d.polygon([iso.P(i + 0.4, j + 0.9, 46), iso.P(i + 1.2, j + 0.9, 46), iso.P(i + 1.2, j + 0.9, 68),
+                   iso.P(i + 0.4, j + 0.9, 68)], fill=(170, 215, 245))
+    q = iso.HK
+    for a in (0.3, 1.3):
+        x, y = iso.iso(i + a, j + 1.0, 8)
+        r = 16 * q
+        d.ellipse([(x - r) * SS, (y - r) * SS, (x + r) * SS, (y + r) * SS], fill=(25, 25, 30))
+        d.ellipse([(x - r / 2) * SS, (y - r / 2) * SS, (x + r / 2) * SS, (y + r / 2) * SS], fill=(190, 190, 200))
+
+
+def grotte(d, i, j, t=0.0):
+    pts = [iso.iso(i, j + 1.4), iso.iso(i - 0.1, j + 0.3, 50), iso.iso(i + 0.7, j, 120), iso.iso(i + 1.5, j + 0.1, 70),
+           iso.iso(i + 1.7, j + 1.4)]
+    d.polygon([(x * SS, y * SS) for x, y in pts], fill=(125, 120, 115))
+    pts2 = [iso.iso(i + 0.3, j + 1.4), iso.iso(i + 0.6, j + 0.6, 90), iso.iso(i + 1.3, j + 0.5, 60), iso.iso(i + 1.5, j + 1.4)]
+    d.polygon([(x * SS, y * SS) for x, y in pts2], fill=(150, 145, 138))
+    ex, ey = iso.iso(i + 0.85, j + 1.4)
+    q = iso.HK
+    d.chord([(ex - 30 * q) * SS, (ey - 60 * q) * SS, (ex + 30 * q) * SS, (ey + 10 * q) * SS], 180, 360, fill=(35, 30, 28))
+    fx, fy = iso.iso(i + 0.9, j + 2.0)                       # feu de camp
+    fl = 1 + 0.15 * math.sin(t * 12)
+    d.polygon([(fx - 14 * q) * SS, fy * SS, fx * SS, (fy - 40 * q * fl) * SS, (fx + 14 * q) * SS, fy * SS], fill=(250, 140, 30))
+    d.polygon([(fx - 7 * q) * SS, fy * SS, fx * SS, (fy - 22 * q * fl) * SS, (fx + 7 * q) * SS, fy * SS], fill=(255, 220, 60))
+
+
+def drapeau(d, i, j, kind, z=95):
+    x, y = iso.iso(i + 0.5, j + 0.5, z)
+    q, s = iso.HK * 1.6, SS
+    d.line([x * s, y * s, x * s, (y - 60 * q) * s], fill=INK, width=int(3 * q * s))
+    w, h = 40 * q, 26 * q
+    d.rectangle([x * s, (y - 60 * q) * s, (x + w) * s, (y - 60 * q + h) * s], fill=(200, 30, 40))
+    cx, cy = x + w / 2, y - 60 * q + h / 2
+    if kind == "maroc":
+        d.text((cx * s, cy * s), "★", font=FA(int(20 * q * s)), fill=(20, 120, 50), anchor="mm")
+    else:
+        r = 8 * q
+        d.ellipse([(cx - r) * s, (cy - r) * s, (cx + r) * s, (cy + r) * s], fill=WHITE)
+        d.ellipse([(cx - r * 0.6) * s, (cy - r * 0.6) * s, (cx + r * 0.4) * s, (cy + r * 0.6) * s], fill=(200, 30, 40))
+
+
+def boulangerie(d, i, j, k=1.0):
+    iso.box(d, i, j, 1.2, 1.2, 50 * k, (250, 235, 200))
+    if k > 0.6:
+        iso.roof(d, i - 0.05, j - 0.05, 1.3, 1.3, 50 * k, 30, (190, 130, 60))
+
+
+def club_boxe(d, i, j, k=1.0):
+    iso.box(d, i, j, 1.2, 1.2, 46 * k, (60, 60, 70))
+    if k > 0.6:
+        x, y = iso.iso(i + 0.6, j + 1.2, 30)
+        q = iso.HK
+        d.ellipse([(x - 16 * q) * SS, (y - 14 * q) * SS, (x + 16 * q) * SS, (y + 14 * q) * SS], fill=(210, 30, 40))
+
+
+def stade(d, i, j, k=1.0):
+    iso.tile(d, i, j, (70, 170, 80), 1.6, 1.6)
+    if k > 0:
+        for a in (0.1, 1.5):
+            iso.box(d, i + a, j + 0.6, 0.05, 0.4, 24, WHITE)
+
+
+def village_j2(etat=None, t=0.0, extra=None):
+    """Carte complète du jour 2 (toutes les maisons construites). extra : bâtiments du vote à montrer."""
+    etat = etat or {}
+    big = iso.carte(dict(maire=(0.6, -1.2), epicerie=1.0, maisons=[], terrains=False,
+                         habitants=etat.get("habitants", [])))
+    d = ImageDraw.Draw(big)
+    objs = []
+    for pseudo, ((i, j), col, toit, flag) in MAISONS.items():
+        objs.append((i + j, lambda i=i, j=j, c=col, r=toit, f=flag: (
+            iso.maison(d, i, j, 1.0, c, r), f and drapeau(d, i, j, f))))
+    objs.append((sum(VILLA_T0) + 2, lambda: villa(d, *VILLA_T0, toit=GOLD)))
+    objs.append((sum(VILLA_OUMAR) + 2, lambda: villa(d, *VILLA_OUMAR)))
+    objs.append((sum(PS5) + 1, lambda: ps5(d, *PS5)))
+    objs.append((sum(VOITURE) + 1.5, lambda: voiture(d, *VOITURE)))
+    objs.append((sum(GROTTE) + 2, lambda: grotte(d, *GROTTE, t)))
+    for name, fn, pos in (("foot", stade, FOOT), ("boulangerie", boulangerie, BOULANGERIE), ("boxe", club_boxe, BOXE)):
+        if extra and name in extra:
+            objs.append((sum(pos) + 1.5, lambda fn=fn, pos=pos: fn(d, *pos)))
+        else:
+            objs.append((-100, lambda pos=pos: iso.terrain(d, *pos, 1.2, 1.2)))
+    for _, fn in sorted(objs, key=lambda o: o[0]):
+        fn()
+    return big
+
+
+_cache = {}
+
+
+def carte_j2(key="base", **kw):
+    if key not in _cache:
+        _cache[key] = village_j2(**kw)
+    return _cache[key]
+
+
+def vue(z, center, key="base", **kw):
+    return iso.camera(carte_j2(key, **kw), z, center)
+
+
+def zoom_sur(i, j, z=2.2, dz=-60, key="base", dx=0, **kw):
+    x, y = iso.iso(i + 0.5, j + 0.5)
+    return vue(z, (x + dx / z, y + dz), key, **kw)
+
+
+# ───────────── les personnages ─────────────
+
+def accessoires(d, cx, base, sc, acc, t):
+    s = SS * sc
+
+    def X(v):
+        return cx * SS + v * s
+
+    def Y(v):
+        return base * SS + v * s
+
+    for a in acc:
+        if a == "medaille":
+            d.line([X(-40), Y(-560), X(0), Y(-470), X(40), Y(-560)], fill=(40, 90, 200), width=int(10 * s))
+            d.ellipse([X(-30), Y(-500), X(30), Y(-440)], fill=GOLD, outline=(180, 130, 20), width=int(5 * s))
+            d.text((X(0), Y(-470)), "1", font=FA(int(40 * s)), fill=INK, anchor="mm")
+        elif a == "couronne":
+            d.polygon([(X(-70), Y(-820)), (X(-70), Y(-900)), (X(-35), Y(-850)), (X(0), Y(-920)), (X(35), Y(-850)),
+                       (X(70), Y(-900)), (X(70), Y(-820))], fill=GOLD, outline=(180, 130, 20))
+        elif a == "rosette":
+            d.ellipse([X(-70), Y(-530), X(-20), Y(-480)], fill=BLEU)
+            d.ellipse([X(-60), Y(-520), X(-30), Y(-490)], fill=BLANC)
+            d.ellipse([X(-52), Y(-512), X(-38), Y(-498)], fill=ROUGE)
+        elif a == "lunettes_soleil":
+            d.rounded_rectangle([X(-75), Y(-725), X(75), Y(-680)], radius=int(14 * s), fill=(20, 20, 26))
+        elif a == "chaine_or":
+            d.arc([X(-60), Y(-600), X(60), Y(-440)], 20, 160, fill=GOLD, width=int(12 * s))
+            d.ellipse([X(-16), Y(-460), X(16), Y(-428)], fill=GOLD)
+        elif a == "toque":
+            d.rounded_rectangle([X(-75), Y(-860), X(75), Y(-790)], radius=int(10 * s), fill=WHITE)
+            for k in (-50, 0, 50):
+                d.ellipse([X(k - 50), Y(-960), X(k + 50), Y(-850)], fill=WHITE)
+        elif a == "baguette":
+            d.rounded_rectangle([X(110), Y(-760), X(150), Y(-440)], radius=int(20 * s), fill=(220, 160, 80))
+            for k in range(4):
+                d.line([X(115), Y(-720 + k * 70), X(145), Y(-700 + k * 70)], fill=(180, 120, 50), width=int(5 * s))
+        elif a == "gants":
+            for sx in (-1, 1):
+                d.ellipse([X(sx * 150 - 45), Y(-905), X(sx * 150 + 45), Y(-815)], fill=(210, 30, 40))
+        elif a == "ballon":
+            d.ellipse([X(-170), Y(-110), X(-70), Y(-10)], fill=WHITE, outline=INK, width=int(5 * s))
+            d.polygon([(X(-130), Y(-75)), (X(-110), Y(-75)), (X(-102), Y(-55)), (X(-120), Y(-42)), (X(-138), Y(-55))],
+                      fill=INK)
+        elif a == "massue":
+            d.line([X(130), Y(-300), X(190), Y(-760)], fill=(120, 80, 40), width=int(40 * s))
+            d.ellipse([X(150), Y(-860), X(250), Y(-720)], fill=(120, 80, 40))
+        elif a == "fourrure":
+            for (u, v) in ((-50, -480), (30, -420), (-20, -340), (50, -520)):
+                d.ellipse([X(u - 18), Y(v - 14), X(u + 18), Y(v + 14)], fill=(110, 70, 35))
+        elif a in ("drapeau_maroc", "drapeau_tunisie"):
+            d.line([X(150), Y(-300), X(150), Y(-980)], fill=INK, width=int(10 * s))
+            d.rectangle([X(150), Y(-980), X(330), Y(-860)], fill=(200, 30, 40))
+            if a == "drapeau_maroc":
+                d.text((X(240), Y(-920)), "★", font=FA(int(80 * s)), fill=(20, 120, 50), anchor="mm")
+            else:
+                d.ellipse([X(205), Y(-955), X(275), Y(-885)], fill=WHITE)
+                d.ellipse([X(218), Y(-942), X(262), Y(-898)], fill=(200, 30, 40))
+        elif a == "casque_audio":
+            d.arc([X(-110), Y(-830), X(110), Y(-620)], 180, 360, fill=INK, width=int(18 * s))
+            d.rounded_rectangle([X(-125), Y(-740), X(-90), Y(-660)], radius=int(10 * s), fill=INK)
+            d.rounded_rectangle([X(90), Y(-740), X(125), Y(-660)], radius=int(10 * s), fill=INK)
+        elif a == "manette":
+            d.rounded_rectangle([X(-90), Y(-420), X(70), Y(-360)], radius=int(26 * s), fill=(245, 245, 250), outline=INK,
+                                width=int(5 * s))
+        elif a == "diplome":
+            d.polygon([(X(0), Y(-900)), (X(130), Y(-850)), (X(0), Y(-800)), (X(-130), Y(-850))], fill=INK)
+            d.rectangle([X(-60), Y(-830), X(60), Y(-790)], fill=INK)
+            d.line([X(100), Y(-850), X(110), Y(-760)], fill=GOLD, width=int(6 * s))
+        elif a == "tablier":
+            d.rounded_rectangle([X(-70), Y(-500), X(70), Y(-250)], radius=int(20 * s), fill=(250, 250, 250))
+            d.text((X(0), Y(-380)), "ÉPICERIE", font=FA(int(26 * s)), fill=(210, 60, 60), anchor="mm")
+        elif a == "maillot":
+            d.text((X(0), Y(-400)), "10", font=FA(int(90 * s)), fill=WHITE, anchor="mm")
+
+
+PERSOS = {  # pseudo : (look, accessoires, rôle)
+    "vendeuse": (dict(shirt=(230, 120, 160), pants=(40, 40, 60), hair=(30, 25, 20), long_hair=True, mouth="grin"),
+                 ["tablier"], "LA VENDEUSE DE L'ÉPICERIE"),
+    "Amine.6919": (dict(shirt=(245, 245, 245), pants=(40, 40, 50), hair=(30, 25, 20), mouth="grin", arm=0.95),
+                   ["medaille"], "1ER HABITANT · MAISON N°1"),
+    "Alexis": (dict(shirt=(40, 50, 90), pants=(40, 50, 90), hair=(90, 60, 40), tie=True, mouth="smile"),
+               ["rosette"], "ÉLU CONSEILLER MUNICIPAL"),
+    "Maël": (dict(shirt=(250, 170, 200), pants=(240, 240, 240), hair=(60, 40, 30), mouth="grin", arm=0.6), [],
+             "CANDIDAT ADJOINT"),
+    "Michael": (dict(shirt=(60, 120, 90), pants=(40, 50, 40), hair=(30, 25, 20), mouth="grin", arm=0.6), [],
+                "CANDIDAT ADJOINT"),
+    "kokoljii": (dict(shirt=(110, 40, 160), pants=(40, 30, 60), hair=(20, 20, 25), mouth="grin", arm=0.9),
+                 ["couronne"], "PREMIER MINISTRE AUTOPROCLAMÉ"),
+    "S'": (dict(shirt=(250, 150, 190), pants=(80, 60, 120), hair=(30, 22, 18), long_hair=True, mouth="grin"), [],
+           "LA FILLE DU MAIRE"),
+    "T_0": (dict(shirt=(30, 30, 36), pants=(30, 30, 36), hair=(25, 20, 18), mouth="grin", arm=0.5),
+            ["lunettes_soleil", "chaine_or"], "LE RICHE DU VILLAGE"),
+    "oumar dansoko": (dict(shirt=(250, 210, 80), pants=(60, 160, 220), hair=(20, 18, 16), mouth="grin", arm=0.95),
+                      ["lunettes_soleil"], "VILLA AVEC PISCINE"),
+    "kova.zfr": (dict(shirt=(220, 35, 45), pants=(40, 40, 50), hair=(30, 25, 20), cap=(220, 35, 45), mouth="grin"),
+                 [], "LA MAISON-VOITURE"),
+    "ps5": (dict(shirt=(40, 60, 140), pants=(30, 30, 40), hair=(40, 30, 25), mouth="o"), ["casque_audio", "manette"],
+            "LA MAISON PS5"),
+    "pkmoi": (dict(shirt=(160, 110, 60), pants=(120, 80, 40), hair=(60, 40, 25), mouth="grin", brows="colere"),
+              ["fourrure", "massue"], "L'HOMME DES CAVERNES"),
+    "You": (dict(shirt=(250, 250, 250), pants=(40, 50, 90), hair=(30, 25, 20), mouth="grin"), ["drapeau_maroc"], ""),
+    "ghb_s91": (dict(shirt=(220, 50, 60), pants=(40, 40, 50), hair=(30, 25, 20), mouth="grin"), ["drapeau_tunisie"], ""),
+    "Waillox": (dict(shirt=(70, 110, 200), pants=(40, 40, 50), hair=(30, 25, 20), glasses=True, mouth="smile"),
+                ["diplome"], "LE PLUS MALIN DU VILLAGE"),
+    "Kuromi": (dict(shirt=(250, 250, 250), pants=(50, 50, 60), hair=(20, 20, 22), mouth="grin"),
+               ["toque", "baguette"], "LE BOULANGER"),
+    "SKR junior": (dict(shirt=(30, 30, 36), pants=(200, 30, 40), hair=(20, 18, 16), mouth="flat", brows="colere",
+                        arms_up=True), ["gants"], "FUTUR CLUB DE BOXE"),
+    "S2Z": (dict(shirt=(40, 140, 70), pants=(250, 250, 250), hair=(20, 18, 16), mouth="grin"), ["ballon", "maillot"],
+            "PRÉSIDENT DU CLUB DE FOOT"),
+}
+
+
+def perso(img, pseudo, lt, x=540, base=2050, sc=1.45):
+    """Dessine le personnage d'un habitant en gros plan par-dessus l'image."""
+    look, acc, _ = PERSOS[pseudo]
+    lay = Image.new("RGBA", (W * SS, H * SS), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    bob = math.sin(lt * 2.6) * 6
+    blink = (lt % 3.1) < 0.1
+    pop = back(lt / 0.3)
+    base = base + (1 - pop) * 300 + bob
+    p = dict(look)
+    p.setdefault("blink", blink)
+    character(d, x, base, sc=sc, **p)
+    accessoires(d, x, base, sc, acc, lt)
+    lay = lay.resize((W, H), Image.LANCZOS)
+    img.paste(lay, (0, 0), lay)
+
+
+def fiche(lt, dur, pseudo, case, z=2.0, nom=None, role=None, x=770, sc=1.3):
+    """Plan « moment de l'habitant » : sa maison à gauche, son personnage à droite, pseudo en grand, rôle en étiquette."""
+    i, j = case
+    img, _ = zoom_sur(i, j, push(lt, dur, z, z + 0.15), 60, dx=230)
+    img = dim(img, 0.22, blur=3, dark=0.9)
+    perso(img, pseudo, lt, x=x, sc=sc, base=2000)
+    titre2(img, "HABITANT DE FAUCHÉ-LES-OIES" if nom is None else "", "@" + pseudo.upper() if nom is None else nom,
+           k=lt / 0.25, y=190)
+    r = role if role is not None else PERSOS[pseudo][2]
+    if r:
+        tag(img, 540, 420, r, 50, ROUGE, WHITE, rot=-3, k=(lt - 0.4) / 0.25)
+    return flash(img, lt)
+
+
+# ───────────── scènes ─────────────
+
+def s_jour(lt, dur):
+    img, _ = vue(1.0, (540, 1020))
+    img = dim(img, 0.25, blur=5, dark=0.9)
+    lay = Image.new("RGBA", (W * SS, H * SS), (0, 0, 0, 0))
+    panneau(ImageDraw.Draw(lay), 540, 820, "FAUCHÉ-LES-OIES")
+    lay = lay.resize((W, H), Image.LANCZOS)
+    sc = 1.25 * (0.7 + 0.3 * back(lt / 0.35))
+    lay = lay.resize((int(W * sc), int(H * sc)), Image.LANCZOS)
+    img.paste(lay, (int(540 - 540 * sc), int(820 - 820 * sc)), lay)
+    titre2(img, "JOUR 2", "VOUS AVEZ VOTÉ", k=1.0, y=230)
+    if lt > T["lu"] - T["s_jour"]:
+        tag(img, 540, 1250, "LE MAIRE A LU TOUS VOS COMMENTAIRES", 50, YEL, INK, rot=-3,
+            k=(lt - (T["lu"] - T["s_jour"])) / 0.25)
+    return shake(img, lt)
+
+
+def s_votes(lt, dur):
+    img, _ = vue(1.0, (540, 1020))
+    img = dim(img, 0.8)
+    titre2(img, "RÉSULTAT", "64 VOTES", k=lt / 0.25)
+    d = ImageDraw.Draw(img)
+    rows = [("1 · RÉPARER LE PONT", 26, (120, 120, 132)), ("2 · OUVRIR UNE ÉPICERIE", 66, GREEN),
+            ("3 · LA FÊTE DU VILLAGE", 8, (120, 120, 132))]
+    for q, (lab, pct, col) in enumerate(rows):
+        y = 620 + q * 210
+        k = ease((lt - 0.3 - 0.25 * q) / 0.8)
+        d.rounded_rectangle([90, y, 990, y + 120], radius=24, fill=(250, 250, 252))
+        if k > 0:
+            d.rounded_rectangle([90, y, 90 + max(48, 900 * pct / 100 * k), y + 120], radius=24, fill=col)
+        d.text((120, y + 60), lab, font=FA(52), fill=INK, anchor="lm")
+        d.text((960, y + 60), f"{int(pct * k)} %", font=FA(60), fill=INK, anchor="rm")
+    return img
+
+
+def s_vendeuse(lt, dur):
+    return fiche(lt, dur, "vendeuse", EPICERIE, z=2.0, nom="L'ÉPICERIE OUVRE", role="LA VENDEUSE EST À LA CAISSE")
+
+
+def s_revenu(lt, dur):
+    ex, ey = iso.iso(2.8, 1.8)
+    img, _ = iso.camera(village_j2(dict(habitants=foule(lt, 18))), push(lt, dur, 1.45, 1.6), (ex, ey - 40))
+    img = dim(img, 0.25, blur=4, dark=0.92)
+    titre2(img, "L'ÉPICERIE RAPPORTE", "5 € / HABITANT / JOUR", k=lt / 0.25)
+    t1, t2 = (T[k] - T["s_revenu"] for k in ("vous53", "caisse"))
+    if lt > t1:
+        big_number(img, (540, 640), "53 × 5 € = +265 €", 120, GREEN, "PAR JOUR", k=(lt - t1) / 0.25)
+    if lt > t2:
+        big_number(img, (540, 980), counter(300, 565, lt - t2, 0.8, "{:,} €"), 200, YEL, "DANS LA CAISSE", k=1.0, rot=-3)
+    return flash(img, lt)
+
+
+def s_habitants(lt, dur):
+    img, _ = vue(1.0, (540, 1000))
+    titre2(img, "MAINTENANT", "LES HABITANTS", k=lt / 0.25)
+    return shake(img, lt, dur=0.3, amp=8)
+
+
+def s_amine(lt, dur):
+    return fiche(lt, dur, "Amine.6919", MAISONS["Amine.6919"][0])
+
+
+def s_alexis(lt, dur):
+    return fiche(lt, dur, "Alexis", MAISONS["Alexis"][0])
+
+
+def s_adjoint(lt, dur):
+    i, j = MAISONS["Maël"][0]
+    img, _ = zoom_sur(i, j, push(lt, dur, 1.8, 1.95), -40)
+    img = dim(img, 0.3, blur=5, dark=0.85)
+    perso(img, "Maël", lt, x=290, sc=1.15)
+    perso(img, "Michael", max(0, lt - 0.4), x=790, sc=1.15)
+    titre2(img, "POSTE D'ADJOINT", "@MAËL VS @MICHAEL", k=lt / 0.25, y=190)
+    big_number(img, (540, 900), "VS", 170, RED, k=(lt - 0.6) / 0.25)
+    if lt > dur - 1.6:
+        tag(img, 540, 520, "ÇA SE JOUERA AU VOTE", 56, YEL, INK, rot=-3, k=(lt - (dur - 1.6)) / 0.25)
+    return flash(img, lt)
+
+
+def s_koko(lt, dur):
+    img = fiche(lt, dur, "kokoljii", MAISONS["kokoljii"][0])
+    if lt > dur - 2.2:
+        tag(img, 540, 540, "PERSONNE SAIT CE QUE ÇA VEUT DIRE", 44, WHITE, INK, rot=3, k=(lt - (dur - 2.2)) / 0.25)
+    return img
+
+
+def s_fille(lt, dur):
+    return fiche(lt, dur, "S'", MAISONS["S'"][0], z=1.8)
+
+
+def s_t0(lt, dur):
+    img = fiche(lt, dur, "T_0", VILLA_T0, z=1.6)
+    if lt > dur - 2.4:
+        tag(img, 540, 540, "DON PROMIS · LE MAIRE ATTEND TOUJOURS", 42, YEL, INK, rot=-3, k=(lt - (dur - 2.4)) / 0.25)
+    return img
+
+
+def s_oumar(lt, dur):
+    return fiche(lt, dur, "oumar dansoko", VILLA_OUMAR, z=1.6)
+
+
+def s_kova(lt, dur):
+    return fiche(lt, dur, "kova.zfr", VOITURE, z=2.0)
+
+
+def s_ps5(lt, dur):
+    return fiche(lt, dur, "ps5", PS5, z=2.0, nom="LA MAISON PS5", role="SORTIE DE TERRE")
+
+
+def s_pkmoi(lt, dur):
+    img = fiche(lt, dur, "pkmoi", GROTTE, z=1.8)
+    if lt > 1.2:
+        tag(img, 540, 540, "VEILLE SUR NOUS DEPUIS SA GROTTE", 46, YEL, INK, rot=3, k=(lt - 1.2) / 0.25)
+    return img
+
+
+def s_drapeaux(lt, dur):
+    i, j = MAISONS["You"][0]
+    img, _ = zoom_sur(i - 0.6, j, push(lt, dur, 1.9, 2.05), -40)
+    img = dim(img, 0.3, blur=5, dark=0.85)
+    perso(img, "You", lt, x=290, sc=1.15)
+    perso(img, "ghb_s91", max(0, lt - 0.4), x=780, sc=1.15)
+    titre2(img, "MAROC ET TUNISIE", "@YOU & @GHB_S91", k=lt / 0.25, y=190)
+    return flash(img, lt)
+
+
+def s_waillox(lt, dur):
+    return fiche(lt, dur, "Waillox", MAISONS["Waillox"][0])
+
+
+def s_kuromi(lt, dur):
+    img = fiche(lt, dur, "Kuromi", MAISONS["Kuromi"][0])
+    if lt > 1.2:
+        tag(img, 540, 540, "CHERCHE UN AGRICULTEUR", 50, YEL, INK, rot=-3, k=(lt - 1.2) / 0.25)
+    return img
+
+
+def s_skr(lt, dur):
+    img = fiche(lt, dur, "SKR junior", MAISONS["SKR junior"][0])
+    if lt > T["sarrete"] - T["s_skr"]:
+        tag(img, 540, 540, "IL S'ARRÊTERA PAS AVANT DE L'AVOIR", 46, RED, WHITE, rot=-3,
+            k=(lt - (T["sarrete"] - T["s_skr"])) / 0.25)
+        return shake(img, lt - (T["sarrete"] - T["s_skr"]))
+    return img
+
+
+CHOIX = [("1", "LE TERRAIN DE FOOT DE @S2Z", "250 €", FOOT, "foot"),
+         ("2", "LA BOULANGERIE DE @KUROMI", "300 €", BOULANGERIE, "boulangerie"),
+         ("3", "LE CLUB DE BOXE DE @SKR JUNIOR", "400 €", BOXE, "boxe")]
+
+
+def s_vote(lt, dur):
+    t0s = [T[k] - T["s_vote"] for k in ("c1", "c2", "c3")]
+    shown = tuple(c[4] for c, t0 in zip(CHOIX, t0s) if lt >= t0)
+    img, to = iso.camera(carte_j2("vote_" + "_".join(shown), extra=shown), 1.0, (540, 1000))
+    titre2(img, "DEUXIÈME VOTE", "565 € DANS LA CAISSE", k=lt / 0.25)
+    for q, ((n, lab, prix, (i, j), _), t0) in enumerate(zip(CHOIX, t0s)):
+        pin(img, to(i + 0.6, j + 0.6), n, None, (lt - t0) / 0.25)
+        tag(img, 540, 1420 + q * 95, f"{n}  ·  {lab}  ·  {prix}", 34, WHITE, INK, rot=0, k=(lt - t0) / 0.25)
+    return img
+
+
+def s_fin(lt, dur):
+    img, _ = vue(1.0, (540, 1000), key="vote_foot_boulangerie_boxe", extra=("foot", "boulangerie", "boxe"))
+    img = dim(img, 0.35, blur=8, dark=0.85)
+    gros_plan_maire(img, lt, arm=0.95, mouth="o" if int(lt * 7) % 2 else "grin")
+    titre2(img, "PLUS QUE 47 HABITANTS", "AVANT LA SURPRISE", k=lt / 0.25)
+    tv = T["vote_fin"] - T["s_fin"]
+    if lt > tv:
+        titre2(img, "1, 2 OU 3 ?", "VOTE EN COMMENTAIRE", k=(lt - tv) / 0.25, y=560)
+        bouton_abonner(img, 540, 1250, (lt - tv - 0.4) / 0.25)
+    return shake(img, lt)
+
+
+def main():
+    v = CartoonVideo("village_ep02", "scripts/village/ep02.txt", "", "", corner="")
+    v.length = (78.0, 82.0, 90.0)
+    v.hook_head_start = 0.0
+    v.voice("output/_work_village_ep02/voice_raw.mp3")
+    sc = [("Jour deux", s_jour), ("Soixante-quatre votes", s_votes), ("Et sa vendeuse", s_vendeuse),
+          ("L'épicerie rapporte", s_revenu), ("Maintenant, les habitants", s_habitants), ("Amine", s_amine),
+          ("Alexis, élu", s_alexis), ("Pour le poste", s_adjoint), ("Kokoljii", s_koko), ("S, la fille", s_fille),
+          ("T zéro", s_t0), ("Oumar", s_oumar), ("Kova", s_kova), ("Et la maison PS5", s_ps5),
+          ("Au fond du village", s_pkmoi), ("You et Ghb", s_drapeaux), ("Waillox", s_waillox),
+          ("Kuromi, le boulanger", s_kuromi), ("Et Skr junior", s_skr), ("Deuxième vote", s_vote),
+          ("Plus que quarante-sept", s_fin)]
+    for phrase, fn in sc:
+        v.scene(phrase, fn)
+        T[fn.__name__] = v.at(phrase)
+    T["lu"] = v.at("Le maire a lu")
+    T["vous53"], T["caisse"] = v.at("Vous êtes cinquante-trois"), v.at("La caisse remonte")
+    T["sarrete"] = v.at("Il s'arrêtera")
+    T["c1"], T["c2"], T["c3"] = v.at("Un, le terrain"), v.at("Deux, la boulangerie"), v.at("Trois, le club")
+    T["vote_fin"] = v.at("Vote un, deux")
+    v.sfx(0.0, "impact", 1.0)
+    v.sfx(T["lu"], "pop", 0.8)
+    v.sfx(T["s_votes"] + 0.3, "ticks", 0.6)
+    v.sfx(T["s_vendeuse"], "succes", 0.9)
+    v.sfx(T["caisse"], "ticks", 0.7)
+    v.sfx(T["s_habitants"], "whoosh", 0.6)
+    for k in ("s_amine", "s_alexis", "s_adjoint", "s_koko", "s_fille", "s_t0", "s_oumar", "s_kova", "s_ps5",
+              "s_pkmoi", "s_drapeaux", "s_waillox", "s_kuromi", "s_skr"):
+        v.sfx(T[k], "pop", 0.75)
+    v.sfx(T["sarrete"], "impact", 0.8)
+    for k in ("c1", "c2", "c3"):
+        v.sfx(T[k], "pop", 0.7)
+    v.sfx(T["vote_fin"], "impact", 0.9)
+    for t0, fn in sorted(v.scenes, key=lambda x: x[0]):
+        print(f"   {t0:5.1f}s {fn.__name__}")
+    v.render()
+
+
+if __name__ == "__main__":
+    main()
