@@ -46,3 +46,27 @@ Données : SMIC et SCI, ~50 % de départs à 0:01, courbe plate ensuite → le c
   ✓ « Kévin ouvre son appli et la CAF lui réclame trois mille euros. » (personnage + action + prix)
   ✗ « Trois mille euros à rembourser à la CAF. » (chiffre nu, sans personnage ni action)
   Jamais une date ou un contexte en ouverture (« Depuis deux mille douze… »).
+
+## Format Kévin v2 (12 novembre 2026, d'après l'audit des 10 dernières vidéos laficelle_off)
+Constat : nos vidéos retiennent (23 s, 26 % jusqu'au bout) mais ne sont ni commentées ni partagées → plafond
+à 300 vues. Leur moteur, ce sont les PARTAGES et les J'AIME. Règles :
+1. **Ouverture = l'adversaire parle À TOI** (tutoiement), montant en premier + ultimatum
+   (« Tu paies 1 430 €, sinon ta voiture reste au garage. »). Le spectateur est la victime.
+2. **Contradiction + promesse** : « Faux, et la preuve officielle je te la lis à la fin. »
+   + la boucle « Kévin le sait pas encore, mais… un seul petit truc… » révélé à la DERNIÈRE phrase.
+3. **2-3 répliques de l'adversaire**, de plus en plus méprisantes, puis le moment où Kévin abandonne presque
+   (un proche lui dit de laisser tomber).
+4. **La règle avec sa référence exacte**, si possible récente, découpée en « 3 choses » ou « 3 pièges ».
+   Mots-crochets : « retiens bien », « regarde bien », « le piège », « fais le calcul avec Kévin ».
+5. **Déclencheur de partage obligatoire** : nommer une 3e personne à qui envoyer la vidéo, dans le récit
+   (« Kévin envoie la règle à tous ses potes qui… On en a tous un. », « tes parents ne le savent sûrement pas »)
+   + « regarde bien TON billet / TON bail / TON devis ».
+6. **L'action concrète lue à l'écran** : la lettre / le mail de 3 phrases.
+7. **Chute en boucle** : l'adversaire humilié, le « petit truc » révélé, dernière phrase coupée qui renvoie
+   à la première.
+8. Abonnement glissé UNE fois dans le récit (« heureusement, Kévin est abonné à Où va ton argent »).
+   Jamais de question au spectateur, jamais « abonne-toi / partage / commente ».
+9. **Durée 75 à 90 s** (≈ 2 000 à 2 300 caractères).
+10. **Image** : badge de rôle sur l'adversaire, montant énorme sur un document dès la 1re image,
+    **compteur permanent en haut à gauche** (« DÛ PAR … 0 € → X € »), cartes d'explication sur fond sombre
+    (liste 1-2-3, calcul, citation officielle surlignée), documents en gros plan, bruitages.

@@ -64,7 +64,9 @@ def check(script: str, duration_target=60, real_voice=False):
     issues, info = [], []
     text = re.sub(r"\s+", " ", script.strip())
     n = len(text)
-    if duration_target >= 55:
+    if duration_target >= 75:
+        lo, hi, best = 1950, 2300, "2 000 à 2 300"
+    elif duration_target >= 55:
         lo, hi = (1600, 1800) if real_voice else (1350, 1500)
         best = "1 450 à 1 500" if not real_voice else "1 600 à 1 800"
     else:
@@ -213,10 +215,11 @@ def main():
     w.add_argument("--out", required=True)
     v = sub.add_parser("verifier")
     v.add_argument("fichier")
+    v.add_argument("--duree", type=int, default=60)
     args = ap.parse_args()
 
     if args.cmd == "verifier":
-        ok, issues, info = check(Path(args.fichier).read_text(encoding="utf-8"))
+        ok, issues, info = check(Path(args.fichier).read_text(encoding="utf-8"), duration_target=args.duree)
         print("\n".join(info))
         print("OK ✅" if ok else "À corriger :\n - " + "\n - ".join(issues))
         sys.exit(0 if ok else 1)
