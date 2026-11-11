@@ -13,7 +13,7 @@ from engine import H, W
 from village import (BLANC, BLEU, ROUGE, bouton_abonner, foule, gros_plan_maire, panneau, pin, titre2)
 
 GOLD = (235, 185, 40)
-iso.TW, iso.TH = 92, 46
+iso.TW, iso.TH = 76, 38
 iso.HK = iso.TW / 96
 iso.OY = 960
 SKIN_D = (150, 100, 70)
@@ -72,14 +72,14 @@ def _reserve():
 
 
 def _visible(i, j):
-    return abs(i - j) <= 9 and -16 <= i + j <= 24
+    return abs(i - j) <= 12 and -20 <= i + j <= 30
 
 
 def _cases(ci, cj, w, d):
     return [(ci + a, cj + b) for a in range(w) for b in range(d)]
 
 
-def _placer(items, occ):
+def _placer(items, occ, marge=2):
     """items : [(nom, largeur, profondeur)] → {nom: (ci, cj)}.
     Les bâtiments s'alignent le long des deux routes (comme un vrai village), en partant du carrefour,
     avec une case vide entre deux bâtiments pour que chacun se voie bien."""
@@ -94,7 +94,7 @@ def _placer(items, occ):
             cs = _cases(ci, cj, w, d)
             if all(c not in occ and _visible(*c) for c in cs):
                 out[nom] = (ci, cj)
-                occ.update(_cases(ci - 2, cj - 2, w + 4, d + 4))   # deux cases libres tout autour
+                occ.update(_cases(ci - marge, cj - marge, w + 2 * marge, d + 2 * marge))   # cases libres autour
                 for k in range(-14, 15):                           # les routes restent des routes
                     occ.discard((0, k)) if False else None
                 break
@@ -108,6 +108,15 @@ _GRANDS = _placer([("ps5", 1, 1), ("voiture", 2, 1), ("villa_t0", 4, 2), ("villa
 for _p, (_ci, _cj) in _PETITS.items():
     _case, _col, _toit, _fl = MAISONS[_p]
     MAISONS[_p] = ((float(_ci), float(_cj)), _col, _toit, _fl)
+# 53 abonnés = 53 logements : les maisons nommées + les bâtiments spéciaux + des maisons « habitant »
+NB_ABONNES = 53
+_NOMMES = len(MAISONS) + 5                     # + villa T_0, villa Oumar, PS5, maison-voiture, grotte
+_COUL = [(245, 215, 150), (200, 225, 250), (250, 190, 190), (210, 240, 200), (240, 240, 240), (250, 230, 170),
+         (220, 205, 250), (190, 230, 230)]
+_TOITS = [(205, 75, 60), (180, 90, 50), (90, 100, 140), (60, 120, 80), (150, 60, 60)]
+_GEN = _placer([("hab%d" % n, 1, 1) for n in range(max(0, NB_ABONNES - _NOMMES))], _OCC, marge=1)
+GENERIQUES = [((float(ci), float(cj)), _COUL[n % len(_COUL)], _TOITS[n % len(_TOITS)])
+              for n, (ci, cj) in enumerate(_GEN.values())]
 FOOT = (_GRANDS["foot"][0] + 0.2, _GRANDS["foot"][1] + 0.2)
 BOULANGERIE = (_GRANDS["boulangerie"][0] + 0.4, _GRANDS["boulangerie"][1] + 0.4)
 BOXE = (_GRANDS["boxe"][0] + 0.4, _GRANDS["boxe"][1] + 0.4)
@@ -409,7 +418,9 @@ def village_j2(etat=None, t=0.0, extra=None):
                          habitants=etat.get("habitants", [])))
     d = ImageDraw.Draw(big)
     objs = []
-    habillage(d, objs, [c for (c, _, _, _) in MAISONS.values()])
+    habillage(d, objs, [c for (c, _, _, _) in MAISONS.values()] + [c for (c, _, _) in GENERIQUES])
+    for (i, j), col, toit in GENERIQUES:
+        objs.append((i + j + 1, lambda i=i, j=j, c=col, r=toit: iso.maison(d, i, j, 1.0, c, r)))
     for pseudo, ((i, j), col, toit, flag) in MAISONS.items():
         objs.append((i + j + 1, lambda i=i, j=j, c=col, r=toit, f=flag: (
             iso.maison(d, i, j, 1.0, c, r), f and drapeau(d, i, j, f))))
