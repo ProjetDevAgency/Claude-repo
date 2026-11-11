@@ -235,6 +235,106 @@ def stade(d, i, j, k=1.0):
             iso.box(d, i + a, j + 0.6, 0.05, 0.4, 24, WHITE)
 
 
+# ───────────── habillage « grandiose » : jardins, lampadaires, voitures, oies, fleurs, montagnes ─────────────
+
+def jardin(d, i, j):
+    """Jardin clôturé autour d'une maison (case i, j) + allée vers la route."""
+    iso.tile(d, i - 0.35, j - 0.35, (135, 210, 110), 1.7, 1.7)
+    pts = [iso.iso(i - 0.35, j - 0.35), iso.iso(i + 1.35, j - 0.35), iso.iso(i + 1.35, j + 1.35),
+           iso.iso(i - 0.35, j + 1.35), iso.iso(i - 0.35, j - 0.35)]
+    q = iso.HK
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        n = 7
+        for k in range(n + 1):
+            x, y = x0 + (x1 - x0) * k / n, y0 + (y1 - y0) * k / n
+            d.line([x * SS, y * SS, x * SS, (y - 10 * q) * SS], fill=(250, 250, 245), width=int(3 * q * SS))
+        d.line([x0 * SS, (y0 - 7 * q) * SS, x1 * SS, (y1 - 7 * q) * SS], fill=(250, 250, 245), width=int(3 * q * SS))
+
+
+def fleurs(d, i, j, seed):
+    q = iso.HK
+    for k in range(5):
+        a = ((seed * 7 + k * 13) % 10) / 10
+        b = ((seed * 3 + k * 17) % 10) / 10
+        x, y = iso.iso(i + a, j + b)
+        col = [(250, 90, 120), (255, 220, 60), (250, 250, 250), (180, 120, 250)][(seed + k) % 4]
+        r = 4 * q
+        d.ellipse([(x - r) * SS, (y - r) * SS, (x + r) * SS, (y + r) * SS], fill=col)
+
+
+def buisson(d, i, j):
+    x, y = iso.iso(i + 0.5, j + 0.5)
+    q = iso.HK
+    for dx, r in ((-10, 13), (8, 15), (0, 11)):
+        d.ellipse([(x + dx * q - r * q) * SS, (y - 18 * q - r * q) * SS, (x + dx * q + r * q) * SS,
+                   (y - 18 * q + r * q) * SS], fill=(70, 160, 75))
+
+
+def lampadaire(d, i, j):
+    x, y = iso.iso(i, j)
+    q = iso.HK
+    d.line([x * SS, y * SS, x * SS, (y - 70 * q) * SS], fill=(50, 50, 60), width=int(4 * q * SS))
+    d.line([x * SS, (y - 70 * q) * SS, (x + 12 * q) * SS, (y - 72 * q) * SS], fill=(50, 50, 60), width=int(4 * q * SS))
+    d.ellipse([(x + 6 * q) * SS, (y - 78 * q) * SS, (x + 20 * q) * SS, (y - 66 * q) * SS], fill=(255, 230, 120))
+
+
+def auto(d, i, j, col, sens):
+    """Petite voiture sur la route (sens 'i' ou 'j')."""
+    if sens == "i":
+        iso.box(d, i, j, 0.7, 0.35, 12, col)
+        iso.box(d, i + 0.15, j + 0.03, 0.35, 0.3, 9, (190, 225, 245), z0=12)
+    else:
+        iso.box(d, i, j, 0.35, 0.7, 12, col)
+        iso.box(d, i + 0.03, j + 0.15, 0.3, 0.35, 9, (190, 225, 245), z0=12)
+
+
+def oie(d, i, j, flip=False):
+    x, y = iso.iso(i, j)
+    q = iso.HK
+    s = -1 if flip else 1
+    d.ellipse([(x - 12 * q) * SS, (y - 12 * q) * SS, (x + 12 * q) * SS, (y + 2 * q) * SS], fill=(250, 250, 250))
+    d.line([(x + 8 * q * s) * SS, (y - 6 * q) * SS, (x + 12 * q * s) * SS, (y - 24 * q) * SS], fill=(250, 250, 250),
+           width=int(5 * q * SS))
+    d.ellipse([(x + 8 * q * s) * SS, (y - 30 * q) * SS, (x + 17 * q * s) * SS if s > 0 else (x + 8 * q * s) * SS,
+               (y - 21 * q) * SS], fill=(250, 250, 250)) if False else None
+    d.ellipse([(x + (12 * s - 5) * q) * SS, (y - 30 * q) * SS, (x + (12 * s + 5) * q) * SS, (y - 20 * q) * SS],
+              fill=(250, 250, 250))
+    d.polygon([(x + (12 * s + 4 * s) * q) * SS, (y - 26 * q) * SS, (x + (12 * s + 12 * s) * q) * SS,
+               (y - 24 * q) * SS, (x + (12 * s + 4 * s) * q) * SS, (y - 22 * q) * SS], fill=(250, 150, 30))
+
+
+def horizon(img):
+    """Ciel et montagnes au fond, au-dessus du village (sur l'image finale)."""
+    d = ImageDraw.Draw(img)
+    for y in range(0, 470, 4):
+        k = y / 470
+        d.rectangle([0, y, W, y + 4], fill=(int(120 + 80 * k), int(190 + 40 * k), int(240 + 10 * k)))
+    for (x0, x1, top, col) in ((-100, 520, 250, (150, 160, 190)), (300, 900, 200, (135, 145, 180)),
+                               (700, 1200, 270, (150, 160, 190))):
+        d.polygon([(x0, 470), ((x0 + x1) / 2, top), (x1, 470)], fill=col)
+        d.polygon([((x0 + x1) / 2 - 40, top + 40), ((x0 + x1) / 2, top), ((x0 + x1) / 2 + 40, top + 40)],
+                  fill=(250, 250, 255))
+    d.rectangle([0, 440, W, 480], fill=(110, 180, 90))
+
+
+def habillage(d, objs, maisons_cases):
+    """Ajoute jardins (sol), fleurs, buissons, lampadaires, voitures et oies dans la liste d'objets à trier."""
+    for n, (i, j) in enumerate(maisons_cases):
+        jardin(d, i, j)
+        fleurs(d, i - 0.3, j + 0.95, n)
+        objs.append((i + j + 0.2, lambda i=i, j=j: buisson(d, i + 0.9, j - 0.3)))
+    for k in range(-12, 13, 3):                              # lampadaires le long des routes
+        if k not in (0,):
+            objs.append((k + 1.0, lambda k=k: lampadaire(d, k + 0.5, 1.05)))
+            objs.append((k + 1.0, lambda k=k: lampadaire(d, 1.05, k + 0.5)))
+    for (i, j, c, sn) in ((-7.0, 0.1, (60, 120, 220), "i"), (5.5, 0.55, (240, 180, 40), "i"),
+                          (0.1, 6.5, (230, 60, 60), "j"), (0.55, -8.0, (250, 250, 250), "j")):
+        objs.append((i + j + 1, lambda i=i, j=j, c=c, sn=sn: auto(d, i, j, c, sn)))
+    for (i, j, f) in ((-4.6, 4.0, False), (-4.2, 4.6, True), (-4.7, 6.2, False), (-3.6, -6.5, True),
+                      (-4.3, -7.0, False), (2.2, 10.0, True), (2.8, 10.4, False)):
+        objs.append((i + j, lambda i=i, j=j, f=f: oie(d, i, j, f)))
+
+
 def village_j2(etat=None, t=0.0, extra=None):
     """Carte complète du jour 2 (toutes les maisons construites). extra : bâtiments du vote à montrer."""
     etat = etat or {}
@@ -242,6 +342,7 @@ def village_j2(etat=None, t=0.0, extra=None):
                          habitants=etat.get("habitants", [])))
     d = ImageDraw.Draw(big)
     objs = []
+    habillage(d, objs, [c for (c, _, _, _) in MAISONS.values()])
     for pseudo, ((i, j), col, toit, flag) in MAISONS.items():
         objs.append((i + j + 1, lambda i=i, j=j, c=col, r=toit, f=flag: (
             iso.maison(d, i, j, 1.0, c, r), f and drapeau(d, i, j, f))))
