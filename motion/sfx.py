@@ -121,7 +121,18 @@ def fail():
     return out
 
 
-BANK = {"impact": impact, "whoosh": whoosh, "pop": pop, "ticks": ticks, "notif": notif,
+def marteau():
+    """Trois coups de marteau rapides (construction)."""
+    out = np.zeros(int(SR * 0.55), np.float32)
+    for k in range(3):
+        t = _t(0.12)
+        coup = (np.sin(2 * np.pi * 420 * t) * 0.6 + _rng.standard_normal(len(t)) * 0.5) * _env(len(t), 0.0008, 0.025)
+        i = int(SR * 0.16 * k)
+        out[i:i + len(t)] += coup.astype(np.float32)
+    return out
+
+
+BANK = {"marteau": marteau, "impact": impact, "whoosh": whoosh, "pop": pop, "ticks": ticks, "notif": notif,
         "attente": hold_music, "tampon": stamp, "succes": success, "rate": fail}
 
 

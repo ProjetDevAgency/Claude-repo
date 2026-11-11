@@ -11,6 +11,7 @@ from cartoon import (FA, GREEN, INK, RED, SS, WHITE, YEL, CartoonVideo, back, bi
                      ease, flash, push, shake, tag)
 from engine import H, W
 from village import (BLANC, BLEU, ROUGE, bouton_abonner, foule, gros_plan_maire, panneau, pin, titre2)
+import rue
 
 GOLD = (235, 185, 40)
 iso.TW, iso.TH = 76, 38
@@ -483,7 +484,7 @@ def colline(d, i, j, w, dd):
         d.ellipse([(x - 14 * q) * SS, (y - 46 * q) * SS, (x + 14 * q) * SS, (y - 14 * q) * SS], fill=(50, 135, 60))
 
 
-def village_j2(etat=None, t=0.0, extra=None):
+def village_j2(etat=None, t=0.0, extra=None, skip=None):
     """Carte complète du jour 2 (toutes les maisons construites). extra : bâtiments du vote à montrer."""
     etat = etat or {}
     big = iso.carte(dict(maire=(0.6, -1.2), epicerie=1.0, maisons=[], terrains=False,
@@ -500,13 +501,20 @@ def village_j2(etat=None, t=0.0, extra=None):
     for (i, j), col, toit in GENERIQUES:
         objs.append((i + j + 1, lambda i=i, j=j, c=col, r=toit: iso.maison(d, i, j, 1.0, c, r)))
     for pseudo, ((i, j), col, toit, flag) in MAISONS.items():
+        if pseudo == skip:
+            continue
         objs.append((i + j + 1, lambda i=i, j=j, c=col, r=toit, f=flag: (
             iso.maison(d, i, j, 1.0, c, r), f and drapeau(d, i, j, f))))
-    objs.append((sum(VILLA_T0) + 3.6, lambda: villa(d, *VILLA_T0, toit=GOLD)))
-    objs.append((sum(VILLA_OUMAR) + 3.6, lambda: villa(d, *VILLA_OUMAR)))
-    objs.append((sum(PS5) + 1, lambda: ps5(d, *PS5)))
-    objs.append((sum(VOITURE) + 1.3, lambda: voiture(d, *VOITURE)))
-    objs.append((sum(GROTTE) + 1.8, lambda: grotte(d, *GROTTE, t)))
+    if skip != 'villa_t0':
+        objs.append((sum(VILLA_T0) + 3.6, lambda: villa(d, *VILLA_T0, toit=GOLD)))
+    if skip != 'villa_oumar':
+        objs.append((sum(VILLA_OUMAR) + 3.6, lambda: villa(d, *VILLA_OUMAR)))
+    if skip != 'ps5':
+        objs.append((sum(PS5) + 1, lambda: ps5(d, *PS5)))
+    if skip != 'voiture':
+        objs.append((sum(VOITURE) + 1.3, lambda: voiture(d, *VOITURE)))
+    if skip != 'grotte':
+        objs.append((sum(GROTTE) + 1.8, lambda: grotte(d, *GROTTE, t)))
     for name, fn, pos in (("foot", stade, FOOT), ("boulangerie", boulangerie, BOULANGERIE), ("boxe", club_boxe, BOXE)):
         if extra and name in extra:
             objs.append((sum(pos) + 1.5, lambda fn=fn, pos=pos: fn(d, *pos)))
@@ -665,18 +673,75 @@ def perso(img, pseudo, lt, x=540, base=2050, sc=1.45):
     img.paste(lay, (0, 0), lay)
 
 
-def fiche(lt, dur, pseudo, case, z=2.0, nom=None, role=None, x=770, sc=1.3):
-    """Plan « moment de l'habitant » : sa maison à gauche, son personnage à droite, pseudo en grand, rôle en étiquette."""
-    i, j = case
-    img, _ = zoom_sur(i, j, push(lt, dur, z, z + 0.15), 60, dx=230)
-    img = dim(img, 0.22, blur=3, dark=0.9)
-    perso(img, pseudo, lt, x=x, sc=sc, base=2000)
+def batiment(d, nom, k):
+    """Dessine le bâtiment d'un habitant à l'étape de construction k (0 → 1, avec rebond)."""
+    if nom in MAISONS:
+        (i, j), col, toit, flag = MAISONS[nom]
+        iso.maison(d, i, j, max(0.05, k), col, toit)
+        if flag and k >= 1:
+            drapeau(d, i, j, flag)
+    elif nom == "villa_t0":
+        villa(d, *VILLA_T0, toit=GOLD, k=max(0.05, k), piscine=k > 0.6, palmiers=k > 0.9)
+    elif nom == "villa_oumar":
+        villa(d, *VILLA_OUMAR, k=max(0.05, k), piscine=k > 0.6, palmiers=k > 0.9)
+    elif nom == "ps5":
+        ps5(d, *PS5, k=max(0.05, k))
+    elif nom == "voiture":
+        voiture(d, *VOITURE, k=max(0.05, k))
+    elif nom == "grotte" and k > 0.3:
+        grotte(d, *GROTTE)
+
+
+CASE = {"epicerie": EPICERIE, "villa_t0": VILLA_T0, "villa_oumar": VILLA_OUMAR, "ps5": PS5, "voiture": VOITURE, "grotte": GROTTE}
+
+
+def case_de(nom):
+    return MAISONS[nom][0] if nom in MAISONS else CASE[nom]
+
+
+def construction(lt, nom, z, dx=230, dz=-60, t0=0.15, duree=0.7):
+    """Plan sur la parcelle : le bâtiment sort de terre (rebond + poussière). Renvoie (image, fonction monde→écran)."""
+    base = carte_j2("sans_" + nom, skip=nom)
+    big = base.copy()
+    d = ImageDraw.Draw(big)
+    k = 0.0 if lt < t0 else min(1.12, back((lt - t0) / duree) if lt - t0 < duree else 1.0)
+    i, j = case_de(nom)
+    if lt > t0 and nom in MAISONS:                       # parcelle mise en valeur (halo jaune)
+        a = min(1.0, (lt - t0) / 0.3)
+        iso.tile(d, i - 0.3, j - 0.3, (255, 230, 120), 1.6, 1.6)
+    if k > 0:
+        batiment(d, nom, min(k, 1.12))
+    if 0 < lt - t0 < duree + 0.4:                       # nuage de poussière au pied du bâtiment
+        a = (lt - t0) / (duree + 0.4)
+        x, y = iso.iso(i + 0.5, j + 1.0)
+        q = iso.HK
+        for n in range(7):
+            ang = n * 0.9
+            r = (14 + 22 * a) * q
+            px, py = x + math.cos(ang) * 40 * a * q * 2, y + math.sin(ang) * 14 * a * q
+            g = int(200 + 40 * a)
+            d.ellipse([(px - r) * SS, (py - r * 0.6) * SS, (px + r) * SS, (py + r * 0.6) * SS], fill=(g, g - 10, g - 25))
+    x, y = iso.iso(i + 0.5, j + 0.5)
+    return iso.camera(big, z, (x + dx / z, y + dz / z))   # dx, dz en pixels d'écran
+
+
+def fiche(lt, dur, pseudo, case=None, z=3.6, nom=None, role=None, x=770, sc=1.3, bat=None):
+    """Moment de l'habitant : sa maison sort de terre, son pseudo s'affiche, son personnage arrive."""
+    bat = bat or pseudo
+    img, to = construction(lt, bat, push(lt, dur, z, z + 0.15))
+    perso(img, pseudo, max(0.0, lt - 0.9), x=x, sc=sc, base=2000) if lt > 0.9 else None
+    img = rue.contour_aretes(img, seuil=70, w=3)
     titre2(img, "HABITANT DE FAUCHÉ-LES-OIES" if nom is None else "", "@" + pseudo.upper() if nom is None else nom,
            k=lt / 0.25, y=190)
     r = role if role is not None else PERSOS[pseudo][2]
     if r:
-        tag(img, 540, 420, r, 50, ROUGE, WHITE, rot=-3, k=(lt - 0.4) / 0.25)
-    return flash(img, lt)
+        tag(img, 540, 420, r, 50, ROUGE, WHITE, rot=-3, k=(lt - 0.5) / 0.25)
+    i, j = case_de(bat)
+    hx, hy = to(i + 0.5, j + 0.5, 140)
+    if lt > 0.8:
+        tag(img, hx, hy, "@" + (pseudo if nom is None else pseudo), 34, WHITE, INK, rot=0, k=(lt - 0.8) / 0.2)
+    return shake(flash(img, lt), lt - 0.85, dur=0.25, amp=10)
+
 
 
 # ───────────── scènes ─────────────
@@ -716,7 +781,7 @@ def s_votes(lt, dur):
 
 
 def s_vendeuse(lt, dur):
-    return fiche(lt, dur, "vendeuse", EPICERIE, z=2.0, nom="L'ÉPICERIE OUVRE", role="LA VENDEUSE EST À LA CAISSE")
+    return fiche(lt, dur, "vendeuse", bat="epicerie", z=3.0, nom="L'ÉPICERIE OUVRE", role="LA VENDEUSE EST À LA CAISSE")
 
 
 def s_revenu(lt, dur):
@@ -747,16 +812,16 @@ def s_alexis(lt, dur):
 
 
 def s_adjoint(lt, dur):
-    i, j = MAISONS["Maël"][0]
-    img, _ = zoom_sur(i, j, push(lt, dur, 1.8, 1.95), -40)
-    img = dim(img, 0.3, blur=5, dark=0.85)
-    perso(img, "Maël", lt, x=290, sc=1.15)
-    perso(img, "Michael", max(0, lt - 0.4), x=790, sc=1.15)
+    img, _ = construction(lt, "Maël", push(lt, dur, 3.2, 3.4), dx=0, dz=300)
+    if lt > 0.9:
+        perso(img, "Maël", lt - 0.9, x=290, sc=1.15)
+        perso(img, "Michael", max(0, lt - 1.3), x=790, sc=1.15)
+    img = rue.contour_aretes(img, seuil=70, w=3)
     titre2(img, "POSTE D'ADJOINT", "@MAËL VS @MICHAEL", k=lt / 0.25, y=190)
-    big_number(img, (540, 900), "VS", 170, RED, k=(lt - 0.6) / 0.25)
+    big_number(img, (540, 900), "VS", 170, RED, k=(lt - 1.4) / 0.25)
     if lt > dur - 1.6:
         tag(img, 540, 520, "ÇA SE JOUERA AU VOTE", 56, YEL, INK, rot=-3, k=(lt - (dur - 1.6)) / 0.25)
-    return flash(img, lt)
+    return shake(flash(img, lt), lt - 0.85, dur=0.25, amp=10)
 
 
 def s_koko(lt, dur):
@@ -767,43 +832,43 @@ def s_koko(lt, dur):
 
 
 def s_fille(lt, dur):
-    return fiche(lt, dur, "S'", MAISONS["S'"][0], z=1.8)
+    return fiche(lt, dur, "S'")
 
 
 def s_t0(lt, dur):
-    img = fiche(lt, dur, "T_0", VILLA_T0, z=1.6)
+    img = fiche(lt, dur, "T_0", bat="villa_t0", z=2.4)
     if lt > dur - 2.4:
         tag(img, 540, 540, "DON PROMIS · LE MAIRE ATTEND TOUJOURS", 42, YEL, INK, rot=-3, k=(lt - (dur - 2.4)) / 0.25)
     return img
 
 
 def s_oumar(lt, dur):
-    return fiche(lt, dur, "oumar dansoko", VILLA_OUMAR, z=1.6)
+    return fiche(lt, dur, "oumar dansoko", bat="villa_oumar", z=2.4)
 
 
 def s_kova(lt, dur):
-    return fiche(lt, dur, "kova.zfr", VOITURE, z=2.0)
+    return fiche(lt, dur, "kova.zfr", bat="voiture", z=3.2)
 
 
 def s_ps5(lt, dur):
-    return fiche(lt, dur, "ps5", PS5, z=2.0, nom="LA MAISON PS5", role="SORTIE DE TERRE")
+    return fiche(lt, dur, "ps5", bat="ps5", z=3.2, nom="LA MAISON PS5", role="SORTIE DE TERRE")
 
 
 def s_pkmoi(lt, dur):
-    img = fiche(lt, dur, "pkmoi", GROTTE, z=1.8)
+    img = fiche(lt, dur, "pkmoi", bat="grotte", z=2.8)
     if lt > 1.2:
         tag(img, 540, 540, "VEILLE SUR NOUS DEPUIS SA GROTTE", 46, YEL, INK, rot=3, k=(lt - 1.2) / 0.25)
     return img
 
 
 def s_drapeaux(lt, dur):
-    i, j = MAISONS["You"][0]
-    img, _ = zoom_sur(i - 0.6, j, push(lt, dur, 1.9, 2.05), -40)
-    img = dim(img, 0.3, blur=5, dark=0.85)
-    perso(img, "You", lt, x=290, sc=1.15)
-    perso(img, "ghb_s91", max(0, lt - 0.4), x=780, sc=1.15)
+    img, _ = construction(lt, "You", push(lt, dur, 3.2, 3.4), dx=0, dz=300)
+    if lt > 0.9:
+        perso(img, "You", lt - 0.9, x=290, sc=1.15)
+        perso(img, "ghb_s91", max(0, lt - 1.3), x=780, sc=1.15)
+    img = rue.contour_aretes(img, seuil=70, w=3)
     titre2(img, "MAROC ET TUNISIE", "@YOU & @GHB_S91", k=lt / 0.25, y=190)
-    return flash(img, lt)
+    return shake(flash(img, lt), lt - 0.85, dur=0.25, amp=10)
 
 
 def s_waillox(lt, dur):
@@ -882,7 +947,10 @@ def main():
     v.sfx(T["s_habitants"], "whoosh", 0.6)
     for k in ("s_amine", "s_alexis", "s_adjoint", "s_koko", "s_fille", "s_t0", "s_oumar", "s_kova", "s_ps5",
               "s_pkmoi", "s_drapeaux", "s_waillox", "s_kuromi", "s_skr"):
-        v.sfx(T[k], "pop", 0.75)
+        v.sfx(T[k], "whoosh", 0.45)
+        v.sfx(T[k] + 0.15, "marteau", 0.7)
+        v.sfx(T[k] + 0.85, "impact", 0.6)
+        v.sfx(T[k] + 0.95, "pop", 0.6)
     v.sfx(T["sarrete"], "impact", 0.8)
     for k in ("c1", "c2", "c3"):
         v.sfx(T[k], "pop", 0.7)

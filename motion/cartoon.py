@@ -488,7 +488,7 @@ def push(lt, dur, z0=1.0, z1=1.12):
 
 def shake(img, lt, dur=0.35, amp=18):
     """Tremblement de caméra au début d'un plan (chiffre choc)."""
-    if lt >= dur:
+    if lt >= dur or lt < 0:
         return img
     a = amp * (1 - lt / dur)
     dx = int(a * math.sin(lt * 90))
