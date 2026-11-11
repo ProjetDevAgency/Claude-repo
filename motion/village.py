@@ -544,9 +544,302 @@ def episode1(voice_file=None):
 
 
 
+# ───────────── épisode 2 : résultat, les maisons des habitants, deuxième vote ─────────────
+
+HAB = [  # pseudo, case, couleur, drapeau, rôle
+    ("@Amine.6919", (1.3, 3.0), (245, 215, 150), None, "1ER HABITANT"),
+    ("@Nelio", (2.5, 3.0), (90, 140, 230), None, None),
+    ("@Mskoww_91", (3.7, 3.0), (60, 110, 210), None, None),
+    ("@Maël", (2.5, 4.2), (250, 190, 190), None, "ADJOINT ?"),
+    ("@Alexis", (1.3, 4.2), (210, 240, 200), None, "CONSEILLER"),
+    ("@T_0", (3.7, 4.3), (240, 200, 60), None, "LE RICHE"),
+    ("@You", (-2.0, 2.6), (248, 248, 248), "maroc", None),
+    ("@ghb_s91", (-3.2, 2.6), (245, 225, 190), "tunisie", None),
+    ("@S'", (-2.0, 1.4), (110, 200, 110), None, "FILLE DU MAIRE"),
+    ("@rph.49", (-3.2, 1.4), (200, 225, 250), None, None),
+    ("@Michael", (-2.0, 3.8), (230, 210, 250), None, "ADJOINT ?"),
+    ("@Waillox", (-3.2, 3.8), (250, 230, 200), None, "LE PLUS MALIN"),
+]
+VILLA = ("@oumar dansoko", (4.6, 5.8))
+GROTTE = ("@pkmoi", (5.6, 1.6))
+PS5 = ("@ps5", (0.8, 6.2))
+VOITURE = ("@kova.zfr", (4.9, 3.0))
+FOOT = (-2.8, -2.8)          # terrain de foot à la place de la fête
+BOULANGERIE = (3.6, -1.6)
+
+
+def drapeau(d, i, j, kind):
+    x, y = iso.iso(i + 0.5, j + 0.5, 95)
+    s, q = SS, iso.HK
+    d.line([x * s, y * s, x * s, (y - 50 * q) * s], fill=INK, width=int(3 * q * s))
+    w, h = 34 * q, 22 * q
+    d.rectangle([x * s, (y - 50 * q) * s, (x + w) * s, (y - 50 * q + h) * s], fill=(200, 30, 40))
+    if kind == "maroc":
+        d.text(((x + w / 2) * s, (y - 50 * q + h / 2) * s), "★", font=F(int(16 * q * s)), fill=(20, 120, 50), anchor="mm")
+    else:
+        cx, cy, r = (x + w / 2), (y - 50 * q + h / 2), 7 * q
+        d.ellipse([(cx - r) * s, (cy - r) * s, (cx + r) * s, (cy + r) * s], fill=WHITE)
+
+
+def villa(d, i, j, k):
+    iso.box(d, i, j, 1.4, 1.1, 42 * k, (250, 250, 245))
+    if k > 0.6:
+        iso.box(d, i + 0.15, j + 0.15, 1.1, 0.8, 4, (60, 60, 70), z0=42 * k)
+    iso.tile(d, i + 1.55, j + 0.1, (80, 190, 240), 0.9, 0.9)
+
+
+def grotte(d, i, j, k):
+    pts = [iso.iso(i + 0.2, j + 0.9), iso.iso(i + 0.1, j + 0.3, 30 * k), iso.iso(i + 0.6, j + 0.1, 70 * k),
+           iso.iso(i + 1.1, j + 0.2, 40 * k), iso.iso(i + 1.2, j + 0.9)]
+    d.polygon([(x * SS, y * SS) for x, y in pts], fill=(130, 125, 120))
+    ex, ey = iso.iso(i + 0.7, j + 0.95)
+    q = iso.HK * k
+    d.chord([(ex - 22 * q) * SS, (ey - 40 * q) * SS, (ex + 22 * q) * SS, (ey + 10 * q) * SS], 180, 360, fill=(40, 35, 32))
+
+
+def ps5(d, i, j, k):
+    h = 95 * k
+    iso.box(d, i, j, 0.28, 0.8, h, (245, 245, 250))
+    iso.box(d, i + 0.28, j, 0.14, 0.8, h * 0.96, (25, 25, 30))
+    iso.box(d, i + 0.42, j, 0.28, 0.8, h, (245, 245, 250))
+
+
+def voiture(d, i, j, k):
+    iso.box(d, i, j, 1.0, 0.7, 26 * k, (215, 40, 50))
+    if k > 0.5:
+        iso.box(d, i + 0.2, j + 0.1, 0.55, 0.5, 20, (190, 225, 245), z0=26 * k)
+    for (a, b) in ((0.15, 0.7), (0.75, 0.7)):
+        x, y = iso.iso(i + a, j + b, 4)
+        r = 10 * iso.HK
+        d.ellipse([(x - r) * SS, (y - r) * SS, (x + r) * SS, (y + r) * SS], fill=INK)
+
+
+def ep2_village(d, kh=None, kspec=1.0, extra_terrains=False):
+    """Dessine les maisons des habitants (kh : liste de facteurs de croissance) + bâtiments spéciaux."""
+    objs = []
+    for n, (pseudo, (i, j), col, flag, role) in enumerate(HAB):
+        k = 1.0 if kh is None else (kh[n] if n < len(kh) else 0.0)
+        if k <= 0:
+            iso.terrain(d, i, j)
+            continue
+        roof_col = (205, 160, 40) if pseudo == "@T_0" else (205, 75, 60)
+        objs.append((i + j, lambda i=i, j=j, k=k, c=col, rc=roof_col, f=flag: (
+            iso.maison(d, i, j, k, c, rc), f and k >= 1 and drapeau(d, i, j, f))))
+    kv = 1.0 if kh is None else (kh[11] if len(kh) > 11 else 0.0)
+    if kv > 0:
+        objs.append((VOITURE[1][0] + VOITURE[1][1], lambda: voiture(d, *VOITURE[1], kv)))
+    else:
+        iso.terrain(d, *VOITURE[1])
+    for (_, (i, j)), fn in ((VILLA, villa), (GROTTE, grotte), (PS5, ps5)):
+        if kspec > 0:
+            objs.append((i + j + 1, lambda i=i, j=j, fn=fn: fn(d, i, j, kspec)))
+        else:
+            iso.terrain(d, i, j, 1.4, 1.0)
+    if extra_terrains:
+        iso.terrain(d, *BOULANGERIE, 1.2, 1.2)
+    for _, fn in sorted(objs, key=lambda o: o[0]):
+        fn()
+
+
+def vue2(etat, z, center, **kw):
+    big = iso.carte_cache(etat).copy()
+    ep2_village(ImageDraw.Draw(big), **kw)
+    return iso.camera(big, z, center)
+
+
+E2 = dict(maire=(0.6, -1.2), epicerie=1.0, maisons=[], terrains=False)
+
+
+def label(img, to, i, j, txt, k=1.0, col=WHITE, fg=INK, z=110):
+    x, y = to(i + 0.5, j + 0.5, z)
+    tag(img, x, y, txt, 30, col, fg, rot=0, k=k)
+
+
+def e2_jour(lt, dur):
+    """Ouverture : le panneau d'entrée de ville, en grand, comme les vidéos qui marchent."""
+    img, _ = vue2(dict(E2, epicerie=0), push(lt, dur, 1.0, 1.1), (540, 1020), kh=[0] * 12, kspec=0)
+    img = dim(img, 0.25, blur=5, dark=0.9)
+    lay = Image.new("RGBA", (W * SS, H * SS), (0, 0, 0, 0))
+    panneau(ImageDraw.Draw(lay), 540, 820, "FAUCHÉ-LES-OIES")
+    lay = lay.resize((W, H), Image.LANCZOS)
+    sc = 0.7 + 0.3 * back(lt / 0.35) if lt < 0.35 else 1.0
+    lay = lay.resize((int(W * 1.25 * sc), int(H * 1.25 * sc)), Image.LANCZOS)
+    img.paste(lay, (int(540 - 540 * 1.25 * sc), int(820 - 820 * 1.25 * sc)), lay)
+    titre2(img, "JOUR 2", "VOUS AVEZ VOTÉ", k=1.0, y=230)
+    return shake(img, lt)
+
+
+def e2_votes(lt, dur):
+    img, _ = vue2(dict(E2, epicerie=0), 1.0, (540, 1020), kh=[0] * 12, kspec=0)
+    img = dim(img, 0.8)
+    titre2(img, "RÉSULTAT", "64 VOTES", k=lt / 0.25)
+    d = ImageDraw.Draw(img)
+    rows = [("1 · RÉPARER LE PONT", 26, (120, 120, 132)), ("2 · OUVRIR UNE ÉPICERIE", 66, GREEN),
+            ("3 · LA FÊTE DU VILLAGE", 8, (120, 120, 132))]
+    for q, (lab, pct, col) in enumerate(rows):
+        y = 620 + q * 210
+        k = ease((lt - 0.3 - 0.25 * q) / 0.8)
+        d.rounded_rectangle([90, y, 990, y + 120], radius=24, fill=(250, 250, 252))
+        if k > 0:
+            d.rounded_rectangle([90, y, 90 + max(48, 900 * pct / 100 * k), y + 120], radius=24, fill=col)
+        d.text((120, y + 60), lab, font=FA(52), fill=INK, anchor="lm")
+        d.text((960, y + 60), f"{int(pct * k)} %", font=FA(60), fill=INK, anchor="rm")
+    return img
+
+
+def e2_epicerie(lt, dur):
+    k = round(min(1.0, ease(lt / 1.0)), 2)
+    ex, ey = iso.iso(2.8, 1.8)
+    img, to = vue2(dict(E2, epicerie=max(0.01, k), habitants=foule(lt, 8)), push(lt, dur, 1.9, 2.1), (ex, ey - 60),
+                   kh=[0] * 12, kspec=0)
+    titre2(img, "L'ÉPICERIE", "GAGNE !", k=lt / 0.25)
+    if lt > 1.0:
+        tag(img, 540, 1250, "OUVERTE AUJOURD'HUI", 64, GREEN, INK, rot=-3, k=(lt - 1.0) / 0.25)
+    return shake(flash(img, lt), lt, dur=0.4, amp=10)
+
+
+def e2_caisse(lt, dur):
+    mx, my = iso.iso(1.6, -2.0)
+    img, _ = vue2(E2, push(lt, dur, 1.6, 1.75), (mx, my + 40), kh=[0] * 12, kspec=0)
+    img = dim(img, 0.3, blur=6, dark=0.9)
+    titre2(img, "CAISSE DE LA MAIRIE", "−700 €", k=lt / 0.25)
+    big_number(img, (540, 760), counter(1000, 300, lt - 0.3, 0.9, "{:,} €"), 220, GREEN, k=1.0)
+    return flash(img, lt)
+
+
+def e2_revenu(lt, dur):
+    """L'épicerie rapporte 5 € par habitant et par jour : la caisse remonte."""
+    ex, ey = iso.iso(2.8, 1.8)
+    img, _ = iso.camera(iso.carte(dict(E2, habitants=foule(lt, 18))), push(lt, dur, 1.45, 1.6), (ex, ey - 40))
+    img = dim(img, 0.25, blur=4, dark=0.92)
+    titre2(img, "L'ÉPICERIE RAPPORTE", "5 € / HABITANT / JOUR", k=lt / 0.25)
+    t1, t2, t3 = (T[k] - T["e2_revenu"] for k in ("vous50", "caisse550", "riche"))
+    if lt > t1:
+        big_number(img, (540, 640), "50 × 5 € = +250 €", 120, GREEN, "PAR JOUR", k=(lt - t1) / 0.25)
+    if lt > t2:
+        big_number(img, (540, 980), counter(300, 550, lt - t2, 0.8, "{:,} €"), 200, YEL, "DANS LA CAISSE", k=1.0, rot=-3)
+    if lt > t3:
+        tag(img, 540, 1330, "PLUS D'HABITANTS = PLUS D'ARGENT", 54, ROUGE, WHITE, rot=-3, k=(lt - t3) / 0.25)
+    return flash(img, lt)
+
+
+def e2_remplit(lt, dur):
+    img, _ = iso.camera(iso.carte(dict(E2, habitants=foule(lt, 18))), push(lt, dur, 1.1, 1.2), (520, 1060))
+    titre2(img, "LE VILLAGE SE REMPLIT", "+50 HABITANTS", k=lt / 0.25)
+    return flash(img, lt)
+
+
+def e2_maisons(lt, dur):
+    third = dur / 3
+    kh = [round(min(1.0, max(0.0, (lt - (n // 4) * third - 0.2 * (n % 4)) / 0.45)), 1) for n in range(12)]
+    g = min(2, int(lt / third))
+    idx = range(g * 4, g * 4 + 4)
+    pts = [HAB[n][1] for n in idx]
+    ci = sum(p[0] for p in pts) / 4 + 0.5
+    cj = sum(p[1] for p in pts) / 4 + 0.5
+    cx, cy = iso.iso(ci, cj)
+    img, to = vue2(E2, 2.0, (cx, cy - 30), kh=kh, kspec=0)
+    titre2(img, "LES MAISONS POUSSENT", "AVEC VOS PSEUDOS", k=lt / 0.25)
+    if g == 0 and kh[11] >= 1 and False:
+        label(img, to, *VOITURE[1], VOITURE[0], k=(lt - 2.5) / 0.2, z=70)
+        x, y = to(VOITURE[1][0] + 0.5, VOITURE[1][1] + 0.5, 70)
+        tag(img, x, y + 48, "MAISON-VOITURE", 24, YEL, INK, rot=0, k=(lt - 2.6) / 0.2)
+    for n in idx:
+        pseudo, (i, j), _, _, role = HAB[n]
+        if kh[n] >= 1:
+            x, y = to(i + 0.5, j + 0.5, 110)
+            tn = (n // 4) * third + 0.2 * (n % 4) + 0.45
+            tag(img, x, y, pseudo, 34, WHITE, INK, rot=0, k=(lt - tn) / 0.2)
+            if role:
+                x, y = to(i + 0.5, j + 0.5, 110)
+                tag(img, x, y + 56, role, 28, YEL, INK, rot=0, k=(lt - tn - 0.15) / 0.2)
+    return flash(img, lt - g * third)
+
+
+def e2_speciaux(lt, dur):
+    T0, T1, T2 = (T[k] - T["e2_speciaux"] for k in ("villa", "grotte", "ps5"))
+    if lt < T1:
+        (pseudo, (i, j)), title = VILLA, ("LA VILLA", "AVEC PISCINE")
+        t0 = 0.0
+    elif lt < T2:
+        (pseudo, (i, j)), title = GROTTE, ("LA GROTTE", "DE L'HOMME DES CAVERNES")
+        t0 = T1
+    else:
+        (pseudo, (i, j)), title = PS5, ("ET MÊME", "LA MAISON PS5")
+        t0 = T2
+    k = round(min(1.0, ease((lt - t0) / 0.6)), 2)
+    cx, cy = iso.iso(i + 0.7, j + 0.6)
+    img, to = vue2(E2, 2.2, (cx, cy - 60), kspec=max(0.01, k))
+    titre2(img, *title, k=(lt - t0) / 0.25)
+    if k >= 1:
+        label(img, to, i + 0.2, j, pseudo, k=(lt - t0 - 0.6) / 0.2, z=130)
+    return shake(flash(img, lt - t0), lt - t0, dur=0.3, amp=8)
+
+
+CHOIX2 = [("1", "TERRAIN DE FOOT", "250 €", FOOT), ("2", "BOULANGERIE", "300 €", BOULANGERIE),
+          ("3", "GARDER L'ARGENT POUR LE PONT", "0 €", (iso.RIVIERE_I + 1.0, iso.ROUTE_J + 0.5))]
+
+
+def e2_vote(lt, dur):
+    t0s = [T["c1"] - T["e2_vote"], T["c2"] - T["e2_vote"], T["c3"] - T["e2_vote"]]
+    img, to = vue2(E2, 1.0, (540, 1000), extra_terrains=True)
+    titre2(img, "DEUXIÈME VOTE", "550 € DANS LA CAISSE", k=lt / 0.25)
+    for q, ((n, lab, prix, (i, j)), t0) in enumerate(zip(CHOIX2, t0s)):
+        pin(img, to(i + 0.6, j + 0.6), n, None, (lt - t0) / 0.25)
+        tag(img, 540, 1400 + q * 98, f"{n}  ·  {lab}  ·  {prix}", 42, WHITE, INK, rot=0, k=(lt - t0) / 0.25)
+    return img
+
+
+def e2_fin(lt, dur):
+    img, _ = vue2(E2, 1.4, (500, 950))
+    img = dim(img, 0.35, blur=8, dark=0.85)
+    gros_plan_maire(img, lt, arm=0.95, mouth="o" if int(lt * 7) % 2 else "grin")
+    titre2(img, "PLUS QUE 50 HABITANTS", "AVANT LA SURPRISE", k=lt / 0.25)
+    tv = T["vote_fin"] - T["e2_fin"]
+    if lt > tv:
+        titre2(img, "1, 2 OU 3 ?", "VOTE EN COMMENTAIRE", k=(lt - tv) / 0.25, y=560)
+        bouton_abonner(img, 540, 1250, (lt - tv - 0.4) / 0.25)
+    return shake(img, lt)
+
+
+def episode2(voice_file=None):
+    v = CartoonVideo("village_ep02", "scripts/village/ep02.txt", "", "", corner="")
+    v.length = (33.0, 34.0, 35.0)
+    v.hook_head_start = 0.0
+    v.voice(voice_file or "output/_work_village_ep02/voice_raw.mp3")
+    sc = [("Jour deux", e2_jour), ("Soixante-quatre votes", e2_votes), ("c'est l'épicerie qui gagne", e2_epicerie),
+          ("Dans la caisse", e2_caisse), ("Mais l'épicerie rapporte", e2_revenu),
+          ("Et les maisons poussent", e2_maisons), ("La villa avec piscine", e2_speciaux),
+          ("Deuxième vote", e2_vote), ("Plus que cinquante", e2_fin)]
+    for phrase, fn in sc:
+        v.scene(phrase, fn)
+        T[fn.__name__] = v.at(phrase)
+    T["vous50"], T["caisse550"], T["riche"] = v.at("Vous êtes cinquante"), v.at("La caisse remonte"), v.at("Plus vous êtes")
+    T["villa"], T["grotte"], T["ps5"] = v.at("La villa"), v.at("la grotte"), v.at("et même la maison")
+    T["c1"], T["c2"], T["c3"] = v.at("Un, un terrain"), v.at("Deux, une boulangerie"), v.at("Trois, on garde")
+    T["vote_fin"] = v.at("Vote un, deux")
+    v.sfx(0.0, "impact", 1.0)
+    v.sfx(T["e2_votes"] + 0.3, "ticks", 0.6)
+    v.sfx(T["e2_epicerie"], "succes", 1.0)
+    v.sfx(T["e2_caisse"] + 0.3, "ticks", 0.6)
+    v.sfx(T["vous50"], "pop", 0.8)
+    v.sfx(T["caisse550"], "ticks", 0.7)
+    v.sfx(T["caisse550"] + 0.8, "succes", 0.8)
+    v.sfx(T["e2_maisons"], "pop", 0.8)
+    for k in ("villa", "grotte", "ps5"):
+        v.sfx(T[k], "pop", 0.8)
+    for k in ("c1", "c2", "c3"):
+        v.sfx(T[k], "pop", 0.7)
+    v.sfx(T["vote_fin"], "impact", 0.9)
+    for t0, fn in sorted(v.scenes, key=lambda x: x[0]):
+        print(f"   {t0:5.1f}s {fn.__name__}")
+    v.render()
+
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--ep", type=int, default=1)
     ap.add_argument("--voice-file")
     a = ap.parse_args()
-    {1: episode1}[a.ep](a.voice_file)
+    {1: episode1, 2: episode2}[a.ep](a.voice_file)
