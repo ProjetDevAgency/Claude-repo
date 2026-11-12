@@ -9,7 +9,7 @@
 // Le village repart de zéro à chaque lancement. Le serveur n'écoute que cet appareil (127.0.0.1) :
 // personne d'autre sur le wifi ne peut envoyer de faux cadeaux.
 import { createServer } from "node:http";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import { WebSocketServer } from "ws";
@@ -20,6 +20,12 @@ const PUBLIC = join(ICI, "public");
 const CFG = JSON.parse(readFileSync(join(ICI, "config.json"), "utf8"));
 const DEMO = process.argv.includes("--demo");
 const PSEUDO = (process.argv.find((a) => a.startsWith("--tiktok=")) || "").split("=")[1] || CFG.tiktok;
+// Clé Euler Stream (gratuite sur eulerstream.com) : nécessaire pour se brancher au live.
+// Donnée une fois avec --cle=…, elle est gardée dans cle_euler.txt pour les fois suivantes.
+const FICHIER_CLE = join(ICI, "cle_euler.txt");
+const cleArg = (process.argv.find((a) => a.startsWith("--cle=")) || "").slice(6).trim();
+if (cleArg) writeFileSync(FICHIER_CLE, cleArg);
+const CLE = cleArg || (existsSync(FICHIER_CLE) ? readFileSync(FICHIER_CLE, "utf8").trim() : "");
 
 // ───── état : on repart de zéro à chaque lancement ─────
 let etat = etatInitial(CFG);
@@ -115,7 +121,8 @@ function idDe(u) {
 
 async function brancherTikTok() {
   const { TikTokLiveConnection, WebcastEvent } = await import("tiktok-live-connector");
-  const live = new TikTokLiveConnection(PSEUDO, { enableExtendedGiftInfo: true });
+  if (!CLE) console.log("⚠️  Pas de clé Euler Stream : la connexion au live risque d'échouer. Lance avec --cle=TA_CLE");
+  const live = new TikTokLiveConnection(PSEUDO, { enableExtendedGiftInfo: true, ...(CLE ? { signApiKey: CLE } : {}) });
   const majStatut = (s) => {
     statut = s;
     console.log("TikTok :", s);
@@ -144,7 +151,10 @@ async function brancherTikTok() {
       await live.connect();
       majStatut(`connecté au live de @${PSEUDO}`);
     } catch (e) {
-      majStatut(`en attente du live de @${PSEUDO} (${String(e.message || e).slice(0, 80)})`);
+      const msg = String(e.message || e);
+      const conseil = /sign/i.test(msg) && !CLE ? " → il faut une clé Euler Stream (--cle=…)"
+        : /sign/i.test(msg) ? " → vérifie ta clé Euler Stream" : "";
+      majStatut(`en attente du live de @${PSEUDO} (${msg.slice(0, 80)})${conseil}`);
     }
   };
   await essayer();
