@@ -135,8 +135,21 @@ function pleinEcran() {
   d.requestFullscreen({ navigationUI: "hide" }).catch(() => {});
 }
 
+// Écran toujours allumé (sinon le téléphone se met en veille et le partage d'écran du live devient noir)
+let verrou = null;
+async function garderEcranAllume() {
+  try {
+    if (!verrou && navigator.wakeLock && document.visibilityState === "visible") {
+      verrou = await navigator.wakeLock.request("screen");
+      verrou.addEventListener("release", () => { verrou = null; });
+    }
+  } catch { verrou = null; }
+}
+document.addEventListener("visibilitychange", garderEcranAllume);
+
 function activerSon() {
   pleinEcran();
+  garderEcranAllume();
   if (!audio) audio = new AudioContext();
   audio.resume();
   musique.lancer();
