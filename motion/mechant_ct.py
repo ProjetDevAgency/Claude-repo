@@ -82,8 +82,8 @@ class Mechant:
         def s_hook(lt, dur):
             img = self.gros_plan(lt, dur, 2.1, 2.25, arm=0.5)
             badge(img, 540, 1190, c["badge"])
-            bubble(img, 540, 545, c["hook_bulle"], 64, 1.0, tail_x=640)
-            tag(img, 540, 880, c["hook_tag"], 62, RED, WHITE, rot=-4, k=(lt + 0.3) / 0.3)
+            bubble(img, 540, 570, c["hook_bulle"], 64, 1.0, tail_x=640)
+            tag(img, 540, 400, c["hook_tag"], 56, RED, WHITE, rot=-3, k=(lt + 0.3) / 0.3)   # au-dessus de la bulle : jamais sur le visage
             return shake(img, lt)
 
         def s_faux(lt, dur):
@@ -119,9 +119,9 @@ class Mechant:
 
         def s_sarah(lt, dur):
             img = self.salon(lt, "triste", sarah=dict(mouth=parle(lt)), z=push(lt, dur, 1.1, 1.2), center=(540, 1000))
-            bubble(img, 720, 545, c["sarah"], 64, lt / 0.3, tail_x=780)
+            bubble(img, 720, 570, c["sarah"], 64, lt / 0.3, tail_x=780)
             if lt > 1.6:
-                tag(img, 540, 860, "LA PLUPART ABANDONNENT ICI", 52, RED, WHITE, rot=-3, k=(lt - 1.6) / 0.3)
+                tag(img, 540, 400, "LA PLUPART ABANDONNENT ICI", 50, RED, WHITE, rot=-3, k=(lt - 1.6) / 0.3)
             return flash(img, lt)
 
         def s_abonne(lt, dur):
@@ -142,8 +142,8 @@ class Mechant:
 
         def s_m4(lt, dur):
             img = self.gros_plan(lt, dur, 2.0, 2.2, mouth="grin" if int(lt * 5) % 2 else "o", arms_up=False, arm=0.2)
-            bubble(img, 540, 545, c["m4"], 62, lt / 0.25, tail_x=640)
-            tag(img, 540, 900, "IL SE MOQUE ENCORE", 50, RED, WHITE, rot=-3, k=(lt - 1.0) / 0.3)
+            bubble(img, 540, 570, c["m4"], 62, lt / 0.25, tail_x=640)
+            tag(img, 540, 400, "IL SE MOQUE ENCORE", 50, RED, WHITE, rot=-3, k=(lt - 1.0) / 0.3)
             return shake(flash(img, lt), lt)
 
         def s_riposte(lt, dur):

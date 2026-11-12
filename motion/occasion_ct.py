@@ -46,7 +46,7 @@ C = dict(
            "CODE DE LA CONSOMMATION · L217-7"),
     lettre=("LETTRE RECOMMANDÉE", "3 PHRASES", [("1. Date d'achat", "", 0.3, False), ("2. La panne", "", 0.8, False),
                                                  ("3. Garantie légale L217-7", "", 1.3, True)]),
-    m4=["TA LETTRE ?", "MON CHIEN", "L'A MANGÉE"],
+    m4=["TA LETTRE ?", "MON CHIEN L'A MANGÉE"],
     riposte="DEVIS JOINT",
     calcul=("LA RÉPARATION", [("Boîte de vitesses : 2 400 €", 0.6, False), ("Payé par Kévin : 0 €", 1.4, True)]),
     gain_phrase="la voiture est réparée",
