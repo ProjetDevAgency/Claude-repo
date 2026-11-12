@@ -142,15 +142,19 @@ const SONS = {
 const PRIORITAIRES = new Set(["arrivee", "arbre", "cabane", "maison", "grande_maison", "immeuble", "monument"]);
 const VOIX_DE = { arbre: "arbre", cabane: "cabane", maison: "maison", villa: "grande_maison", immeuble: "immeuble", chateau: "monument" };
 const voix = {
-  liste: {}, debloquee: false, finLe: 0, dernier: {}, dernierTout: 0, attente: null, derniers: {},
-  REPOS: { arrivee: 4, arbre: 8, cabane: 6, maison: 4, grande_maison: 3, immeuble: 2, monument: 0,
-    like: 45, partage: 15, visiteur: 60, discute: 0, appel: 0, soir: 0, matin: 0 },
+  liste: {}, debloquee: false, finLe: 0, dernier: {}, dernierTout: 0, file: [], derniers: {},
+  // abonnés et cadeaux : jamais de pause, chacun a sa phrase (file d'attente) ; le reste : des pauses
+  REPOS: { like: 45, partage: 15, visiteur: 60, discute: 0, appel: 0, soir: 0, matin: 0 },
   dire(cat, now) {
     const fichiers = this.liste[cat];
     if (!fichiers || !fichiers.length) return;
-    if (now - (this.dernier[cat] ?? -1e9) < (this.REPOS[cat] ?? 10)) return;
-    if (now < this.finLe + 0.8) {                                         // quelqu'un parle déjà
-      if (PRIORITAIRES.has(cat)) this.attente = { cat, jusqua: now + 8 };
+    const prio = PRIORITAIRES.has(cat);
+    if (!prio && now - (this.dernier[cat] ?? -1e9) < (this.REPOS[cat] ?? 10)) return;
+    if (now < this.finLe + 0.6 || (!prio && this.file.length)) {           // quelqu'un parle déjà
+      if (prio) {
+        this.file.push({ cat, jusqua: now + 25 });
+        if (this.file.length > 6) this.file.shift();                        // gros rush : on garde les 6 derniers
+      }
       return;
     }
     // jamais deux fois de suite la même phrase
@@ -165,12 +169,12 @@ const voix = {
     this.dernier[cat] = this.dernierTout = now;
   },
   tic(now) {
-    if (this.attente && now < this.attente.jusqua && now >= this.finLe + 0.8) {
-      const c = this.attente.cat;
-      this.attente = null;
-      this.dernier[c] = -1e9;
-      this.dire(c, now);
-    } else if (this.attente && now >= this.attente.jusqua) this.attente = null;
+    while (this.file.length && now > this.file[0].jusqua) this.file.shift();
+    if (this.file.length && now >= this.finLe + 0.6) {
+      const { cat } = this.file.shift();
+      this.finLe = 0;
+      this.dire(cat, now);
+    }
   },
 };
 const likes = [];             // [instant, nombre] des derniers likes
