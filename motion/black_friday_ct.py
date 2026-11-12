@@ -104,7 +104,7 @@ def s_truc(lt, dur):
 
 def s_achat(lt, dur):
     img = salon(lt, "telephone", z=1.0, center=(540, 1000))
-    tag(img, 540, 250, "VENDREDI 27 NOVEMBRE", 60, WHITE, INK, rot=-3, k=lt / 0.25)
+    tag(img, 540, 250, "L'AN DERNIER, AU BLACK FRIDAY", 56, WHITE, INK, rot=-3, k=lt / 0.25)
     produit(img, 540, 760, lt - 0.4)
     return flash(img, lt)
 
@@ -223,7 +223,7 @@ def main():
     v.hook_head_start = 0.0
     v.voice("output/_work_droits_bf/voice_raw.mp3")
     sc = [("Moins quarante pour cent", s_hook), ("Faux. Kévin", s_faux), ("Grâce à un seul", s_truc),
-          ("Vendredi vingt-sept", s_achat), ("Trois jours plus tard", s_appel), ("Le conseiller rigole", s_c1),
+          ("L'an dernier, au Black", s_achat), ("Trois jours plus tard", s_appel), ("Le conseiller rigole", s_c1),
           ("Et en raccrochant", s_c2), ("Même Sarah", s_sarah)]
     for phrase, fn in sc:
         T[fn.__name__] = v.at(phrase)
