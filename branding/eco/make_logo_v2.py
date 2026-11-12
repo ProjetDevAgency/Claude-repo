@@ -90,49 +90,54 @@ def rayons(img, c, n=16):
                    (S / 2 + 900 * math.cos(a1), S / 2 + 900 * math.sin(a1))], fill=c)
 
 
-# A — Kévin choqué, billets ailés qui s'envolent, fond jaune à rayons
-a = fond(YEL)
-rayons(a, (255, 222, 70))
-kevin(a, 400, 1210, 1.3, mouth="o", brows="haut")
-pose(a, ailes(billet(0.55, 14), 0.55), 150, 330)
-pose(a, ailes(billet(0.5, -16), 0.5), 680, 370)
-pose(a, coin(0.5), 130, 520)
+def main():
+    # A — Kévin choqué, billets ailés qui s'envolent, fond jaune à rayons
+    a = fond(YEL)
+    rayons(a, (255, 222, 70))
+    kevin(a, 400, 1210, 1.3, mouth="o", brows="haut")
+    pose(a, ailes(billet(0.55, 14), 0.55), 150, 330)
+    pose(a, ailes(billet(0.5, -16), 0.5), 680, 370)
+    pose(a, coin(0.5), 130, 520)
 
-# B — Kévin sourire + grosse pièce, fond vert
-b = fond((34, 120, 74))
-rayons(b, (44, 138, 86))
-kevin(b, 360, 1150, 1.2, mouth="grin")
-pose(b, coin(1.55), 590, 520)
-d = ImageDraw.Draw(b)
+    # B — Kévin sourire + grosse pièce, fond vert
+    b = fond((34, 120, 74))
+    rayons(b, (44, 138, 86))
+    kevin(b, 360, 1150, 1.2, mouth="grin")
+    pose(b, coin(1.55), 590, 520)
+    d = ImageDraw.Draw(b)
 
-# C — typo empilée sur rouge, billet ailé
-c = fond(RED)
-d = ImageDraw.Draw(c)
-for txt, y, n, col in [("OÙ VA", 300, 120, WHITE), ("TON", 420, 120, WHITE), ("ARGENT ?", 545, 140, YEL)]:
-    d.text((400, y), txt, font=F(n, anton=True), fill=col, anchor="mm", stroke_width=8, stroke_fill=INK)
-pose(c, ailes(billet(0.75, 10), 0.75), 400, 150)
+    # C — typo empilée sur rouge, billet ailé
+    c = fond(RED)
+    d = ImageDraw.Draw(c)
+    for txt, y, n, col in [("OÙ VA", 300, 120, WHITE), ("TON", 420, 120, WHITE), ("ARGENT ?", 545, 140, YEL)]:
+        d.text((400, y), txt, font=F(n, anton=True), fill=col, anchor="mm", stroke_width=8, stroke_fill=INK)
+    pose(c, ailes(billet(0.75, 10), 0.75), 400, 150)
 
-# D — gros billet ailé + « ? », fond jaune (icône pure)
-dd = fond(YEL)
-rayons(dd, (255, 222, 70))
-pose(dd, ailes(billet(1.6, 10), 1.6), 400, 400)
-ImageDraw.Draw(dd).text((640, 600), "?", font=F(260, anton=True), fill=RED, anchor="mm", stroke_width=10, stroke_fill=INK)
+    # D — gros billet ailé + « ? », fond jaune (icône pure)
+    dd = fond(YEL)
+    rayons(dd, (255, 222, 70))
+    pose(dd, ailes(billet(1.6, 10), 1.6), 400, 400)
+    ImageDraw.Draw(dd).text((640, 600), "?", font=F(260, anton=True), fill=RED, anchor="mm", stroke_width=10, stroke_fill=INK)
 
-props = {"a": a, "b": b, "c": c, "d": dd}
-for k, im in props.items():
-    im.convert("RGB").save(OUT / f"logo_v2_{k}.png")
+    props = {"a": a, "b": b, "c": c, "d": dd}
+    for k, im in props.items():
+        im.convert("RGB").save(OUT / f"logo_v2_{k}.png")
 
-# aperçu : chaque logo en grand rond + en petit (taille réelle TikTok/YouTube)
-ap = Image.new("RGB", (4 * 420, 560), (245, 245, 248))
-da = ImageDraw.Draw(ap)
-mask = Image.new("L", (S, S), 0)
-ImageDraw.Draw(mask).ellipse([0, 0, S, S], fill=255)
-for i, (k, im) in enumerate(props.items()):
-    rond = Image.new("RGBA", (S, S), (0, 0, 0, 0))
-    rond.paste(im, (0, 0), mask)
-    ap.paste(rond.resize((380, 380), Image.LANCZOS), (i * 420 + 20, 20), rond.resize((380, 380)).split()[3])
-    petit = rond.resize((64, 64), Image.LANCZOS)
-    ap.paste(petit, (i * 420 + 178, 420), petit.split()[3])
-    da.text((i * 420 + 210, 530), k.upper(), font=F(30), fill=INK, anchor="mm")
-ap.save(OUT / "logo_v2_apercu.png")
-print("ok")
+    # aperçu : chaque logo en grand rond + en petit (taille réelle TikTok/YouTube)
+    ap = Image.new("RGB", (4 * 420, 560), (245, 245, 248))
+    da = ImageDraw.Draw(ap)
+    mask = Image.new("L", (S, S), 0)
+    ImageDraw.Draw(mask).ellipse([0, 0, S, S], fill=255)
+    for i, (k, im) in enumerate(props.items()):
+        rond = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+        rond.paste(im, (0, 0), mask)
+        ap.paste(rond.resize((380, 380), Image.LANCZOS), (i * 420 + 20, 20), rond.resize((380, 380)).split()[3])
+        petit = rond.resize((64, 64), Image.LANCZOS)
+        ap.paste(petit, (i * 420 + 178, 420), petit.split()[3])
+        da.text((i * 420 + 210, 530), k.upper(), font=F(30), fill=INK, anchor="mm")
+    ap.save(OUT / "logo_v2_apercu.png")
+    print("ok")
+
+
+if __name__ == "__main__":
+    main()
