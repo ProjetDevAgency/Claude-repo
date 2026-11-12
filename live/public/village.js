@@ -82,8 +82,6 @@ function sprite(nom, x, ySol, ech, { flip = false } = {}) {
 
 // ───────── sons et narrateur ─────────
 let audio = null;
-// pas de bouton à l'écran (il passerait dans le live) : toucher l'écran une fois suffit
-const boutonSon = { hidden: true };
 // Musique de fond : jour et nuit en boucle, fondu selon l'heure du village, plus bas quand le narrateur parle.
 const musique = {
   pistes: null, lancee: false, vol: 0,
@@ -92,15 +90,21 @@ const musique = {
       this.pistes = { jour: new Audio("musique/jour.mp3"), nuit: new Audio("musique/nuit.mp3") };
       for (const a of Object.values(this.pistes)) { a.loop = true; a.volume = 0; }
     }
-    if (this.lancee) return;
+    if (this.lancee || this.enCours) return;
+    this.enCours = true;
     Promise.all(Object.values(this.pistes).map((a) => a.play()))
       .then(() => { this.lancee = true; })
-      .catch(() => { for (const a of Object.values(this.pistes)) a.pause(); });
+      .catch(() => { for (const a of Object.values(this.pistes)) a.pause(); })
+      .finally(() => { this.enCours = false; });
   },
   maj(n, now, dt) {
-    if (!this.lancee) return;
-    const base = cfg?.musique ?? 0.35;
-    const cible = base * (now < voix.finLe ? 0.35 : 1);       // on baisse pendant que le narrateur parle
+    if (!this.lancee) {
+      // on réessaie toutes les 2 s : dès que le navigateur autorise le son, la musique part
+      if (now - (this.essai || 0) > 2) { this.essai = now; this.lancer(); }
+      return;
+    }
+    const base = cfg?.musique ?? 0.55;
+    const cible = base * (now < voix.finLe ? 0.45 : 1);       // on baisse pendant que le narrateur parle
     this.vol += (cible - this.vol) * Math.min(1, dt * 3);
     this.pistes.jour.volume = Math.max(0, Math.min(1, this.vol * (1 - n)));
     this.pistes.nuit.volume = Math.max(0, Math.min(1, this.vol * n));
@@ -111,10 +115,9 @@ function activerSon() {
   if (!audio) audio = new AudioContext();
   audio.resume();
   musique.lancer();
-  voix.debloquee = true;
-  boutonSon.hidden = true;
 }
-document.addEventListener("pointerdown", activerSon);
+// Sur téléphone, le navigateur n'autorise le son qu'à la FIN du toucher (doigt levé) : on écoute tout.
+for (const ev of ["pointerup", "touchend", "click", "keydown"]) document.addEventListener(ev, activerSon);
 
 function bip(freq, dur, type = "square", vol = 0.08, glisse = 0, t0 = 0) {
   if (!audio || audio.state !== "running") return;
@@ -142,7 +145,7 @@ const SONS = {
 const PRIORITAIRES = new Set(["arrivee", "arbre", "cabane", "maison", "grande_maison", "immeuble", "monument"]);
 const VOIX_DE = { arbre: "arbre", cabane: "cabane", maison: "maison", villa: "grande_maison", immeuble: "immeuble", chateau: "monument" };
 const voix = {
-  liste: {}, debloquee: false, finLe: 0, dernier: {}, dernierTout: 0, file: [], derniers: {},
+  liste: {}, finLe: 0, dernier: {}, dernierTout: 0, file: [], derniers: {},
   // abonnés et cadeaux : jamais de pause, chacun a sa phrase (file d'attente) ; le reste : des pauses
   REPOS: { like: 45, partage: 15, visiteur: 60, discute: 0, appel: 0, soir: 0, matin: 0 },
   dire(cat, now) {
@@ -165,7 +168,7 @@ const voix = {
     a.volume = 1;
     this.finLe = now + 6;
     a.onloadedmetadata = () => { this.finLe = performance.now() / 1000 + a.duration; };
-    a.play().then(() => { boutonSon.hidden = true; }).catch(() => { this.finLe = 0; });
+    a.play().catch(() => { this.finLe = 0; });
     this.dernier[cat] = this.dernierTout = now;
   },
   tic(now) {
@@ -601,7 +604,7 @@ async function demarrer() {
   try { audio = new AudioContext(); } catch { audio = null; }
   musique.lancer();          // démarre seule là où le son est autorisé (LIVE Studio, lanceurs, Firefox réglé)
   // OBS / LIVE Studio laissent jouer le son tout seul ; sinon, un bouton (hors du live) pour l'activer
-  setTimeout(() => { boutonSon.hidden = !!audio && audio.state === "running"; voix.debloquee = !boutonSon.hidden; }, 300);
+  window.villageSon = () => ({ musique: musique.lancee, effets: audio?.state, volJour: musique.pistes?.jour.volume });  // tests
   requestAnimationFrame(image);
 }
 

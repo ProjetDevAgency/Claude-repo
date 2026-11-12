@@ -19,7 +19,7 @@ Le village en direct pour un live TikTok. Les règles sont les mêmes que sur le
 - les commentaires s'affichent en bulle au-dessus du bonhomme de la personne ;
 - un narrateur parle de temps en temps ;
 - cycle jour/soir de 8 minutes, avec une musique de jour et une musique de nuit (originales, générées par ElevenLabs) ;
-  volume dans `config.json` → `"musique"` (0 = coupée, 1 = fort ; 0.35 par défaut).
+  volume dans `config.json` → `"musique"` (0 = coupée, 1 = fort ; 0.55 par défaut).
 
 Le village est sauvegardé dans `etat.json` et continue d'un live à l'autre.
 
