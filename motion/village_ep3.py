@@ -206,11 +206,11 @@ def s_fin(lt, dur):
     img = dim(img, 0.35, blur=8, dark=0.85)
     gros_plan_maire(img, lt, arm=0.95, mouth="o" if int(lt * 7) % 2 else "grin")
     titre2(img, "ABONNE-TOI", "TU DEVIENS LE 68E HABITANT", k=lt / 0.25, y=290)
-    bouton_abonner(img, 540, 600, (lt - 0.4) / 0.25)
+    bouton_abonner(img, 540, 470, (lt - 0.4) / 0.25)
     tp = T["pote"] - T["s_fin"]
     if lt > tp:
-        tag(img, 540, 1560, "ENVOIE ÇA À TON POTE", 60, YEL, INK, rot=-3, k=(lt - tp) / 0.25)
-        tag(img, 540, 1690, "SA MAISON SERA À CÔTÉ DE LA TIENNE", 42, WHITE, INK, rot=2, k=(lt - tp - 0.6) / 0.25)
+        tag(img, 540, 590, "ENVOIE ÇA À TON POTE", 60, YEL, INK, rot=-3, k=(lt - tp) / 0.25)
+        tag(img, 540, 700, "SA MAISON SERA À CÔTÉ DE LA TIENNE", 42, WHITE, INK, rot=2, k=(lt - tp - 0.6) / 0.25)
     return shake(img, lt)
 
 
