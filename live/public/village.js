@@ -111,7 +111,15 @@ const musique = {
   },
 };
 
+function pleinEcran() {
+  // sur téléphone : le premier toucher passe le village en plein écran (pas de barre d'adresse dans le live)
+  const d = document.documentElement;
+  if (document.fullscreenElement || !d.requestFullscreen || window.self !== window.top) return;
+  d.requestFullscreen({ navigationUI: "hide" }).catch(() => {});
+}
+
 function activerSon() {
+  pleinEcran();
   if (!audio) audio = new AudioContext();
   audio.resume();
   musique.lancer();
