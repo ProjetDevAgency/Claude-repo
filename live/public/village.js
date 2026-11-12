@@ -82,32 +82,49 @@ function sprite(nom, x, ySol, ech, { flip = false } = {}) {
 
 // ───────── sons et narrateur ─────────
 let audio = null;
-// Musique de fond : jour et nuit en boucle, fondu selon l'heure du village, plus bas quand le narrateur parle.
+// Musique de fond : jour et nuit en boucle, fondu selon l'heure du village, plus basse quand le narrateur parle.
+// Jouée par le moteur audio de la page (comme les bruitages) : sur téléphone, Firefox ne la coupe pas
+// quand une phrase du narrateur démarre.
 const musique = {
-  pistes: null, lancee: false, vol: 0,
-  lancer() {
-    if (!this.pistes) {
-      this.pistes = { jour: new Audio("musique/jour.mp3"), nuit: new Audio("musique/nuit.mp3") };
-      for (const a of Object.values(this.pistes)) { a.loop = true; a.volume = 0; }
-    }
-    if (this.lancee || this.enCours) return;
-    this.enCours = true;
-    Promise.all(Object.values(this.pistes).map((a) => a.play()))
-      .then(() => { this.lancee = true; })
-      .catch(() => { for (const a of Object.values(this.pistes)) a.pause(); })
-      .finally(() => { this.enCours = false; });
+  tampons: null, gains: null, lancee: false, essai: 0,
+  async charger() {
+    try {
+      if (!audio) audio = new AudioContext();
+      const lire = async (f) => audio.decodeAudioData(await (await fetch(f)).arrayBuffer());
+      const [jour, nuit] = await Promise.all([lire("musique/jour.mp3"), lire("musique/nuit.mp3")]);
+      this.tampons = { jour, nuit };
+    } catch (e) { console.warn("musique", e); }
   },
-  maj(n, now, dt) {
+  lancer() {
+    if (this.lancee || !this.tampons || !audio) return;
+    if (audio.state !== "running") { audio.resume().catch(() => {}); return; }
+    const total = audio.createGain();
+    total.connect(audio.destination);
+    this.gains = { total };
+    for (const k of ["jour", "nuit"]) {
+      const g = audio.createGain();
+      g.gain.value = 0;
+      g.connect(total);
+      const src = audio.createBufferSource();
+      src.buffer = this.tampons[k];
+      src.loop = true;
+      src.connect(g);
+      src.start();
+      this.gains[k] = g;
+    }
+    total.gain.value = 0;
+    this.lancee = true;
+  },
+  maj(n, now) {
     if (!this.lancee) {
-      // on réessaie toutes les 2 s : dès que le navigateur autorise le son, la musique part
-      if (now - (this.essai || 0) > 2) { this.essai = now; this.lancer(); }
+      if (now - this.essai > 2) { this.essai = now; this.lancer(); }   // dès que le son est autorisé, ça part
       return;
     }
-    const base = cfg?.musique ?? 0.55;
-    const cible = base * (now < voix.finLe ? 0.45 : 1);       // on baisse pendant que le narrateur parle
-    this.vol += (cible - this.vol) * Math.min(1, dt * 3);
-    this.pistes.jour.volume = Math.max(0, Math.min(1, this.vol * (1 - n)));
-    this.pistes.nuit.volume = Math.max(0, Math.min(1, this.vol * n));
+    const base = cfg?.musique ?? 0.8;
+    const t = audio.currentTime;
+    this.gains.total.gain.setTargetAtTime(base * (now < voix.finLe ? 0.6 : 1), t, 0.3);
+    this.gains.jour.gain.setTargetAtTime(1 - n, t, 0.5);
+    this.gains.nuit.gain.setTargetAtTime(n, t, 0.5);
   },
 };
 
@@ -591,7 +608,7 @@ function image() {
   avant = now;
   if (etat && meta.decor) {
     const n = nuit(now);
-    musique.maj(n, now, dt);
+    musique.maj(n, now);
     fond(n);
     dessinerVillage(now, dt, n);
     bulleSuivante(now);
@@ -639,9 +656,9 @@ async function demarrer() {
   } else {
     brancher();
   }
-  try { audio = new AudioContext(); } catch { audio = null; }
-  musique.lancer();          // démarre seule là où le son est autorisé (LIVE Studio, lanceurs, Firefox réglé)
-  window.villageSon = () => ({ musique: musique.lancee, effets: audio?.state, volJour: musique.pistes?.jour.volume });  // tests
+  try { audio = audio || new AudioContext(); } catch { audio = null; }
+  musique.charger().then(() => musique.lancer());          // démarre seule là où le son est autorisé (LIVE Studio, lanceurs, Firefox réglé)
+  window.villageSon = () => ({ musique: musique.lancee, chargee: !!musique.tampons, effets: audio?.state });  // tests
   requestAnimationFrame(image);
 }
 
