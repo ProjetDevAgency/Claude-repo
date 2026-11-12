@@ -44,7 +44,7 @@ Tester sans être en live : `npm run demo` (faux événements en continu).
 2. Ouvrir http://localhost:3000 dans **Firefox** : menu → Paramètres → Autorisations du site →
    Lecture automatique → « Autoriser l'audio et la vidéo ». Le son se lance alors sans toucher l'écran.
    (Chrome sur Android bloque le son tant qu'on n'a pas touché l'écran une fois : il n'a pas de réglage pour ça.)
-3. Dans TikTok : LIVE → « Jeu mobile » → partager l'écran, puis revenir sur Chrome.
+3. Dans TikTok : LIVE → « Jeu mobile » → partager l'écran, puis revenir sur Firefox.
 4. Mettre le téléphone en Ne pas déranger, et le brancher.
 
 ## Changer les dessins ou les phrases
