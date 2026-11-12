@@ -107,11 +107,17 @@ http.listen(CFG.port, "127.0.0.1", () => {
 });
 
 // ───── TikTok ─────
+// TikTok envoie le format « v3 » (user.displayId, content, gift, count) ; on lit aussi l'ancien format au cas où.
+const DEBUG = process.argv.includes("--debug");
+// enlève les caractères invisibles ou spéciaux que certains mettent dans leur pseudo (sinon : des carrés à l'écran)
+const propre = (t) => String(t || "").replace(/[\u0000-\u001f\u200b-\u200f\u2028-\u202f\u2060-\u206f\ue000-\uf8ff\ufe00-\ufe0f\ufff0-\uffff]/g, "").trim();
 function nomDe(u) {
-  return (u && (u.nickname || u.uniqueId)) || "quelqu'un";
+  if (!u) return "quelqu'un";
+  const n = propre(u.nickname);
+  return (n.replace(/\s/g, "").length >= 2 ? n : "") || u.displayId || u.uniqueId || "quelqu'un";
 }
 function idDe(u) {
-  return (u && (u.uniqueId || String(u.userId))) || "anonyme";
+  return (u && (u.displayId || u.uniqueId || String(u.id || u.userId || ""))) || "";
 }
 
 async function brancherTikTok() {
@@ -125,20 +131,25 @@ async function brancherTikTok() {
     diffuser({ t: "statut", statut });
   };
   const u = (d) => ({ id: idDe(d.user), nom: nomDe(d.user) });
-  const connu = (d) => !!(d.user && (d.user.uniqueId || d.user.nickname));   // TikTok envoie parfois des messages sans pseudo
+  const connu = (d) => !!idDe(d.user);                 // TikTok envoie parfois des messages sans pseudo
+  const ev = (e) => { if (DEBUG) console.log("→", JSON.stringify(e)); evenement(e); };
 
-  live.on(WebcastEvent.FOLLOW, (d) => connu(d) && evenement({ type: "follow", ...u(d) }));
-  live.on(WebcastEvent.SHARE, (d) => connu(d) && evenement({ type: "share", ...u(d) }));
-  live.on(WebcastEvent.CHAT, (d) => connu(d) && d.comment && evenement({ type: "chat", ...u(d), texte: d.comment }));
-  live.on(WebcastEvent.MEMBER, (d) => connu(d) && evenement({ type: "join", ...u(d) }));
-  live.on(WebcastEvent.LIKE, (d) => evenement({ type: "like", ...u(d), n: d.likeCount || 1 }));
-  live.on(WebcastEvent.GIFT, (d) => {
-    const g = d.giftDetails || {};
-    // cadeaux en série : on ne compte qu'à la fin de la série
-    if (g.giftType === 1 && !d.repeatEnd) return;
-    const pieces = (g.diamondCount || 1) * (d.repeatCount || 1);
-    evenement({ type: "gift", ...u(d), pieces, cadeau: g.giftName || "cadeau" });
+  live.on(WebcastEvent.FOLLOW, (d) => connu(d) && ev({ type: "follow", ...u(d) }));
+  live.on(WebcastEvent.SHARE, (d) => connu(d) && ev({ type: "share", ...u(d) }));
+  live.on(WebcastEvent.CHAT, (d) => {
+    const texte = d.content ?? d.comment;
+    if (connu(d) && texte) ev({ type: "chat", ...u(d), texte });
   });
+  live.on(WebcastEvent.MEMBER, (d) => connu(d) && ev({ type: "join", ...u(d) }));
+  live.on(WebcastEvent.LIKE, (d) => ev({ type: "like", ...u(d), n: Number(d.count ?? d.likeCount ?? 1) || 1 }));
+  live.on(WebcastEvent.GIFT, (d) => {
+    const g = d.gift || d.giftDetails || {};
+    // cadeaux en série (type 1) : on ne compte qu'à la fin de la série, avec le total
+    if ((g.type ?? g.giftType) === 1 && !d.repeatEnd) return;
+    const pieces = (Number(g.diamondCount) || 1) * (Number(d.repeatCount) || 1);
+    ev({ type: "gift", ...u(d), pieces, cadeau: g.name || g.giftName || "cadeau" });
+  });
+  if (DEBUG) live.on(WebcastEvent.SOCIAL, (d) => console.log("social non reconnu :", d.common?.displayText?.key));
   live.on(WebcastEvent.STREAM_END, () => majStatut("live terminé"));
   live.on(WebcastEvent.DISCONNECTED, () => majStatut("déconnecté"));
 
