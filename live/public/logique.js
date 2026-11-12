@@ -76,11 +76,12 @@ export function appliquer(etat, ev) {
         etat.batiments.push({ id: bid, proprio: ev.id, nom: p.nom, sprite });
       }
       annonces.push({ kind: "construction", id: ev.id, nom: p.nom, palier: pal.nom, bat: bid, arbre: pal.sprite === "arbre",
-        pieces, monument: pal.sprite === "chateau" });
+        pieces, type: pal.sprite });
       break;
     }
     case "like":
       etat.budget += ev.n || 1;
+      annonces.push({ kind: "like", n: ev.n || 1 });
       break;
     case "share":
       annonces.push({ kind: "partage", id: ev.id, nom: p.nom });

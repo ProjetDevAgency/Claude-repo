@@ -3,16 +3,69 @@
   "voix/arrivee_0.mp3",
   "voix/arrivee_1.mp3",
   "voix/arrivee_2.mp3",
-  "voix/arrivee_3.mp3"
+  "voix/arrivee_3.mp3",
+  "voix/arrivee_4.mp3"
  ],
- "construction": [
-  "voix/construction_0.mp3",
-  "voix/construction_1.mp3",
-  "voix/construction_2.mp3"
+ "arbre": [
+  "voix/arbre_0.mp3",
+  "voix/arbre_1.mp3",
+  "voix/arbre_2.mp3",
+  "voix/arbre_3.mp3"
+ ],
+ "cabane": [
+  "voix/cabane_0.mp3",
+  "voix/cabane_1.mp3",
+  "voix/cabane_2.mp3",
+  "voix/cabane_3.mp3"
+ ],
+ "maison": [
+  "voix/maison_0.mp3",
+  "voix/maison_1.mp3",
+  "voix/maison_2.mp3",
+  "voix/maison_3.mp3"
+ ],
+ "grande_maison": [
+  "voix/grande_maison_0.mp3",
+  "voix/grande_maison_1.mp3",
+  "voix/grande_maison_2.mp3",
+  "voix/grande_maison_3.mp3"
+ ],
+ "immeuble": [
+  "voix/immeuble_0.mp3",
+  "voix/immeuble_1.mp3",
+  "voix/immeuble_2.mp3",
+  "voix/immeuble_3.mp3"
+ ],
+ "monument": [
+  "voix/monument_0.mp3",
+  "voix/monument_1.mp3",
+  "voix/monument_2.mp3",
+  "voix/monument_3.mp3"
+ ],
+ "like": [
+  "voix/like_0.mp3",
+  "voix/like_1.mp3",
+  "voix/like_2.mp3",
+  "voix/like_3.mp3"
+ ],
+ "partage": [
+  "voix/partage_0.mp3",
+  "voix/partage_1.mp3",
+  "voix/partage_2.mp3",
+  "voix/partage_3.mp3"
  ],
  "discute": [
   "voix/discute_0.mp3",
-  "voix/discute_1.mp3"
+  "voix/discute_1.mp3",
+  "voix/discute_2.mp3",
+  "voix/discute_3.mp3",
+  "voix/discute_4.mp3"
+ ],
+ "visiteur": [
+  "voix/visiteur_0.mp3",
+  "voix/visiteur_1.mp3",
+  "voix/visiteur_2.mp3",
+  "voix/visiteur_3.mp3"
  ],
  "soir": [
   "voix/soir_0.mp3"
@@ -25,8 +78,5 @@
   "voix/appel_1.mp3",
   "voix/appel_2.mp3",
   "voix/appel_3.mp3"
- ],
- "monument": [
-  "voix/monument_0.mp3"
  ]
 }

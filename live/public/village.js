@@ -113,23 +113,43 @@ const SONS = {
   marteau: () => [0, 0.18, 0.36].forEach((t) => bip(180, 0.07, "square", 0.12, 0.5, t)),
 };
 
-// Le narrateur : des phrases enregistrées (voix/…), jamais deux en même temps, avec des temps de repos.
+// Le narrateur : 4-5 phrases enregistrées par interaction (voix/…), tirées au hasard,
+// jamais deux en même temps. Abonnés et cadeaux passent avant le reste (ils attendent leur tour).
+const PRIORITAIRES = new Set(["arrivee", "arbre", "cabane", "maison", "grande_maison", "immeuble", "monument"]);
+const VOIX_DE = { arbre: "arbre", cabane: "cabane", maison: "maison", villa: "grande_maison", immeuble: "immeuble", chateau: "monument" };
 const voix = {
-  liste: {}, debloquee: false, enCours: null, finLe: 0, dernier: {}, dernierTout: 0,
-  REPOS: { arrivee: 12, construction: 10, monument: 5, discute: 120, appel: 0, soir: 0, matin: 0 },
+  liste: {}, debloquee: false, finLe: 0, dernier: {}, dernierTout: 0, attente: null, derniers: {},
+  REPOS: { arrivee: 4, arbre: 8, cabane: 6, maison: 4, grande_maison: 3, immeuble: 2, monument: 0,
+    like: 45, partage: 15, visiteur: 60, discute: 0, appel: 0, soir: 0, matin: 0 },
   dire(cat, now) {
     const fichiers = this.liste[cat];
     if (!fichiers || !fichiers.length) return;
-    if (now < this.finLe + 1.2) return;                                  // quelqu'un parle déjà
     if (now - (this.dernier[cat] ?? -1e9) < (this.REPOS[cat] ?? 10)) return;
-    const a = new Audio(fichiers[Math.floor(Math.random() * fichiers.length)]);
+    if (now < this.finLe + 0.8) {                                         // quelqu'un parle déjà
+      if (PRIORITAIRES.has(cat)) this.attente = { cat, jusqua: now + 8 };
+      return;
+    }
+    // jamais deux fois de suite la même phrase
+    const choix = fichiers.length > 1 ? fichiers.filter((f) => f !== this.derniers[cat]) : fichiers;
+    const f = choix[Math.floor(Math.random() * choix.length)];
+    this.derniers[cat] = f;
+    const a = new Audio(f);
     a.volume = 1;
     this.finLe = now + 6;
     a.onloadedmetadata = () => { this.finLe = performance.now() / 1000 + a.duration; };
     a.play().then(() => { boutonSon.hidden = true; }).catch(() => { this.finLe = 0; });
     this.dernier[cat] = this.dernierTout = now;
   },
+  tic(now) {
+    if (this.attente && now < this.attente.jusqua && now >= this.finLe + 0.8) {
+      const c = this.attente.cat;
+      this.attente = null;
+      this.dernier[c] = -1e9;
+      this.dire(c, now);
+    } else if (this.attente && now >= this.attente.jusqua) this.attente = null;
+  },
 };
+const likes = [];             // [instant, nombre] des derniers likes
 const chats = [];             // instants des derniers commentaires (pour « ça discute bien »)
 let prochainAppel = 40;
 
@@ -390,26 +410,34 @@ function annoncer(a, now) {
         toasts.push({ t: `🌳 ${a.nom} plante un arbre` });
         construire(a.bat, now, true);
         SONS.pop();
+        voix.dire("arbre", now);
       } else {
         alertes.push({ ...a, couleur: JAUNE, l1: a.nom, l2: `offre ${fmt(a.pieces)} pièces`, l3: a.palier,
-          l4: "TON CADEAU = TA MAISON", son: "fanfare", dire: a.monument ? "monument" : "construction" });
+          l4: "TON CADEAU = TA MAISON", son: "fanfare", dire: VOIX_DE[a.type] || "maison" });
       }
       break;
     case "partage":
       toasts.push({ t: `↗ ${a.nom} partage le live` });
       SONS.piece();
+      voix.dire("partage", now);
       break;
+    case "like": {
+      likes.push([now, a.n]);
+      while (likes.length && now - likes[0][0] > 20) likes.shift();
+      if (likes.reduce((s, l) => s + l[1], 0) >= 40) voix.dire("like", now);
+      break;
+    }
     case "bulle": {
       const m = marcheur(a.id, a.nom, !!etat.pseudos[a.id]?.abonne, true);
       m.bulle = a.texte;
       m.tBulle = now;
       chats.push(now);
-      while (chats.length && now - chats[0] > 25) chats.shift();
-      if (chats.length >= 6) voix.dire("discute", now);
+      while (chats.length && now - chats[0] > 60) chats.shift();
       break;
     }
     case "passant":
       marcheur(a.id, a.nom, false);
+      voix.dire("visiteur", now);
       break;
   }
 }
@@ -510,8 +538,10 @@ function image() {
     panneaux();
     dessinerAlerte(now);
     dessinerConfettis(dt);
+    voix.tic(now);
     if (now > prochainAppel && now - voix.dernierTout > 15) {
-      voix.dire("appel", now);
+      const anime = chats.filter((t) => now - t < 60).length >= 8;
+      voix.dire(anime && Math.random() < 0.5 ? "discute" : "appel", now);
       prochainAppel = now + 70 + Math.random() * 40;
     }
   }
