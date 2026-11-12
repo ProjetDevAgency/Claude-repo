@@ -1,0 +1,32 @@
+{
+ "arrivee": [
+  "voix/arrivee_0.mp3",
+  "voix/arrivee_1.mp3",
+  "voix/arrivee_2.mp3",
+  "voix/arrivee_3.mp3"
+ ],
+ "construction": [
+  "voix/construction_0.mp3",
+  "voix/construction_1.mp3",
+  "voix/construction_2.mp3"
+ ],
+ "discute": [
+  "voix/discute_0.mp3",
+  "voix/discute_1.mp3"
+ ],
+ "soir": [
+  "voix/soir_0.mp3"
+ ],
+ "matin": [
+  "voix/matin_0.mp3"
+ ],
+ "appel": [
+  "voix/appel_0.mp3",
+  "voix/appel_1.mp3",
+  "voix/appel_2.mp3",
+  "voix/appel_3.mp3"
+ ],
+ "monument": [
+  "voix/monument_0.mp3"
+ ]
+}

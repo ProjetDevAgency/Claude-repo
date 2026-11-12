@@ -1,0 +1,53 @@
+{
+  "tiktok": "",
+  "port": 3000,
+  "ville": "FAUCHÉ-LES-OIES",
+  "habitantsDepart": 67,
+  "objectif": 10000,
+  "likeEuro": 1,
+  "batimentsDepart": [
+    {
+      "id": "kuromi",
+      "nom": "Kuromi",
+      "sprite": "boulangerie",
+      "role": "BOULANGÈRE"
+    },
+    {
+      "id": "skr",
+      "nom": "SKR",
+      "sprite": "boxe",
+      "role": "CLUB DE BOXE"
+    },
+    {
+      "id": "al_bsc",
+      "nom": "al_bsc",
+      "sprite": "restaurant",
+      "role": "RESTAURATEUR"
+    },
+    {
+      "id": "louane_",
+      "nom": "Louane_",
+      "sprite": "villa_spa",
+      "role": "VILLA SPA"
+    },
+    {
+      "id": "mskoww_91",
+      "nom": "Mskoww_91",
+      "sprite": "motocross",
+      "role": "MOTOCROSS"
+    },
+    {
+      "id": "waillox",
+      "nom": "Waillox",
+      "sprite": "usine",
+      "role": "USINE"
+    },
+    {
+      "id": "rph.49",
+      "nom": "rph.49",
+      "sprite": "chateau",
+      "role": "VEUT ÊTRE MAIRE"
+    }
+  ],
+  "budgetDepart": 10615
+}

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pilotage du village</title>
+<style>
+  :root { --fond: #f4f4f7; --carte: #fff; --texte: #16161c; --doux: #6b6f7c; --accent: #e8323c; --ok: #1f9d55; --bord: #dcdde3; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --fond: #111218; --carte: #1c1d25; --texte: #f2f2f5; --doux: #a3a6b3; --bord: #2e3040; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fond); color: var(--texte); font: 16px/1.4 system-ui, sans-serif; }
+  main { max-width: 560px; margin: 0 auto; padding: 16px; display: grid; gap: 14px; }
+  h1 { font-size: 20px; margin: 4px 0; }
+  section { background: var(--carte); border: 1px solid var(--bord); border-radius: 14px; padding: 14px; display: grid; gap: 10px; }
+  h2 { font-size: 15px; margin: 0; color: var(--doux); text-transform: uppercase; letter-spacing: .04em; }
+  input { width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--bord); background: var(--fond); color: var(--texte); font-size: 16px; }
+  button { padding: 12px; border: 0; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; background: var(--texte); color: var(--carte); }
+  button.rouge { background: var(--accent); color: #fff; }
+  .ligne { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ligne > * { flex: 1 1 120px; }
+  #statut { font-weight: 700; }
+  #statut.ok { color: var(--ok); }
+  small { color: var(--doux); }
+</style>
+</head>
+<body>
+<main>
+  <h1>🎛️ Pilotage du village</h1>
+  <section>
+    <h2>Connexion</h2>
+    <div id="statut">…</div>
+    <small>Le village se branche tout seul dès que ton live démarre (essai toutes les 20 s).</small>
+  </section>
+
+  <section>
+    <h2>Tester (sans être en live)</h2>
+    <input id="nom" placeholder="Pseudo de test" value="test_kevin">
+    <div class="ligne">
+      <button data-ev="follow">+ Abonné</button>
+      <button data-ev="like">+ 20 likes</button>
+      <button data-ev="share">Partage</button>
+    </div>
+    <div class="ligne">
+      <button data-ev="gift" data-p="1">Cadeau 1</button>
+      <button data-ev="gift" data-p="30">Cadeau 30</button>
+      <button data-ev="gift" data-p="100">Cadeau 100</button>
+      <button data-ev="gift" data-p="500">Cadeau 500</button>
+      <button data-ev="gift" data-p="2000">Cadeau 2000</button>
+    </div>
+    <div class="ligne">
+      <input id="msg" placeholder="Commentaire de test">
+      <button data-ev="chat">Envoyer</button>
+    </div>
+  </section>
+</main>
+<script>
+  const $ = (s) => document.querySelector(s);
+  let ws;
+  function brancher() {
+    ws = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws`);
+    ws.onmessage = (e) => {
+      const m = JSON.parse(e.data);
+      if (m.statut !== undefined || m.t === "statut") {
+        const s = m.statut;
+        $("#statut").textContent = s;
+        $("#statut").className = /connecté au live|démo/.test(s) ? "ok" : "";
+      }
+    };
+    ws.onclose = () => { $("#statut").textContent = "serveur arrêté ? (nouvel essai…)"; setTimeout(brancher, 2000); };
+  }
+  function envoyer(o) { if (ws && ws.readyState === 1) ws.send(JSON.stringify(o)); }
+  document.querySelectorAll("[data-ev]").forEach((b) => b.onclick = () => {
+    const nom = $("#nom").value.trim() || "test";
+    const ev = { type: b.dataset.ev, id: nom.toLowerCase(), nom };
+    if (ev.type === "gift") { ev.pieces = Number(b.dataset.p); ev.cadeau = "Test"; }
+    if (ev.type === "like") ev.n = 20;
+    if (ev.type === "chat") ev.texte = $("#msg").value || "coucou";
+    envoyer({ cmd: "test", ev });
+  });
+  brancher();
+</script>
+</body>
+</html>
