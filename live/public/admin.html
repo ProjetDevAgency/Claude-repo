@@ -109,7 +109,10 @@
   document.querySelectorAll("[data-ev]").forEach((b) => b.onclick = () => {
     const nom = $("#nom").value.trim() || "test";
     const ev = { type: b.dataset.ev, id: nom.toLowerCase(), nom };
-    if (ev.type === "gift") { ev.pieces = Number(b.dataset.p); ev.cadeau = "Test"; }
+    if (ev.type === "gift") {
+      ev.pieces = Number(b.dataset.p);
+      ev.cadeau = { 1: "Rose", 5: "Cœur", 30: "Donut", 100: "Confettis", 500: "Billets", 2000: "Baleine" }[ev.pieces] || "Cadeau";
+    }
     if (ev.type === "like") ev.n = 20;
     if (ev.type === "chat") ev.texte = $("#msg").value || "coucou";
     envoyer({ cmd: "test", ev });
