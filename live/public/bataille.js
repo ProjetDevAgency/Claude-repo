@@ -1,6 +1,7 @@
 // Mode « Villageois vs Zombies » : deux équipes de spectateurs s'affrontent en direct.
 //   commentaire 1 = villageois, 2 = zombies · cadeau = renforts dans ton équipe · like = répare ton camp
-//   abonnement = un combattant offert · manches de 4 minutes · combattants automatiques si peu de monde.
+//   abonné = ton combattant est un CHAMPION (s'abonner pendant le live le transforme tout de suite)
+//   manches de 4 minutes · combattants automatiques si peu de monde.
 // Toute la bataille tourne dans la page ; le serveur ne fait que transmettre les événements du live.
 
 export const RENFORTS = [
@@ -55,12 +56,20 @@ export function creerBataille(o) {
     return nv <= nz ? "v" : "z";
   }
 
-  function joueur(id, nom, equipe) {
+  function joueur(id, nom, equipe, abonne) {
     let j = joueurs.get(id);
-    if (!j) { j = { equipe: equipe || equipeAuto(), nom, pieces: 0, piecesManche: 0, degats: 0, unite: null, finRespawn: 0 }; joueurs.set(id, j); }
+    if (!j) { j = { equipe: equipe || equipeAuto(), nom, pieces: 0, piecesManche: 0, degats: 0, unite: null, finRespawn: 0, abonne: false }; joueurs.set(id, j); }
     if (nom) j.nom = nom;
     if (equipe) j.equipe = equipe;
+    if (abonne) j.abonne = true;
     return j;
+  }
+
+  // le combattant personnel d'un joueur : champion s'il est abonné
+  function sonCombattant(j, id, now) {
+    j.unite = lancer(j.equipe, j.abonne ? "champion" : "soldat", j.nom, id, now);
+    j.unite.abonne = j.abonne;
+    return j.unite;
   }
 
   function lancer(equipe, type, nom = "", id = null, now = 0) {
@@ -71,6 +80,9 @@ export function creerBataille(o) {
       dy: (n * 37) % 40 - 20, pv: t.pv, pvMax: t.pv, deg: t.deg, vit: t.vit * (0.9 + (n % 5) * 0.05), ech: t.ech,
       ne: now, ph: (n * 1.7) % 6, coup: 0 };
     unites.push(u);
+    if (type === "geant") SONS.geant();
+    else if (id) SONS.apparition();
+    if (equipe === "z" && Math.random() < 0.3) SONS.zombie();
     return u;
   }
 
@@ -83,17 +95,19 @@ export function creerBataille(o) {
         const choix = /^(1|villageois?)$/.test(t) ? "v" : /^(2|zombies?)$/.test(t) ? "z" : null;
         if (choix) {
           const deja = joueurs.get(ev.id);
-          const j = joueur(ev.id, ev.nom, choix);
-          if (!deja || deja.equipe !== choix || !j.unite || j.unite.pv <= 0) {
+          const ancienne = deja?.equipe;
+          const j = joueur(ev.id, ev.nom, choix, ev.abonne);
+          if (!deja || ancienne !== choix || !j.unite || j.unite.pv <= 0) {
             if (j.unite && j.unite.pv > 0) j.unite.pv = 0;
-            if (phase === "combat") j.unite = lancer(choix, "soldat", j.nom, ev.id, now);
+            if (phase === "combat") sonCombattant(j, ev.id, now);
             if (!deja) annoncePetite(`${j.nom} rejoint les ${NOM[choix].toLowerCase()}`, COUL[choix]);
             SONS.pop();
           }
         } else {
           const j = joueurs.get(ev.id);
+          if (j && ev.abonne) j.abonne = true;
           if (j && (!j.unite || j.unite.pv <= 0) && now > j.finRespawn && phase === "combat") {
-            j.unite = lancer(j.equipe, "soldat", j.nom, ev.id, now);   // un commentaire fait revenir ton combattant
+            sonCombattant(j, ev.id, now);   // un commentaire fait revenir ton combattant
             j.finRespawn = now + 8;
           }
           fileBulles.push({ id: ev.id, nom: ev.nom, texte: String(ev.texte || "").slice(0, 50) });
@@ -102,7 +116,7 @@ export function creerBataille(o) {
         break;
       }
       case "gift": {
-        const j = joueur(ev.id, ev.nom);
+        const j = joueur(ev.id, ev.nom, null, ev.abonne);
         j.pieces += ev.pieces; j.piecesManche += ev.pieces;
         const p = ev.pieces;
         const e = j.equipe;
@@ -133,9 +147,17 @@ export function creerBataille(o) {
         break;
       }
       case "follow": {
-        const j = joueur(ev.id, ev.nom);
-        if (phase === "combat") lancer(j.equipe, "soldat", j.nom, ev.id, now);
-        alertes.push({ couleur: "#3ccf6e", l1: ev.nom, l2: "s'abonne", l3: "+1 COMBATTANT", l4: `CHEZ LES ${NOM[j.equipe]}`, voix: "arrivee" });
+        const j = joueur(ev.id, ev.nom, null, true);
+        if (phase === "combat") {
+          const u = j.unite && j.unite.pv > 0 ? j.unite : null;
+          if (u && u.type !== "champion" && u.type !== "geant") {
+            // son combattant devient champion sur place
+            const t = TYPES.champion;
+            Object.assign(u, { type: "champion", ech: t.ech, pvMax: t.pv, pv: t.pv, deg: t.deg, ne: now, abonne: true });
+          } else if (!u) sonCombattant(j, ev.id, now);
+        }
+        alertes.push({ couleur: "#ffce00", l1: `⭐ ${ev.nom}`, l2: "s'abonne", l3: "DEVIENT CHAMPION !", l4: `CHEZ LES ${NOM[j.equipe]}`,
+          voix: "bataille_abonne", icone: null });
         break;
       }
       case "share":
@@ -149,7 +171,7 @@ export function creerBataille(o) {
     for (const u of unites) if (u.equipe === ennemi) { u.pv -= 220; touche(u.x, SOL - 60, "#ffd75e"); }
     camp[ennemi] = Math.max(0, camp[ennemi] - 180);
     effets.push({ kind: "eclair", t0: now, couleur: COUL[e] });
-    SONS.fanfare();
+    SONS.speciale();
   }
 
   const petites = [];
@@ -161,7 +183,7 @@ export function creerBataille(o) {
 
   // ───── simulation ─────
   function simuler(now, dt) {
-    if (phase === "debut" && now >= debutManche) phase = "combat";
+    if (phase === "debut" && now >= debutManche) { phase = "combat"; SONS.corne(); }
     if (phase === "fin") { if (now - tPhase > 12) nouvelleManche(now); return; }
     if (phase !== "combat") return;
 
@@ -186,19 +208,19 @@ export function creerBataille(o) {
       if (cible && dmin < portee) {
         cible.pv -= u.deg * dt;
         u.coup += dt;
-        if (u.coup > 0.5) { u.coup = 0; touche(cible.x, SOL - 70 * cible.ech / 0.2, u.equipe === "v" ? "#ffe08a" : "#9dff8a"); }
+        if (u.coup > 0.5) { u.coup = 0; touche(cible.x, SOL - 70 * cible.ech / 0.2, u.equipe === "v" ? "#ffe08a" : "#9dff8a"); SONS.coup(); }
         const j = u.joueur && joueurs.get(u.joueur); if (j) j.degats += u.deg * dt;
       } else if (dCamp <= 0) {
         const ennemi = u.equipe === "v" ? "z" : "v";
         camp[ennemi] = Math.max(0, camp[ennemi] - u.deg * dt);
         u.coup += dt;
-        if (u.coup > 0.5) { u.coup = 0; touche(xCamp + sens * 40, SOL - 120, "#cccccc"); }
+        if (u.coup > 0.5) { u.coup = 0; touche(xCamp + sens * 40, SOL - 120, "#cccccc"); SONS.camp(); }
         const j = u.joueur && joueurs.get(u.joueur); if (j) j.degats += u.deg * dt;
       } else {
         u.x += sens * u.vit * dt;
       }
     }
-    for (const u of unites) if (u.pv <= 0 && !u.mort) { u.mort = now; touche(u.x, SOL - 50, "#888"); }
+    for (const u of unites) if (u.pv <= 0 && !u.mort) { u.mort = now; touche(u.x, SOL - 50, "#888"); SONS.mort(); }
     unites = unites.filter((u) => !u.mort || now - u.mort < 0.6);
     if (unites.length > 90) unites = unites.slice(-90);
 
@@ -219,7 +241,7 @@ export function creerBataille(o) {
     mvp = best;
     phase = "fin"; tPhase = now;
     voix.dire(gagnant === "v" ? "bataille_victoire_v" : "bataille_victoire_z", now);
-    SONS.fanfare();
+    SONS.victoire();
   }
 
   // ───── dessin ─────
@@ -266,10 +288,11 @@ export function creerBataille(o) {
         rrect(u.x - 26, haut - 12, Math.max(4, 52 * u.pv / u.pvMax), 7, 3, COUL[u.equipe]);
       }
       if (u.nom) {
+        const nom = u.abonne ? `⭐ ${u.nom}` : u.nom;
         ctx.font = "800 22px Montserrat";
-        const tw = Math.min(ctx.measureText(u.nom).width, 170);
-        rrect(u.x - tw / 2 - 10, haut - 46, tw + 20, 30, 15, u.equipe === "v" ? "rgba(20,70,40,.92)" : "rgba(60,25,90,.92)");
-        texte(u.nom, u.x, haut - 31, { taille: 22, max: 170 });
+        const tw = Math.min(ctx.measureText(nom).width, 190);
+        rrect(u.x - tw / 2 - 10, haut - 46, tw + 20, 30, 15, u.abonne ? "rgba(120,90,0,.95)" : u.equipe === "v" ? "rgba(20,70,40,.92)" : "rgba(60,25,90,.92)");
+        texte(nom, u.x, haut - 31, { taille: 22, max: 190 });
       }
     }
   }
@@ -339,13 +362,18 @@ export function creerBataille(o) {
       texte(`${fmt(r.min)}${i ? "+" : ""}`, x + 44, y, { taille: 21, align: "left" });
       texte(r.texte, x + 440, y, { taille: 21, align: "right", couleur: ["#7be08f", "#e3b179", "#ffd75e", "#7fc4ff", "#c79bff", "#ff8a8a"][i] });
     });
+    const pulse = 1 + Math.sin(now * 3) * 0.03;
+    ctx.save(); ctx.translate(W / 2, 772); ctx.scale(pulse, pulse);
+    rrect(-440, -26, 880, 52, 26, "#ffce00", "#16161c", 4);
+    texte("⭐ ABONNE-TOI = TON COMBATTANT DEVIENT UN CHAMPION", 0, 1, { taille: 25, couleur: "#16161c", max: 840 });
+    ctx.restore();
   }
 
   function dessinerAlerte(now) {
     if (!alerte && alertes.length) {
       alerte = { ...alertes.shift(), t0: now };
       if (alerte.voix) voix.dire(alerte.voix, now);
-      SONS.fanfare();
+      if (alerte.voix === "bataille_abonne") SONS.victoire(); else SONS.fanfare();
       if (alerte.image) { alerte.img = new Image(); alerte.img.src = alerte.image; }
     }
     if (alertes.length > 5) alertes.splice(0, alertes.length - 5);
@@ -357,10 +385,11 @@ export function creerBataille(o) {
     ctx.translate(W / 2, 880);
     ctx.scale(k, k);
     rrect(-470, -130, 940, 260, 30, "rgba(12,12,18,.95)", alerte.couleur, 8);
-    texte(alerte.l1, 0, -82, { taille: 48, police: "Anton", couleur: alerte.couleur, max: 600 });
-    texte(alerte.l2, 0, -38, { taille: 26, couleur: "#d7dae4", max: 600 });
-    texte(alerte.l3, 0, 14, { taille: 58, police: "Anton", max: 600 });
-    texte(alerte.l4, 0, 78, { taille: 26, couleur: alerte.couleur, max: 600 });
+    const large = alerte.icone || alerte.image ? 600 : 860;
+    texte(alerte.l1, 0, -82, { taille: 48, police: "Anton", couleur: alerte.couleur, max: large });
+    texte(alerte.l2, 0, -38, { taille: 26, couleur: "#d7dae4", max: large });
+    texte(alerte.l3, 0, 14, { taille: 58, police: "Anton", max: large });
+    texte(alerte.l4, 0, 78, { taille: 26, couleur: alerte.couleur, max: large });
     const ic = alerte.img?.complete && alerte.img.naturalWidth ? alerte.img : img[alerte.icone];
     if (ic) for (const sx of [-1, 1]) ctx.drawImage(ic, sx * 370 - 55, -65, 110, 110);
     ctx.restore();

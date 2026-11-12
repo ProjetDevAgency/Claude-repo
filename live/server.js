@@ -24,7 +24,7 @@ const PSEUDO = (process.argv.find((a) => a.startsWith("--tiktok=")) || "").split
 
 // ───── état : on repart de zéro à chaque lancement ─────
 let etat = etatInitial(CFG);
-let mode = (process.argv.find((a) => a.startsWith("--mode=")) || "").slice(7) || "village";   // ou "bataille"
+let mode = (process.argv.find((a) => a.startsWith("--mode=")) || "").slice(7) || CFG.mode || "bataille";   // "bataille" ou "village"
 // bac à sable des tests : une copie jetable, effacée 30 s après le dernier test (ou au premier vrai événement)
 let bac = null, finBac = 0;
 
@@ -141,11 +141,14 @@ async function brancherTikTok() {
     console.log("TikTok :", s);
     diffuser({ t: "statut", statut });
   };
-  const u = (d) => ({ id: idDe(d.user), nom: nomDe(d.user) });
+  // abonné ? TikTok l'indique pour chaque spectateur (followStatus ≥ 1) ; et ceux qui s'abonnent pendant le live
+  const abonnes = new Set();
+  const estAbonne = (us) => !!us && (abonnes.has(idDe(us)) || Number(us.followInfo?.followStatus || 0) >= 1 || us.isFollowing === true);
+  const u = (d) => ({ id: idDe(d.user), nom: nomDe(d.user), abonne: estAbonne(d.user) });
   const connu = (d) => !!idDe(d.user);                 // TikTok envoie parfois des messages sans pseudo
   const ev = (e) => { if (DEBUG) console.log("→", JSON.stringify(e)); evenement(e); };
 
-  live.on(WebcastEvent.FOLLOW, (d) => connu(d) && ev({ type: "follow", ...u(d) }));
+  live.on(WebcastEvent.FOLLOW, (d) => { if (!connu(d)) return; abonnes.add(idDe(d.user)); ev({ type: "follow", ...u(d), abonne: true }); });
   live.on(WebcastEvent.SHARE, (d) => connu(d) && ev({ type: "share", ...u(d) }));
   live.on(WebcastEvent.CHAT, (d) => {
     const texte = d.content ?? d.comment;

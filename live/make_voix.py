@@ -125,7 +125,13 @@ PHRASES = {
         "Tape un ou deux pour rejoindre une équipe !",
         "Ton cadeau envoie des renforts dans ton équipe !",
         "Chaque like répare le camp de ton équipe !",
-        "Abonne-toi, et un combattant rejoint ton équipe !",
+        "Abonne-toi, et ton combattant devient un champion !",
+        "Les abonnés se battent avec des champions. Abonne-toi !",
+    ],
+    "bataille_abonne": [
+        "Un nouvel abonné ! Son combattant devient un champion !",
+        "Abonné ! Et hop, un champion de plus sur le terrain !",
+        "Merci pour l'abonnement ! Ton combattant passe champion !",
     ],
     # ambiance
     "soir": ["Le soir tombe sur Fauché-les-Oies… C'est magnifique."],

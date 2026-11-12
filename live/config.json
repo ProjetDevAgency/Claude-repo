@@ -48,5 +48,6 @@
       "role": "VEUT ÊTRE MAIRE"
     }
   ],
-  "musique": 0.8
+  "musique": 0.8,
+  "mode": "bataille"
 }

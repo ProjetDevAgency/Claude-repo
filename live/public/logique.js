@@ -136,14 +136,15 @@ const CADEAUX = [["Rose", 1], ["Rose", 1], ["TikTok", 1], ["GG", 1], ["Rose x5",
 export function fauxEvenement(r = Math.random) {
   const nom = NOMS[Math.floor(r() * NOMS.length)] + (r() < 0.4 ? String(Math.floor(r() * 99)) : "");
   const id = nom.toLowerCase();
+  const abonne = hash(id) % 3 === 0;
   const x = r();
-  if (x < 0.07) return { type: "follow", id, nom };
+  if (x < 0.07) return { type: "follow", id, nom, abonne: true };
   if (x < 0.15) {
     const [cadeau, pieces] = CADEAUX[Math.floor(r() * CADEAUX.length)];
-    return { type: "gift", id, nom, cadeau, pieces };
+    return { type: "gift", id, nom, cadeau, pieces, abonne };
   }
   if (x < 0.5) return { type: "like", id, nom, n: 1 + Math.floor(r() * 15) };
   if (x < 0.53) return { type: "share", id, nom };
-  if (x < 0.85) return { type: "chat", id, nom, texte: PHRASES[Math.floor(r() * PHRASES.length)] };
-  return { type: "join", id, nom };
+  if (x < 0.85) return { type: "chat", id, nom, abonne, texte: PHRASES[Math.floor(r() * PHRASES.length)] };
+  return { type: "join", id, nom, abonne };
 }

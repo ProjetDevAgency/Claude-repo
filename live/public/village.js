@@ -8,7 +8,7 @@ const cv = document.getElementById("c");
 const ctx = cv.getContext("2d");
 const DEMO = new URLSearchParams(location.search).has("demo") || window.VILLAGE_DEMO === true;
 // mode du live : "village" ou "bataille" (villageois vs zombies) ; changé depuis la page de pilotage
-let mode = new URLSearchParams(location.search).get("mode") || (location.hash === "#bataille" ? "bataille" : "") || window.VILLAGE_MODE || "village";
+let mode = new URLSearchParams(location.search).get("mode") || (location.hash === "#village" ? "village" : "") || window.VILLAGE_MODE || "bataille";
 let bataille = null;
 
 const INK = "#16161c", JAUNE = "#ffce00", VERT = "#3ccf6e", BLEU = "#3d8bff", ROUGE = "#e8323c", BLANC = "#fafafa";
@@ -177,7 +177,43 @@ function bip(freq, dur, type = "square", vol = 0.08, glisse = 0, t0 = 0) {
   o.start(t);
   o.stop(t + dur);
 }
+// bruit blanc partagé (coups, explosions)
+let bruit = null;
+function souffle(dur, vol, freq, t0 = 0, type = "lowpass", glisse = 0) {
+  if (!audio || audio.state !== "running") return;
+  if (!bruit) {
+    bruit = audio.createBuffer(1, audio.sampleRate, audio.sampleRate);
+    const d = bruit.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  }
+  const t = audio.currentTime + t0;
+  const src = audio.createBufferSource(), f = audio.createBiquadFilter(), g = audio.createGain();
+  src.buffer = bruit; f.type = type; f.frequency.setValueAtTime(freq, t);
+  if (glisse) f.frequency.exponentialRampToValueAtTime(freq * glisse, t + dur);
+  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  src.connect(f).connect(g).connect(audio.destination);
+  src.start(t, Math.random() * 0.5); src.stop(t + dur);
+}
+// limite : pas plus de N sons d'un même type par seconde (sinon c'est la bouillie)
+const quota = {};
+function permis(cle, parSeconde) {
+  const now = performance.now() / 1000, q = quota[cle] || (quota[cle] = []);
+  while (q.length && now - q[0] > 1) q.shift();
+  if (q.length >= parSeconde) return false;
+  q.push(now); return true;
+}
+
 const SONS = {
+  // combat
+  coup: () => { if (!permis("coup", 7)) return; souffle(0.08, 0.22, 1800 + Math.random() * 1500, 0, "bandpass"); bip(140 + Math.random() * 60, 0.07, "square", 0.08, 0.5); },
+  mort: () => { if (!permis("mort", 4)) return; bip(420, 0.35, "sawtooth", 0.07, 0.3); souffle(0.25, 0.12, 900, 0, "lowpass", 0.3); },
+  camp: () => { if (!permis("camp", 3)) return; bip(70, 0.25, "sine", 0.35, 0.6); souffle(0.2, 0.18, 400, 0, "lowpass"); },
+  apparition: () => { if (!permis("apparition", 4)) return; souffle(0.3, 0.12, 300, 0, "bandpass", 6); bip(330, 0.18, "triangle", 0.08, 2); },
+  geant: () => { [0, 0.35, 0.7].forEach((t) => { bip(55, 0.3, "sine", 0.5, 0.7, t); souffle(0.25, 0.25, 250, t, "lowpass"); }); },
+  speciale: () => { souffle(1.4, 0.45, 2500, 0, "lowpass", 0.05); bip(90, 1.2, "sawtooth", 0.2, 0.25); bip(45, 1.4, "sine", 0.5, 0.6); },
+  corne: () => { [196, 247, 294].forEach((f) => bip(f, 0.9, "sawtooth", 0.06, 1.01)); bip(98, 0.9, "square", 0.05); },
+  victoire: () => { [523, 659, 784, 1046, 784, 1046].forEach((f, i) => bip(f, 0.25, "triangle", 0.16, 0, i * 0.13)); },
+  zombie: () => { if (!permis("zombie", 2)) return; bip(110 + Math.random() * 40, 0.5, "sawtooth", 0.05, 0.7); },
   pop: () => bip(500, 0.12, "sine", 0.2, 2.2),
   arrivee: () => [660, 880].forEach((f, i) => bip(f, 0.16, "triangle", 0.15, 0, i * 0.1)),
   piece: () => { bip(1320, 0.08, "square", 0.06); bip(1760, 0.18, "square", 0.06, 0, 0.07); },
@@ -188,7 +224,7 @@ const SONS = {
 // Le narrateur : 4-5 phrases enregistrées par interaction (voix/…), tirées au hasard,
 // jamais deux en même temps. Abonnés et cadeaux passent avant le reste (ils attendent leur tour).
 const PRIORITAIRES = new Set(["arrivee", "arbre", "cabane", "maison", "grande_maison", "immeuble", "monument",
-  "bataille_debut", "bataille_victoire_v", "bataille_victoire_z", "bataille_geant", "bataille_speciale"]);
+  "bataille_debut", "bataille_abonne", "bataille_victoire_v", "bataille_victoire_z", "bataille_geant", "bataille_speciale"]);
 const VOIX_DE = { arbre: "arbre", cabane: "cabane", maison: "maison", villa: "grande_maison", immeuble: "immeuble", chateau: "monument" };
 const voix = {
   liste: {}, finLe: 0, dernier: {}, dernierTout: 0, file: [], derniers: {},
