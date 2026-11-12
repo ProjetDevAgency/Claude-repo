@@ -24,8 +24,17 @@ def salon(t, kpose="telephone", sarah=None, z=1.0, center=None, kx=540):
     return rue.contour_aretes(shot(big, z, center=center), seuil=90, w=3)
 
 
-def pl(t, **kw):
-    return rue.contour_aretes(plateau(t, **kw), seuil=90, w=3)
+def pl(t, sans_panneau=False, **kw):
+    """sans_panneau : gros plan sans le panneau SERVICE CLIENT (sinon coupé par le bord / le compteur)."""
+    if not sans_panneau:
+        return rue.contour_aretes(plateau(t, **kw), seuil=90, w=3)
+    import box_ct
+    avec = box_ct.plateau_bg()
+    box_ct._bg["p"] = box_ct.room("vide")
+    try:
+        return rue.contour_aretes(plateau(t, **kw), seuil=90, w=3)
+    finally:
+        box_ct._bg["p"] = avec
 
 
 def talk(t):
@@ -117,14 +126,14 @@ def s_appel(lt, dur):
 
 
 def s_c1(lt, dur):
-    img = pl(lt, conseiller=dict(mouth=talk(lt), arm=0.3), z=push(lt, dur, 1.9, 2.1), center=(CHEAD[0] - 60, CHEAD[1] + 60))
+    img = pl(lt, sans_panneau=True, conseiller=dict(mouth=talk(lt), arm=0.3), z=push(lt, dur, 1.9, 2.1), center=(CHEAD[0] - 60, CHEAD[1] + 60))
     bubble(img, 560, 540, ["C'EST UNE PROMO,", "NI REPRIS", "NI ÉCHANGÉ"], 62, (lt - 0.4) / 0.3, tail_x=680)
     return flash(img, lt)
 
 
 def s_c2(lt, dur):
-    img = pl(lt, conseiller=dict(mouth=talk(lt)), z=push(lt, dur, 1.5, 1.6), center=(760 - 100, CHEAD[1] + 200))
-    bubble(img, 560, 540, ["FALLAIT RÉFLÉCHIR", "AVANT"], 70, lt / 0.3, tail_x=700)
+    img = pl(lt, sans_panneau=True, conseiller=dict(mouth=talk(lt)), z=push(lt, dur, 1.5, 1.6), center=(840, CHEAD[1] - 20))
+    bubble(img, 540, 540, ["FALLAIT RÉFLÉCHIR", "AVANT"], 70, lt / 0.3, tail_x=470)
     return flash(img, lt)
 
 
@@ -135,8 +144,8 @@ def s_sarah(lt, dur):
 
 
 def s_echo(lt, dur):
-    img = dim(pl(lt, conseiller=dict(mouth="grin"), z=1.5, center=(760 - 100, CHEAD[1] + 200)), 0.7)
-    tag(img, 540, 700, "« NI REPRIS NI ÉCHANGÉ »", 76, RED, WHITE, rot=-4, k=lt / 0.25)
+    img = dim(pl(lt, sans_panneau=True, conseiller=dict(mouth="grin"), z=1.5, center=(840, CHEAD[1] - 20)), 0.7)
+    tag(img, 540, 760, "« NI REPRIS NI ÉCHANGÉ »", 76, RED, WHITE, rot=-4, k=lt / 0.25)
     return img
 
 
@@ -202,11 +211,11 @@ def s_partage(lt, dur):
 def s_renvoi(lt, dur):
     img = salon(lt, "victoire" if lt > T["remb"] - T["s_renvoi"] else "neutre", z=1.0, center=(540, 1000))
     ts = T["signal"] - T["s_renvoi"]
-    if lt > ts:
-        tag(img, 540, 410, "SIGNALÉ SUR SIGNALCONSO", 56, WHITE, INK, rot=-3, k=(lt - ts) / 0.25)
     tr = T["remb"] - T["s_renvoi"]
     if lt > tr:
-        phone_big(img, 540, 900, lt - tr, "10:12", [("Banque", "Remboursement", "SITE · +299,00 €", (60, 110, 230))])
+        phone_big(img, 540, 960, lt - tr, "10:12", [("Banque", "Remboursement", "SITE · +299,00 €", (60, 110, 230))])
+    if lt > ts:
+        tag(img, 540, 410, "SIGNALÉ SUR SIGNALCONSO", 56, WHITE, INK, rot=-3, k=(lt - ts) / 0.25)
     return flash(img, lt)
 
 
