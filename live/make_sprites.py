@@ -104,6 +104,77 @@ for k in range(16):
         if not suf:
             meta[f"perso_{k:02d}"] = dict(w=spr.width, h=spr.height, ax=200 - x0, ay=740 - y0)
 
+# ───────── icônes des cadeaux du barème (dessinées dans notre style, 160x160) ─────────
+def icone(nom, dessin):
+    T = 160 * 4
+    im = Image.new("RGBA", (T, T), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    dessin(d, T)
+    im = contour(im.resize((160, 160), Image.LANCZOS), 4)
+    im.save(OUT / f"{nom}.png", optimize=True)
+
+
+def _coeur(d, cx, cy, r, col):
+    d.ellipse([cx - r, cy - r * 0.9, cx + r * 0.1, cy + r * 0.2], fill=col)
+    d.ellipse([cx - r * 0.1, cy - r * 0.9, cx + r, cy + r * 0.2], fill=col)
+    d.polygon([(cx - r * 0.97, cy - r * 0.2), (cx + r * 0.97, cy - r * 0.2), (cx, cy + r * 1.05)], fill=col)
+
+
+def rose(d, T):
+    d.line([(T * .5, T * .45), (T * .48, T * .95)], fill=(60, 150, 70), width=int(T * .05))
+    d.ellipse([T * .22, T * .62, T * .48, T * .74], fill=(80, 170, 80))
+    d.ellipse([T * .5, T * .7, T * .76, T * .82], fill=(80, 170, 80))
+    for k, (r, c) in enumerate([(.3, (200, 30, 50)), (.22, (225, 45, 65)), (.14, (245, 70, 90)), (.07, (200, 30, 50))]):
+        d.ellipse([T * (.5 - r), T * (.32 - r * .9), T * (.5 + r), T * (.32 + r * .9)], fill=c)
+
+
+def coeur(d, T):
+    _coeur(d, T * .5, T * .45, T * .4, (255, 90, 150))
+    d.ellipse([T * .26, T * .22, T * .38, T * .32], fill=(255, 190, 215))
+
+
+def donut(d, T):
+    d.ellipse([T * .08, T * .2, T * .92, T * .86], fill=(200, 140, 80))
+    d.ellipse([T * .1, T * .16, T * .9, T * .78], fill=(255, 140, 190))
+    d.ellipse([T * .38, T * .38, T * .62, T * .56], fill=(200, 140, 80))
+    d.ellipse([T * .4, T * .4, T * .6, T * .54], fill=(0, 0, 0, 0))
+    for i, c in enumerate([(255, 230, 80), (90, 200, 255), (255, 255, 255), (120, 220, 120)] * 3):
+        x, y = T * (.2 + (i * 37 % 60) / 100), T * (.24 + (i * 23 % 40) / 100)
+        if abs(x - T * .5) < T * .14 and abs(y - T * .47) < T * .1:
+            continue
+        d.rounded_rectangle([x, y, x + T * .07, y + T * .025], radius=6, fill=c)
+
+
+def confettis(d, T):
+    d.polygon([(T * .15, T * .9), (T * .45, T * .45), (T * .6, T * .6)], fill=(255, 200, 40))
+    d.line([(T * .25, T * .75), (T * .5, T * .52)], fill=(240, 80, 80), width=int(T * .03))
+    cols = [(240, 60, 80), (60, 160, 255), (80, 210, 120), (255, 220, 60), (190, 100, 255)]
+    for i in range(16):
+        x, y = T * (.45 + (i * 29 % 45) / 100), T * (.08 + (i * 17 % 42) / 100)
+        d.rounded_rectangle([x, y, x + T * .06, y + T * .03], radius=4, fill=cols[i % 5])
+
+
+def billets(d, T):
+    for i, (dx, dy) in enumerate([(-.06, .1), (0, 0), (.06, -.1)]):
+        x0, y0 = T * (.14 + dx), T * (.36 + dy)
+        d.rounded_rectangle([x0, y0, x0 + T * .66, y0 + T * .34], radius=14, fill=(110, 190, 110), outline=(40, 110, 50), width=8)
+        d.ellipse([x0 + T * .25, y0 + T * .07, x0 + T * .41, y0 + T * .27], outline=(40, 110, 50), width=8)
+
+
+def baleine(d, T):
+    d.ellipse([T * .1, T * .4, T * .8, T * .85], fill=(60, 120, 220))
+    d.ellipse([T * .2, T * .62, T * .7, T * .85], fill=(170, 210, 250))
+    d.polygon([(T * .72, T * .58), (T * .95, T * .38), (T * .92, T * .6), (T * .97, T * .78)], fill=(60, 120, 220))
+    d.ellipse([T * .26, T * .52, T * .32, T * .58], fill=(20, 20, 30))
+    for k in range(3):
+        d.ellipse([T * (.36 + k * .08), T * (.1 + abs(k - 1) * .06), T * (.44 + k * .08), T * (.2 + abs(k - 1) * .06)], fill=(150, 210, 255))
+
+
+for nom, f in [("cadeau_rose", rose), ("cadeau_coeur", coeur), ("cadeau_donut", donut), ("cadeau_confettis", confettis),
+               ("cadeau_billets", billets), ("cadeau_baleine", baleine)]:
+    icone(nom, f)
+    meta[nom] = dict(w=160, h=160, ax=80, ay=160)
+
 # ───────── fond : ciel, collines, herbe, trottoir (le décor des vidéos) ─────────
 fa.decor().crop((0, 600, W, BASE + 120)).save(OUT / "decor.png", optimize=True)
 meta["decor"] = dict(w=W, h=BASE + 120 - 600, sol=BASE - 600)

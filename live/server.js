@@ -147,7 +147,8 @@ async function brancherTikTok() {
     // cadeaux en série (type 1) : on ne compte qu'à la fin de la série, avec le total
     if ((g.type ?? g.giftType) === 1 && !d.repeatEnd) return;
     const pieces = (Number(g.diamondCount) || 1) * (Number(d.repeatCount) || 1);
-    ev({ type: "gift", ...u(d), pieces, cadeau: g.name || g.giftName || "cadeau" });
+    const image = g.image?.urlList?.[0] || g.icon?.urlList?.[0] || null;   // la vraie image TikTok du cadeau
+    ev({ type: "gift", ...u(d), pieces, cadeau: g.name || g.giftName || "cadeau", image });
   });
   if (DEBUG) live.on(WebcastEvent.SOCIAL, (d) => console.log("social non reconnu :", d.common?.displayText?.key));
   live.on(WebcastEvent.STREAM_END, () => majStatut("live terminé"));

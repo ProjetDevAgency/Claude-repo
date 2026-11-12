@@ -3,12 +3,13 @@
 // chaque cadeau construit un bâtiment selon son prix (barème ci-dessous), classement des bâtisseurs.
 
 export const PALIERS = [
-  { min: 1, nom: "UN ARBRE", sprite: "arbre" },
-  { min: 5, nom: "UNE CABANE", sprite: "cabane" },
-  { min: 30, nom: "UNE MAISON", sprite: "maison" },
-  { min: 100, nom: "UNE GRANDE MAISON", sprite: "villa" },
-  { min: 500, nom: "UN IMMEUBLE", sprite: "immeuble" },
-  { min: 2000, nom: "UN MONUMENT", sprite: "chateau" },
+  // icone : le cadeau TikTok typique à ce prix (rose 1, cœur 5, donut 30, confettis 100, billets 500, baleine 2000)
+  { min: 1, nom: "UN ARBRE", sprite: "arbre", icone: "cadeau_rose" },
+  { min: 5, nom: "UNE CABANE", sprite: "cabane", icone: "cadeau_coeur" },
+  { min: 30, nom: "UNE MAISON", sprite: "maison", icone: "cadeau_donut" },
+  { min: 100, nom: "UNE GRANDE MAISON", sprite: "villa", icone: "cadeau_confettis" },
+  { min: 500, nom: "UN IMMEUBLE", sprite: "immeuble", icone: "cadeau_billets" },
+  { min: 2000, nom: "UN MONUMENT", sprite: "chateau", icone: "cadeau_baleine" },
 ];
 
 const MAISONS = ["maison_jaune", "maison_bleue", "maison_rose", "maison_verte"];
@@ -94,7 +95,7 @@ export function appliquer(etat, ev) {
         etat.batiments.push({ id: bid, proprio: ev.id, nom: p.nom, sprite });
       }
       annonces.push({ kind: "construction", id: ev.id, nom: p.nom, palier: pal.nom, bat: bid, arbre: pal.sprite === "arbre",
-        pieces, type: pal.sprite });
+        pieces, type: pal.sprite, icone: pal.icone, image: ev.image || null, cadeau: ev.cadeau || null });
       break;
     }
     case "like":

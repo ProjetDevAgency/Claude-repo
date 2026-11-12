@@ -435,8 +435,9 @@ function panneaux() {
   const cols = ["#7be08f", "#e3b179", "#ffd75e", "#7fc4ff", "#c79bff", "#ff8a8a"];
   PALIERS.forEach((p, i) => {
     const y = y0 + 78 + i * 38;
-    texte(`${p.min}${i ? "+" : ""} pièce${p.min > 1 ? "s" : ""}`, 70, y, { taille: 22, align: "left" });
-    texte(p.nom, 505, y, { taille: 22, align: "right", couleur: cols[i], max: 260 });
+    if (img[p.icone]) ctx.drawImage(img[p.icone], 58, y - 18, 36, 36);
+    texte(`${fmt(p.min)}${i ? "+" : ""}`, 102, y, { taille: 22, align: "left" });
+    texte(p.nom, 505, y, { taille: 22, align: "right", couleur: cols[i], max: 290 });
   });
   rrect(550, y0, 490, h, 22, "rgba(16,16,22,.9)", "#ff5ec8", 5);
   texte("TOP BÂTISSEURS", 795, y0 + 32, { taille: 24, couleur: "#ff7fd4" });
@@ -468,8 +469,9 @@ function annoncer(a, now) {
         SONS.pop();
         voix.dire("arbre", now);
       } else {
-        alertes.push({ ...a, couleur: JAUNE, l1: a.nom, l2: `offre ${fmt(a.pieces)} pièces`, l3: a.palier,
-          l4: "TON CADEAU = TA MAISON", son: "fanfare", dire: VOIX_DE[a.type] || "maison" });
+        alertes.push({ ...a, couleur: JAUNE, l1: a.nom, l2: `offre ${a.cadeau && a.cadeau !== "cadeau" ? a.cadeau + " · " : ""}${fmt(a.pieces)} pièces`,
+          l3: a.palier, l4: "TON CADEAU = TA MAISON", son: "fanfare", dire: VOIX_DE[a.type] || "maison",
+          imageCadeau: imageDistante(a.image), icone: a.icone });
       }
       break;
     case "partage":
@@ -537,11 +539,31 @@ function dessinerAlerte(now) {
   ctx.translate(W / 2, 742);
   ctx.scale(k, k);
   rrect(-470, -150, 940, 300, 30, "rgba(12,12,18,.96)", alerte.couleur, 8);
-  texte(alerte.l1, 0, -96, { taille: 54, police: "Anton", couleur: alerte.couleur, max: 860 });
-  texte(alerte.l2, 0, -46, { taille: 28, couleur: "#d7dae4" });
-  texte(alerte.l3, 0, 14, { taille: 62, police: "Anton", max: 860 });
+  const large = alerte.icone ? 600 : 860;
+  texte(alerte.l1, 0, -96, { taille: 54, police: "Anton", couleur: alerte.couleur, max: large });
+  texte(alerte.l2, 0, -46, { taille: 28, couleur: "#d7dae4", max: large });
+  texte(alerte.l3, 0, 14, { taille: 62, police: "Anton", max: large });
   texte(alerte.l4, 0, 90, { taille: 28, couleur: alerte.couleur });
+  // l'image du cadeau envoyé (la vraie image TikTok si elle a chargé, sinon notre icône)
+  const ic = alerte.imageCadeau?.complete && alerte.imageCadeau.naturalWidth ? alerte.imageCadeau : img[alerte.icone];
+  if (ic) {
+    const b = 1 + Math.sin(t * 6) * 0.06;
+    ctx.save(); ctx.translate(-370, -10); ctx.scale(b, b); ctx.drawImage(ic, -60, -60, 120, 120); ctx.restore();
+    ctx.save(); ctx.translate(370, -10); ctx.scale(b, b); ctx.drawImage(ic, -60, -60, 120, 120); ctx.restore();
+  }
   ctx.restore();
+}
+
+const imagesCadeaux = new Map();
+function imageDistante(url) {
+  if (!url) return null;
+  if (!imagesCadeaux.has(url)) {
+    const i = new Image();
+    i.src = url;
+    imagesCadeaux.set(url, i);
+    if (imagesCadeaux.size > 60) imagesCadeaux.delete(imagesCadeaux.keys().next().value);
+  }
+  return imagesCadeaux.get(url);
 }
 
 // un petit message à la fois, à la place de la ligne des règles
