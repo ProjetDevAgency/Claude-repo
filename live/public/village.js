@@ -82,15 +82,15 @@ function sprite(nom, x, ySol, ech, { flip = false } = {}) {
 
 // ───────── sons et narrateur ─────────
 let audio = null;
-const boutonSon = document.getElementById("son");
+// pas de bouton à l'écran (il passerait dans le live) : toucher l'écran une fois suffit
+const boutonSon = { hidden: true };
 function activerSon() {
   if (!audio) audio = new AudioContext();
   audio.resume();
   voix.debloquee = true;
   boutonSon.hidden = true;
 }
-boutonSon.onclick = activerSon;
-cv.onclick = activerSon;
+document.addEventListener("pointerdown", activerSon);
 
 function bip(freq, dur, type = "square", vol = 0.08, glisse = 0, t0 = 0) {
   if (!audio || audio.state !== "running") return;

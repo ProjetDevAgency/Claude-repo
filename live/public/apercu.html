@@ -9,12 +9,7 @@
   body { margin: 0; background: var(--fond); display: flex; align-items: center; justify-content: center; overflow: hidden;
          padding-left: max(0px, env(safe-area-inset-left, 0px)); padding-right: max(0px, env(safe-area-inset-right, 0px)); }
   canvas { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; }
-  #son { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
-         padding: 10px 18px; border: 0; border-radius: 999px; background: var(--bouton); color: var(--encre);
-         font: 800 15px Montserrat, system-ui, sans-serif; cursor: pointer; }
-  #son:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 </style>
 <canvas id="c" width="1080" height="1920" aria-label="Village animé en direct"></canvas>
-<button id="son" hidden>🔇 Touche pour activer le son</button>
 <script>window.VILLAGE_DEMO = true;</script>
 <script type="module" src="village.js"></script>
