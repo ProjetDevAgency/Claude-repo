@@ -9,7 +9,7 @@
 // Le village repart de zéro à chaque lancement. Le serveur n'écoute que cet appareil (127.0.0.1) :
 // personne d'autre sur le wifi ne peut envoyer de faux cadeaux.
 import { createServer } from "node:http";
-import { readFileSync, existsSync, writeFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import { WebSocketServer } from "ws";
@@ -20,12 +20,7 @@ const PUBLIC = join(ICI, "public");
 const CFG = JSON.parse(readFileSync(join(ICI, "config.json"), "utf8"));
 const DEMO = process.argv.includes("--demo");
 const PSEUDO = (process.argv.find((a) => a.startsWith("--tiktok=")) || "").split("=")[1] || CFG.tiktok;
-// Clé Euler Stream (gratuite sur eulerstream.com) : nécessaire pour se brancher au live.
-// Donnée une fois avec --cle=…, elle est gardée dans cle_euler.txt pour les fois suivantes.
-const FICHIER_CLE = join(ICI, "cle_euler.txt");
-const cleArg = (process.argv.find((a) => a.startsWith("--cle=")) || "").slice(6).trim();
-if (cleArg) writeFileSync(FICHIER_CLE, cleArg);
-const CLE = cleArg || (existsSync(FICHIER_CLE) ? readFileSync(FICHIER_CLE, "utf8").trim() : "");
+// Pas besoin de clé Euler Stream : la connexion simple au live est gratuite. (--cle=… est accepté mais ignoré.)
 
 // ───── état : on repart de zéro à chaque lancement ─────
 let etat = etatInitial(CFG);
@@ -121,19 +116,21 @@ function idDe(u) {
 
 async function brancherTikTok() {
   const { TikTokLiveConnection, WebcastEvent } = await import("tiktok-live-connector");
-  if (!CLE) console.log("⚠️  Pas de clé Euler Stream : la connexion au live risque d'échouer. Lance avec --cle=TA_CLE");
-  const live = new TikTokLiveConnection(PSEUDO, { enableExtendedGiftInfo: true, ...(CLE ? { signApiKey: CLE } : {}) });
+  // surtout pas enableExtendedGiftInfo : cette option passe par un service payant et bloque la connexion.
+  // Le prix de chaque cadeau arrive de toute façon avec le cadeau (giftDetails.diamondCount).
+  const live = new TikTokLiveConnection(PSEUDO, {});
   const majStatut = (s) => {
     statut = s;
     console.log("TikTok :", s);
     diffuser({ t: "statut", statut });
   };
   const u = (d) => ({ id: idDe(d.user), nom: nomDe(d.user) });
+  const connu = (d) => !!(d.user && (d.user.uniqueId || d.user.nickname));   // TikTok envoie parfois des messages sans pseudo
 
-  live.on(WebcastEvent.FOLLOW, (d) => evenement({ type: "follow", ...u(d) }));
-  live.on(WebcastEvent.SHARE, (d) => evenement({ type: "share", ...u(d) }));
-  live.on(WebcastEvent.CHAT, (d) => evenement({ type: "chat", ...u(d), texte: d.comment }));
-  live.on(WebcastEvent.MEMBER, (d) => evenement({ type: "join", ...u(d) }));
+  live.on(WebcastEvent.FOLLOW, (d) => connu(d) && evenement({ type: "follow", ...u(d) }));
+  live.on(WebcastEvent.SHARE, (d) => connu(d) && evenement({ type: "share", ...u(d) }));
+  live.on(WebcastEvent.CHAT, (d) => connu(d) && d.comment && evenement({ type: "chat", ...u(d), texte: d.comment }));
+  live.on(WebcastEvent.MEMBER, (d) => connu(d) && evenement({ type: "join", ...u(d) }));
   live.on(WebcastEvent.LIKE, (d) => evenement({ type: "like", ...u(d), n: d.likeCount || 1 }));
   live.on(WebcastEvent.GIFT, (d) => {
     const g = d.giftDetails || {};
@@ -152,13 +149,13 @@ async function brancherTikTok() {
       majStatut(`connecté au live de @${PSEUDO}`);
     } catch (e) {
       const msg = String(e.message || e);
-      const conseil = /sign/i.test(msg) && !CLE ? " → il faut une clé Euler Stream (--cle=…)"
-        : /sign/i.test(msg) ? " → vérifie ta clé Euler Stream" : "";
-      majStatut(`en attente du live de @${PSEUDO} (${msg.slice(0, 80)})${conseil}`);
+      const pasEnLive = /isn't online|offline|Room ID/i.test(msg);
+      majStatut(pasEnLive ? `en attente du live de @${PSEUDO} (tu n'es pas en live)`
+        : `connexion au live de @${PSEUDO} ratée, nouvel essai… (${msg.slice(0, 80)})`);
     }
   };
   await essayer();
-  setInterval(essayer, 20000);   // se (re)connecte tout seul dès que tu lances le live
+  setInterval(essayer, 10000);   // se (re)connecte tout seul dès que tu lances le live
 }
 
 if (DEMO) {
