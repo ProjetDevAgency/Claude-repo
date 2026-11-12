@@ -84,9 +84,33 @@ function sprite(nom, x, ySol, ech, { flip = false } = {}) {
 let audio = null;
 // pas de bouton à l'écran (il passerait dans le live) : toucher l'écran une fois suffit
 const boutonSon = { hidden: true };
+// Musique de fond : jour et nuit en boucle, fondu selon l'heure du village, plus bas quand le narrateur parle.
+const musique = {
+  pistes: null, lancee: false, vol: 0,
+  lancer() {
+    if (!this.pistes) {
+      this.pistes = { jour: new Audio("musique/jour.mp3"), nuit: new Audio("musique/nuit.mp3") };
+      for (const a of Object.values(this.pistes)) { a.loop = true; a.volume = 0; }
+    }
+    if (this.lancee) return;
+    Promise.all(Object.values(this.pistes).map((a) => a.play()))
+      .then(() => { this.lancee = true; })
+      .catch(() => { for (const a of Object.values(this.pistes)) a.pause(); });
+  },
+  maj(n, now, dt) {
+    if (!this.lancee) return;
+    const base = cfg?.musique ?? 0.35;
+    const cible = base * (now < voix.finLe ? 0.35 : 1);       // on baisse pendant que le narrateur parle
+    this.vol += (cible - this.vol) * Math.min(1, dt * 3);
+    this.pistes.jour.volume = Math.max(0, Math.min(1, this.vol * (1 - n)));
+    this.pistes.nuit.volume = Math.max(0, Math.min(1, this.vol * n));
+  },
+};
+
 function activerSon() {
   if (!audio) audio = new AudioContext();
   audio.resume();
+  musique.lancer();
   voix.debloquee = true;
   boutonSon.hidden = true;
 }
@@ -529,6 +553,7 @@ function image() {
   avant = now;
   if (etat && meta.decor) {
     const n = nuit(now);
+    musique.maj(n, now, dt);
     fond(n);
     dessinerVillage(now, dt, n);
     majMarcheurs(dt, now);
@@ -570,6 +595,7 @@ async function demarrer() {
     brancher();
   }
   try { audio = new AudioContext(); } catch { audio = null; }
+  musique.lancer();          // démarre seule là où le son est autorisé (LIVE Studio, lanceurs, Firefox réglé)
   // OBS / LIVE Studio laissent jouer le son tout seul ; sinon, un bouton (hors du live) pour l'activer
   setTimeout(() => { boutonSon.hidden = !!audio && audio.state === "running"; voix.debloquee = !boutonSon.hidden; }, 300);
   requestAnimationFrame(image);
