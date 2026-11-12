@@ -81,7 +81,7 @@ def produit(img, cx, cy, lt, ancien="499 €", nouveau="299 €", remise="−40 
 def s_hook(lt, dur):
     """0:00 — visage du conseiller bien visible, phrase courte sur une ligne."""
     img = pl(lt, conseiller=dict(mouth=talk(lt), arm=0.3), z=push(lt, dur, 2.0, 2.15), center=(CHEAD[0], CHEAD[1] - 40))
-    badge(img, 540, 1260, "LE SERVICE CLIENT")
+    badge(img, 540, 1180, "LE SERVICE CLIENT")
     tag(img, 540, 480, "« UNE PROMO, ÇA SE REMBOURSE PAS »", 58, WHITE, INK, rot=-3, k=1.0)
     big_number(img, (540, 720), "−40 %", 170, RED, k=(lt + 0.3) / 0.3)
     return shake(img, lt)
@@ -146,7 +146,7 @@ def s_abonne(lt, dur):
     tag(img, 540, 410, "HEUREUSEMENT…", 64, YEL, INK, rot=-3, k=lt / 0.25)
     tr = T["deux"] - T["s_abonne"]
     if lt > tr:
-        tag(img, 540, 1500, "RETIENS BIEN LES 2 RÈGLES", 56, RED, WHITE, rot=-2, k=(lt - tr) / 0.25)
+        tag(img, 540, 1210, "RETIENS BIEN LES 2 RÈGLES", 56, RED, WHITE, rot=-2, k=(lt - tr) / 0.25)
     return img
 
 
@@ -214,7 +214,7 @@ def s_chute(lt, dur):
     img = salon(lt, "victoire", z=push(lt, dur, 1.1, 1.2), center=(540, 1000))
     big_number(img, (540, 450), "PRIX BARRÉ", 130, RED, "FAUX", k=lt / 0.25, strike=ease((lt - 0.5) / 0.3))
     big_number(img, (540, 800), "299 €", 170, GREEN, "REMBOURSÉS, BIEN RÉELS", k=(lt - 0.9) / 0.25, rot=-3)
-    tag(img, 540, 1780, "CAS TYPE · CODE DE LA CONSO. L112-1-1 ET L221-18 · CECI N'EST PAS UN CONSEIL", 20, (40, 40, 50),
+    tag(img, 520, 1450, "CAS TYPE · L112-1-1 ET L221-18 · CECI N'EST PAS UN CONSEIL", 24, (40, 40, 50),
         WHITE, rot=0, k=(lt - 0.5) / 0.3)
     return img
 
@@ -222,6 +222,7 @@ def s_chute(lt, dur):
 def main():
     v = CartoonVideo("droits_black_friday", "scripts/modele/10_black_friday.txt", "", "", corner="")
     v.hook_head_start = 0.0
+    v.sub_y = 0.69   # zone visible : au-dessus de la description TikTok
     v.voice("output/_work_droits_bf/voice_raw.mp3")
     sc = [("Moins quarante pour cent", s_hook), ("Faux. Kévin", s_faux), ("Grâce à un seul", s_truc),
           ("L'an dernier, au Black", s_achat), ("Trois jours plus tard", s_appel), ("Le conseiller rigole", s_c1),

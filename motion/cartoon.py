@@ -372,7 +372,7 @@ class CartoonVideo(Video):
     def render(self):
         self.scenes.sort(key=lambda s: s[0])
         cfg = load_config()
-        sub_cfg = dict(cfg["subtitles"], position_y=0.80, size=80)
+        sub_cfg = dict(cfg["subtitles"], position_y=getattr(self, "sub_y", 0.80), size=80)
         ass = subtitles.write_ass(self.words, self.work / "subs.ass", sub_cfg, W, H, self.dur)
         out = ROOT / "output" / f"{self.name}.mp4"
         fonts = str(ROOT / "assets" / "fonts")
