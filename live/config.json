@@ -2,7 +2,6 @@
   "tiktok": "",
   "port": 3000,
   "ville": "FAUCHÉ-LES-OIES",
-  "habitantsDepart": 67,
   "objectif": 10000,
   "likeEuro": 1,
   "batimentsDepart": [
@@ -49,6 +48,5 @@
       "role": "VEUT ÊTRE MAIRE"
     }
   ],
-  "budgetDepart": 10615,
   "musique": 0.55
 }

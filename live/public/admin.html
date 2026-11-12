@@ -35,7 +35,17 @@
   </section>
 
   <section>
+    <h2>Village</h2>
+    <small>Le village repart de zéro à chaque lancement du serveur (0 habitant, objectif 10 000).</small>
+    <button class="rouge" id="zero">Remettre le village à zéro</button>
+    <small id="zeroOk" hidden>C'est fait : le village repart de zéro.</small>
+  </section>
+
+  <section>
     <h2>Tester (sans être en live)</h2>
+    <small>Les tests ne laissent aucune trace : le village revient tout seul à son état normal
+      30 s après le dernier test, ou dès qu'un vrai événement du live arrive.</small>
+    <div id="modeTest" hidden><strong>🧪 Mode test en cours</strong></div>
     <input id="nom" placeholder="Pseudo de test" value="test_kevin">
     <div class="ligne">
       <button data-ev="follow">+ Abonné</button>
@@ -62,6 +72,8 @@
     ws = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws`);
     ws.onmessage = (e) => {
       const m = JSON.parse(e.data);
+      if (m.t === "test") $("#modeTest").hidden = !m.actif;
+      if (m.test === false) $("#modeTest").hidden = true;
       if (m.statut !== undefined || m.t === "statut") {
         const s = m.statut;
         $("#statut").textContent = s;
@@ -71,6 +83,12 @@
     ws.onclose = () => { $("#statut").textContent = "serveur arrêté ? (nouvel essai…)"; setTimeout(brancher, 2000); };
   }
   function envoyer(o) { if (ws && ws.readyState === 1) ws.send(JSON.stringify(o)); }
+  $("#zero").onclick = () => {
+    if (!confirm("Remettre le village à zéro ? Habitants, budget, maisons et classement repartent à 0.")) return;
+    envoyer({ cmd: "zero" });
+    $("#zeroOk").hidden = false;
+    setTimeout(() => { $("#zeroOk").hidden = true; }, 3000);
+  };
   document.querySelectorAll("[data-ev]").forEach((b) => b.onclick = () => {
     const nom = $("#nom").value.trim() || "test";
     const ev = { type: b.dataset.ev, id: nom.toLowerCase(), nom };

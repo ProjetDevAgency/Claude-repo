@@ -21,7 +21,9 @@ Le village en direct pour un live TikTok. Les règles sont les mêmes que sur le
 - cycle jour/soir de 8 minutes, avec une musique de jour et une musique de nuit (originales, générées par ElevenLabs) ;
   volume dans `config.json` → `"musique"` (0 = coupée, 1 = fort ; 0.55 par défaut).
 
-Le village est sauvegardé dans `etat.json` et continue d'un live à l'autre.
+Le village repart de zéro à chaque lancement (0 habitant, objectif 10 000) : il n'est pas relié au vrai nombre
+d'abonnés du compte. Les bâtiments des épisodes restent dans la rue comme décor. La page de pilotage a un bouton
+« Remettre le village à zéro ».
 
 ## Avec un ordinateur (LIVE Studio)
 1. Installer Node.js (nodejs.org, version LTS).

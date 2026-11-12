@@ -25,25 +25,35 @@ export function palier(pieces) {
   return p;
 }
 
+// Chaque lancement repart de zéro (le village n'est pas relié au vrai nombre d'abonnés du compte).
+// Les bâtiments des épisodes restent dans la rue comme décor, sans compter dans MAISONS.
 export function etatInitial(cfg) {
-  const pseudos = {};
-  const batiments = [];
-  for (const b of cfg.batimentsDepart || []) {
-    pseudos[b.id] = { nom: b.nom || b.id, abonne: true, pieces: 0 };
-    batiments.push({ id: "depart:" + b.id, proprio: b.id, nom: b.nom || b.id, sprite: b.sprite });
-  }
   return {
-    habitants: cfg.habitantsDepart,
-    budget: cfg.budgetDepart,
-    pseudos,       // id → { nom, abonne, pieces }
-    batiments,     // dans l'ordre de construction : { id, proprio, nom, sprite }
+    habitants: 0,
+    budget: 0,
+    decor: (cfg.batimentsDepart || []).map((b) => ({ id: "decor:" + b.id, nom: b.nom || b.id, sprite: b.sprite })),
+    pseudos: {},   // seulement les abonnés et les donateurs du live : id → { nom, abonne, pieces }
+    batiments: [], // construits pendant le live : { id, proprio, nom, sprite }
     arbres: [],    // { id, nom }
-    n: 0,          // compteur pour des ids uniques
+    nbArbres: 0,
+    recents: [],   // derniers abonnés (pour peupler la rue si la page se recharge)
+    n: 0,
   };
 }
 
-export function nbMaisons(etat) {
-  return etat.batiments.length;
+const MAX_ARBRES = 80;     // au-delà, les plus anciens arbres laissent la place (le compteur continue)
+
+// Ce que la page a besoin de savoir : léger, même avec des milliers de spectateurs.
+export function vue(etat) {
+  return {
+    habitants: etat.habitants,
+    budget: etat.budget,
+    decor: etat.decor,
+    batiments: etat.batiments,
+    arbres: etat.arbres,
+    top: topBatisseurs(etat, 5),
+    recents: etat.recents,
+  };
 }
 
 function personne(etat, id, nom) {
@@ -53,24 +63,32 @@ function personne(etat, id, nom) {
 }
 
 // ev : { type: follow|gift|like|chat|share|join, id, nom, pieces?, cadeau?, n?, texte? }
+// Renvoie les annonces ; « change » dit si les compteurs ou la rue ont bougé.
 export function appliquer(etat, ev) {
   const annonces = [];
-  const p = ev.id ? personne(etat, ev.id, ev.nom) : null;
+  const abonne = !!etat.pseudos[ev.id]?.abonne;
   switch (ev.type) {
-    case "follow":
+    case "follow": {
+      const p = personne(etat, ev.id, ev.nom);
       if (!p.abonne) {
         p.abonne = true;
         etat.habitants += 1;
+        etat.recents.push({ id: ev.id, nom: p.nom });
+        if (etat.recents.length > 14) etat.recents.shift();
         annonces.push({ kind: "arrivee", id: ev.id, nom: p.nom, numero: etat.habitants });
       }
       break;
+    }
     case "gift": {
+      const p = personne(etat, ev.id, ev.nom);
       const pieces = Math.max(1, Math.round(ev.pieces || 1));
       p.pieces += pieces;
       const pal = palier(pieces);
       const bid = "b" + ++etat.n;
       if (pal.sprite === "arbre") {
         etat.arbres.push({ id: bid, nom: p.nom });
+        etat.nbArbres += 1;
+        if (etat.arbres.length > MAX_ARBRES) etat.arbres.shift();
       } else {
         const sprite = pal.sprite === "maison" ? MAISONS[hash(bid) % MAISONS.length] : pal.sprite;
         etat.batiments.push({ id: bid, proprio: ev.id, nom: p.nom, sprite });
@@ -83,14 +101,15 @@ export function appliquer(etat, ev) {
       etat.budget += ev.n || 1;
       annonces.push({ kind: "like", n: ev.n || 1 });
       break;
+    // partages, commentaires, entrées : on ne garde rien en mémoire (sinon ça gonfle avec le monde)
     case "share":
-      annonces.push({ kind: "partage", id: ev.id, nom: p.nom });
+      annonces.push({ kind: "partage", id: ev.id, nom: ev.nom });
       break;
     case "chat":
-      annonces.push({ kind: "bulle", id: ev.id, nom: p.nom, texte: String(ev.texte || "").trim().slice(0, 60) });
+      annonces.push({ kind: "bulle", id: ev.id, nom: ev.nom, abonne, texte: String(ev.texte || "").trim().slice(0, 60) });
       break;
     case "join":
-      annonces.push({ kind: "passant", id: ev.id, nom: p.nom });
+      annonces.push({ kind: "passant", id: ev.id, nom: ev.nom, abonne });
       break;
   }
   return annonces;

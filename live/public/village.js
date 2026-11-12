@@ -1,6 +1,6 @@
 // Page du village en direct (1080x1920). Reçoit l'état et les annonces du serveur par WebSocket,
 // ou simule un live toute seule avec ?demo.
-import { PALIERS, appliquer, etatInitial, fauxEvenement, hash, nbMaisons, topBatisseurs } from "./logique.js";
+import { PALIERS, appliquer, etatInitial, fauxEvenement, hash, vue } from "./logique.js";
 
 const W = 1080, H = 1920;
 const cv = document.getElementById("c");
@@ -15,7 +15,7 @@ const ECH_ARBRE = 0.62;
 const ECH_PERSO = 0.21;
 const CYCLE = 480;           // un jour + une nuit = 8 minutes
 
-let cfg = null, etat = null;
+let cfg = null, etat = null;   // etat = la « vue » envoyée par le serveur (compteurs, rue, top)
 let meta = {};
 const img = {};
 
@@ -219,7 +219,7 @@ function marcheur(id, nom, abonne = false, surPlace = false) {
     m = { nom, look: `perso_${String(hash(id) % 16).padStart(2, "0")}`,
       x: surPlace ? 90 + Math.random() * (W - 180) : gauche ? -60 : W + 60,
       cible: 80 + Math.random() * (W - 160), vit: 70 + Math.random() * 50, dir: gauche ? 1 : -1,
-      bulle: "", tBulle: -99, vu: now, abonne, ph: Math.random() * 6, ne: surPlace ? now : -99 };
+      bulle: "", tBulle: -99, finBulle: 0, vu: now, abonne, ph: Math.random() * 6, ne: surPlace ? now : -99 };
     marcheurs.set(id, m);
   }
   m.nom = nom || m.nom;
@@ -230,7 +230,7 @@ function marcheur(id, nom, abonne = false, surPlace = false) {
 
 function majMarcheurs(dt, now) {
   for (const m of marcheurs.values()) {
-    if (now - m.tBulle < 5) continue;          // il parle : il s'arrête
+    if (now < m.finBulle) continue;            // il parle : il s'arrête
     const d = m.cible - m.x;
     if (Math.abs(d) < 4) {
       if (Math.random() < dt * 0.5) m.cible = 60 + Math.random() * (W - 120);
@@ -244,7 +244,7 @@ function majMarcheurs(dt, now) {
 function dessinerMarcheurs(now) {
   const liste = [...marcheurs.values()].sort((a, b) => a.ph - b.ph);
   for (const m of liste) {
-    const parle = now - m.tBulle < 5;
+    const parle = now < m.finBulle;
     const marche = !parle && Math.abs(m.cible - m.x) > 4;
     const saut = marche ? Math.abs(Math.sin(now * 9 + m.ph)) * 8 : 0;
     const k = back((now - m.ne) / 0.35);
@@ -262,7 +262,7 @@ function dessinerMarcheurs(now) {
   }
   // bulles : le pseudo en rouge, le commentaire dessous
   for (const m of liste) {
-    if (now - m.tBulle >= 5 || !m.bulle) continue;
+    if (now >= m.finBulle || !m.bulle) continue;
     const k = back((now - m.tBulle) / 0.25);
     const y = TROTTOIR - meta[m.look].ay * ECH_PERSO - 70;
     ctx.save();
@@ -287,7 +287,7 @@ let camera = 0;
 
 function rue() {
   let x = 70;
-  const bats = etat.batiments.map((b) => {
+  const bats = [...etat.decor, ...etat.batiments].map((b) => {
     const m = meta[b.sprite];
     const w = (m ? m.w : 300) * ECH_BAT;
     const r = { ...b, x: x + (m ? m.ax : 150) * ECH_BAT, w };
@@ -385,7 +385,7 @@ function entete(now) {
 }
 
 function compteurs(dt, now) {
-  const cibles = { habitants: etat.habitants, budget: etat.budget, maisons: nbMaisons(etat) };
+  const cibles = { habitants: etat.habitants, budget: etat.budget, maisons: etat.batiments.length };
   for (const k in aff) aff[k] += (cibles[k] - aff[k]) * Math.min(1, dt * 6);
   [["HABITANTS", fmt(aff.habitants), VERT], ["BUDGET", fmt(aff.budget) + " €", JAUNE], ["MAISONS", fmt(aff.maisons), BLEU]]
     .forEach(([lab, val, col], i) => {
@@ -415,7 +415,7 @@ function panneaux() {
   });
   rrect(550, y0, 490, h, 22, "rgba(16,16,22,.9)", "#ff5ec8", 5);
   texte("TOP BÂTISSEURS", 795, y0 + 32, { taille: 24, couleur: "#ff7fd4" });
-  const top = topBatisseurs(etat, 5);
+  const top = etat.top;
   if (!top.length) texte("Sois le premier !", 795, y0 + 160, { taille: 26, couleur: "#cfd2dc" });
   top.forEach((t, i) => {
     const y = y0 + 80 + i * 44;
@@ -459,21 +459,44 @@ function annoncer(a, now) {
       break;
     }
     case "bulle": {
-      const m = marcheur(a.id, a.nom, !!etat.pseudos[a.id]?.abonne, true);
-      m.bulle = a.texte;
-      m.tBulle = now;
+      // comme sur les lives village : les commentaires passent un par un, dans l'ordre
+      marcheur(a.id, a.nom, a.abonne, true);
+      fileBulles.push(a);
+      if (fileBulles.length > 8) fileBulles.shift();          // gros chat : on garde les 8 plus récents
       chats.push(now);
       while (chats.length && now - chats[0] > 60) chats.shift();
       break;
     }
     case "passant":
-      marcheur(a.id, a.nom, false);
+      marcheur(a.id, a.nom, a.abonne);
       voix.dire("visiteur", now);
       break;
   }
 }
 
+const fileBulles = [];
+let finBulle = 0;
+function bulleSuivante(now) {
+  if (now < finBulle || !fileBulles.length) return;
+  const a = fileBulles.shift();
+  const m = marcheur(a.id, a.nom, a.abonne, true);
+  const dur = fileBulles.length > 3 ? 1.6 : fileBulles.length ? 2.2 : 3;
+  m.bulle = a.texte;
+  m.tBulle = now;
+  m.finBulle = finBulle = now + dur;
+}
+
+const MAX_ALERTES = 6;
+function limiterAlertes() {
+  // en cas de rafale : on lâche d'abord les plus anciennes arrivées, puis les plus anciennes alertes
+  while (alertes.length > MAX_ALERTES) {
+    const i = alertes.findIndex((x) => x.kind === "arrivee");
+    alertes.splice(i >= 0 ? i : 0, 1);
+  }
+}
+
 function dessinerAlerte(now) {
+  limiterAlertes();
   if (!alerte && alertes.length) {
     alerte = { ...alertes.shift(), t0: now };
     SONS[alerte.son]?.();
@@ -563,6 +586,7 @@ function image() {
     musique.maj(n, now, dt);
     fond(n);
     dessinerVillage(now, dt, n);
+    bulleSuivante(now);
     majMarcheurs(dt, now);
     dessinerMarcheurs(now);
     entete(now);
@@ -586,24 +610,29 @@ function recevoirAnnonces(annonces) {
 }
 
 function peupler() {
-  Object.entries(etat.pseudos).filter(([, p]) => p.abonne).slice(-14)
-    .forEach(([id, p]) => { const m = marcheur(id, p.nom, true); m.x = 60 + Math.random() * (W - 120); });
-  aff.habitants = etat.habitants; aff.budget = etat.budget; aff.maisons = nbMaisons(etat);
+  for (const r of etat.recents) { const m = marcheur(r.id, r.nom, true); m.x = 60 + Math.random() * (W - 120); }
+  aff.habitants = etat.habitants; aff.budget = etat.budget; aff.maisons = etat.batiments.length;
+}
+
+function remiseAZero() {
+  marcheurs.clear(); pops.clear(); alertes.length = 0; alerte = null; toasts.length = 0; camera = 0; focus = null;
+  fileBulles.length = 0; finBulle = 0;
+  peupler();
 }
 
 async function demarrer() {
   await chargerTout();
   if (DEMO) {
     cfg = await (await fetch("config.json")).json();
-    etat = etatInitial(cfg);
+    const complet = etatInitial(cfg);
+    etat = vue(complet);
     peupler();
-    setInterval(() => recevoirAnnonces(appliquer(etat, fauxEvenement())), 850);
+    setInterval(() => { const a = appliquer(complet, fauxEvenement()); etat = vue(complet); recevoirAnnonces(a); }, 850);
   } else {
     brancher();
   }
   try { audio = new AudioContext(); } catch { audio = null; }
   musique.lancer();          // démarre seule là où le son est autorisé (LIVE Studio, lanceurs, Firefox réglé)
-  // OBS / LIVE Studio laissent jouer le son tout seul ; sinon, un bouton (hors du live) pour l'activer
   window.villageSon = () => ({ musique: musique.lancee, effets: audio?.state, volJour: musique.pistes?.jour.volume });  // tests
   requestAnimationFrame(image);
 }
@@ -614,11 +643,13 @@ function brancher() {
     const m = JSON.parse(e.data);
     if (m.t === "etat") {
       const premier = !etat;
-      etat = m.etat; cfg = m.cfg;
-      if (premier) peupler();
+      etat = m.vue; cfg = m.cfg;
+      if (premier || m.zero) remiseAZero();
     } else if (m.t === "ev") {
-      etat = m.etat;
+      if (m.vue) etat = m.vue;
       recevoirAnnonces(m.annonces);
+    } else if (m.t === "vue") {
+      etat = m.vue;
     }
   };
   ws.onclose = () => setTimeout(brancher, 2000);

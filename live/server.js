@@ -4,30 +4,27 @@
 //   node server.js --demo     → faux événements toutes les secondes (pour tester sans être en live)
 //
 // Page du village : http://localhost:3000        (à mettre dans LIVE Studio / à partager à l'écran)
-// Page de pilotage : http://localhost:3000/admin (statut de la connexion, tests)
+// Page de pilotage : http://localhost:3000/admin (statut de la connexion, tests, remise à zéro)
+//
+// Le village repart de zéro à chaque lancement. Le serveur n'écoute que cet appareil (127.0.0.1) :
+// personne d'autre sur le wifi ne peut envoyer de faux cadeaux.
 import { createServer } from "node:http";
-import { readFileSync, writeFileSync, existsSync, renameSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import { WebSocketServer } from "ws";
-import { appliquer, etatInitial, fauxEvenement } from "./public/logique.js";
+import { appliquer, etatInitial, fauxEvenement, vue } from "./public/logique.js";
 
 const ICI = fileURLToPath(new URL(".", import.meta.url));
 const PUBLIC = join(ICI, "public");
 const CFG = JSON.parse(readFileSync(join(ICI, "config.json"), "utf8"));
-const FICHIER_ETAT = join(ICI, "etat.json");
 const DEMO = process.argv.includes("--demo");
 const PSEUDO = (process.argv.find((a) => a.startsWith("--tiktok=")) || "").split("=")[1] || CFG.tiktok;
 
-// ───── état (sauvegardé : le village continue d'un live à l'autre) ─────
-let etat = existsSync(FICHIER_ETAT) && !DEMO ? JSON.parse(readFileSync(FICHIER_ETAT, "utf8")) : etatInitial(CFG);
-let sale = false;
-setInterval(() => {
-  if (!sale || DEMO) return;
-  writeFileSync(FICHIER_ETAT + ".tmp", JSON.stringify(etat));
-  renameSync(FICHIER_ETAT + ".tmp", FICHIER_ETAT);
-  sale = false;
-}, 3000);
+// ───── état : on repart de zéro à chaque lancement ─────
+let etat = etatInitial(CFG);
+// bac à sable des tests : une copie jetable, effacée 30 s après le dernier test (ou au premier vrai événement)
+let bac = null, finBac = 0;
 
 // ───── serveur web ─────
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".png": "image/png",
@@ -57,25 +54,53 @@ function diffuser(msg) {
   for (const c of wss.clients) if (c.readyState === 1) c.send(s);
 }
 
-function evenement(ev) {
-  const annonces = appliquer(etat, ev);
-  sale = true;
-  diffuser({ t: "ev", ev, annonces, etat });
+// Les annonces partent tout de suite. L'état (compteurs, rue) part avec elles s'il a changé ;
+// pour les likes (très nombreux), on le regroupe : au plus 4 envois par seconde.
+let vueEnRetard = false;
+function evenement(ev, test = false) {
+  if (!test && bac) finirBac();
+  const cible = test ? bac : etat;
+  const annonces = appliquer(cible, ev);
+  const important = ev.type === "follow" || ev.type === "gift";
+  if (important) diffuser({ t: "ev", annonces, vue: vue(cible) });
+  else {
+    if (annonces.length) diffuser({ t: "ev", annonces });
+    if (ev.type === "like") vueEnRetard = true;
+  }
 }
+setInterval(() => {
+  if (!vueEnRetard) return;
+  vueEnRetard = false;
+  diffuser({ t: "vue", vue: vue(bac || etat) });
+}, 250);
+
+function finirBac() {
+  bac = null;
+  // la page efface tout ce qui vient du test (bonshommes compris)
+  diffuser({ t: "etat", vue: vue(etat), cfg: CFG, statut, zero: true, test: false });
+}
+setInterval(() => { if (bac && Date.now() > finBac) finirBac(); }, 1000);
 
 wss.on("connection", (ws) => {
-  ws.send(JSON.stringify({ t: "etat", etat, cfg: CFG, statut }));
+  ws.send(JSON.stringify({ t: "etat", vue: vue(bac || etat), cfg: CFG, statut, test: !!bac }));
   ws.on("message", (raw) => {
     let m;
     try { m = JSON.parse(raw); } catch { return; }
     if (m.cmd === "test" && m.ev) {
-      evenement(m.ev);
-      return;
+      if (!bac) bac = structuredClone(etat);
+      finBac = Date.now() + 30000;
+      evenement(m.ev, true);
+      diffuser({ t: "test", actif: true });
+    } else if (m.cmd === "zero") {
+      etat = etatInitial(CFG);
+      bac = null;
+      diffuser({ t: "etat", vue: vue(etat), cfg: CFG, statut, zero: true });
+      console.log("Village remis à zéro.");
     }
   });
 });
 
-http.listen(CFG.port, () => {
+http.listen(CFG.port, "127.0.0.1", () => {
   console.log(`\n🏘️  Village : http://localhost:${CFG.port}`);
   console.log(`🎛️  Pilotage : http://localhost:${CFG.port}/admin\n`);
 });
