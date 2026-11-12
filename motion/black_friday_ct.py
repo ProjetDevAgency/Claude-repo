@@ -38,9 +38,10 @@ def rembourse(t):
 
 def compteur(img, v):
     d = ImageDraw.Draw(img)
-    d.rounded_rectangle([30, 40, 380, 150], radius=18, fill=(20, 20, 26))
-    d.text((52, 66), "REMBOURSÉ À KÉVIN", font=FA(26), fill=(200, 200, 210), anchor="lm")
-    d.text((52, 116), f"{v} €", font=FA(56), fill=GREEN if v else (240, 80, 80), anchor="lm")
+    # sous la barre de TikTok (recherche + onglets), qui cache les 200 premiers pixels
+    d.rounded_rectangle([30, 215, 400, 335], radius=18, fill=(20, 20, 26), outline=WHITE, width=3)
+    d.text((54, 243), "REMBOURSÉ À KÉVIN", font=FA(28), fill=(210, 210, 220), anchor="lm")
+    d.text((54, 298), f"{v} €", font=FA(62), fill=GREEN if v else (240, 80, 80), anchor="lm")
 
 
 def avec_compteur(fn):
@@ -81,8 +82,8 @@ def s_hook(lt, dur):
     """0:00 — visage du conseiller bien visible, phrase courte sur une ligne."""
     img = pl(lt, conseiller=dict(mouth=talk(lt), arm=0.3), z=push(lt, dur, 2.0, 2.15), center=(CHEAD[0], CHEAD[1] - 40))
     badge(img, 540, 1260, "LE SERVICE CLIENT")
-    tag(img, 540, 330, "« UNE PROMO, ÇA SE REMBOURSE PAS »", 58, WHITE, INK, rot=-3, k=1.0)
-    big_number(img, (540, 560), "−40 %", 170, RED, k=(lt + 0.3) / 0.3)
+    tag(img, 540, 480, "« UNE PROMO, ÇA SE REMBOURSE PAS »", 58, WHITE, INK, rot=-3, k=1.0)
+    big_number(img, (540, 720), "−40 %", 170, RED, k=(lt + 0.3) / 0.3)
     return shake(img, lt)
 
 
@@ -90,46 +91,46 @@ def s_faux(lt, dur):
     """0:02 — le gain promis en grand, Kévin choqué, image claire."""
     img = salon(lt, "choc", z=2.1, center=(540, BASE - 760))
     shock_lines(img, 540, 900, 300, lt)
-    tag(img, 540, 250, "FAUX", 110, RED, WHITE, rot=-5, k=lt / 0.2)
-    big_number(img, (540, 470), counter(0, 299, lt - 0.4, 0.6, "{} €"), 210, GREEN, "QU'IL VA RÉCUPÉRER", k=1.0)
+    tag(img, 540, 400, "FAUX", 110, RED, WHITE, rot=-5, k=lt / 0.2)
+    big_number(img, (540, 620), counter(0, 299, lt - 0.4, 0.6, "{} €"), 210, GREEN, "QU'IL VA RÉCUPÉRER", k=1.0)
     return shake(flash(img, lt), lt)
 
 
 def s_truc(lt, dur):
     img = salon(lt, "telephone", z=push(lt, dur, 1.5, 1.65), center=(540, BASE - 640))
-    tag(img, 540, 300, "UN SEUL PETIT TRUC", 70, YEL, INK, rot=-4, k=lt / 0.25)
-    tag(img, 540, 460, "FAIT DÉBUT NOVEMBRE", 52, WHITE, INK, rot=3, k=(lt - 0.6) / 0.25)
+    tag(img, 540, 450, "UN SEUL PETIT TRUC", 70, YEL, INK, rot=-4, k=lt / 0.25)
+    tag(img, 540, 610, "FAIT DÉBUT NOVEMBRE", 52, WHITE, INK, rot=3, k=(lt - 0.6) / 0.25)
     return flash(img, lt)
 
 
 def s_achat(lt, dur):
     img = salon(lt, "telephone", z=1.0, center=(540, 1000))
-    tag(img, 540, 250, "L'AN DERNIER, AU BLACK FRIDAY", 56, WHITE, INK, rot=-3, k=lt / 0.25)
+    tag(img, 540, 400, "L'AN DERNIER, AU BLACK FRIDAY", 56, WHITE, INK, rot=-3, k=lt / 0.25)
     produit(img, 540, 760, lt - 0.4)
     return flash(img, lt)
 
 
 def s_appel(lt, dur):
     img = salon(lt, "telephone", z=push(lt, dur, 1.5, 1.7), center=(540, BASE - 620))
-    tag(img, 540, 300, "3 JOURS PLUS TARD", 66, WHITE, INK, rot=-3, k=lt / 0.25)
+    tag(img, 540, 450, "3 JOURS PLUS TARD", 66, WHITE, INK, rot=-3, k=lt / 0.25)
     return flash(img, lt)
 
 
 def s_c1(lt, dur):
     img = pl(lt, conseiller=dict(mouth=talk(lt), arm=0.3), z=push(lt, dur, 1.9, 2.1), center=(CHEAD[0] - 60, CHEAD[1] + 60))
-    bubble(img, 520, 380, ["C'EST UNE PROMO,", "NI REPRIS", "NI ÉCHANGÉ"], 62, (lt - 0.4) / 0.3, tail_x=680)
+    bubble(img, 560, 540, ["C'EST UNE PROMO,", "NI REPRIS", "NI ÉCHANGÉ"], 62, (lt - 0.4) / 0.3, tail_x=680)
     return flash(img, lt)
 
 
 def s_c2(lt, dur):
     img = pl(lt, conseiller=dict(mouth=talk(lt)), z=push(lt, dur, 1.5, 1.6), center=(760 - 100, CHEAD[1] + 200))
-    bubble(img, 540, 380, ["FALLAIT RÉFLÉCHIR", "AVANT"], 70, lt / 0.3, tail_x=700)
+    bubble(img, 560, 540, ["FALLAIT RÉFLÉCHIR", "AVANT"], 70, lt / 0.3, tail_x=700)
     return flash(img, lt)
 
 
 def s_sarah(lt, dur):
     img = salon(lt, "triste", sarah=dict(mouth=talk(lt)), z=push(lt, dur, 1.1, 1.2), center=(540, 1000))
-    bubble(img, 720, 380, ["GARDE LA", "CONSOLE"], 70, lt / 0.3, tail_x=780)
+    bubble(img, 720, 520, ["GARDE LA", "CONSOLE"], 70, lt / 0.3, tail_x=780)
     return flash(img, lt)
 
 
@@ -142,7 +143,7 @@ def s_echo(lt, dur):
 def s_abonne(lt, dur):
     img = salon(lt, "telephone", z=1.0, center=(540, 1000))
     phone_big(img, 540, 900, lt, "19:42", [("Où va ton argent", "Où va ton argent", "Black Friday : tes droits", (40, 160, 90))])
-    tag(img, 540, 260, "HEUREUSEMENT…", 64, YEL, INK, rot=-3, k=lt / 0.25)
+    tag(img, 540, 410, "HEUREUSEMENT…", 64, YEL, INK, rot=-3, k=lt / 0.25)
     tr = T["deux"] - T["s_abonne"]
     if lt > tr:
         tag(img, 540, 1500, "RETIENS BIEN LES 2 RÈGLES", 56, RED, WHITE, rot=-2, k=(lt - tr) / 0.25)
@@ -158,15 +159,15 @@ def s_r1(lt, dur):
 
 def s_capture(lt, dur):
     img = salon(lt, "telephone", z=1.0, center=(540, 1000))
-    tag(img, 540, 250, "LE PETIT TRUC DE KÉVIN", 60, YEL, INK, rot=-3, k=lt / 0.25)
-    tag(img, 540, 400, "UNE CAPTURE D'ÉCRAN", 56, WHITE, INK, rot=3, k=(lt - 0.5) / 0.25)
+    tag(img, 540, 400, "LE PETIT TRUC DE KÉVIN", 60, YEL, INK, rot=-3, k=lt / 0.25)
+    tag(img, 540, 550, "UNE CAPTURE D'ÉCRAN", 56, WHITE, INK, rot=3, k=(lt - 0.5) / 0.25)
     produit(img, 540, 900, lt - 1.0, ancien="", nouveau="319 €", remise="3 NOV.", titre="CAPTURE · 3 NOVEMBRE")
     return flash(img, lt)
 
 
 def s_calcul(lt, dur):
     img = dim(salon(lt, "neutre"), 0.9)
-    tag(img, 540, 260, "FAIS LE CALCUL AVEC KÉVIN", 56, YEL, INK, rot=-3, k=lt / 0.25)
+    tag(img, 540, 410, "FAIS LE CALCUL AVEC KÉVIN", 56, YEL, INK, rot=-3, k=lt / 0.25)
     carte_sombre(img, "LA VRAIE RÉDUCTION", [("319 € → 299 €", 0.6, False), ("= −6 %", 1.4, True),
                                              ("PAS −40 %", 2.0, False)], lt, y0=520)
     return img
@@ -194,7 +195,7 @@ def s_partage(lt, dur):
         lay = lay.resize((W, H), Image.LANCZOS).crop((x0, y0, x0 + 440, y0 + 500))
         img.paste(lay, (x0, y0), lay)
         d.text((x0 + 24, y0 + 470), noms[k], font=FA(34), fill=WHITE, anchor="lm")
-    tag(img, 540, 330, "ON EN A TOUS UN", 70, YEL, INK, rot=-3, k=(lt - T["tous"] + T["s_partage"]) / 0.25)
+    tag(img, 540, 480, "ON EN A TOUS UN", 70, YEL, INK, rot=-3, k=(lt - T["tous"] + T["s_partage"]) / 0.25)
     return img
 
 
@@ -202,7 +203,7 @@ def s_renvoi(lt, dur):
     img = salon(lt, "victoire" if lt > T["remb"] - T["s_renvoi"] else "neutre", z=1.0, center=(540, 1000))
     ts = T["signal"] - T["s_renvoi"]
     if lt > ts:
-        tag(img, 540, 260, "SIGNALÉ SUR SIGNALCONSO", 56, WHITE, INK, rot=-3, k=(lt - ts) / 0.25)
+        tag(img, 540, 410, "SIGNALÉ SUR SIGNALCONSO", 56, WHITE, INK, rot=-3, k=(lt - ts) / 0.25)
     tr = T["remb"] - T["s_renvoi"]
     if lt > tr:
         phone_big(img, 540, 900, lt - tr, "10:12", [("Banque", "Remboursement", "SITE · +299,00 €", (60, 110, 230))])
@@ -211,8 +212,8 @@ def s_renvoi(lt, dur):
 
 def s_chute(lt, dur):
     img = salon(lt, "victoire", z=push(lt, dur, 1.1, 1.2), center=(540, 1000))
-    big_number(img, (540, 300), "PRIX BARRÉ", 130, RED, "FAUX", k=lt / 0.25, strike=ease((lt - 0.5) / 0.3))
-    big_number(img, (540, 640), "299 €", 170, GREEN, "REMBOURSÉS, BIEN RÉELS", k=(lt - 0.9) / 0.25, rot=-3)
+    big_number(img, (540, 450), "PRIX BARRÉ", 130, RED, "FAUX", k=lt / 0.25, strike=ease((lt - 0.5) / 0.3))
+    big_number(img, (540, 800), "299 €", 170, GREEN, "REMBOURSÉS, BIEN RÉELS", k=(lt - 0.9) / 0.25, rot=-3)
     tag(img, 540, 1780, "CAS TYPE · CODE DE LA CONSO. L112-1-1 ET L221-18 · CECI N'EST PAS UN CONSEIL", 20, (40, 40, 50),
         WHITE, rot=0, k=(lt - 0.5) / 0.3)
     return img
