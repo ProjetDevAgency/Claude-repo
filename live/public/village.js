@@ -1,11 +1,15 @@
 // Page du village en direct (1080x1920). Reçoit l'état et les annonces du serveur par WebSocket,
 // ou simule un live toute seule avec ?demo.
 import { PALIERS, appliquer, etatInitial, fauxEvenement, hash, vue } from "./logique.js";
+import { creerBataille } from "./bataille.js";
 
 const W = 1080, H = 1920;
 const cv = document.getElementById("c");
 const ctx = cv.getContext("2d");
 const DEMO = new URLSearchParams(location.search).has("demo") || window.VILLAGE_DEMO === true;
+// mode du live : "village" ou "bataille" (villageois vs zombies) ; changé depuis la page de pilotage
+let mode = new URLSearchParams(location.search).get("mode") || (location.hash === "#bataille" ? "bataille" : "") || window.VILLAGE_MODE || "village";
+let bataille = null;
 
 const INK = "#16161c", JAUNE = "#ffce00", VERT = "#3ccf6e", BLEU = "#3d8bff", ROUGE = "#e8323c", BLANC = "#fafafa";
 const SOL = 1130;            // pied des bâtiments
@@ -92,7 +96,8 @@ const musique = {
       if (!audio) audio = new AudioContext();
       const lire = async (f) => audio.decodeAudioData(await (await fetch(f)).arrayBuffer());
       const [jour, nuit] = await Promise.all([lire("musique/jour.mp3"), lire("musique/nuit.mp3")]);
-      this.tampons = { jour, nuit };
+      const bat = await lire("musique/bataille.mp3").catch(() => null);
+      this.tampons = { jour, nuit, ...(bat ? { bataille: bat } : {}) };
     } catch (e) { console.warn("musique", e); }
   },
   lancer() {
@@ -101,7 +106,7 @@ const musique = {
     const total = audio.createGain();
     total.connect(audio.destination);
     this.gains = { total };
-    for (const k of ["jour", "nuit"]) {
+    for (const k of Object.keys(this.tampons)) {
       const g = audio.createGain();
       g.gain.value = 0;
       g.connect(total);
@@ -123,8 +128,10 @@ const musique = {
     const base = cfg?.musique ?? 0.8;
     const t = audio.currentTime;
     this.gains.total.gain.setTargetAtTime(base * (now < voix.finLe ? 0.6 : 1), t, 0.3);
-    this.gains.jour.gain.setTargetAtTime(1 - n, t, 0.5);
-    this.gains.nuit.gain.setTargetAtTime(n, t, 0.5);
+    const bat = mode === "bataille" && this.gains.bataille ? 1 : 0;
+    this.gains.jour.gain.setTargetAtTime((1 - n) * (1 - bat), t, 0.5);
+    this.gains.nuit.gain.setTargetAtTime(n * (1 - bat), t, 0.5);
+    if (this.gains.bataille) this.gains.bataille.gain.setTargetAtTime(bat, t, 0.5);
   },
 };
 
@@ -180,12 +187,14 @@ const SONS = {
 
 // Le narrateur : 4-5 phrases enregistrées par interaction (voix/…), tirées au hasard,
 // jamais deux en même temps. Abonnés et cadeaux passent avant le reste (ils attendent leur tour).
-const PRIORITAIRES = new Set(["arrivee", "arbre", "cabane", "maison", "grande_maison", "immeuble", "monument"]);
+const PRIORITAIRES = new Set(["arrivee", "arbre", "cabane", "maison", "grande_maison", "immeuble", "monument",
+  "bataille_debut", "bataille_victoire_v", "bataille_victoire_z", "bataille_geant", "bataille_speciale"]);
 const VOIX_DE = { arbre: "arbre", cabane: "cabane", maison: "maison", villa: "grande_maison", immeuble: "immeuble", chateau: "monument" };
 const voix = {
   liste: {}, finLe: 0, dernier: {}, dernierTout: 0, file: [], derniers: {},
   // abonnés et cadeaux : jamais de pause, chacun a sa phrase (file d'attente) ; le reste : des pauses
-  REPOS: { like: 45, partage: 15, visiteur: 60, discute: 0, appel: 0, soir: 0, matin: 0 },
+  REPOS: { like: 45, partage: 15, visiteur: 60, discute: 0, appel: 0, soir: 0, matin: 0,
+    bataille_renforts: 6, bataille_danger: 30, bataille_appel: 0 },
   dire(cat, now) {
     const fichiers = this.liste[cat];
     if (!fichiers || !fichiers.length) return;
@@ -641,7 +650,19 @@ function image() {
   const now = performance.now() / 1000;
   const dt = Math.min(0.1, now - avant);
   avant = now;
-  if (etat && meta.decor) {
+  if (mode === "bataille" && meta.decor) {
+    const n = nuit(now);
+    musique.maj(n, now);
+    fond(n);
+    if (!bataille) bataille = creerBataille({ ctx, W, img, meta, sprite, texte, rrect, fmt, back, ease, SONS, voix, hash });
+    bataille.dessiner(now, dt, n);
+    dessinerConfettis(dt);
+    voix.tic(now);
+    if (now > prochainAppel && now - voix.dernierTout > 15) {
+      voix.dire("bataille_appel", now);
+      prochainAppel = now + 60 + Math.random() * 30;
+    }
+  } else if (etat && meta.decor) {
     const n = nuit(now);
     musique.maj(n, now);
     fond(n);
@@ -687,7 +708,11 @@ async function demarrer() {
     const complet = etatInitial(cfg);
     etat = vue(complet);
     peupler();
-    setInterval(() => { const a = appliquer(complet, fauxEvenement()); etat = vue(complet); recevoirAnnonces(a); }, 850);
+    setInterval(() => {
+      const ev = fauxEvenement();
+      if (mode === "bataille") { if (bataille) bataille.evenement(ev, performance.now() / 1000); return; }
+      const a = appliquer(complet, ev); etat = vue(complet); recevoirAnnonces(a);
+    }, 850);
   } else {
     brancher();
   }
@@ -701,13 +726,15 @@ function brancher() {
   const ws = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws`);
   ws.onmessage = (e) => {
     const m = JSON.parse(e.data);
+    if (m.mode && m.mode !== mode) { mode = m.mode; prochainAppel = 0; }
     if (m.t === "etat") {
       const premier = !etat;
       etat = m.vue; cfg = m.cfg;
       if (premier || m.zero) remiseAZero();
     } else if (m.t === "ev") {
       if (m.vue) etat = m.vue;
-      recevoirAnnonces(m.annonces);
+      if (mode === "bataille") { if (bataille && m.ev) bataille.evenement(m.ev, performance.now() / 1000); return; }
+      recevoirAnnonces(m.annonces || []);
     } else if (m.t === "vue") {
       etat = m.vue;
     }

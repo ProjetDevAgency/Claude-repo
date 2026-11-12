@@ -86,6 +86,47 @@ PHRASES = {
         "Bienvenue au visiteur ! Abonne-toi pour avoir ta maison.",
         "Quelqu'un découvre le village. Fais comme chez toi !",
     ],
+    # mode « Villageois vs Zombies »
+    "bataille_debut": [
+        "Nouvelle manche ! Tape un pour les villageois, deux pour les zombies !",
+        "Les zombies sortent de la crypte… Choisis ton camp !",
+        "C'est reparti ! Villageois ou zombies, à toi de choisir !",
+    ],
+    "bataille_renforts": [
+        "Des renforts arrivent !",
+        "Merci pour les renforts !",
+        "Encore des combattants sur le terrain !",
+        "Ça se bat fort, merci pour le cadeau !",
+    ],
+    "bataille_geant": [
+        "Attention… Un géant entre sur le terrain !",
+        "Un géant ! Ça va faire mal !",
+    ],
+    "bataille_speciale": [
+        "Attaque spéciale ! Tout le terrain est balayé !",
+        "Énorme ! Une attaque spéciale qui change tout !",
+    ],
+    "bataille_danger": [
+        "Le camp est presque détruit ! Envoyez des renforts !",
+        "Attention, le camp ne tiendra plus longtemps !",
+        "Likez pour réparer votre camp, vite !",
+    ],
+    "bataille_victoire_v": [
+        "Les villageois gagnent la manche ! Bravo !",
+        "Victoire des villageois ! Les zombies retournent dans leur crypte !",
+        "Le village est sauvé ! Victoire des villageois !",
+    ],
+    "bataille_victoire_z": [
+        "Les zombies gagnent la manche !",
+        "Victoire des zombies ! Le village est envahi !",
+        "Les zombies ont tout cassé ! Victoire des zombies !",
+    ],
+    "bataille_appel": [
+        "Tape un ou deux pour rejoindre une équipe !",
+        "Ton cadeau envoie des renforts dans ton équipe !",
+        "Chaque like répare le camp de ton équipe !",
+        "Abonne-toi, et un combattant rejoint ton équipe !",
+    ],
     # ambiance
     "soir": ["Le soir tombe sur Fauché-les-Oies… C'est magnifique."],
     "matin": ["Le soleil se lève sur Fauché-les-Oies. Bonne journée, les habitants !"],

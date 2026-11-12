@@ -67,6 +67,46 @@
   "voix/visiteur_2.mp3",
   "voix/visiteur_3.mp3"
  ],
+ "bataille_debut": [
+  "voix/bataille_debut_0.mp3",
+  "voix/bataille_debut_1.mp3",
+  "voix/bataille_debut_2.mp3"
+ ],
+ "bataille_renforts": [
+  "voix/bataille_renforts_0.mp3",
+  "voix/bataille_renforts_1.mp3",
+  "voix/bataille_renforts_2.mp3",
+  "voix/bataille_renforts_3.mp3"
+ ],
+ "bataille_geant": [
+  "voix/bataille_geant_0.mp3",
+  "voix/bataille_geant_1.mp3"
+ ],
+ "bataille_speciale": [
+  "voix/bataille_speciale_0.mp3",
+  "voix/bataille_speciale_1.mp3"
+ ],
+ "bataille_danger": [
+  "voix/bataille_danger_0.mp3",
+  "voix/bataille_danger_1.mp3",
+  "voix/bataille_danger_2.mp3"
+ ],
+ "bataille_victoire_v": [
+  "voix/bataille_victoire_v_0.mp3",
+  "voix/bataille_victoire_v_1.mp3",
+  "voix/bataille_victoire_v_2.mp3"
+ ],
+ "bataille_victoire_z": [
+  "voix/bataille_victoire_z_0.mp3",
+  "voix/bataille_victoire_z_1.mp3",
+  "voix/bataille_victoire_z_2.mp3"
+ ],
+ "bataille_appel": [
+  "voix/bataille_appel_0.mp3",
+  "voix/bataille_appel_1.mp3",
+  "voix/bataille_appel_2.mp3",
+  "voix/bataille_appel_3.mp3"
+ ],
  "soir": [
   "voix/soir_0.mp3"
  ],

@@ -104,6 +104,57 @@ for k in range(16):
         if not suf:
             meta[f"perso_{k:02d}"] = dict(w=spr.width, h=spr.height, ax=200 - x0, ay=740 - y0)
 
+# ───────── zombies (mode bataille) : nos habitants, peau verte, bras tendus ─────────
+import cartoon as _c  # noqa: E402
+_peau = (_c.SKIN, _c.SKIN2)
+_c.SKIN, _c.SKIN2 = (140, 190, 120), (100, 150, 90)
+HAILLONS = [(90, 100, 110), (110, 80, 70), (70, 90, 80), (100, 100, 80), (80, 70, 100), (120, 110, 90), (60, 70, 70), (95, 85, 75)]
+for k in range(8):
+    look = dict(shirt=HAILLONS[k], hair=[(40, 40, 40), (90, 80, 60), (60, 60, 60)][k % 3], pants=(50, 50, 55),
+                long_hair=k % 4 == 1)
+    for bouche, suf in (("o", ""), ("sad", "_parle")):
+        big = Image.new("RGBA", (400 * SS, 760 * SS), (0, 0, 0, 0))
+        dz = ImageDraw.Draw(big)
+        character(dz, 200, 740, sc=0.82, mouth=bouche, arm=0.55, brows="colere", **look)
+        # bras gauche tendu aussi, façon zombie
+        dz.line([((200 - 74) * SS, (740 - 0.82 * 520) * SS), ((200 - 150) * SS, (740 - 0.82 * 470) * SS)],
+                fill=look["shirt"], width=int(40 * SS * 0.82))
+        dz.ellipse([(200 - 175) * SS, (740 - 0.82 * 495) * SS, (200 - 135) * SS, (740 - 0.82 * 445) * SS], fill=_c.SKIN)
+        spr = contour(big.resize((400, 760), Image.LANCZOS), 5)
+        x0, y0, x1, y1 = spr.getbbox()
+        spr = spr.crop((x0, y0, x1, y1))
+        spr.save(OUT / f"zombie_{k:02d}{suf}.png", optimize=True)
+        if not suf:
+            meta[f"zombie_{k:02d}"] = dict(w=spr.width, h=spr.height, ax=200 - x0, ay=740 - y0)
+_c.SKIN, _c.SKIN2 = _peau
+
+
+# ───────── crypte : le camp des zombies ─────────
+def crypte(d, cx=540):
+    pierre, sombre = (150, 150, 160), (90, 90, 105)
+    R(d, cx - 300, BASE - 430, cx + 300, BASE, pierre)
+    poly(d, [(cx - 340, BASE - 420), (cx, BASE - 620), (cx + 340, BASE - 420)], sombre)
+    for x in (cx - 260, cx + 200):
+        R(d, x, BASE - 400, x + 60, BASE, (130, 130, 142))
+    d.chord([(cx - 120) * SS, (BASE - 330) * SS, (cx + 120) * SS, (BASE - 90) * SS], 180, 360, fill=(30, 40, 30))
+    R(d, cx - 120, BASE - 210, cx + 120, BASE, (30, 40, 30))
+    for x in (cx - 80, cx + 30):
+        d.ellipse([x * SS, (BASE - 180) * SS, (x + 50) * SS, (BASE - 150) * SS], fill=(120, 255, 120))
+    R(d, cx - 22, BASE - 560, cx + 22, BASE - 470, (200, 200, 210))
+    R(d, cx - 55, BASE - 535, cx + 55, BASE - 505, (200, 200, 210))
+    for x, h in ((cx - 470, 170), (cx + 380, 200), (cx - 400, 120)):
+        d.rounded_rectangle([x * SS, (BASE - h) * SS, (x + 80) * SS, BASE * SS], radius=int(36 * SS), fill=(160, 160, 170))
+
+
+lay = Image.new("RGBA", (W * SS, H * SS), (0, 0, 0, 0))
+crypte(ImageDraw.Draw(lay))
+lay = contour(lay, 10).resize((W, H), Image.LANCZOS)
+x0, y0, x1, y1 = lay.getbbox()
+spr = lay.crop((x0, y0, x1, y1))
+spr = spr.resize((spr.width // 2, spr.height // 2), Image.LANCZOS)
+spr.save(OUT / "crypte.png", optimize=True)
+meta["crypte"] = dict(w=spr.width, h=spr.height, ax=(540 - x0) / 2, ay=(BASE - y0) / 2)
+
 # ───────── icônes des cadeaux du barème (dessinées dans notre style, 160x160) ─────────
 def icone(nom, dessin):
     T = 160 * 4

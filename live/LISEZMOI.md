@@ -25,6 +25,14 @@ Le village repart de zéro à chaque lancement (0 habitant, objectif 10 000) : i
 d'abonnés du compte. Les bâtiments des épisodes restent dans la rue comme décor. La page de pilotage a un bouton
 « Remettre le village à zéro ».
 
+## Mode « Villageois vs Zombies »
+Un deuxième jeu, à lancer depuis la page de pilotage (bouton « 🧟 Villageois vs Zombies ») :
+- commentaire **1** = rejoindre les villageois, **2** = les zombies (ton bonhomme entre sur le terrain) ;
+- cadeau = renforts dans ton équipe : 1 pièce 1 combattant, 5 → 3, 30 → un champion, 100 → 5 + un champion,
+  500 → un géant, 2000 → attaque spéciale ;
+- like = répare le camp de ton équipe ; abonnement = un combattant offert ;
+- manches de 4 minutes ; des combattants automatiques font vivre la bataille même avec peu de monde.
+
 ## Avec un ordinateur (LIVE Studio)
 1. Installer Node.js (nodejs.org, version LTS).
 2. Dans ce dossier `live/` : `npm install` (une seule fois).

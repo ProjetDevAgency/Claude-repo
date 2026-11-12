@@ -128,7 +128,8 @@ export function topBatisseurs(etat, n = 5) {
 const NOMS = ["Kuromi", "SKR", "al_bsc", "Louane_", "Mskoww_91", "Waillox", "rph.49", "T_0", "Maël", "Michael",
   "PKMOI", "lea.mtz", "yanis93", "Nours", "Zoé_lpb", "kev.inn", "Sarah_b", "Inès", "Hugo_grt", "Lina.k"];
 const PHRASES = ["c'est trop bien", "je veux une maison", "bonsoirrr", "ça va tout le monde", "trop styl", "weeee",
-  "jsuis le 70e ?", "il est où l'oie", "go 10 000", "bien la famille", "moi", "ma maison elle est où"];
+  "jsuis le 70e ?", "il est où l'oie", "go 10 000", "bien la famille", "moi", "ma maison elle est où",
+  "1", "2", "1", "2", "2", "1"];
 const CADEAUX = [["Rose", 1], ["Rose", 1], ["TikTok", 1], ["GG", 1], ["Rose x5", 5], ["Coeur", 5], ["Donut", 30],
   ["Casquette", 99], ["Licorne", 100], ["Chapeau", 199], ["Fusée", 500]];
 

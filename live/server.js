@@ -24,6 +24,7 @@ const PSEUDO = (process.argv.find((a) => a.startsWith("--tiktok=")) || "").split
 
 // ───── état : on repart de zéro à chaque lancement ─────
 let etat = etatInitial(CFG);
+let mode = (process.argv.find((a) => a.startsWith("--mode=")) || "").slice(7) || "village";   // ou "bataille"
 // bac à sable des tests : une copie jetable, effacée 30 s après le dernier test (ou au premier vrai événement)
 let bac = null, finBac = 0;
 
@@ -60,12 +61,18 @@ function diffuser(msg) {
 let vueEnRetard = false;
 function evenement(ev, test = false) {
   if (!test && bac) finirBac();
+  if (mode === "bataille") {
+    // la bataille tourne dans la page : on transmet l'événement tel quel (les abonnés comptent quand même au village)
+    if (ev.type === "follow") appliquer(test ? (bac || etat) : etat, ev);
+    diffuser({ t: "ev", ev });
+    return;
+  }
   const cible = test ? bac : etat;
   const annonces = appliquer(cible, ev);
   const important = ev.type === "follow" || ev.type === "gift";
-  if (important) diffuser({ t: "ev", annonces, vue: vue(cible) });
+  if (important) diffuser({ t: "ev", annonces, vue: vue(cible), ev });
   else {
-    if (annonces.length) diffuser({ t: "ev", annonces });
+    if (annonces.length) diffuser({ t: "ev", annonces, ev });
     if (ev.type === "like") vueEnRetard = true;
   }
 }
@@ -78,12 +85,12 @@ setInterval(() => {
 function finirBac() {
   bac = null;
   // la page efface tout ce qui vient du test (bonshommes compris)
-  diffuser({ t: "etat", vue: vue(etat), cfg: CFG, statut, zero: true, test: false });
+  diffuser({ t: "etat", vue: vue(etat), cfg: CFG, statut, zero: true, test: false, mode });
 }
 setInterval(() => { if (bac && Date.now() > finBac) finirBac(); }, 1000);
 
 wss.on("connection", (ws) => {
-  ws.send(JSON.stringify({ t: "etat", vue: vue(bac || etat), cfg: CFG, statut, test: !!bac }));
+  ws.send(JSON.stringify({ t: "etat", vue: vue(bac || etat), cfg: CFG, statut, test: !!bac, mode }));
   ws.on("message", (raw) => {
     let m;
     try { m = JSON.parse(raw); } catch { return; }
@@ -92,10 +99,14 @@ wss.on("connection", (ws) => {
       finBac = Date.now() + 30000;
       evenement(m.ev, true);
       diffuser({ t: "test", actif: true });
+    } else if (m.cmd === "mode" && (m.mode === "village" || m.mode === "bataille")) {
+      mode = m.mode;
+      diffuser({ t: "etat", vue: vue(bac || etat), cfg: CFG, statut, mode });
+      console.log("Mode :", mode);
     } else if (m.cmd === "zero") {
       etat = etatInitial(CFG);
       bac = null;
-      diffuser({ t: "etat", vue: vue(etat), cfg: CFG, statut, zero: true });
+      diffuser({ t: "etat", vue: vue(etat), cfg: CFG, statut, zero: true, mode });
       console.log("Village remis à zéro.");
     }
   });
