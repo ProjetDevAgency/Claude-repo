@@ -205,12 +205,11 @@ def compteur(img, t):
     d.line([(240, 232), (240, 320)], fill=(80, 80, 90), width=3)
     d.text((54, 360), f"{caisse(t):,} €".replace(",", " "), font=FA(58), fill=GREEN, anchor="lm")
     d.text((260, 292), "DU VILLAGE", font=FA(26), fill=(150, 150, 160), anchor="lm")
-    # le dernier mouvement, à droite du compteur, 1,8 s
-    for cle, dt, montant, raison in MOUVEMENTS:
-        if cle not in T:
-            continue
-        age = t - T[cle] - dt
-        if 0 <= age < 1.8:
+    # le dernier mouvement seulement (jamais deux bulles l'une sur l'autre), à droite du compteur, 1,8 s
+    actifs = [(T[c] + dt, m, r) for c, dt, m, r in MOUVEMENTS if c in T and 0 <= t - T[c] - dt < 1.8]
+    for debut, montant, raison in sorted(actifs)[-1:]:
+        age = t - debut
+        if True:
             k = ease(age / 0.2) * ease((1.8 - age) / 0.3)
             txt = f"{'+' if montant > 0 else '−'}{abs(montant):,} €".replace(",", " ")
             col = GREEN if montant > 0 else (230, 60, 60)
