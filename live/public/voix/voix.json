@@ -133,16 +133,34 @@
   "voix/quiz_vite_2.mp3"
  ],
  "quiz_bonne_a": [
-  "voix/quiz_bonne_a_0.mp3"
+  "voix/quiz_bonne_a_0.mp3",
+  "voix/quiz_bonne_a_1.mp3",
+  "voix/quiz_bonne_a_2.mp3"
  ],
  "quiz_bonne_b": [
-  "voix/quiz_bonne_b_0.mp3"
+  "voix/quiz_bonne_b_0.mp3",
+  "voix/quiz_bonne_b_1.mp3",
+  "voix/quiz_bonne_b_2.mp3"
  ],
  "quiz_bonne_c": [
-  "voix/quiz_bonne_c_0.mp3"
+  "voix/quiz_bonne_c_0.mp3",
+  "voix/quiz_bonne_c_1.mp3",
+  "voix/quiz_bonne_c_2.mp3"
  ],
  "quiz_bonne_d": [
-  "voix/quiz_bonne_d_0.mp3"
+  "voix/quiz_bonne_d_0.mp3",
+  "voix/quiz_bonne_d_1.mp3",
+  "voix/quiz_bonne_d_2.mp3"
+ ],
+ "quiz_premiere": [
+  "voix/quiz_premiere_0.mp3",
+  "voix/quiz_premiere_1.mp3",
+  "voix/quiz_premiere_2.mp3"
+ ],
+ "quiz_suivante": [
+  "voix/quiz_suivante_0.mp3",
+  "voix/quiz_suivante_1.mp3",
+  "voix/quiz_suivante_2.mp3"
  ],
  "quiz_personne": [
   "voix/quiz_personne_0.mp3",

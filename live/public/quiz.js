@@ -13,7 +13,7 @@ export const BONUS = [
 ];
 const COUL = ["#ff9f43", "#b48cff", "#2fd47d", "#ff5c8a"];
 const OR = "#ffd76a", INK = "#16161c", BLANC = "#fafafa";
-const DUREE = { intro: 10, palier: 7, question: 20, reponse: 6, bilan: 6, classement: 8, fin: 15 };
+const DUREE = { intro: 10, palier: 7, question: 20, reponse: 7, bilan: 6, classement: 8, fin: 15 };
 const ABONNE = 1.2;
 
 // « a », « B », « réponse c », « D ! » → index 0..3 ; sinon null
@@ -99,7 +99,9 @@ export function creerQuiz(o) {
     resultat = null;
     viteDit = false; dernierTic = -1;
     aller("question", now);
-    voix.dire(`q_${q.id}`, now, { prio: true, attente: 3 });
+    // « Question suivante ! » puis la question, lue à chaque fois (rien ne passe devant)
+    voix.dire(num ? "quiz_suivante" : "quiz_premiere", now, { prio: true, coupe: true });
+    voix.dire(`q_${q.id}`, now, { prio: true, attente: 8, devant: true });
     if (moitieEnAttente) { moitie(moitieEnAttente, now, true); moitieEnAttente = null; }
     if (demo) fauxRepondants(now, brute.d);
   }
@@ -123,12 +125,16 @@ export function creerQuiz(o) {
         j.erreur = true; j.histo.push(0);
       }
     }
-    resultat = { bons, total: reponses.size };
+    // les gagnants, du plus rapide au plus lent (affichés : « BRAVO À … »)
+    const gagnants = [...reponses.entries()].filter(([, r]) => r.i === q.bonne).sort((a, b) => a[1].t - b[1].t)
+      .map(([id, r]) => ({ j: joueurs.get(id), t: r.t })).filter((g) => g.j);
+    resultat = { bons, total: reponses.size, gagnants };
+    if (bons) confettis(now);
     aller("reponse", now);
-    if (!reponses.size) voix.dire(`quiz_bonne_${"abcd"[q.bonne]}`, now, { prio: true, attente: 3 });
-    else if (!bons) voix.dire("quiz_personne", now, { prio: true, attente: 3 });
-    else if (bons === reponses.size && bons >= 5) voix.dire("quiz_tous", now, { prio: true, attente: 3 });
-    else voix.dire(`quiz_bonne_${"abcd"[q.bonne]}`, now, { prio: true, attente: 3 });
+    if (!reponses.size) voix.dire(`quiz_bonne_${"abcd"[q.bonne]}`, now, { prio: true, coupe: true });
+    else if (!bons) voix.dire("quiz_personne", now, { prio: true, coupe: true });
+    else if (bons === reponses.size && bons >= 5) voix.dire("quiz_tous", now, { prio: true, coupe: true });
+    else voix.dire(`quiz_bonne_${"abcd"[q.bonne]}`, now, { prio: true, coupe: true });
     if (bons) SONS.bonne(); else SONS.buzz();
   }
 
@@ -497,6 +503,46 @@ export function creerQuiz(o) {
     texte(`Nouvelle partie dans ${Math.max(0, r)} s`, W / 2, y + 810, { taille: 30, couleur: "#7fd3ff" });
   }
 
+  // pendant la réponse : « BRAVO À » + les pseudos de ceux qui ont trouvé (le plus rapide en premier)
+  const pluie = [];
+  function confettis(now) {
+    for (let k = 0; k < 90; k++) {
+      pluie.push({ x: W / 2 + (Math.random() - 0.5) * 500, y: 560, vx: (Math.random() - 0.5) * 1000, vy: -300 - Math.random() * 700,
+        r: Math.random() * 6, c: [OR, "#2fd47d", "#7fd3ff", "#ff5c8a", BLANC][k % 5], fin: now + 2 + Math.random() });
+    }
+  }
+  function dessinerConfettis(now, dt) {
+    for (let k = pluie.length - 1; k >= 0; k--) {
+      const p = pluie[k];
+      p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 900 * dt; p.r += dt * 8;
+      if (now > p.fin || p.y > 1920) { pluie.splice(k, 1); continue; }
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.fillRect(-8, -4, 16, 8); ctx.restore();
+    }
+  }
+  function bravo(now) {
+    if (phase !== "reponse" || !resultat) return;
+    const t = now - t0, g = resultat.gagnants;
+    const k = back((t - 0.3) / 0.35);
+    if (k <= 0.01) return;
+    ctx.save(); ctx.translate(W / 2, 1434); ctx.scale(k, k);
+    rrect(-500, -128, 1000, 256, 30, "#0a0a12", g.length ? "#2fd47d" : "#ff5c5c", 8);
+    if (!g.length) {
+      texte(resultat.total ? "PERSONNE N'A TROUVÉ !" : "PERSONNE N'A RÉPONDU…", 0, -20, { taille: 52, police: "Anton", couleur: "#ff7070" });
+      texte("On se rattrape à la question suivante !", 0, 46, { taille: 28, couleur: "#cfd2dc" });
+    } else {
+      texte(`🎉 BRAVO AUX ${g.length} GAGNANT${g.length > 1 ? "S" : ""} !`, 0, -90, { taille: 40, police: "Anton", couleur: "#7dffb0", max: 940 });
+      const premier = g[0];
+      rond(premier.j, -400, -14, 30, OR);
+      texte(`⚡ LE PLUS RAPIDE : ${premier.j.nom} (${premier.t.toFixed(1).replace(".", ",")} s)`, -356, -14, { taille: 28, align: "left", couleur: OR, max: 830 });
+      const noms = g.slice(1, 12).map((x) => x.j.nom).join(" · ");
+      if (noms) {
+        const ls = lignes(noms + (g.length > 12 ? ` · +${g.length - 12}` : ""), 900, 24).slice(0, 2);
+        ls.forEach((l, n) => texte(l, 0, 40 + n * 36, { taille: 24, couleur: BLANC, max: 920 }));
+      }
+    }
+    ctx.restore();
+  }
+
   function dessinerAlerte(now) {
     if (!alerte && alertes.length) {
       alerte = { ...alertes.shift(), t0: now };
@@ -524,8 +570,8 @@ export function creerQuiz(o) {
 
   return {
     evenement,
-    calme: () => phase === "reponse" || phase === "classement" || phase === "bilan",
-    dessiner(now) {
+    calme: () => phase === "classement" || phase === "bilan",
+    dessiner(now, dt = 0.016) {
       simuler(now);
       if (!banque || !phase) return;
       if (phase === "intro") ecranIntro(now);
@@ -535,6 +581,8 @@ export function creerQuiz(o) {
       else if (phase === "fin") ecranFin(now);
       else { bandeau(now); cartes(now); boiteQuestion(now); }
       basDePage(now);
+      bravo(now);
+      dessinerConfettis(now, dt);
       dessinerAlerte(now);
     },
   };

@@ -235,21 +235,27 @@ const SONS = {
 const PRIORITAIRES = new Set(["arrivee", "arbre", "cabane", "maison", "grande_maison", "immeuble", "monument",
   "bataille_debut", "bataille_abonne", "bataille_regle", "bataille_victoire_v", "bataille_victoire_z", "bataille_geant", "bataille_speciale"]);
 const VOIX_DE = { arbre: "arbre", cabane: "cabane", maison: "maison", villa: "grande_maison", immeuble: "immeuble", chateau: "monument" };
+const ABONNES = new Set(["arrivee", "bataille_abonne", "quiz_abonne"]);
 const voix = {
   liste: {}, finLe: 0, dernier: {}, dernierTout: 0, file: [], derniers: {},
   // abonnés et cadeaux : jamais de pause, chacun a sa phrase (file d'attente) ; le reste : des pauses
   REPOS: { like: 45, partage: 15, visiteur: 60, discute: 0, appel: 0, soir: 0, matin: 0,
     bataille_renforts: 6, bataille_danger: 30, bataille_appel: 0, bataille_regle: 0 },
   // opt.prio : passe avant le reste ; opt.attente : combien de secondes la phrase peut attendre son tour
+  // opt.coupe : coupe la phrase en cours et parle tout de suite ; opt.devant : passe en tête de la file d'attente
   dire(cat, now, opt = {}) {
     const fichiers = this.liste[cat];
     if (!fichiers || !fichiers.length) return;
+    // on ne coupe jamais l'annonce d'un abonné : la phrase passe juste en tête de file
+    if (opt.coupe && this.encours && !ABONNES.has(this.encoursCat)) { this.encours.pause(); this.encours = null; this.finLe = 0; }
+    else if (opt.coupe) opt = { ...opt, devant: true };
     const prio = opt.prio ?? PRIORITAIRES.has(cat);
     if (!prio && now - (this.dernier[cat] ?? -1e9) < (this.REPOS[cat] ?? 10)) return;
     if (now < this.finLe + 0.6 || (!prio && this.file.length)) {           // quelqu'un parle déjà
       if (prio) {
-        const abonne = cat === "arrivee" || cat === "bataille_abonne";
-        this.file.push({ cat, jusqua: now + (abonne ? 1e9 : opt.attente ?? 25), abonne, opt });   // un abonné n'est jamais oublié
+        const abonne = ABONNES.has(cat);
+        const x = { cat, jusqua: now + (abonne ? 1e9 : opt.attente ?? 25), abonne, opt };   // un abonné n'est jamais oublié
+        if (opt.devant) this.file.unshift(x); else this.file.push(x);
         while (this.file.filter((x) => !x.abonne).length > 6) {             // gros rush : on lâche les autres phrases
           this.file.splice(this.file.findIndex((x) => !x.abonne), 1);
         }
@@ -262,6 +268,7 @@ const voix = {
     this.derniers[cat] = f;
     const a = new Audio(f);
     a.volume = 1;
+    this.encours = a; this.encoursCat = cat;
     this.finLe = now + 6;
     a.onloadedmetadata = () => { this.finLe = performance.now() / 1000 + a.duration; };
     a.play().catch(() => { this.finLe = 0; });
