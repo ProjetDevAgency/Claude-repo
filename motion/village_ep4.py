@@ -244,17 +244,20 @@ def torche(img, x, y, ang, lt):
     p1 = (x + L * math.cos(a - 0.28), y + L * math.sin(a - 0.28))
     p2 = (x + L * math.cos(a + 0.28), y + L * math.sin(a + 0.28))
     d.polygon([(x, y), p1, p2], fill=(255, 240, 180, 95))
-    lay = lay.filter(ImageFilter.GaussianBlur(18))
+    lay = lay.resize((W // 4, H // 4)).filter(ImageFilter.GaussianBlur(5)).resize((W, H), Image.BILINEAR)
     img.paste(lay, (0, 0), lay)
 
 
+_vig = {}
+
+
 def vignette(img, force=0.75):
-    m = Image.new("L", img.size, 0)
-    d = ImageDraw.Draw(m)
-    d.ellipse([-200, 100, W + 200, H - 100], fill=255)
-    m = m.filter(ImageFilter.GaussianBlur(160))
+    if "m" not in _vig:                       # le masque ne change pas : calculé une seule fois
+        m = Image.new("L", (W // 4, H // 4), 0)
+        ImageDraw.Draw(m).ellipse([-50, 25, W // 4 + 50, H // 4 - 25], fill=255)
+        _vig["m"] = m.filter(ImageFilter.GaussianBlur(40)).resize((W, H), Image.BILINEAR)
     noir = Image.new("RGB", img.size, (0, 0, 0))
-    return Image.composite(img, Image.blend(img, noir, force), m)
+    return Image.composite(img, Image.blend(img, noir, force), _vig["m"])
 
 
 def oie_zombie(cx, cy, s, lt, yeux=1.0):
@@ -289,7 +292,7 @@ def oie_zombie(cx, cy, s, lt, yeux=1.0):
     gx, gy = cx + hx * s, cy + hy * s
     r = 120 * s * (1 + 0.15 * math.sin(lt * 7)) * yeux
     hd.ellipse([gx - r, gy - r, gx + r, gy + r], fill=(80, 255, 120, 110))
-    halo = halo.filter(ImageFilter.GaussianBlur(40))
+    halo = halo.resize((W // 4, H // 4)).filter(ImageFilter.GaussianBlur(10)).resize((W, H), Image.BILINEAR)
     halo.alpha_composite(lay)
     return halo
 
