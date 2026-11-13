@@ -179,24 +179,48 @@ def vue4(z, center):
 
 # ───────────── compteurs permanents (sous la barre TikTok) ─────────────
 
+# Chaque mouvement de la caisse : (repère, décalage s, montant, raison). Tout est affiché à l'écran, rien de caché.
+MOUVEMENTS = [("s_camera", 0.3, -500, "LES CAMÉRAS"), ("d_mosk", 0.0, 5000, "@MSKOWW_91"),
+              ("d_koko", 0.0, 10000, "@KOKOLJII"), ("d_clovis", 0.0, 2000, "@CLOVIS"), ("d_t0", 0.0, 100000, "@T_0"),
+              ("b_pont", 0.3, -2000, "LE PONT"),
+              ("b_caserne", 0.3, -5000, "LA CASERNE"), ("s_eco", 1.6, 5000, "REVENUS DU JOUR")]
+DEPART = 10615          # fin du jour 3 → arrivée : 125 115 €
+
+
 def caisse(t):
-    v = 10615
-    for cle, montant in (("d_mosk", 5000), ("d_koko", 10000), ("d_clovis", 2000), ("d_t0", 4300)):
-        if cle in T and t >= T[cle]:
-            v += int(montant * ease((t - T[cle]) / 0.5))
-    for cle, montant in (("s_camera", 500), ("b_pont", 2000), ("b_caserne", 5000)):
-        if cle in T and t >= T[cle] + 0.3:
-            v -= int(montant * ease((t - T[cle] - 0.3) / 0.4))
-    return v
+    v = DEPART
+    for cle, dt, montant, _ in MOUVEMENTS:
+        if cle in T and t >= T[cle] + dt:
+            v += montant * ease((t - T[cle] - dt) / 0.5)
+    return int(round(v))
 
 
 def compteur(img, t):
     d = ImageDraw.Draw(img)
-    d.rounded_rectangle([30, 215, 410, 380], radius=20, fill=(20, 20, 26), outline=WHITE, width=3)
-    d.text((52, 242), "HABITANTS", font=FA(26), fill=(200, 200, 210), anchor="lm")
-    d.text((52, 290), "96", font=FA(64), fill=YEL, anchor="lm")
-    d.text((140, 296), "/ 100", font=FA(32), fill=(150, 150, 160), anchor="lm")
-    d.text((52, 352), f"CAISSE {caisse(t):,} €".replace(",", " "), font=FA(32), fill=GREEN, anchor="lm")
+    d.rounded_rectangle([30, 215, 470, 398], radius=20, fill=(20, 20, 26), outline=WHITE, width=3)
+    d.text((54, 245), "HABITANTS", font=FA(26), fill=(200, 200, 210), anchor="lm")
+    d.text((54, 292), "96", font=FA(60), fill=YEL, anchor="lm")
+    d.text((140, 298), "/ 100", font=FA(32), fill=(150, 150, 160), anchor="lm")
+    d.text((260, 245), "CAISSE", font=FA(26), fill=(200, 200, 210), anchor="lm")
+    d.line([(240, 232), (240, 320)], fill=(80, 80, 90), width=3)
+    d.text((54, 360), f"{caisse(t):,} €".replace(",", " "), font=FA(58), fill=GREEN, anchor="lm")
+    d.text((260, 292), "DU VILLAGE", font=FA(26), fill=(150, 150, 160), anchor="lm")
+    # le dernier mouvement, à droite du compteur, 1,8 s
+    for cle, dt, montant, raison in MOUVEMENTS:
+        if cle not in T:
+            continue
+        age = t - T[cle] - dt
+        if 0 <= age < 1.8:
+            k = ease(age / 0.2) * ease((1.8 - age) / 0.3)
+            txt = f"{'+' if montant > 0 else '−'}{abs(montant):,} €".replace(",", " ")
+            col = GREEN if montant > 0 else (230, 60, 60)
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+            ld = ImageDraw.Draw(lay)
+            ld.rounded_rectangle([490, 290, 1050, 398], radius=22, fill=(20, 20, 26, int(235 * k)), outline=col + (int(255 * k),),
+                                 width=4)
+            ld.text((515, 324), txt, font=FA(46), fill=col + (int(255 * k),), anchor="lm")
+            ld.text((515, 372), raison, font=FA(28), fill=(220, 220, 230, int(255 * k)), anchor="lm")
+            img.paste(lay, (0, 0), lay)
 
 
 def avec_caisse(fn):
