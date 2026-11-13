@@ -118,6 +118,79 @@
   "voix/bataille_abonne_1.mp3",
   "voix/bataille_abonne_2.mp3"
  ],
+ "quiz_partie": [
+  "voix/quiz_partie_0.mp3",
+  "voix/quiz_partie_1.mp3"
+ ],
+ "quiz_regle": [
+  "voix/quiz_regle_0.mp3",
+  "voix/quiz_regle_1.mp3",
+  "voix/quiz_regle_2.mp3"
+ ],
+ "quiz_vite": [
+  "voix/quiz_vite_0.mp3",
+  "voix/quiz_vite_1.mp3",
+  "voix/quiz_vite_2.mp3"
+ ],
+ "quiz_bonne_a": [
+  "voix/quiz_bonne_a_0.mp3"
+ ],
+ "quiz_bonne_b": [
+  "voix/quiz_bonne_b_0.mp3"
+ ],
+ "quiz_bonne_c": [
+  "voix/quiz_bonne_c_0.mp3"
+ ],
+ "quiz_bonne_d": [
+  "voix/quiz_bonne_d_0.mp3"
+ ],
+ "quiz_personne": [
+  "voix/quiz_personne_0.mp3",
+  "voix/quiz_personne_1.mp3"
+ ],
+ "quiz_tous": [
+  "voix/quiz_tous_0.mp3",
+  "voix/quiz_tous_1.mp3"
+ ],
+ "quiz_palier": [
+  "voix/quiz_palier_0.mp3",
+  "voix/quiz_palier_1.mp3",
+  "voix/quiz_palier_2.mp3"
+ ],
+ "quiz_nouveau": [
+  "voix/quiz_nouveau_0.mp3",
+  "voix/quiz_nouveau_1.mp3"
+ ],
+ "quiz_million": [
+  "voix/quiz_million_0.mp3",
+  "voix/quiz_million_1.mp3"
+ ],
+ "quiz_fin": [
+  "voix/quiz_fin_0.mp3",
+  "voix/quiz_fin_1.mp3"
+ ],
+ "quiz_abonne": [
+  "voix/quiz_abonne_0.mp3",
+  "voix/quiz_abonne_1.mp3",
+  "voix/quiz_abonne_2.mp3"
+ ],
+ "quiz_joker": [
+  "voix/quiz_joker_0.mp3",
+  "voix/quiz_joker_1.mp3"
+ ],
+ "quiz_x2": [
+  "voix/quiz_x2_0.mp3",
+  "voix/quiz_x2_1.mp3"
+ ],
+ "quiz_moitie": [
+  "voix/quiz_moitie_0.mp3",
+  "voix/quiz_moitie_1.mp3"
+ ],
+ "quiz_appel": [
+  "voix/quiz_appel_0.mp3",
+  "voix/quiz_appel_1.mp3",
+  "voix/quiz_appel_2.mp3"
+ ],
  "soir": [
   "voix/soir_0.mp3"
  ],
@@ -129,5 +202,509 @@
   "voix/appel_1.mp3",
   "voix/appel_2.mp3",
   "voix/appel_3.mp3"
+ ],
+ "theme_culture": [
+  "voix/theme_culture_0.mp3"
+ ],
+ "theme_argent": [
+  "voix/theme_argent_0.mp3"
+ ],
+ "theme_geo": [
+  "voix/theme_geo_0.mp3"
+ ],
+ "theme_histoire": [
+  "voix/theme_histoire_0.mp3"
+ ],
+ "theme_cine": [
+  "voix/theme_cine_0.mp3"
+ ],
+ "theme_sport": [
+  "voix/theme_sport_0.mp3"
+ ],
+ "theme_sciences": [
+  "voix/theme_sciences_0.mp3"
+ ],
+ "theme_animaux": [
+  "voix/theme_animaux_0.mp3"
+ ],
+ "theme_cuisine": [
+  "voix/theme_cuisine_0.mp3"
+ ],
+ "theme_musique": [
+  "voix/theme_musique_0.mp3"
+ ],
+ "theme_expressions": [
+  "voix/theme_expressions_0.mp3"
+ ],
+ "theme_anglais": [
+  "voix/theme_anglais_0.mp3"
+ ],
+ "q_cul01": [
+  "voix/q_cul01_0.mp3"
+ ],
+ "q_cul02": [
+  "voix/q_cul02_0.mp3"
+ ],
+ "q_cul03": [
+  "voix/q_cul03_0.mp3"
+ ],
+ "q_cul04": [
+  "voix/q_cul04_0.mp3"
+ ],
+ "q_cul05": [
+  "voix/q_cul05_0.mp3"
+ ],
+ "q_cul06": [
+  "voix/q_cul06_0.mp3"
+ ],
+ "q_cul07": [
+  "voix/q_cul07_0.mp3"
+ ],
+ "q_cul08": [
+  "voix/q_cul08_0.mp3"
+ ],
+ "q_cul09": [
+  "voix/q_cul09_0.mp3"
+ ],
+ "q_cul10": [
+  "voix/q_cul10_0.mp3"
+ ],
+ "q_cul11": [
+  "voix/q_cul11_0.mp3"
+ ],
+ "q_cul12": [
+  "voix/q_cul12_0.mp3"
+ ],
+ "q_cul13": [
+  "voix/q_cul13_0.mp3"
+ ],
+ "q_arg01": [
+  "voix/q_arg01_0.mp3"
+ ],
+ "q_arg02": [
+  "voix/q_arg02_0.mp3"
+ ],
+ "q_arg03": [
+  "voix/q_arg03_0.mp3"
+ ],
+ "q_arg04": [
+  "voix/q_arg04_0.mp3"
+ ],
+ "q_arg05": [
+  "voix/q_arg05_0.mp3"
+ ],
+ "q_arg06": [
+  "voix/q_arg06_0.mp3"
+ ],
+ "q_arg07": [
+  "voix/q_arg07_0.mp3"
+ ],
+ "q_arg08": [
+  "voix/q_arg08_0.mp3"
+ ],
+ "q_arg09": [
+  "voix/q_arg09_0.mp3"
+ ],
+ "q_arg10": [
+  "voix/q_arg10_0.mp3"
+ ],
+ "q_arg11": [
+  "voix/q_arg11_0.mp3"
+ ],
+ "q_arg12": [
+  "voix/q_arg12_0.mp3"
+ ],
+ "q_arg13": [
+  "voix/q_arg13_0.mp3"
+ ],
+ "q_geo01": [
+  "voix/q_geo01_0.mp3"
+ ],
+ "q_geo02": [
+  "voix/q_geo02_0.mp3"
+ ],
+ "q_geo03": [
+  "voix/q_geo03_0.mp3"
+ ],
+ "q_geo04": [
+  "voix/q_geo04_0.mp3"
+ ],
+ "q_geo05": [
+  "voix/q_geo05_0.mp3"
+ ],
+ "q_geo06": [
+  "voix/q_geo06_0.mp3"
+ ],
+ "q_geo07": [
+  "voix/q_geo07_0.mp3"
+ ],
+ "q_geo08": [
+  "voix/q_geo08_0.mp3"
+ ],
+ "q_geo09": [
+  "voix/q_geo09_0.mp3"
+ ],
+ "q_geo10": [
+  "voix/q_geo10_0.mp3"
+ ],
+ "q_geo11": [
+  "voix/q_geo11_0.mp3"
+ ],
+ "q_geo12": [
+  "voix/q_geo12_0.mp3"
+ ],
+ "q_geo13": [
+  "voix/q_geo13_0.mp3"
+ ],
+ "q_his01": [
+  "voix/q_his01_0.mp3"
+ ],
+ "q_his02": [
+  "voix/q_his02_0.mp3"
+ ],
+ "q_his03": [
+  "voix/q_his03_0.mp3"
+ ],
+ "q_his04": [
+  "voix/q_his04_0.mp3"
+ ],
+ "q_his05": [
+  "voix/q_his05_0.mp3"
+ ],
+ "q_his06": [
+  "voix/q_his06_0.mp3"
+ ],
+ "q_his07": [
+  "voix/q_his07_0.mp3"
+ ],
+ "q_his08": [
+  "voix/q_his08_0.mp3"
+ ],
+ "q_his09": [
+  "voix/q_his09_0.mp3"
+ ],
+ "q_his10": [
+  "voix/q_his10_0.mp3"
+ ],
+ "q_his11": [
+  "voix/q_his11_0.mp3"
+ ],
+ "q_his12": [
+  "voix/q_his12_0.mp3"
+ ],
+ "q_his13": [
+  "voix/q_his13_0.mp3"
+ ],
+ "q_cin01": [
+  "voix/q_cin01_0.mp3"
+ ],
+ "q_cin02": [
+  "voix/q_cin02_0.mp3"
+ ],
+ "q_cin03": [
+  "voix/q_cin03_0.mp3"
+ ],
+ "q_cin04": [
+  "voix/q_cin04_0.mp3"
+ ],
+ "q_cin05": [
+  "voix/q_cin05_0.mp3"
+ ],
+ "q_cin06": [
+  "voix/q_cin06_0.mp3"
+ ],
+ "q_cin07": [
+  "voix/q_cin07_0.mp3"
+ ],
+ "q_cin08": [
+  "voix/q_cin08_0.mp3"
+ ],
+ "q_cin09": [
+  "voix/q_cin09_0.mp3"
+ ],
+ "q_cin10": [
+  "voix/q_cin10_0.mp3"
+ ],
+ "q_cin11": [
+  "voix/q_cin11_0.mp3"
+ ],
+ "q_cin12": [
+  "voix/q_cin12_0.mp3"
+ ],
+ "q_cin13": [
+  "voix/q_cin13_0.mp3"
+ ],
+ "q_spo01": [
+  "voix/q_spo01_0.mp3"
+ ],
+ "q_spo02": [
+  "voix/q_spo02_0.mp3"
+ ],
+ "q_spo03": [
+  "voix/q_spo03_0.mp3"
+ ],
+ "q_spo04": [
+  "voix/q_spo04_0.mp3"
+ ],
+ "q_spo05": [
+  "voix/q_spo05_0.mp3"
+ ],
+ "q_spo06": [
+  "voix/q_spo06_0.mp3"
+ ],
+ "q_spo07": [
+  "voix/q_spo07_0.mp3"
+ ],
+ "q_spo08": [
+  "voix/q_spo08_0.mp3"
+ ],
+ "q_spo09": [
+  "voix/q_spo09_0.mp3"
+ ],
+ "q_spo10": [
+  "voix/q_spo10_0.mp3"
+ ],
+ "q_spo11": [
+  "voix/q_spo11_0.mp3"
+ ],
+ "q_spo12": [
+  "voix/q_spo12_0.mp3"
+ ],
+ "q_spo13": [
+  "voix/q_spo13_0.mp3"
+ ],
+ "q_sci01": [
+  "voix/q_sci01_0.mp3"
+ ],
+ "q_sci02": [
+  "voix/q_sci02_0.mp3"
+ ],
+ "q_sci03": [
+  "voix/q_sci03_0.mp3"
+ ],
+ "q_sci04": [
+  "voix/q_sci04_0.mp3"
+ ],
+ "q_sci05": [
+  "voix/q_sci05_0.mp3"
+ ],
+ "q_sci06": [
+  "voix/q_sci06_0.mp3"
+ ],
+ "q_sci07": [
+  "voix/q_sci07_0.mp3"
+ ],
+ "q_sci08": [
+  "voix/q_sci08_0.mp3"
+ ],
+ "q_sci09": [
+  "voix/q_sci09_0.mp3"
+ ],
+ "q_sci10": [
+  "voix/q_sci10_0.mp3"
+ ],
+ "q_sci11": [
+  "voix/q_sci11_0.mp3"
+ ],
+ "q_sci12": [
+  "voix/q_sci12_0.mp3"
+ ],
+ "q_sci13": [
+  "voix/q_sci13_0.mp3"
+ ],
+ "q_ani01": [
+  "voix/q_ani01_0.mp3"
+ ],
+ "q_ani02": [
+  "voix/q_ani02_0.mp3"
+ ],
+ "q_ani03": [
+  "voix/q_ani03_0.mp3"
+ ],
+ "q_ani04": [
+  "voix/q_ani04_0.mp3"
+ ],
+ "q_ani05": [
+  "voix/q_ani05_0.mp3"
+ ],
+ "q_ani06": [
+  "voix/q_ani06_0.mp3"
+ ],
+ "q_ani07": [
+  "voix/q_ani07_0.mp3"
+ ],
+ "q_ani08": [
+  "voix/q_ani08_0.mp3"
+ ],
+ "q_ani09": [
+  "voix/q_ani09_0.mp3"
+ ],
+ "q_ani10": [
+  "voix/q_ani10_0.mp3"
+ ],
+ "q_ani11": [
+  "voix/q_ani11_0.mp3"
+ ],
+ "q_ani12": [
+  "voix/q_ani12_0.mp3"
+ ],
+ "q_ani13": [
+  "voix/q_ani13_0.mp3"
+ ],
+ "q_cui01": [
+  "voix/q_cui01_0.mp3"
+ ],
+ "q_cui02": [
+  "voix/q_cui02_0.mp3"
+ ],
+ "q_cui03": [
+  "voix/q_cui03_0.mp3"
+ ],
+ "q_cui04": [
+  "voix/q_cui04_0.mp3"
+ ],
+ "q_cui05": [
+  "voix/q_cui05_0.mp3"
+ ],
+ "q_cui06": [
+  "voix/q_cui06_0.mp3"
+ ],
+ "q_cui07": [
+  "voix/q_cui07_0.mp3"
+ ],
+ "q_cui08": [
+  "voix/q_cui08_0.mp3"
+ ],
+ "q_cui09": [
+  "voix/q_cui09_0.mp3"
+ ],
+ "q_cui10": [
+  "voix/q_cui10_0.mp3"
+ ],
+ "q_cui11": [
+  "voix/q_cui11_0.mp3"
+ ],
+ "q_cui12": [
+  "voix/q_cui12_0.mp3"
+ ],
+ "q_cui13": [
+  "voix/q_cui13_0.mp3"
+ ],
+ "q_mus01": [
+  "voix/q_mus01_0.mp3"
+ ],
+ "q_mus02": [
+  "voix/q_mus02_0.mp3"
+ ],
+ "q_mus03": [
+  "voix/q_mus03_0.mp3"
+ ],
+ "q_mus04": [
+  "voix/q_mus04_0.mp3"
+ ],
+ "q_mus05": [
+  "voix/q_mus05_0.mp3"
+ ],
+ "q_mus06": [
+  "voix/q_mus06_0.mp3"
+ ],
+ "q_mus07": [
+  "voix/q_mus07_0.mp3"
+ ],
+ "q_mus08": [
+  "voix/q_mus08_0.mp3"
+ ],
+ "q_mus09": [
+  "voix/q_mus09_0.mp3"
+ ],
+ "q_mus10": [
+  "voix/q_mus10_0.mp3"
+ ],
+ "q_mus11": [
+  "voix/q_mus11_0.mp3"
+ ],
+ "q_mus12": [
+  "voix/q_mus12_0.mp3"
+ ],
+ "q_mus13": [
+  "voix/q_mus13_0.mp3"
+ ],
+ "q_exp01": [
+  "voix/q_exp01_0.mp3"
+ ],
+ "q_exp02": [
+  "voix/q_exp02_0.mp3"
+ ],
+ "q_exp03": [
+  "voix/q_exp03_0.mp3"
+ ],
+ "q_exp04": [
+  "voix/q_exp04_0.mp3"
+ ],
+ "q_exp05": [
+  "voix/q_exp05_0.mp3"
+ ],
+ "q_exp06": [
+  "voix/q_exp06_0.mp3"
+ ],
+ "q_exp07": [
+  "voix/q_exp07_0.mp3"
+ ],
+ "q_exp08": [
+  "voix/q_exp08_0.mp3"
+ ],
+ "q_exp09": [
+  "voix/q_exp09_0.mp3"
+ ],
+ "q_exp10": [
+  "voix/q_exp10_0.mp3"
+ ],
+ "q_exp11": [
+  "voix/q_exp11_0.mp3"
+ ],
+ "q_exp12": [
+  "voix/q_exp12_0.mp3"
+ ],
+ "q_exp13": [
+  "voix/q_exp13_0.mp3"
+ ],
+ "q_ang01": [
+  "voix/q_ang01_0.mp3"
+ ],
+ "q_ang02": [
+  "voix/q_ang02_0.mp3"
+ ],
+ "q_ang03": [
+  "voix/q_ang03_0.mp3"
+ ],
+ "q_ang04": [
+  "voix/q_ang04_0.mp3"
+ ],
+ "q_ang05": [
+  "voix/q_ang05_0.mp3"
+ ],
+ "q_ang06": [
+  "voix/q_ang06_0.mp3"
+ ],
+ "q_ang07": [
+  "voix/q_ang07_0.mp3"
+ ],
+ "q_ang08": [
+  "voix/q_ang08_0.mp3"
+ ],
+ "q_ang09": [
+  "voix/q_ang09_0.mp3"
+ ],
+ "q_ang10": [
+  "voix/q_ang10_0.mp3"
+ ],
+ "q_ang11": [
+  "voix/q_ang11_0.mp3"
+ ],
+ "q_ang12": [
+  "voix/q_ang12_0.mp3"
+ ],
+ "q_ang13": [
+  "voix/q_ang13_0.mp3"
  ]
 }

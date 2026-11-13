@@ -24,7 +24,7 @@ const PSEUDO = (process.argv.find((a) => a.startsWith("--tiktok=")) || "").split
 
 // ───── état : on repart de zéro à chaque lancement ─────
 let etat = etatInitial(CFG);
-let mode = (process.argv.find((a) => a.startsWith("--mode=")) || "").slice(7) || CFG.mode || "bataille";   // "bataille" ou "village"
+let mode = (process.argv.find((a) => a.startsWith("--mode=")) || "").slice(7) || CFG.mode || "bataille";   // "bataille", "quiz" ou "village"
 // bac à sable des tests : une copie jetable, effacée 30 s après le dernier test (ou au premier vrai événement)
 let bac = null, finBac = 0;
 
@@ -61,8 +61,8 @@ function diffuser(msg) {
 let vueEnRetard = false;
 function evenement(ev, test = false) {
   if (!test && bac) finirBac();
-  if (mode === "bataille") {
-    // la bataille tourne dans la page : on transmet l'événement tel quel (les abonnés comptent quand même au village)
+  if (mode === "bataille" || mode === "quiz") {
+    // la bataille et le quiz tournent dans la page : on transmet l'événement tel quel (les abonnés comptent quand même au village)
     if (ev.type === "follow") appliquer(test ? (bac || etat) : etat, ev);
     diffuser({ t: "ev", ev });
     return;
@@ -99,7 +99,7 @@ wss.on("connection", (ws) => {
       finBac = Date.now() + 30000;
       evenement(m.ev, true);
       diffuser({ t: "test", actif: true });
-    } else if (m.cmd === "mode" && (m.mode === "village" || m.mode === "bataille")) {
+    } else if (m.cmd === "mode" && ["village", "bataille", "quiz"].includes(m.mode)) {
       mode = m.mode;
       diffuser({ t: "etat", vue: vue(bac || etat), cfg: CFG, statut, mode });
       console.log("Mode :", mode);
@@ -144,7 +144,10 @@ async function brancherTikTok() {
   // abonné ? TikTok l'indique pour chaque spectateur (followStatus ≥ 1) ; et ceux qui s'abonnent pendant le live
   const abonnes = new Set();
   const estAbonne = (us) => !!us && (abonnes.has(idDe(us)) || Number(us.followInfo?.followStatus || 0) >= 1 || us.isFollowing === true);
-  const u = (d) => ({ id: idDe(d.user), nom: nomDe(d.user), abonne: estAbonne(d.user) });
+  // la photo de profil (affichée dans les cases du quiz)
+  const photo = (us) => us?.avatarThumb?.urlList?.[0] || us?.avatarMedium?.urlList?.[0] || us?.avatarLarge?.urlList?.[0]
+    || us?.profilePictureUrl || null;
+  const u = (d) => ({ id: idDe(d.user), nom: nomDe(d.user), abonne: estAbonne(d.user), avatar: photo(d.user) });
   const connu = (d) => !!idDe(d.user);                 // TikTok envoie parfois des messages sans pseudo
   const ev = (e) => { if (DEBUG) console.log("→", JSON.stringify(e)); evenement(e); };
 

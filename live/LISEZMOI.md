@@ -25,6 +25,17 @@ Le village repart de zéro à chaque lancement (0 habitant, objectif 10 000) : i
 d'abonnés du compte. Les bâtiments des épisodes restent dans la rue comme décor. La page de pilotage a un bouton
 « Remettre le village à zéro ».
 
+## Mode « Le Quiz du Million » (mode par défaut)
+- Les spectateurs écrivent **A, B, C ou D** en commentaire ; 20 s par question, seule la 1ʳᵉ réponse compte.
+- Leur photo de profil apparaît dans la case qu'ils ont choisie.
+- 10 paliers de 6 questions, thème tiré au sort à chaque palier ; une bonne réponse rapporte de 1 000 € (palier 1)
+  à 60 000 € (palier 10) : tout juste = 1 000 000 € (argent fictif).
+- Abonné = +20 % sur ses gains · cadeau 1+ = joker (1 erreur pardonnée) · 30+ = x2 sur le palier (1 fois par partie)
+  · 100+ = 50/50 pour tout le monde.
+- Une partie dure environ 30 min, puis une nouvelle commence. 156 questions dans `public/questions.json`
+  (on peut en ajouter : relancer `make_voix.py` pour enregistrer leur lecture).
+- Pour changer de mode pendant le live : page de pilotage → Mode du live.
+
 ## Mode « Villageois vs Zombies »
 Un deuxième jeu, à lancer depuis la page de pilotage (bouton « 🧟 Villageois vs Zombies ») :
 - commentaire **1** = rejoindre les villageois, **2** = les zombies (ton bonhomme entre sur le terrain) ;

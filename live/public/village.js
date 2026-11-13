@@ -2,14 +2,15 @@
 // ou simule un live toute seule avec ?demo.
 import { PALIERS, appliquer, etatInitial, fauxEvenement, hash, vue } from "./logique.js";
 import { creerBataille } from "./bataille.js";
+import { creerQuiz } from "./quiz.js";
 
 const W = 1080, H = 1920;
 const cv = document.getElementById("c");
 const ctx = cv.getContext("2d");
 const DEMO = new URLSearchParams(location.search).has("demo") || window.VILLAGE_DEMO === true;
-// mode du live : "village" ou "bataille" (villageois vs zombies) ; changé depuis la page de pilotage
-let mode = new URLSearchParams(location.search).get("mode") || (location.hash === "#village" ? "village" : "") || window.VILLAGE_MODE || "bataille";
-let bataille = null;
+// mode du live : "village", "bataille" (villageois vs zombies) ou "quiz" ; changé depuis la page de pilotage
+let mode = new URLSearchParams(location.search).get("mode") || (location.hash ? location.hash.slice(1) : "") || window.VILLAGE_MODE || "bataille";
+let bataille = null, quiz = null;
 
 const INK = "#16161c", JAUNE = "#ffce00", VERT = "#3ccf6e", BLEU = "#3d8bff", ROUGE = "#e8323c", BLANC = "#fafafa";
 const SOL = 1130;            // pied des bâtiments
@@ -96,8 +97,8 @@ const musique = {
       if (!audio) audio = new AudioContext();
       const lire = async (f) => audio.decodeAudioData(await (await fetch(f)).arrayBuffer());
       const [jour, nuit] = await Promise.all([lire("musique/jour.mp3"), lire("musique/nuit.mp3")]);
-      const bat = await lire("musique/bataille.mp3").catch(() => null);
-      this.tampons = { jour, nuit, ...(bat ? { bataille: bat } : {}) };
+      const [bat, qz] = await Promise.all([lire("musique/bataille.mp3").catch(() => null), lire("musique/quiz.mp3").catch(() => null)]);
+      this.tampons = { jour, nuit, ...(bat ? { bataille: bat } : {}), ...(qz ? { quiz: qz } : {}) };
     } catch (e) { console.warn("musique", e); }
   },
   lancer() {
@@ -129,9 +130,12 @@ const musique = {
     const t = audio.currentTime;
     this.gains.total.gain.setTargetAtTime(base * (now < voix.finLe ? 0.6 : 1), t, 0.3);
     const bat = mode === "bataille" && this.gains.bataille ? 1 : 0;
-    this.gains.jour.gain.setTargetAtTime((1 - n) * (1 - bat), t, 0.5);
-    this.gains.nuit.gain.setTargetAtTime(n * (1 - bat), t, 0.5);
+    const qz = mode === "quiz" && this.gains.quiz ? 1 : 0;
+    const autre = Math.max(bat, qz);
+    this.gains.jour.gain.setTargetAtTime((1 - n) * (1 - autre), t, 0.5);
+    this.gains.nuit.gain.setTargetAtTime(n * (1 - autre), t, 0.5);
     if (this.gains.bataille) this.gains.bataille.gain.setTargetAtTime(bat, t, 0.5);
+    if (this.gains.quiz) this.gains.quiz.gain.setTargetAtTime(qz * 0.8, t, 0.5);
   },
 };
 
@@ -219,6 +223,11 @@ const SONS = {
   piece: () => { bip(1320, 0.08, "square", 0.06); bip(1760, 0.18, "square", 0.06, 0, 0.07); },
   fanfare: () => [523, 659, 784, 1046].forEach((f, i) => bip(f, 0.22, "triangle", 0.16, 0, i * 0.11)),
   marteau: () => [0, 0.18, 0.36].forEach((t) => bip(180, 0.07, "square", 0.12, 0.5, t)),
+  // quiz
+  tic: (leger) => { if (!permis("tic", 12)) return; bip(leger ? 1500 : 1000, 0.05, "square", leger ? 0.04 : 0.09); },
+  bonne: () => [659, 784, 988, 1318].forEach((f, i) => bip(f, 0.3, "triangle", 0.16, 0, i * 0.09)),
+  buzz: () => { bip(110, 0.6, "sawtooth", 0.12, 0.8); bip(116, 0.6, "sawtooth", 0.1, 0.8); },
+  revele: () => { souffle(0.6, 0.18, 600, 0, "bandpass", 5); bip(523, 0.25, "triangle", 0.15, 0, 0.35); bip(784, 0.4, "triangle", 0.15, 0, 0.5); },
 };
 
 // Le narrateur : 4-5 phrases enregistrées par interaction (voix/…), tirées au hasard,
@@ -231,15 +240,16 @@ const voix = {
   // abonnés et cadeaux : jamais de pause, chacun a sa phrase (file d'attente) ; le reste : des pauses
   REPOS: { like: 45, partage: 15, visiteur: 60, discute: 0, appel: 0, soir: 0, matin: 0,
     bataille_renforts: 6, bataille_danger: 30, bataille_appel: 0, bataille_regle: 0 },
-  dire(cat, now) {
+  // opt.prio : passe avant le reste ; opt.attente : combien de secondes la phrase peut attendre son tour
+  dire(cat, now, opt = {}) {
     const fichiers = this.liste[cat];
     if (!fichiers || !fichiers.length) return;
-    const prio = PRIORITAIRES.has(cat);
+    const prio = opt.prio ?? PRIORITAIRES.has(cat);
     if (!prio && now - (this.dernier[cat] ?? -1e9) < (this.REPOS[cat] ?? 10)) return;
     if (now < this.finLe + 0.6 || (!prio && this.file.length)) {           // quelqu'un parle déjà
       if (prio) {
         const abonne = cat === "arrivee" || cat === "bataille_abonne";
-        this.file.push({ cat, jusqua: now + (abonne ? 1e9 : 25), abonne });   // un abonné n'est jamais oublié
+        this.file.push({ cat, jusqua: now + (abonne ? 1e9 : opt.attente ?? 25), abonne, opt });   // un abonné n'est jamais oublié
         while (this.file.filter((x) => !x.abonne).length > 6) {             // gros rush : on lâche les autres phrases
           this.file.splice(this.file.findIndex((x) => !x.abonne), 1);
         }
@@ -260,9 +270,9 @@ const voix = {
   tic(now) {
     while (this.file.length && now > this.file[0].jusqua) this.file.shift();
     if (this.file.length && now >= this.finLe + 0.6) {
-      const { cat } = this.file.shift();
+      const { cat, opt } = this.file.shift();
       this.finLe = 0;
-      this.dire(cat, now);
+      this.dire(cat, now, opt);
     }
   },
 };
@@ -683,12 +693,38 @@ function fond(n) {
   ctx.fillStyle = rgb(mix([110, 190, 80], [45, 85, 45], n)); ctx.fillRect(0, yb + 150, W, H);
 }
 
+// fond du quiz : plateau de télé sombre, projecteurs qui balaient
+function fondQuiz(now) {
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, "#0b1030"); g.addColorStop(0.55, "#121a4a"); g.addColorStop(1, "#06081a");
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  for (let k = 0; k < 3; k++) {
+    const a = Math.sin(now * 0.4 + k * 2.1) * 0.5;
+    ctx.save(); ctx.translate(W * (0.2 + k * 0.3), -40); ctx.rotate(a);
+    const l = ctx.createLinearGradient(0, 0, 0, H);
+    l.addColorStop(0, "rgba(127,211,255,.16)"); l.addColorStop(1, "rgba(127,211,255,0)");
+    ctx.fillStyle = l; ctx.beginPath(); ctx.moveTo(-30, 0); ctx.lineTo(30, 0); ctx.lineTo(260, H); ctx.lineTo(-260, H); ctx.fill();
+    ctx.restore();
+  }
+}
+
 let avant = performance.now() / 1000;
 function image() {
   const now = performance.now() / 1000;
   const dt = Math.min(0.1, now - avant);
   avant = now;
-  if (mode === "bataille" && meta.decor) {
+  if (mode === "quiz" && meta.decor) {
+    musique.maj(0, now);
+    fondQuiz(now);
+    if (!quiz) quiz = creerQuiz({ ctx, W, img, texte, rrect, fmt, back, ease, SONS, voix, hash, demo: DEMO });
+    quiz.dessiner(now, dt);
+    voix.tic(now);
+    // entre deux questions, de temps en temps : la règle ou un rappel (abonnement, cadeaux, partage)
+    if (now > prochainAppel && now - voix.dernierTout > 5 && quiz.calme()) {
+      voix.dire(Math.random() < 0.55 ? "quiz_regle" : "quiz_appel", now);
+      prochainAppel = now + 75;
+    }
+  } else if (mode === "bataille" && meta.decor) {
     const n = nuit(now);
     musique.maj(n, now);
     fond(n);
@@ -750,6 +786,7 @@ async function demarrer() {
     setInterval(() => {
       const ev = fauxEvenement();
       if (mode === "bataille") { if (bataille) bataille.evenement(ev, performance.now() / 1000); return; }
+      if (mode === "quiz") { if (quiz && ev.type !== "chat") quiz.evenement(ev, performance.now() / 1000); return; }
       const a = appliquer(complet, ev); etat = vue(complet); recevoirAnnonces(a);
     }, 850);
   } else {
@@ -773,6 +810,7 @@ function brancher() {
     } else if (m.t === "ev") {
       if (m.vue) etat = m.vue;
       if (mode === "bataille") { if (bataille && m.ev) bataille.evenement(m.ev, performance.now() / 1000); return; }
+      if (mode === "quiz") { if (quiz && m.ev) quiz.evenement(m.ev, performance.now() / 1000); return; }
       recevoirAnnonces(m.annonces || []);
     } else if (m.t === "vue") {
       etat = m.vue;

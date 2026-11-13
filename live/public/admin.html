@@ -39,6 +39,7 @@
     <div class="ligne">
       <button id="modeVillage">🏘️ Village</button>
       <button id="modeBataille">🧟 Villageois vs Zombies</button>
+      <button id="modeQuiz">❓ Quiz du Million</button>
     </div>
     <small id="modeActuel">…</small>
   </section>
@@ -72,7 +73,8 @@
       <input id="msg" placeholder="Commentaire de test">
       <button data-ev="chat">Envoyer</button>
     </div>
-    <small>En mode bataille : écris 1 (villageois) ou 2 (zombies) pour rejoindre une équipe.</small>
+    <small>En mode bataille : écris 1 (villageois) ou 2 (zombies) pour rejoindre une équipe.
+      En mode quiz : écris A, B, C ou D pendant une question.</small>
   </section>
 </main>
 <script>
@@ -84,9 +86,10 @@
       const m = JSON.parse(e.data);
       if (m.t === "test") $("#modeTest").hidden = !m.actif;
       if (m.mode) {
-        $("#modeActuel").textContent = m.mode === "bataille" ? "En ce moment : Villageois vs Zombies" : "En ce moment : le village";
+        $("#modeActuel").textContent = "En ce moment : " + ({ bataille: "Villageois vs Zombies", quiz: "le Quiz du Million" }[m.mode] || "le village");
         $("#modeVillage").className = m.mode === "village" ? "rouge" : "";
         $("#modeBataille").className = m.mode === "bataille" ? "rouge" : "";
+        $("#modeQuiz").className = m.mode === "quiz" ? "rouge" : "";
       }
       if (m.test === false) $("#modeTest").hidden = true;
       if (m.statut !== undefined || m.t === "statut") {
@@ -100,6 +103,7 @@
   function envoyer(o) { if (ws && ws.readyState === 1) ws.send(JSON.stringify(o)); }
   $("#modeVillage").onclick = () => envoyer({ cmd: "mode", mode: "village" });
   $("#modeBataille").onclick = () => envoyer({ cmd: "mode", mode: "bataille" });
+  $("#modeQuiz").onclick = () => envoyer({ cmd: "mode", mode: "quiz" });
   $("#zero").onclick = () => {
     if (!confirm("Remettre le village à zéro ? Habitants, budget, maisons et classement repartent à 0.")) return;
     envoyer({ cmd: "zero" });
