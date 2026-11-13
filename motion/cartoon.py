@@ -5,6 +5,7 @@ On dessine le décor et les personnages en x2 (SS) puis on réduit (bords lisses
 et on pose ensuite les éléments graphiques (chiffres, étiquettes, cartes) à la taille finale.
 """
 import math
+import os
 import subprocess
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
@@ -369,6 +370,34 @@ class CartoonVideo(Video):
         """Pose un bruitage (voir sfx.BANK) à l'instant t (secondes)."""
         self.sfx_events.append((max(0.0, t), name, gain))
 
+    def _image(self, i):
+        """L'image n° i de la vidéo."""
+        t = i / FPS
+        cur = [(t0, fn) for t0, fn in self.scenes if t0 <= t]
+        if cur:
+            t0, fn = cur[-1]
+            nxt = [s0 for s0, _ in self.scenes if s0 > t0]
+            end = nxt[0] if nxt else self.dur
+            lt = t - t0
+            if t0 == self.scenes[0][0]:
+                lt += self.hook_head_start
+            img = fn(lt, end - t0)
+        else:
+            img = self.scenes[0][1](self.hook_head_start + t, 1.0)
+        if self.corner:
+            corner_tag(img, self.corner)
+        return img
+
+    def _morceau(self, a, b, chemin):
+        """Dessine les images a à b-1 dans un fichier vidéo (qualité quasi parfaite, recompressé à la fin)."""
+        ff = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
+                               "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "ultrafast", "-crf", "8",
+                               "-pix_fmt", "yuv444p", str(chemin)], stdin=subprocess.PIPE)
+        for i in range(a, b):
+            ff.stdin.write(self._image(i).convert("RGB").tobytes())
+        ff.stdin.close()
+        ff.wait()
+
     def render(self):
         self.scenes.sort(key=lambda s: s[0])
         cfg = load_config()
@@ -384,30 +413,39 @@ class CartoonVideo(Video):
             audio_path = self.work / "voice_sfx.wav"
             audio.save(mixed, audio_path)
             print(f"   {len(self.sfx_events)} bruitages mixés")
-        ff = subprocess.Popen(
-            ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
-             "-r", str(FPS), "-i", "-", "-i", str(audio_path), "-af", "apad", "-t", f"{self.dur:.2f}",
-             "-vf", f"ass='{ass}':fontsdir='{fonts}'", "-c:v", "libx264", "-preset", "medium", "-crf", "20",
-             "-maxrate", "2M", "-bufsize", "4M", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k",
-             "-movflags", "+faststart", str(out)], stdin=subprocess.PIPE)
-        for i in range(int(self.dur * FPS)):
-            t = i / FPS
-            cur = [(t0, fn) for t0, fn in self.scenes if t0 <= t]
-            if cur:
-                t0, fn = cur[-1]
-                nxt = [s0 for s0, _ in self.scenes if s0 > t0]
-                end = nxt[0] if nxt else self.dur
-                lt = t - t0
-                if t0 == self.scenes[0][0]:
-                    lt += self.hook_head_start
-                img = fn(lt, end - t0)
-            else:
-                img = self.scenes[0][1](self.hook_head_start + t, 1.0)
-            if self.corner:
-                corner_tag(img, self.corner)
-            ff.stdin.write(img.tobytes())
-        ff.stdin.close()
-        ff.wait()
+        n = int(self.dur * FPS)
+        coeurs = int(os.environ.get("RENDU_COEURS", os.cpu_count() or 1))
+        finition = ["-af", "apad", "-t", f"{self.dur:.2f}", "-vf", f"ass='{ass}':fontsdir='{fonts}'",
+                    "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-maxrate", "2M", "-bufsize", "4M",
+                    "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", str(out)]
+        if coeurs > 1 and n > 120:
+            # Rendu en parallèle : chaque processeur dessine un morceau de la vidéo (presque sans perte),
+            # puis on recolle les morceaux en y ajoutant les sous-titres et le son.
+            import multiprocessing as mp
+            bornes = [round(k * n / coeurs) for k in range(coeurs + 1)]
+            morceaux = [self.work / f"morceau_{k}.mkv" for k in range(coeurs)]
+            ctx = mp.get_context("fork")
+            procs = [ctx.Process(target=self._morceau, args=(bornes[k], bornes[k + 1], morceaux[k])) for k in range(coeurs)]
+            for p in procs:
+                p.start()
+            for p in procs:
+                p.join()
+            if any(p.exitcode != 0 for p in procs):
+                raise RuntimeError("un morceau du rendu a échoué")
+            liste = self.work / "morceaux.txt"
+            liste.write_text("".join(f"file '{m}'\n" for m in morceaux))
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(liste),
+                            "-i", str(audio_path), *finition], check=True)
+            for m in morceaux:
+                m.unlink(missing_ok=True)
+            print(f"   rendu sur {coeurs} processeurs")
+        else:
+            ff = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
+                                   "-r", str(FPS), "-i", "-", "-i", str(audio_path), *finition], stdin=subprocess.PIPE)
+            for i in range(n):
+                ff.stdin.write(self._image(i).tobytes())
+            ff.stdin.close()
+            ff.wait()
         print("✅", out)
         return out
 
