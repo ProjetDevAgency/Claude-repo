@@ -108,6 +108,11 @@
   "voix/bataille_appel_3.mp3",
   "voix/bataille_appel_4.mp3"
  ],
+ "bataille_regle": [
+  "voix/bataille_regle_0.mp3",
+  "voix/bataille_regle_1.mp3",
+  "voix/bataille_regle_2.mp3"
+ ],
  "bataille_abonne": [
   "voix/bataille_abonne_0.mp3",
   "voix/bataille_abonne_1.mp3",

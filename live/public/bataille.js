@@ -376,9 +376,12 @@ export function creerBataille(o) {
       if (alerte.voix === "bataille_abonne") SONS.victoire(); else SONS.fanfare();
       if (alerte.image) { alerte.img = new Image(); alerte.img.src = alerte.image; }
     }
-    if (alertes.length > 5) alertes.splice(0, alertes.length - 5);
+    // rafale : on lâche les plus anciennes alertes de cadeaux, jamais un abonnement ; et tout défile plus vite
+    while (alertes.filter((x) => x.voix !== "bataille_abonne").length > 5) {
+      alertes.splice(alertes.findIndex((x) => x.voix !== "bataille_abonne"), 1);
+    }
     if (!alerte) return;
-    const t = now - alerte.t0, dur = 2.6;
+    const t = now - alerte.t0, dur = alertes.length > 3 ? 1.5 : 2.6;
     if (t > dur) { alerte = null; return; }
     const k = t < 0.3 ? back(t / 0.3) : t > dur - 0.25 ? ease((dur - t) / 0.25) : 1;
     ctx.save();
@@ -392,6 +395,28 @@ export function creerBataille(o) {
     texte(alerte.l4, 0, 78, { taille: 26, couleur: alerte.couleur, max: large });
     const ic = alerte.img?.complete && alerte.img.naturalWidth ? alerte.img : img[alerte.icone];
     if (ic) for (const sx of [-1, 1]) ctx.drawImage(ic, sx * 370 - 55, -65, 110, 110);
+    ctx.restore();
+  }
+
+  // la règle « 1 = villageois, 2 = zombie » : toutes les 30 s, panneau 4 s + la voix en même temps
+  let cycleRegle = -1;
+  function dessinerRegle(now) {
+    if (phase !== "combat" || now - debutManche < 6) return;
+    const ecoule = now - debutManche - 6;
+    const cycle = Math.floor(ecoule / 30);
+    const t = ecoule - cycle * 30;
+    if (cycle !== cycleRegle && t < 1) { cycleRegle = cycle; voix.dire("bataille_regle", now); }
+    if (t > 4 || alerte) return;
+    const k = t < 0.3 ? back(t / 0.3) : t > 3.7 ? ease((4 - t) / 0.3) : 1;
+    const p = 1 + Math.sin(now * 6) * 0.03;
+    ctx.save();
+    ctx.translate(W / 2, 900);
+    ctx.scale(k * p, k * p);
+    rrect(-470, -120, 940, 240, 30, "rgba(12,12,18,.95)", "#ffce00", 8);
+    texte("POUR JOUER, TAPE EN COMMENTAIRE :", 0, -72, { taille: 30, couleur: "#ffce00" });
+    texte("1 → VILLAGEOIS", -230, 10, { taille: 64, police: "Anton", couleur: COUL.v, contour: 8 });
+    texte("2 → ZOMBIE", 250, 10, { taille: 64, police: "Anton", couleur: COUL.z, contour: 8 });
+    texte("⭐ ABONNÉ = CHAMPION", 0, 82, { taille: 28, couleur: "#fafafa" });
     ctx.restore();
   }
 
@@ -445,6 +470,7 @@ export function creerBataille(o) {
       dessinerHUD(now);
       dessinerBulle(now);
       dessinerAlerte(now);
+      dessinerRegle(now);
       dessinerFin(now);
     },
   };

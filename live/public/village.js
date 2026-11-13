@@ -224,13 +224,13 @@ const SONS = {
 // Le narrateur : 4-5 phrases enregistrées par interaction (voix/…), tirées au hasard,
 // jamais deux en même temps. Abonnés et cadeaux passent avant le reste (ils attendent leur tour).
 const PRIORITAIRES = new Set(["arrivee", "arbre", "cabane", "maison", "grande_maison", "immeuble", "monument",
-  "bataille_debut", "bataille_abonne", "bataille_victoire_v", "bataille_victoire_z", "bataille_geant", "bataille_speciale"]);
+  "bataille_debut", "bataille_abonne", "bataille_regle", "bataille_victoire_v", "bataille_victoire_z", "bataille_geant", "bataille_speciale"]);
 const VOIX_DE = { arbre: "arbre", cabane: "cabane", maison: "maison", villa: "grande_maison", immeuble: "immeuble", chateau: "monument" };
 const voix = {
   liste: {}, finLe: 0, dernier: {}, dernierTout: 0, file: [], derniers: {},
   // abonnés et cadeaux : jamais de pause, chacun a sa phrase (file d'attente) ; le reste : des pauses
   REPOS: { like: 45, partage: 15, visiteur: 60, discute: 0, appel: 0, soir: 0, matin: 0,
-    bataille_renforts: 6, bataille_danger: 30, bataille_appel: 0 },
+    bataille_renforts: 6, bataille_danger: 30, bataille_appel: 0, bataille_regle: 0 },
   dire(cat, now) {
     const fichiers = this.liste[cat];
     if (!fichiers || !fichiers.length) return;
@@ -238,8 +238,11 @@ const voix = {
     if (!prio && now - (this.dernier[cat] ?? -1e9) < (this.REPOS[cat] ?? 10)) return;
     if (now < this.finLe + 0.6 || (!prio && this.file.length)) {           // quelqu'un parle déjà
       if (prio) {
-        this.file.push({ cat, jusqua: now + 25 });
-        if (this.file.length > 6) this.file.shift();                        // gros rush : on garde les 6 derniers
+        const abonne = cat === "arrivee" || cat === "bataille_abonne";
+        this.file.push({ cat, jusqua: now + (abonne ? 1e9 : 25), abonne });   // un abonné n'est jamais oublié
+        while (this.file.filter((x) => !x.abonne).length > 6) {             // gros rush : on lâche les autres phrases
+          this.file.splice(this.file.findIndex((x) => !x.abonne), 1);
+        }
       }
       return;
     }
@@ -265,7 +268,7 @@ const voix = {
 };
 const likes = [];             // [instant, nombre] des derniers likes
 const chats = [];             // instants des derniers commentaires (pour « ça discute bien »)
-let prochainAppel = 40;
+let prochainAppel = 24;
 
 // ───────── jour / nuit ─────────
 let phaseAvant = null;
@@ -573,10 +576,9 @@ function bulleSuivante(now) {
 
 const MAX_ALERTES = 6;
 function limiterAlertes() {
-  // en cas de rafale : on lâche d'abord les plus anciennes arrivées, puis les plus anciennes alertes
-  while (alertes.length > MAX_ALERTES) {
-    const i = alertes.findIndex((x) => x.kind === "arrivee");
-    alertes.splice(i >= 0 ? i : 0, 1);
+  // en cas de rafale : on lâche les plus anciennes alertes, mais JAMAIS un abonnement (pas de limite pour les abonnés)
+  while (alertes.filter((x) => x.kind !== "arrivee").length > MAX_ALERTES) {
+    alertes.splice(alertes.findIndex((x) => x.kind !== "arrivee"), 1);
   }
 }
 
@@ -694,9 +696,10 @@ function image() {
     bataille.dessiner(now, dt, n);
     dessinerConfettis(dt);
     voix.tic(now);
-    if (now > prochainAppel && now - voix.dernierTout > 15) {
+    // la règle revient toutes les 30 s (bataille.js) ; entre deux, un rappel (cadeaux, likes, abonnés) par minute
+    if (now > prochainAppel && now - voix.dernierTout > 8) {
       voix.dire("bataille_appel", now);
-      prochainAppel = now + 60 + Math.random() * 30;
+      prochainAppel = now + 60;
     }
   } else if (etat && meta.decor) {
     const n = nuit(now);
@@ -762,7 +765,7 @@ function brancher() {
   const ws = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws`);
   ws.onmessage = (e) => {
     const m = JSON.parse(e.data);
-    if (m.mode && m.mode !== mode) { mode = m.mode; prochainAppel = 0; }
+    if (m.mode && m.mode !== mode) { mode = m.mode; prochainAppel = performance.now() / 1000 + 24; }
     if (m.t === "etat") {
       const premier = !etat;
       etat = m.vue; cfg = m.cfg;

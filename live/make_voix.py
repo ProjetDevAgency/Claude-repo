@@ -128,6 +128,11 @@ PHRASES = {
         "Abonne-toi, et ton combattant devient un champion !",
         "Les abonnés se battent avec des champions. Abonne-toi !",
     ],
+    "bataille_regle": [
+        "Tape un pour être villageois, tape deux pour être un zombie !",
+        "Pour jouer, c'est simple. Un, t'es villageois. Deux, t'es zombie !",
+        "T'arrives ? Tape un ou deux dans les commentaires, et ton bonhomme entre dans la bataille !",
+    ],
     "bataille_abonne": [
         "Un nouvel abonné ! Son combattant devient un champion !",
         "Abonné ! Et hop, un champion de plus sur le terrain !",
