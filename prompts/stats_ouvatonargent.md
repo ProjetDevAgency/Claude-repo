@@ -12,6 +12,7 @@
 | « Vous partez avant la fin ? 9 mois » | 11/11 18:00 | 363 | 21 | 0 | 0 | 1 | 21,2 s | 20,8 % | 61 % | 34 % | 4 |
 | Vol en retard (88 s) | 12/11 11:59 | 499 | 42 | 0 | 1 | 15 | 18,7 s | 9,3 % | 53 % | 21 % | 4 |
 | Black Friday | 12/11 18:00 | 308 | 19 | 0 | 0 | 4 | 16,4 s | 13,1 % | 61 % | 26 % | 1 |
+| Congés perdus « T'avais qu'à les poser, espèce d'idiot » (62 s) — relevé à +3 h | 13/11 11:47 | 305 | 25 | 0 | 0 | 3 | 23,5 s | 10,2 % | 61 % à 3 s | 38 % | 1 |
 
 Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidéo de la caution).
 
