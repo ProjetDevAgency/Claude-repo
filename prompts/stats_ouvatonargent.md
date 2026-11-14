@@ -12,7 +12,8 @@
 | « Vous partez avant la fin ? 9 mois » | 11/11 18:00 | 363 | 21 | 0 | 0 | 1 | 21,2 s | 20,8 % | 61 % | 34 % | 4 |
 | Vol en retard (88 s) | 12/11 11:59 | 499 | 42 | 0 | 1 | 15 | 18,7 s | 9,3 % | 53 % | 21 % | 4 |
 | Black Friday | 12/11 18:00 | 308 | 19 | 0 | 0 | 4 | 16,4 s | 13,1 % | 61 % | 26 % | 1 |
-| Congés perdus « T'avais qu'à les poser, espèce d'idiot » (62 s) — relevé à +3 h | 13/11 11:47 | 305 | 25 | 0 | 0 | 3 | 23,5 s | 10,2 % | 61 % à 3 s | 38 % | 1 |
+| Congés perdus « T'avais qu'à les poser, espèce d'idiot » (62 s) — relevé à J+1 | 13/11 11:47 | 580 | 47 | 0 | 0 | 11 | 25,4 s | 13,9 % | 63 % à 3 s | 41 % | 5 |
+| Occasion « Pas mon problème, pigeon » (62 s) — relevé à J+1 | 13/11 20:04 | 473 | 30 | 0 | 0 | 3 | 20,9 s | 8,6 % | 60 % à 3 s | 34 % | 2 |
 
 Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidéo de la caution).
 
@@ -23,3 +24,11 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
 4. **Les histoires entre personnes** (le pote qui doit de l'argent, le patron) retiennent mieux que les sujets administratifs (CAF, aides).
 5. **Le vol en retard a le plus d'engagement** (42 j'aime, 15 enregistrements, 4 abonnés), mais à 88 s, c'est le moins vu jusqu'au bout. Les conseils pratiques donnent envie d'enregistrer, la longueur décroche.
 6. **0 commentaire et 0 à 2 partages partout** : rien ne pousse à réagir. C'est ce qui manque pour dépasser le premier lot de test.
+
+## Relevé du 14 nov. (format « méchant violent tout au long »)
+7. **Congés = meilleure rétention de la chaîne** (41 % vus en moyenne, 25,4 s, 63 % encore là à 3 s, 5 abonnés, 11 enregistrements).
+   L'insulte directe (« espèce d'idiot ») + un sujet de travail bat le garage (« pigeon », 34 %).
+8. On perd 20 % dès la 1re seconde sur les deux : c'est le swipe normal ; le vrai levier reste 0:01–0:03.
+9. Défaut corrigé : un « ? » s'affichait seul en sous-titre à 0:01 (espace française avant la ponctuation).
+10. **Toujours 0 commentaire et 0 partage**, même avec la question finale. À essayer : un choix « tape 1 / tape 2 »
+    (comme les votes du village, qui font commenter) et un commentaire épinglé par le compte.

@@ -48,7 +48,14 @@ def transcribe_words(audio_path, model_size="small"):
 
 def align(script_text, whisper_words):
     """Donne à chaque mot du script un (start, end) issu de Whisper."""
-    tokens = script_text.split()
+    # en français on met une espace avant « ? ! : ; » : on recolle la ponctuation seule au mot d'avant
+    # (sinon un « ? » s'affiche tout seul à l'écran comme un mot)
+    tokens = []
+    for t in script_text.split():
+        if tokens and not re.search(r"\w", t):
+            tokens[-1] += " " + t if t in "?!:;" else t
+        else:
+            tokens.append(t)
     a = [_norm(t) for t in tokens]
     b = [_norm(w["text"]) for w in whisper_words]
     times = [None] * len(tokens)
