@@ -52,9 +52,10 @@ Constat : nos vidéos retiennent (23 s, 26 % jusqu'au bout) mais ne sont ni comm
 à 300 vues. Leur moteur, ce sont les PARTAGES et les J'AIME. Règles :
 1. **Ouverture = l'adversaire parle À TOI** (tutoiement), montant en premier + ultimatum
    (« Tu paies 1 430 €, sinon ta voiture reste au garage. »). Le spectateur est la victime.
-2. **Contradiction + promesse** : « Faux, et la preuve officielle je te la lis à la fin. »
-   + la boucle « Kévin le sait pas encore, mais… un seul petit truc… » révélé à la DERNIÈRE phrase.
-3. **2-3 répliques de l'adversaire**, de plus en plus méprisantes, puis le moment où Kévin abandonne presque
+2. **PAS de « Faux. »** (règle du 14 nov. : ça casse l'élan et les gens partent). On enchaîne directement sur
+   la boucle « Kévin le sait pas encore, mais… un seul petit truc… » révélé à la DERNIÈRE phrase.
+3. **2-3 répliques de l'adversaire**, de plus en plus méprisantes, **mais sans insulte** (pas de « idiot », « pigeon »,
+   « abruti », « minable »… règle du 14 nov.) : le mépris passe par le ton, les menaces et l'humiliation, puis le moment où Kévin abandonne presque
    (un proche lui dit de laisser tomber).
 4. **La règle avec sa référence exacte**, si possible récente, découpée en « 3 choses » ou « 3 pièges ».
    Mots-crochets : « retiens bien », « regarde bien », « le piège », « fais le calcul avec Kévin ».
