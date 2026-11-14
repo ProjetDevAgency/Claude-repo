@@ -1,18 +1,24 @@
 # Introduction en bourse d'Anthropic, 19 nov. 2026 (Nasdaq, symbole ANT). À publier AVANT le 19.
-# Sources : dépôts et communiqué IPO (825 M d'actions, 70–78 $, jusqu'à ~64 Md$ levés, valorisation ~1 000–1 400 Md$),
-# chiffre d'affaires 386 M$ (2024), ~4,6 Md$ (2025), ~16,3 Md$ (1er semestre 2026), perte opérationnelle ~8 Md$ (2025).
-# Fiscalité : action US non éligible au PEA → compte-titres, PFU 31,4 % depuis le 1er janv. 2026 (LFSS 2026).
-# Ton neutre : pas d'incitation à acheter. « Ceci n'est pas un conseil en investissement » à l'écran et dans la description.
-# M = le pote qui veut tout miser, N = narrateur. Compteur : ÉPARGNE DE KÉVIN.
-M: Le 19 novembre, Anthropic entre en bourse. Tu vides ton Livret A et tu mets tout dessus. Sinon tu resteras fauché toute ta vie.
-N: Ce pote le sait pas encore, mais son conseil peut coûter très cher à Kévin. Trois chiffres à connaître avant de cliquer.
-N: Anthropic, c'est l'entreprise derrière Claude, une intelligence artificielle. Le 19, elle vend huit cent vingt-cinq millions d'actions sur le Nasdaq. Entre soixante-dix et soixante-dix-huit dollars l'une.
-M: L'IA, c'est l'avenir. Ça peut que monter. Ceux qui réfléchissent restent sur le quai.
-N: Premier chiffre : la croissance. Trois cent quatre-vingt-six millions de dollars de chiffre d'affaires en 2024. Quatre milliards six en 2025. Seize milliards rien que sur les six premiers mois de cette année. C'est énorme.
-N: Deuxième chiffre : le prix. À soixante-dix-huit dollars, l'entreprise vaut autour de mille milliards. Toute cette croissance est déjà dans le prix. Et en 2025, elle perdait encore huit milliards.
-M: Tu piges rien à la bourse. T'achètes à l'ouverture, tu revends le soir, et t'es riche.
-N: Retiens bien, c'est le piège. Si tu n'as pas eu d'actions au prix d'introduction, tu achètes au prix d'ouverture. Si ça ouvre à cent dix dollars, tu paies quarante pour cent plus cher que les premiers.
-N: Troisième chiffre : trente et un virgule quatre. Une action américaine ne rentre pas dans un PEA. Sur un compte-titres, ta plus-value est taxée à trente et un virgule quatre pour cent depuis cette année. Plus les frais de change.
-M: Mouais. Moi, j'ai déjà mis mon loyer dedans.
-N: Fais le calcul avec Kévin. Il garde son épargne de secours intacte, et il ne met que ce qu'il peut perdre. Pas un euro de plus.
-N: Envoie ça au pote qui veut tout miser le 19. Et toi, tu achètes, ou tu regardes ? Écris-le. Ceci n'est pas un conseil en investissement.
+# Méthode v3 (prompts/methode_ecriture.md). Kévin raconte, M = son grand frère.
+# Faits : actions proposées entre 70 et 78 $ ; valorisation ~1 000 Md$ ; chiffre d'affaires ×12 entre 2024 et 2025 ;
+# action US non éligible au PEA → compte-titres, PFU 31,4 % depuis le 1er janv. 2026.
+# À l'écran et dans la description (pas dans la voix) : « Ceci n'est pas un conseil en investissement. »
+M: Tu mets tes quatre mille euros sur Anthropic le dix-neuf, sinon tu resteras fauché toute ta vie.
+N: C'est ce que mon grand frère m'a sorti, au repas du dimanche, devant mes parents. Son téléphone posé à côté de l'assiette, l'appli de bourse ouverte.
+N: Et pourtant j'étais fier en arrivant. Deux ans à mettre de côté sur mon livret. Pour la caution de mon premier appart.
+N: Il rigole et il me fait,
+M: Ton livret, ça rapporte même pas l'inflation. Moi j'ai déjà passé mon ordre. Tout ce que j'avais.
+N: Et en se resservant du gratin, il en rajoute une couche.
+M: Toi, tu finiras comme papa, à compter tes centimes avec ton petit livret.
+N: Je dis rien. Je finis mon assiette.
+N: Ton petit livret.
+N: Anthropic, c'est l'entreprise derrière Claude. Le dix-neuf, ses actions sortent entre soixante-dix et soixante-dix-huit dollars.
+N: Mais alors pourquoi tout le monde se jette dessus ? Son chiffre d'affaires a explosé en un an.
+N: Sauf qu'à ce prix, elle vaut déjà mille milliards. La croissance, elle est déjà dans le prix.
+N: Ce que mon frère sait pas, c'est que si l'action ouvre plus haut, il paie le prix d'ouverture. Pas soixante-dix-huit.
+N: Une action américaine rentre pas dans un PEA. Sur un compte-titres, l'État prend trente et un virgule quatre pour cent.
+N: Honnêtement, sur l'IA, il a peut-être raison.
+N: Je garde ma caution. Je mets juste ce que je peux perdre.
+N: Mercredi, il m'appelle. Il me demande de lui avancer son loyer.
+N: Il avait vraiment tout mis.
+N: Quatre mille euros. Et c'est moi qui lui prête.
