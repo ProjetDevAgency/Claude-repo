@@ -1,21 +1,22 @@
-# Permis en candidat libre : aucune auto-école obligatoire, aucun minimum d'heures (les 20 h ne s'imposent qu'aux auto-écoles,
-# arrêté du 22 déc. 2009). Accompagnateur : permis B depuis 5 ans, sans annulation ni invalidation, non payé. Voiture assurée
-# à double commande + panneau « apprentissage » + livret. NEPH via l'ANTS, code 30 €, examen réservé sur RdvPermis.
-# Structure La Ficelle (nov. 2026) : pas de « Faux », pas d'insulte ; « il le sait pas encore, mais… un seul petit truc »
-# révélé à la dernière phrase, qui renvoie à la première (boucle).
-# M = le gérant de l'auto-école, N = narrateur. Compteur : GARDÉ PAR KÉVIN 0 € → 1 150 €.
-M: Mille huit cents euros, ton permis. Tu signes aujourd'hui, ou tu restes à pied.
-N: Ce gérant le sait pas encore, mais il vient de perdre mille huit cents euros. Parce que Kévin a fait un seul petit truc, que presque personne ne pense à faire. Et c'est ce petit truc qui va tout faire basculer.
-N: Et pourtant, tout était prêt. Le contrat sur le bureau, le stylo dans la main de Kévin.
-M: Vingt heures minimum, c'est la loi. Et ton père, il peut rien t'apprendre. Signe.
-N: Même Sarah lui dit de signer. Et Kévin approche le stylo.
-N: Sauf que heureusement, Kévin est abonné à Où va ton argent. Rien en France n'oblige à passer par une auto-école. Il faut trois choses.
-N: Un : un accompagnateur. Le permis depuis cinq ans, sans annulation, et pas payé.
-N: Deux : une voiture à double commande. Ça se loue autour de vingt euros de l'heure, assurance comprise.
-N: Trois : Kévin s'inscrit seul sur le site de l'ANTS. Le code, trente euros. Et il réserve lui-même son examen.
-N: Et c'est là que Kévin envoie la règle à son petit frère de dix-sept ans. On en a tous un.
-N: Fais le calcul avec Kévin. Trente euros de code. Vingt-cinq heures à vingt euros. Cent vingt pour la voiture de l'examen. Six cent cinquante euros. Mille cent cinquante de gardés.
-M: Sans mes vingt heures, tu vas te planter à l'examen. Et tu reviendras me supplier.
-N: Retiens bien : ces vingt heures s'imposent aux auto-écoles. Pas à toi. L'État l'écrit noir sur blanc : aucun minimum d'heures.
-N: Trois mois plus tard, Kévin a son permis du premier coup. Le pire pour le gérant ? Il le croise au feu rouge. Au volant.
-N: Et le petit truc de Kévin : il a regardé la date sur le permis de son père. Obtenu il y a trente ans. Juste avant d'entendre :
+# Permis en candidat libre. Méthode v3 (prompts/methode_ecriture.md) : Kévin raconte à la 1re personne.
+# Règle (à l'écran + description) : aucune auto-école obligatoire, aucun minimum d'heures en candidat libre (les 20 h
+# ne s'imposent qu'aux auto-écoles, arrêté du 22 déc. 2009). Accompagnateur : permis B depuis 5 ans, sans annulation
+# ni invalidation, non payé. Voiture assurée à double commande. Inscription seul sur l'ANTS, examen sur RdvPermis.
+# M = le gérant de l'auto-école, N = Kévin.
+M: Mille huit cents euros ton permis. Tu signes aujourd'hui, ou tu restes à pied.
+N: C'est ce que le gérant de l'auto-école m'a sorti, devant ma mère. Le contrat sur le comptoir, le stylo déjà posé dessus.
+N: Et pourtant j'étais content en entrant. Mon premier job commence en mars, il faut le permis. Tout l'été au snack pour me le payer.
+N: Je demande juste si je peux apprendre avec mon père. Il rigole et il me fait,
+M: Ton père ? Il sait même pas faire un créneau. Ici c'est vingt heures minimum, c'est la loi.
+N: Et en rangeant son stylo, il en rajoute une couche.
+M: Un gamin qui retourne des burgers, ça a pas les moyens de faire le malin.
+N: Je dis rien. Je laisse le contrat et je sors.
+N: Ça a pas les moyens.
+N: Sauf que rien en France oblige à passer par une auto-école. Et ce que les gérants disent jamais, c'est que ces vingt heures, c'est leur règle à eux. Seul, l'État en demande aucune.
+N: Mais alors qui s'assoit à côté de moi ? Mon père. Le permis depuis plus de cinq ans, jamais suspendu, et il demande rien.
+N: Sauf que sa Clio a qu'une pédale de frein. Donc je loue une voiture à double commande, vingt euros de l'heure, assurance comprise.
+N: Je m'inscris seul sur le site de l'ANTS, je passe le code, et je réserve moi-même l'examen.
+N: Honnêtement, des fois je me demandais s'il avait pas raison. Trois mois sans moniteur, ça fait peur.
+N: Trois mois après, je passe devant l'agence. Au volant. Le gérant est sur le trottoir. Il me regarde passer, il dit plu rien.
+N: Six cent cinquante euros en tout.
+N: Mille huit cents euros pour un permis que j'ai eu sans lui.
