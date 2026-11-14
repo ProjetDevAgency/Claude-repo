@@ -1,18 +1,21 @@
 # Permis en candidat libre : aucune auto-école obligatoire, aucun minimum d'heures (les 20 h ne s'imposent qu'aux auto-écoles,
 # arrêté du 22 déc. 2009). Accompagnateur : permis B depuis 5 ans, sans annulation ni invalidation, non payé. Voiture assurée
 # à double commande + panneau « apprentissage » + livret. NEPH via l'ANTS, code 30 €, examen réservé sur RdvPermis.
-# M = le gérant de l'auto-école, N = narrateur. Compteur : ÉCONOMISÉ PAR KÉVIN 0 € → 1 150 €.
-M: Mille huit cents euros, ton permis. T'as pas l'argent ? Alors tu restes à pied.
-N: Ce gérant le sait pas encore, mais Kévin va avoir son permis pour six cent cinquante euros. Sans lui.
-N: Kévin demande s'il peut apprendre avec son père.
-M: Avec ton père ? Vingt heures minimum chez moi, c'est la loi. Signe, ou dégage de mon agence.
-N: Il ment. Et c'est là que la plupart des gens signent. Sauf que heureusement, Kévin est abonné à Où va ton argent. Retiens bien : rien en France n'oblige à passer par une auto-école. Il faut trois choses.
-N: Un, un accompagnateur. Le permis depuis cinq ans, sans annulation, et pas payé. Le père de Kévin coche tout.
-M: Ton vieux ? Sa bagnole a une seule pédale de frein. Vous allez finir dans un platane.
-N: Deux, justement : une voiture à double commande. Vingt euros de l'heure en location, assurance comprise.
-N: Trois, le piège : Kévin s'inscrit seul sur le site de l'ANTS. Le code, trente euros. Et il réserve lui-même son examen.
-M: Personne réussit comme ça. Tu reviendras en pleurant, et ce sera deux mille.
+# Structure La Ficelle (nov. 2026) : pas de « Faux », pas d'insulte ; « il le sait pas encore, mais… un seul petit truc »
+# révélé à la dernière phrase, qui renvoie à la première (boucle).
+# M = le gérant de l'auto-école, N = narrateur. Compteur : GARDÉ PAR KÉVIN 0 € → 1 150 €.
+M: Mille huit cents euros, ton permis. Tu signes aujourd'hui, ou tu restes à pied.
+N: Ce gérant le sait pas encore, mais il vient de perdre mille huit cents euros. Parce que Kévin a fait un seul petit truc, que presque personne ne pense à faire. Et c'est ce petit truc qui va tout faire basculer.
+N: Et pourtant, tout était prêt. Le contrat sur le bureau, le stylo dans la main de Kévin.
+M: Vingt heures minimum, c'est la loi. Et ton père, il peut rien t'apprendre. Signe.
+N: Même Sarah lui dit de signer. Et Kévin approche le stylo.
+N: Sauf que heureusement, Kévin est abonné à Où va ton argent. Rien en France n'oblige à passer par une auto-école. Il faut trois choses.
+N: Un : un accompagnateur. Le permis depuis cinq ans, sans annulation, et pas payé.
+N: Deux : une voiture à double commande. Ça se loue autour de vingt euros de l'heure, assurance comprise.
+N: Trois : Kévin s'inscrit seul sur le site de l'ANTS. Le code, trente euros. Et il réserve lui-même son examen.
+N: Et c'est là que Kévin envoie la règle à son petit frère de dix-sept ans. On en a tous un.
 N: Fais le calcul avec Kévin. Trente euros de code. Vingt-cinq heures à vingt euros. Cent vingt pour la voiture de l'examen. Six cent cinquante euros. Mille cent cinquante de gardés.
-N: Et ses vingt heures obligatoires ? Elles s'imposent aux auto-écoles. Pas à toi. L'État l'écrit noir sur blanc : aucun minimum d'heures.
-N: Trois mois plus tard, Kévin a son permis du premier coup. Il passe devant l'agence, et le gérant fait semblant de pas le voir.
-N: Envoie ça à ton petit frère avant qu'il signe. Et toi, ton permis, il t'a coûté combien ? Kévin, lui, a failli payer avant d'entendre :
+M: Sans mes vingt heures, tu vas te planter à l'examen. Et tu reviendras me supplier.
+N: Retiens bien : ces vingt heures s'imposent aux auto-écoles. Pas à toi. L'État l'écrit noir sur blanc : aucun minimum d'heures.
+N: Trois mois plus tard, Kévin a son permis du premier coup. Le pire pour le gérant ? Il le croise au feu rouge. Au volant.
+N: Et le petit truc de Kévin : il a regardé la date sur le permis de son père. Obtenu il y a trente ans. Juste avant d'entendre :

@@ -52,7 +52,12 @@ Constat : nos vidéos retiennent (23 s, 26 % jusqu'au bout) mais ne sont ni comm
 à 300 vues. Leur moteur, ce sont les PARTAGES et les J'AIME. Règles :
 1. **Ouverture = l'adversaire parle À TOI** (tutoiement), montant en premier + ultimatum
    (« Tu paies 1 430 €, sinon ta voiture reste au garage. »). Le spectateur est la victime.
-2. **PAS de « Faux. »** (règle du 14 nov. : ça casse l'élan et les gens partent). On enchaîne directement sur
+2. **PAS de « Faux. »** (règle du 14 nov. : ça casse l'élan ; La Ficelle ne le dit plus dans ses nouvelles vidéos).
+   Juste après la réplique de l'adversaire : « Il le sait pas encore, mais c'est lui qui vient de perdre X €. Parce que
+   Kévin a fait un seul petit truc, que presque personne ne pense à faire. Et c'est ce petit truc qui va tout faire
+   basculer. » Puis « Et pourtant… » (le retour en arrière). Le petit truc n'est révélé qu'à la toute dernière phrase
+   (« Et le petit truc de Kévin : … juste avant d'entendre : »), qui renvoie à la 1re réplique.
+   Ancienne version :
    la boucle « Kévin le sait pas encore, mais… un seul petit truc… » révélé à la DERNIÈRE phrase.
 3. **2-3 répliques de l'adversaire**, de plus en plus méprisantes, **mais sans insulte** (pas de « idiot », « pigeon »,
    « abruti », « minable »… règle du 14 nov.) : le mépris passe par le ton, les menaces et l'humiliation, puis le moment où Kévin abandonne presque
