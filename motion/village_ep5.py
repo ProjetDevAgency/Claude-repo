@@ -286,10 +286,16 @@ def fond_remparts(lt=0.0):
 
 # ───────────── scènes ─────────────
 
+def rph_gp(img, lt):
+    """RPH en gros plan, menton au-dessus des sous-titres et couronne sous la bulle."""
+    v2.perso(img, "rph.49", lt, x=560, sc=1.85, base=2360)
+    return img
+
+
 def s_hook(lt, dur):
     img = dim(fond_remparts(), 0.5, blur=8, dark=0.7)
-    e4.rph_gros_plan(img, lt)
-    bubble(img, 540, 540, ["50 000 € DE REMPARTS ?", "JE LES FAIS TOMBER", "EN UNE NUIT"], 62, (lt + 0.3) / 0.3,
+    rph_gp(img, lt)
+    bubble(img, 540, 575, ["50 000 € DE REMPARTS ?", "JE LES FAIS TOMBER", "EN UNE NUIT"], 62, (lt + 0.3) / 0.3,
            tail_x=600)
     return shake(img, lt)
 
@@ -374,8 +380,8 @@ def s_descend(lt, dur):
 
 def s_coup1(lt, dur):
     img = dim(fond_remparts(), 0.5, blur=8, dark=0.75)
-    e4.rph_gros_plan(img, lt)
-    bubble(img, 540, 540, ["DES REMPARTS EN CARTON.", "ÇA ARRÊTE MÊME PAS", "UN POUSSIN"], 60, lt / 0.25, tail_x=600)
+    rph_gp(img, lt)
+    bubble(img, 540, 575, ["DES REMPARTS EN CARTON.", "ÇA ARRÊTE MÊME PAS", "UN POUSSIN"], 60, lt / 0.25, tail_x=600)
     return shake(flash(img, lt), lt, dur=0.3, amp=8)
 
 
@@ -392,8 +398,8 @@ def s_coup2(lt, dur):
     img = dim(facades.decor().copy(), 0.5, blur=8, dark=0.75)
     facades.poser(img, facades.calque("chateau"), 1.0)
     img = dim(img, 0.5, blur=6, dark=0.75)
-    e4.rph_gros_plan(img, lt)
-    bubble(img, 540, 540, ["UN MAIRE QUI VEND", "SES MINISTRES, ÇA FINIT", "DEHORS AVANT L'HIVER"], 58, lt / 0.25,
+    rph_gp(img, lt)
+    bubble(img, 540, 575, ["UN MAIRE QUI VEND", "SES MINISTRES, ÇA FINIT", "DEHORS AVANT L'HIVER"], 58, lt / 0.25,
            tail_x=600)
     return shake(flash(img, lt), lt, dur=0.3, amp=8)
 
