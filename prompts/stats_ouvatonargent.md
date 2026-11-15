@@ -44,3 +44,9 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
 14. **Abonnés** : 14 sur Anthropic, 1 seul sur le permis : un sujet très recherché ramène des vues, mais pas forcément
     des gens qui veulent suivre le compte. Les sujets « argent » purs (bourse, épargne) fidélisent mieux.
 → On garde la méthode v3 pour tous les scripts.
+
+## Relevé du 15 nov., 23 h 57
+- Anthropic : 25 900 vues · 756 j'aime · 18 com. · 46 partages · 145 enreg. · 24,6 s · 24,9 % en entier · 27 abonnés · 0,07 $
+- Candidat libre : 26 400 vues · 1 265 j'aime · 4 com. · 176 partages · 369 enreg. · 26,7 s · 31,3 % en entier · 18 abonnés · 0,01 $
+→ Le permis a explosé au 2e jour (pic ~5 000 vues/h) : meilleur taux de vue en entier de la chaîne (31 %) et 176 partages.
+→ Récompenses quasi nulles (RPM ≈ 0,003–0,009 $) : ticket ouvert chez TikTok.
