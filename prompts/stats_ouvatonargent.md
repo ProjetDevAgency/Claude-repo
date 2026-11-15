@@ -14,6 +14,8 @@
 | Black Friday | 12/11 18:00 | 308 | 19 | 0 | 0 | 4 | 16,4 s | 13,1 % | 61 % | 26 % | 1 |
 | Congés perdus « T'avais qu'à les poser, espèce d'idiot » (62 s) — relevé à J+1 | 13/11 11:47 | 580 | 47 | 0 | 0 | 11 | 25,4 s | 13,9 % | 63 % à 3 s | 41 % | 5 |
 | Occasion « Pas mon problème, pigeon » (62 s) — relevé à J+1 | 13/11 20:04 | 473 | 30 | 0 | 0 | 3 | 20,9 s | 8,6 % | 60 % à 3 s | 34 % | 2 |
+| **Anthropic « Tes 4 000 € sur Anthropic »** (méthode v3, 62 s) — relevé 15/11 2 h | 14/11 11:57 | **14 200** | 411 | 2 | 23 | 77 | 24,4 s | **24,8 %** | — | 39 % | **14** |
+| **Candidat libre « 1 800 € ton permis »** (méthode v3, 62 s) — relevé 15/11 2 h | 14/11 18:00 | **5 798** | 240 | 0 | 38 | 55 | 22,7 s | **24,3 %** | — | 37 % | 1 |
 
 Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidéo de la caution).
 
@@ -32,3 +34,13 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
 9. Défaut corrigé : un « ? » s'affichait seul en sous-titre à 0:01 (espace française avant la ponctuation).
 10. **Toujours 0 commentaire et 0 partage**, même avec la question finale. À essayer : un choix « tape 1 / tape 2 »
     (comme les votes du village, qui font commenter) et un commentaire épinglé par le compte.
+
+## Relevé du 15 nov. : la méthode v3 casse le plafond
+11. **Les 2 premières vidéos écrites avec la méthode v3** (Kévin raconte à la 1re personne, français parlé, deux coups du
+    méchant, silence + écho, doute, chute qui referme le début, zéro appel au spectateur) **sortent du premier lot** :
+    14 200 et 5 800 vues, contre 300 à 580 pour toutes les précédentes.
+12. **Vue en entier doublée** : 24–25 % contre 9–14 % avant, à durée égale (62 s). Temps moyen stable (22–24 s).
+13. **Les partages arrivent enfin** (23 et 38, contre 0 à 2) et beaucoup d'enregistrements (77 et 55).
+14. **Abonnés** : 14 sur Anthropic, 1 seul sur le permis : un sujet très recherché ramène des vues, mais pas forcément
+    des gens qui veulent suivre le compte. Les sujets « argent » purs (bourse, épargne) fidélisent mieux.
+→ On garde la méthode v3 pour tous les scripts.
