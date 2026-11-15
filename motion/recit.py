@@ -47,8 +47,9 @@ def gros_plan_mechant(fond, look, lt, dur, z0=2.05, z1=2.2, devant=None, **pose)
                 center=(MHEAD[0] - 40, MHEAD[1] + 40))
 
 
-def gros_plan_kevin(fond, lt, dur, pose="triste", devant=None):
-    return plan(fond, lt, pose, devant=devant, z=push(lt, dur, 2.0, 2.12), center=(KHEAD[0] + 40, KHEAD[1] + 40))
+def gros_plan_kevin(fond, lt, dur, pose="triste", devant=None, **kextra):
+    return plan(fond, lt, pose, devant=devant, z=push(lt, dur, 2.0, 2.12), center=(KHEAD[0] + 40, KHEAD[1] + 40),
+                **kextra)
 
 
 def echo(img, txt):
