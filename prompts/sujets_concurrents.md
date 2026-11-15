@@ -5,7 +5,7 @@ Méthode : les 250 dernières vidéos de chaque compte, gardées si elles font a
 regard.media, ame_sensible5, ec0leducash, ecureuillafinance. On reprend le SUJET, jamais le texte.
 Chaque règle est revérifiée au moment d'écrire. (✔ = déjà fait chez nous)
 
-## Travail (74 sujets au total dans ce fichier ; ceux-ci sont les plus sûrs)
+## Travail
 - Laver sa tenue de travail : à la charge de l'employeur — 2 M (bmf), 1,2 M (lefutetfute), 508 k (docccash)
 - Arriver en avance imposé = temps de travail — 810 k (docccash), 604 k (bmf)
 - Retard de 10 min, le patron retire 1 h de salaire — 43 k (1min2droit)
