@@ -155,7 +155,7 @@ def c_etagere(lt, dur):
     img = magasin(lt, "neutre", dict(mouth="flat"), z=push(lt, dur, 1.6, 1.75), center=(540, 760))
     tag(img, 540, 470, "POSÉ AU BORD, EN ÉQUILIBRE", 48, RED, WHITE, rot=-3, k=(lt - 2.0) / 0.3)
     if lt > 4.0:
-        tag(img, 540, 1200, "LA FAUTE DU MAGASIN", 56, YEL, INK, rot=2, k=(lt - 4.0) / 0.3)
+        tag(img, 540, 600, "LA FAUTE DU MAGASIN", 56, YEL, INK, rot=2, k=(lt - 4.0) / 0.3)
     return img
 
 
@@ -222,7 +222,7 @@ ENFANTS = [dict(shirt=(250, 190, 60), pants=(60, 90, 160), hair=(70, 45, 30), sc
 def chez_sarah(t, kpose="neutre", sarah=None, enfants=True, z=1.0, center=(540, 1000)):
     autres = [(780, SARAH, sarah or dict(mouth="flat"), 1.7)]
     if enfants:
-        autres += [(560, ENFANTS[0], {}, 0.4), (660, ENFANTS[1], {}, 0.9)]
+        autres += [(935, ENFANTS[0], {}, 0.4), (1020, ENFANTS[1], {}, 0.9)]   # à droite : jamais sous les sous-titres
     return plan(salon_bg, t, kpose, kx=260, autres=autres, z=z, center=center)
 
 
