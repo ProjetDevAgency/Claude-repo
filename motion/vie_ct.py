@@ -42,7 +42,7 @@ def parents(t, kpose="neutre", lea=None, pere=None, z=1.0, center=(540, 1000)):
 def k_hook(lt, dur):
     img = gros_plan_mechant(lambda: room("vide"), LEA, lt, dur, arm=0.5, devant=lambda d, t: bureau_fg(d))
     badge(img, 540, 1190, "SA COPINE")
-    bubble(img, 540, 570, ["1 350 € CHACUN,", "SINON JE SIGNE LE BAIL", "SANS TOI VENDREDI"], 58,
+    bubble(img, 540, 570, ["TU METS 1 350 €", "COMME MOI, SINON JE", "SIGNE SANS TOI VENDREDI"], 58,
            (lt + 0.3) / 0.3, tail_x=660)
     return shake(img, lt)
 
@@ -154,7 +154,7 @@ def k_chute(lt, dur):
 
 COUPLE = (Recit("droits_couple", "scripts/modele/19_couple_prorata.txt", "output/_work_droits_couple/voice_duo.wav",
                 compteur=dict(label="RESTE À KÉVIN / MOIS", depart=150, montant=600, phrase="Il me resterait six cents")),
-          [("Mille trois cent cinquante euros chacun, sinon", k_hook, ("impact", 1.0)),
+          [("Tu mets mille trois cent cinquante", k_hook, ("impact", 1.0)),
            ("C'est ce que ma copine", k_couture, ("whoosh", 0.6)), ("Et pourtant j'étais heureux", k_montee, ("pop", 0.8)),
            ("Je lui rappelle juste", k_compte, None), ("Et alors", k_coup1, ("impact", 0.8)),
            ("Et en serrant", k_geste, ("whoosh", 0.5)), ("Un homme qui peut pas", k_coup2, ("impact", 1.0)),
@@ -191,7 +191,7 @@ def chez_kevin(t, kpose="telephone", z=1.0, center=(540, 1000)):
 def a_hook(lt, dur):
     img = gros_plan_mechant(salon_bg, YANIS, lt, dur, arm=0.5, phone=True)
     badge(img, 540, 1190, "SON MEILLEUR POTE, LE MARIÉ")
-    bubble(img, 540, 570, ["2 100 € NON REMBOURSABLES ?", "T'AVAIS QU'À PRENDRE L'OPTION,", "C'EST TOI L'ORGANISATEUR"], 52, (lt + 0.3) / 0.3,
+    bubble(img, 540, 570, ["T'AS PAYÉ 2 100 € NON", "REMBOURSABLES ? FALLAIT", "PRENDRE L'OPTION"], 52, (lt + 0.3) / 0.3,
            tail_x=660)
     return shake(img, lt)
 
@@ -301,7 +301,7 @@ def a_chute(lt, dur):
 
 TAXES = (Recit("droits_taxes", "scripts/modele/20_taxes_aeroport.txt", "output/_work_droits_taxes/voice_duo.wav",
                compteur=dict(label="TAXES RÉCUPÉRÉES", depart=0, montant=360, phrase="Trois cent soixante euros")),
-         [("Deux mille cent euros de billets non", a_hook, ("impact", 1.0)),
+         [("T'as payé deux mille cent euros", a_hook, ("impact", 1.0)),
           ("C'est ce que mon meilleur", a_couture, ("notif", 0.7)), ("Et pourtant j'avais", a_montee, ("pop", 0.8)),
           ("Les cinq autres", a_demande, None), ("Pour un voyage", a_coup1, ("impact", 0.8)),
           ("Et en raccrochant", a_geste, ("whoosh", 0.5)), ("Toi de toute façon", a_coup2, ("impact", 1.0)),

@@ -360,7 +360,7 @@ def quai(t, kpose="neutre", drh=None, gars=True, z=1.0, center=(540, 1000)):
 def c_hook(lt, dur):
     img = gros_plan_mechant(entrepot_bg, DRH, lt, dur, arm=0.5)
     badge(img, 540, 1190, "LE DRH DE L'ENTREPÔT")
-    bubble(img, 540, 570, ["1 140 € DE PRIME ?", "T'AVAIS QU'À SIGNER", "LE CDI. C'EST ZÉRO"], 60, (lt + 0.3) / 0.3,
+    bubble(img, 540, 570, ["TA PRIME DE 1 140 € ?", "T'AVAIS QU'À SIGNER", "LE CDI. C'EST ZÉRO"], 60, (lt + 0.3) / 0.3,
            tail_x=660)
     return shake(img, lt)
 
@@ -468,7 +468,7 @@ def c_fin(lt, dur):
 
 CDD = (Recit("test_cdd", "scripts/modele/23_cdd_precarite.txt", "output/_work_test_cdd/voice_duo.wav",
              compteur=dict(label="DÛ PAR L'ENTREPÔT", depart=0, montant=1140, phrase="Six mois à mille")),
-       [("Mille cent quarante euros de prime", c_hook, ("impact", 1.0)), ("C'est ce que le DRH", c_couture, ("whoosh", 0.6)),
+       [("Tu veux ta prime de mille", c_hook, ("impact", 1.0)), ("C'est ce que le DRH", c_couture, ("whoosh", 0.6)),
         ("Et pourtant j'avais", c_montee, ("pop", 0.8)), ("Je lui demande juste", c_demande, None),
         ("La prime, c'est pour", c_coup1, ("impact", 0.8)), ("Et en refermant", c_geste, ("whoosh", 0.5)),
         ("Un CDD de plus", c_coup2, ("impact", 1.0)), ("Je dis rien", c_silence, None),

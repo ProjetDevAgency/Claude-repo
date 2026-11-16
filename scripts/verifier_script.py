@@ -3,7 +3,7 @@
     python3 scripts/verifier_script.py scripts/modele/22_valise_cassee.dial
 
 Vérifie ce qui se mesure : longueur (60-65 s), ponctuation interdite, négations en « ne », phrases trop longues,
-montant en toutes lettres dans la 1re phrase, objet nommé dans la 1re phrase, montant du hook repris dans la chute.
+montant en toutes lettres dans la 1re phrase MAIS pas en 1er mot, objet nommé dans la 1re phrase, montant du hook repris dans la chute.
 Le reste (les 8 critères de la machine à sujets, la règle de loi vérifiée) se coche à la main dans l'en-tête du .dial.
 """
 import re
@@ -31,6 +31,9 @@ def verifier(chemin):
     premiere = re.split(r"(?<=[.?!])\s+", hook)[0]
     a_montant = bool(re.search(NOMBRES, premiere.lower())) and "euro" in premiere.lower()
     (ok if a_montant else ko).append(f"montant en euros dans la 1re phrase : « {premiere} »")
+    premier_mot = (re.findall(r"[\wÀ-ÿ'-]+", premiere.lower()) or [""])[0]
+    (ko if re.fullmatch(NOMBRES, premier_mot.split("-")[0]) or premier_mot in ("mille",) else ok).append(
+        f"le prix est DANS la phrase, pas en 1er mot : 1er mot « {premier_mot} »")
     mots = [m for m in re.findall(r"[a-zàâçéèêëîïôûùüÿœ'-]+", premiere.lower())
             if not re.fullmatch(NOMBRES, m) and m not in ("euros", "euro", "de", "tu", "me", "t'as", "le", "la", "les",
                                                              "ton", "ta", "tes", "un", "une", "des", "et", "sur", "pour",

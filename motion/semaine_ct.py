@@ -352,7 +352,7 @@ CONSEILLER = dict(shirt=(40, 70, 130), pants=(36, 36, 44), hair=(50, 40, 30), ti
 MAMIE = dict(shirt=(170, 120, 170), pants=(60, 60, 80), hair=(215, 215, 222), long_hair=True, glasses=True)
 V = Video(banque_bg, CONSEILLER)
 CARTE = (recit("s_carte", "27_carte_piratee", "REMBOURSÉ À MAMIE", 3200, "Deux jours plus tard"), [
-    ("Trois mille deux cents euros volés", V.hook("h", "LE CONSEILLER DE SA BANQUE", ["3 200 € VOLÉS ?", "ELLE A CLIQUÉ,", "C'EST POUR ELLE"], devant=guichet_fg), ("impact", 1.0)),
+    ("Trois mille deux cents euros volés", V.hook("h", "LE CONSEILLER DE SA BANQUE", ["TA GRAND-MÈRE S'EST FAIT", "VOLER 3 200 € ?", "C'EST POUR ELLE"], devant=guichet_fg), ("impact", 1.0)),
     ("C'est ce que le conseiller", V.scene("couture", "carte", [("LA CARTE DE MAMIE", YEL, 0.3), ("MAISON DE RETRAITE : J-5", RED, 3.2)], mechant=dict(mouth="grin", arm=0.3), devant=guichet_fg), ("whoosh", 0.6)),
     ("Mamie, elle a", V.scene("montee", "neutre", [("MAMIE · 84 ANS", GREEN, 0.2), ("ELLE GÈRE TOUT SEULE", YEL, 1.6)], fond=salon_bg, sans_mechant=True, autres=[(780, MAMIE, dict(mouth="smile"), 0.4)]), ("pop", 0.8)),
     ("Un faux SMS", V.tel("sms", "14:07", [("SMS", "Livraison", "Colis bloqué, payez", GRIS), ("Banque", "Paiement carte", "− 3 200,00 €", RED)], "choc", fond=salon_bg), ("notif", 0.7)),
@@ -377,7 +377,7 @@ SERVICE = dict(shirt=(60, 140, 200), pants=(36, 36, 44), hair=(30, 25, 20))
 V = Video(callcenter_bg, SERVICE)
 APPART = lambda: room("appart")  # noqa: E731
 COLIS = (recit("s_colis", "28_colis_perdu", "REMBOURSÉ PAR LE SITE", 1200, "Le vendredi, le site"), [
-    ("Mille deux cents euros d'ordinateur", V.hook("h", "LE SERVICE CLIENT", ["1 200 € JAMAIS REÇU ?", "C'EST MARQUÉ LIVRÉ.", "VOYEZ AVEC LE", "TRANSPORTEUR"], devant=casque), ("impact", 1.0)),
+    ("Mille deux cents euros d'ordinateur", V.hook("h", "LE SERVICE CLIENT", ["VOTRE ORDI À 1 200 €", "JAMAIS ARRIVÉ ? VOYEZ", "AVEC LE TRANSPORTEUR"], devant=casque), ("impact", 1.0)),
     ("C'est ce que le service client", V.scene("couture", "telephone", [("MISSION DE GRAPHISTE : LUNDI", YEL, 0.3), ("PLUS D'ORDI", RED, 3.0)], fond=APPART, sans_mechant=True), ("whoosh", 0.6)),
     ("Et pourtant j'étais fier", V.scene("montee", "victoire", [("3 MOIS DE PETITS BOULOTS", GREEN, 0.2), ("LE CONTRAT EST SIGNÉ", YEL, 2.0)], fond=APPART, sans_mechant=True), ("pop", 0.8)),
     ("Le suivi dit livré", V.tel("suivi", "14:02", [("Suivi", "Colis 4471", "LIVRÉ · 14:02", GREEN)], "choc", fond=APPART, tags=[("PERSONNE A SONNÉ", RED, 2.5)]), ("notif", 0.7)),
@@ -401,7 +401,7 @@ PATRON = dict(shirt=(245, 245, 248), pants=(50, 50, 60), hair=(80, 70, 60), glas
 GILET = dict(shirt=(230, 120, 40))
 V = Video(chantier_bg, PATRON, GILET)
 SALAIRE = (recit("s_salaire", "29_salaire_retard", "RENDU PAR LE PATRON", 90, "Le mois suivant"), [
-    ("Quatre-vingt-dix euros de frais", V.hook("h", "MON PATRON", ["90 € DE FRAIS ?", "LE SALAIRE TOMBE", "QUAND IL TOMBE"]), ("impact", 1.0)),
+    ("Quatre-vingt-dix euros de frais", V.hook("h", "MON PATRON", ["QUE JE TE PAIE", "TES 90 € DE FRAIS ?", "LE SALAIRE TOMBE", "QUAND IL TOMBE"]), ("impact", 1.0)),
     ("C'est ce que mon patron", V.scene("couture", "choc", [("PAIE ATTENDUE LE 1er · ON EST LE 12", YEL, 0.3), ("LOYER REJETÉ", RED, 3.4)], mechant=dict(mouth="grin")), ("whoosh", 0.6)),
     ("Et pourtant j'aimais", V.scene("montee", "victoire", [("2 ANS DE CHANTIERS", GREEN, 0.2), ("MÊME SOUS LA NEIGE", YEL, 2.4)]), ("pop", 0.8)),
     ("Je lui montre juste", V.fiche("rejet", "AVIS DE REJET", "TA BANQUE", [("Prélèvement du loyer", "rejeté", 0.3, False), ("Frais de rejet", "90 €", 1.0, True)]), None),
@@ -425,7 +425,7 @@ SALAIRE = (recit("s_salaire", "29_salaire_retard", "RENDU PAR LE PATRON", 90, "L
 GARAGISTE = dict(shirt=(60, 90, 140), pants=(60, 90, 140), hair=(40, 30, 25))
 V = Video(garage_bg, GARAGISTE)
 VOITURE = (recit("s_voiture", "30_voiture_occasion", "PAYÉ PAR LE GARAGE", 1800, "Deux heures plus tard"), [
-    ("Mille huit cents euros l'embrayage", V.hook("h", "LE GARAGISTE", ["1 800 € L'EMBRAYAGE ?", "VENDUE EN L'ÉTAT,", "T'AS SIGNÉ"]), ("impact", 1.0)),
+    ("Mille huit cents euros l'embrayage", V.hook("h", "LE GARAGISTE", ["QUE JE PAIE TON", "EMBRAYAGE À 1 800 € ?", "VENDUE EN L'ÉTAT,", "T'AS SIGNÉ"]), ("impact", 1.0)),
     ("C'est ce que le garagiste", V.scene("couture", "choc", [("OCCASION · 6 500 €", YEL, 0.3), ("3 SEMAINES APRÈS", RED, 1.6), ("CDI LUNDI · À 40 KM", WHITE, 5.0)], mechant=dict(mouth="grin")), ("whoosh", 0.6)),
     ("Et pourtant j'avais tout fait", V.scene("montee", "victoire", [("LE CRÉDIT, L'ASSURANCE", GREEN, 0.3), ("DES TAPIS NEUFS", YEL, 2.0)], mechant=dict(mouth="smile")), ("pop", 0.8)),
     ("Sur la rocade", V.scene("panne", "choc", [("L'EMBRAYAGE LÂCHE", RED, 0.2), ("REMORQUAGE · DEVIS", YEL, 1.6)], fond=route_bg, sans_mechant=True), ("impact", 0.6)),
@@ -450,7 +450,7 @@ MAMAN = dict(shirt=(150, 92, 165), pants=(50, 50, 70), hair=(110, 70, 40), long_
 V = Video(cabinet_bg, DENTISTE)
 MAMAN_C = [(560, MAMAN, dict(mouth="flat", sc=0.92), 0.8)]
 DENTISTE_V = (recit("s_dentiste", "31_dentiste", "ÉCONOMISÉ", 2400, "Trois semaines plus tard"), [
-    ("Deux mille quatre cents euros les deux", V.hook("h", "LA DENTISTE", ["2 400 € LES COURONNES ?", "LE PAS CHER, C'EST", "POUR MÂCHER DU CARTON"]), ("impact", 1.0)),
+    ("Deux mille quatre cents euros les deux", V.hook("h", "LA DENTISTE", ["C'EST CHER, 2 400 €", "LES COURONNES ? LE PAS", "CHER, C'EST DU CARTON"]), ("impact", 1.0)),
     ("C'est ce que la dentiste", V.scene("couture", "carte", [("LE DEVIS", YEL, 0.3), ("RETRAITE DE MAMAN : J-21", RED, 2.6)], mechant=dict(mouth="grin"), autres=MAMAN_C, mx=840), ("whoosh", 0.6)),
     ("Quarante-deux ans", V.scene("montee", "neutre", [("42 ANS À LA CANTINE", GREEN, 0.2), ("SOURIRE SUR LES PHOTOS", YEL, 3.4)], fond=salon_bg, sans_mechant=True, autres=[(760, MAMAN, dict(mouth="smile"), 0.8)]), ("pop", 0.8)),
     ("Sur le devis", V.fiche("devis", "DEVIS · 2 COURONNES", "CABINET DENTAIRE", [("Céramique", "2 400 €", 0.3, True), ("Option 100 % Santé", "AUCUNE", 1.6, False)], kpose="carte"), None),
@@ -474,7 +474,7 @@ GERANTE = dict(shirt=(140, 40, 70), pants=(30, 30, 40), hair=(90, 50, 30), long_
 GILET_B = dict(shirt=(30, 90, 160))
 V = Video(boutique_bg, GERANTE, GILET_B)
 RETARD = (recit("s_retard", "32_retard_retenue", "RENDU PAR LA GÉRANTE", 108, "Le mois suivant"), [
-    ("Cent huit euros retirés", V.hook("h", "MA GÉRANTE", ["108 € POUR 10 MINUTES ?", "UNE HEURE PAR RETARD,", "C'EST LA RÈGLE ICI"]), ("impact", 1.0)),
+    ("Cent huit euros retirés", V.hook("h", "MA GÉRANTE", ["JE T'AI RETIRÉ 108 €,", "OUI. UNE HEURE PAR", "RETARD, C'EST LA RÈGLE"]), ("impact", 1.0)),
     ("C'est ce que ma gérante", V.scene("couture", "choc", [("GRÈVE DES BUS : 9 RETARDS", YEL, 1.6), ("VOYAGE SCOLAIRE : VENDREDI", RED, 4.6)], mechant=dict(mouth="grin")), ("whoosh", 0.6)),
     ("Et pourtant je partais", V.scene("montee", "marche", [("PARTI 1 H AVANT", GREEN, 0.2), ("2 ARRÊTS À PIED", YEL, 1.6)], fond=lambda: route_bg(True), sans_mechant=True), ("pop", 0.8)),
     ("Neuf fois dix minutes", V.calcul("calcul", "9 RETARDS DE 10 MIN", [("RETARD RÉEL", 90, "1 H 30", GREEN, 0.4), ("RETIRÉ", 540, "9 H", RED, 2.2)], "EN MINUTES"), ("ticks", 0.6)),
@@ -498,7 +498,7 @@ PATRON_A = dict(shirt=(60, 60, 70), pants=(40, 40, 50), hair=(50, 40, 30), glass
 BLEU_TRAVAIL = dict(shirt=(50, 80, 150))
 V = Video(atelier_bg, PATRON_A, BLEU_TRAVAIL)
 SMIC = (recit("s_smic", "33_smic_decembre", "EN PLUS PAR MOIS", 24, "Fin décembre"), [
-    ("Vingt-quatre euros de plus", V.hook("h", "MON PATRON", ["24 € DE PLUS ? LE SMIC,", "C'EST EN JANVIER.", "ET PAS CHEZ MOI"]), ("impact", 1.0)),
+    ("Vingt-quatre euros de plus", V.hook("h", "MON PATRON", ["TU CROIS TOUCHER 24 €", "DE PLUS ? LE SMIC, C'EST", "EN JANVIER. PAS CHEZ MOI"]), ("impact", 1.0)),
     ("C'est ce que mon patron", V.scene("couture", "choc", [("SMIC : 1er DÉCEMBRE", YEL, 0.3), ("NOËL DE MES 2 NIÈCES", RED, 3.0)], mechant=dict(mouth="grin")), ("whoosh", 0.6)),
     ("Et pourtant j'avais suivi", V.tel("actu", "07:45", [("Actu", "9 novembre", "SMIC + 1,6 %", BLEU), ("Actu", "Dès le 1er décembre", "Un mois plus tôt", GREEN)], fond=salon_bg), ("notif", 0.7)),
     ("Je lui demande juste", V.scene("demande", "parle", [("SUR LA PAIE ?", WHITE, 0.3)], mechant=dict(mouth="flat")), None),
@@ -522,7 +522,7 @@ VENDEUR = dict(shirt=(200, 40, 40), pants=(36, 36, 44), hair=(160, 110, 60))
 TECH = dict(shirt=(50, 80, 150), pants=(50, 80, 150), hair=(40, 30, 25), cap=(50, 80, 150))
 V = Video(magasin_bg, VENDEUR)
 GARANTIE = (recit("s_garantie", "34_garantie_legale", "PAYÉ PAR LE MAGASIN", 650, "Trois jours plus tard"), [
-    ("Six cent cinquante euros la machine", V.hook("h", "LE VENDEUR DU MAGASIN", ["650 € LA MACHINE ?", "PLUS D'UN AN, VOYEZ", "AVEC LA MARQUE"], phone=True), ("impact", 1.0)),
+    ("Six cent cinquante euros la machine", V.hook("h", "LE VENDEUR DU MAGASIN", ["VOTRE MACHINE À 650 €", "EN PANNE ? VOYEZ", "AVEC LA MARQUE"], phone=True), ("impact", 1.0)),
     ("C'est ce que le vendeur", V.scene("couture", "telephone", [("MA FILLE A 8 MOIS", YEL, 1.4), ("1 SEMAINE DE LINGE SALE", RED, 3.0)], fond=salon_bg, sans_mechant=True, devant=salon_machine), ("whoosh", 0.6)),
     ("Et pourtant on l'avait", V.scene("montee", "victoire", [("LA PLUS SOLIDE DU RAYON", GREEN, 0.3), ("650 €", YEL, 1.8)], mechant=dict(mouth="smile", arm=0.5)), ("pop", 0.8)),
     ("Quatorze mois après", V.scene("panne", "choc", [("14 MOIS APRÈS", WHITE, 0.2), ("PLUS D'ESSORAGE", RED, 1.4)], fond=salon_bg, sans_mechant=True, devant=salon_fumee), ("impact", 0.6)),
