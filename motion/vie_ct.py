@@ -167,8 +167,8 @@ COUPLE = (Recit("droits_couple", "scripts/modele/19_couple_prorata.txt", "output
 
 # ═════════════ 2. les taxes d'aéroport ═════════════
 
-def aeroport_bg():
-    if "a" not in _bg:
+def aeroport_bg(panneau="BARCELONE · ANNULÉ"):
+    if ("a", panneau) not in _bg:
         s = SS
         im = Image.new("RGB", (W * s, H * s), (215, 225, 235))
         d = ImageDraw.Draw(im)
@@ -179,9 +179,9 @@ def aeroport_bg():
         d.polygon([(500 * s, 740 * s), (640 * s, 600 * s), (680 * s, 610 * s), (590 * s, 760 * s)], fill=WHITE)
         d.rectangle([0, 1500 * s, W * s, H * s], fill=(180, 180, 190))
         d.rounded_rectangle([480 * s, 150 * s, 1040 * s, 280 * s], radius=14 * s, fill=(20, 22, 30))
-        d.text((510 * s, 215 * s), "BARCELONE · ANNULÉ", font=FA(44 * s), fill=(255, 200, 60), anchor="lm")
-        _bg["a"] = im
-    return _bg["a"]
+        d.text((510 * s, 215 * s), panneau, font=FA(44 * s), fill=(255, 200, 60), anchor="lm")
+        _bg[("a", panneau)] = im
+    return _bg[("a", panneau)]
 
 
 def chez_kevin(t, kpose="telephone", z=1.0, center=(540, 1000)):
