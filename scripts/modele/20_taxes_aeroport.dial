@@ -1,21 +1,21 @@
-# Billet d'avion non utilisé, même « non remboursable » : les taxes et redevances liées au passager sont remboursables
-# (Code de la consommation, art. L224-66), demande gratuite en ligne, remboursement sous 30 jours (sinon amende pour
-# le vendeur). C'est à l'acheteur de le demander. Exemple : ~55 € de taxes par billet aller-retour Barcelone.
-# Méthode v3 + geste clivant (Kévin garde aussi les taxes du billet de Yanis) + doute.
-# M = Yanis, le meilleur pote. N = Kévin. Compteur : RÉCUPÉRÉ PAR KÉVIN 0 € → 110 €.
-M: Trois cent quatre-vingts euros de billets non remboursables ? T'avais qu'à prendre l'option, radin.
-N: C'est ce que mon meilleur pote m'a sorti, la veille du départ pour Barcelone. Les deux billets, c'est moi qui les avais payés. Et lui venait d'annuler pour une fille rencontrée la semaine d'avant.
-N: Et pourtant j'avais tout prévu. Le match au Camp Nou, la plage, quinze ans d'amitié à fêter.
-N: Je lui demande juste s'il peut me rembourser son billet. Il rigole et il me fait,
-M: Te rembourser quoi ? C'est la compagnie qui garde l'argent, pas moi.
+# Billet non utilisé, même « non remboursable » : taxes et redevances liées au passager remboursables (Code de la
+# consommation, art. L224-66), demande gratuite en ligne, remboursement sous 30 jours. Version 8/8.
+# Enterrement de vie de garçon à Marrakech : 6 billets à 350 € = 2 100 €, payés par Kévin (l'organisateur) ; les 5 potes
+# l'ont remboursé, sauf le marié. Le mariage est annulé 3 jours avant le départ → personne ne part.
+# Taxes ≈ 60 € par billet → 360 € (cas type, montants indicatifs). Deadline : départ vendredi.
+# Zone grise : Kévin rend leur part de taxes aux 5 potes, et garde celle du marié. M = Yanis, le marié. N = Kévin.
+M: Deux mille cent euros de billets non remboursables ? T'avais qu'à prendre l'option, c'est toi l'organisateur.
+N: C'est ce que mon meilleur pote m'a sorti, trois jours avant son enterrement de vie de garçon à Marrakech. Six billets, tous payés par moi. Et lui venait d'annuler son mariage.
+N: Et pourtant j'avais tout préparé. Le riad, le quad dans le désert, quinze ans d'amitié à fêter.
+N: Les cinq autres m'avaient remboursé leur place. Lui, jamais. Je lui demande juste ses trois cent cinquante euros. Il rigole et il me fait,
+M: Pour un voyage où je vais même pas ? Faut être sérieux.
 N: Et en raccrochant presque, il en rajoute une couche.
 M: Toi de toute façon, t'as jamais su profiter de la vie.
-N: Je dis rien. Je regarde les deux cartes d'embarquement sur mon téléphone.
+N: Je dis rien. Je regarde les six cartes d'embarquement sur mon téléphone.
 N: Jamais su profiter.
 N: Sauf que ce que presque personne sait, c'est qu'un billet non remboursable a une partie remboursable. Les taxes d'aéroport. Si tu montes pas dans l'avion, la loi oblige la compagnie à te les rendre.
 N: Mais alors comment on fait ? Un formulaire en ligne, gratuit. Elle a trente jours pour payer, sinon elle risque une amende.
-N: Je fais la demande pour les deux billets. Le mien, et celui de Yanis. C'est moi qui les ai payés.
-N: Trois semaines plus tard, cent dix euros tombent sur mon compte.
-N: Honnêtement, je me dis que j'aurais pu lui rendre sa moitié. Quinze ans d'amitié, pour cinquante-cinq euros.
-N: Le soir même, il m'écrit. La fille l'a quitté. Il veut savoir si les billets sont encore valables.
-N: Cent dix euros, et c'est lui qui est resté à quai.
+N: Je fais la demande pour les six billets. Trois cent soixante euros. Je rends leur part aux cinq autres. Et celle de Yanis, je la garde.
+N: Honnêtement, je me dis que j'aurais dû lui rendre sa part. Quinze ans d'amitié, pour soixante euros.
+N: Une semaine plus tard, il m'écrit. Le mariage est de nouveau prévu. Il veut savoir si les billets sont encore valables.
+N: Deux mille cent euros de billets, et c'est lui qui est resté à quai.
