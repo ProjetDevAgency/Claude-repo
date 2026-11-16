@@ -1,0 +1,36 @@
+{
+ "script": "scripts/mon_loup_p1.txt",
+ "sortie": "mon_loup_p1",
+ "tts": {
+  "provider": "elevenlabs",
+  "model": "eleven_v4",
+  "voix": {
+   "NARRATEUR": {"id": "bJ4Wa440PU9c765nkJkn", "nom": "Jon, le narrateur cinématique",
+                 "settings": {"stability": 0.45, "similarity_boost": 0.8, "style": 0.25}},
+   "VOIX DERRIÈRE LA PORTE": {"id": "O31r762Gb3WFygrEOGh0", "nom": "Victoire", "effet": "porte",
+                 "settings": {"stability": 0.55, "similarity_boost": 0.8, "style": 0.15}},
+   "TEXTO DE MAMAN": {"id": "O31r762Gb3WFygrEOGh0", "nom": "Victoire", "effet": "telephone", "texto": true,
+                 "settings": {"stability": 0.6, "similarity_boost": 0.8, "style": 0.1}}
+  }
+ },
+ "rythme": {"debut": 0.12, "entre_repliques": 0.28, "pause": 0.9, "tenue_finale": 3.2, "duree_min": 62},
+ "bruitages": {
+  "TROIS COUPS": {"son": "knock3", "avance": 1.2},
+  "VIBREUR": {"son": "buzz", "avance": 0.45},
+  "GRINCEMENT": {"son": "creak", "avance": 0.9},
+  "PAS DANS L'ESCALIER": {"son": "steps", "avance": 1.3},
+  "QUESTION": {"son": "sting"}
+ },
+ "battements_depuis": 6,
+ "hud": {"episode": "PARTIE 1", "heure": "02:14:07", "lieu": "6E ÉTAGE · TON SALON"},
+ "regle": {"ligne": 7, "titre": "RÈGLE N°1", "texte": "LA NUIT, TU OUVRES À PERSONNE"},
+ "texto": {"de": "Maman", "avant": "Bonne nuit mon loup", "avant_heure": "22:03", "heure": "02:15"},
+ "choix": {"gauche": "TON FRÈRE", "droite": "OUVRIR À MAMAN"},
+ "rouge": ["quatorze", "frappe", "personne", "ascenseur", "nuit", "frère", "canapé", "sécurité", "judas", "vide",
+           "pieds", "règle", "loup", "maman", "texto", "vibre", "cœur", "rien", "froid", "qui", "voix", "plu",
+           "salle", "lumière", "ouvres", "chercher"],
+ "plans": ["porte", "salon_large", "canape", "serrure", "judas", "porte_bas", "heros_porte", "porte_proche",
+           "heros_visage", "telephone", "telephone_proche", "telephone_proche", "telephone_proche", "porte_bas",
+           "entre_deux", "canape_vide", "salle_de_bain", "final"],
+ "marques": {"marche": 4, "judas": 5, "pieds": 6, "texto": 11, "retour": 16, "choix": 18}
+}

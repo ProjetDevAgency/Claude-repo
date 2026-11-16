@@ -1,5 +1,6 @@
 // Étape 2 : rend la scène 3D image par image et assemble la vidéo avec l'audio.
 //   node tueur/render.js [sortie.mp4] [--preview t1,t2,...] [--fps 30]
+// Par défaut la vidéo va dans output/<sortie de l'épisode>.mp4
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
@@ -10,7 +11,6 @@ const ROOT = path.resolve(__dirname, "..");
 const BUILD = path.join(__dirname, "build");
 const args = process.argv.slice(2);
 const opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
-const out = args[0] && !args[0].startsWith("--") ? args[0] : path.join(ROOT, "output", "tueur_ep1.mp4");
 const FPS = Number(opt("--fps", 30));
 const preview = opt("--preview", null);
 
@@ -26,6 +26,7 @@ const server = http.createServer((req, res) => {
   await new Promise(r => server.listen(0, r));
   const port = server.address().port;
   const tl = JSON.parse(fs.readFileSync(path.join(BUILD, "timeline.json"), "utf8"));
+  const out = args[0] && !args[0].startsWith("--") ? args[0] : path.join(ROOT, "output", (tl.sortie || "episode") + ".mp4");
   const browser = await chromium.launch({ args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"] });
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
   page.on("pageerror", e => console.error("PAGE:", e.message));

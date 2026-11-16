@@ -10,38 +10,44 @@
   canvas { position: absolute; inset: 0; }
   #ui { position: absolute; inset: 0; font-family: "Inter", sans-serif; color: #fff; pointer-events: none; }
 
-  #hud { position: absolute; left: 64px; top: 150px; text-shadow: 0 3px 14px rgba(0,0,0,.8); }
-  #hud .ep { display: inline-block; background: #d72631; color: #fff; font: 800 30px "Mont"; letter-spacing: 3px;
-             padding: 8px 18px; border-radius: 8px; }
-  #hud .clock { font: 400 118px "Anton"; letter-spacing: 4px; line-height: 1.05; margin-top: 14px; }
-  #hud .place { font: 700 30px "Inter"; letter-spacing: 5px; opacity: .85; }
-  #hud .rec { display:inline-block; width:18px; height:18px; border-radius:50%; background:#ff3340; margin-right:12px; }
+  #hud { position: absolute; left: 56px; top: 140px; text-shadow: 0 3px 14px rgba(0,0,0,.8); }
+  #hud .ep { display: inline-block; background: #e3202b; color: #fff; font: 800 28px "Mont"; letter-spacing: 3px;
+             padding: 8px 16px; border-radius: 8px; }
+  #hud .rec { display:inline-block; width:16px; height:16px; border-radius:50%; background:#fff; margin-right:12px; }
+  #hud .clock { font: 400 100px "Anton"; letter-spacing: 3px; line-height: 1.05; margin-top: 12px; }
+  #hud .place { font: 700 28px "Inter"; letter-spacing: 5px; opacity: .85; }
 
-  #sub { position: absolute; left: 70px; right: 70px; top: 610px; padding: 34px 40px; border-radius: 22px;
-         background: rgba(8,10,16,.72); text-align: center; opacity: 0; transform: translateY(16px); }
-  #sub .t { font: 600 50px/1.3 "Inter"; }
-  #sub .h { font: 800 56px/1.25 "Mont"; color: #ffa53a; margin-top: 12px; opacity: 0; }
+  #cap { position: absolute; left: 70px; right: 150px; top: 1170px; text-align: center; font: 400 104px/1.04 "Anton";
+         letter-spacing: 1px; text-transform: uppercase; color: #fff; -webkit-text-stroke: 4px #000; paint-order: stroke fill;
+         text-shadow: 0 6px 22px rgba(0,0,0,.75); }
+  #cap .r { color: #ff2b2b; }
+  #cap.dlg { color: #ffe9c9; }
+
+  #rule { position: absolute; left: 100px; right: 100px; top: 470px; background: rgba(10,12,18,.92); border: 4px solid #ff2b2b;
+          border-radius: 20px; padding: 26px 30px 30px; text-align: center; opacity: 0; }
+  #rule .k { display: inline-block; background: #ff2b2b; font: 400 44px "Anton"; padding: 4px 22px; border-radius: 8px; letter-spacing: 3px; }
+  #rule .t { font: 400 66px/1.08 "Anton"; margin-top: 16px; letter-spacing: 1px; }
+
+  #sms { position: absolute; left: 120px; right: 120px; top: 380px; background: #f3f3f6; color: #111; border-radius: 36px;
+         padding: 26px 30px 34px; opacity: 0; box-shadow: 0 24px 70px rgba(0,0,0,.7); }
+  #sms .h { display: flex; align-items: center; gap: 18px; font: 700 40px "Inter"; padding-bottom: 14px; border-bottom: 2px solid #ddd; }
+  #sms .av { width: 64px; height: 64px; border-radius: 50%; background: #c94f7c; color: #fff; display: flex; align-items: center;
+             justify-content: center; font: 800 34px "Inter"; }
+  #sms .ts { text-align: center; color: #8a8a90; font: 500 26px "Inter"; margin: 18px 0 8px; }
+  #sms .b { display: inline-block; background: #e2e2e8; border-radius: 28px; padding: 18px 26px; font: 500 42px/1.25 "Inter"; max-width: 88%; }
+  #sms .hrt { color: #e3205e; display: inline-block; }
+  #sms .ring { position: absolute; border: 6px solid #ff2b2b; border-radius: 40px; opacity: 0; }
 
   #peep { position: absolute; inset: 0; opacity: 0;
-          background: radial-gradient(circle at 50% 48%, transparent 0 360px, rgba(0,0,0,.85) 420px, #000 470px); }
-
-  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+          background: radial-gradient(circle at 50% 46%, transparent 0 360px, rgba(0,0,0,.85) 420px, #000 470px); }
   #vign { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0,0,0,.55) 100%); }
-
-  #choice { position: absolute; left: 0; right: 0; top: 0; bottom: 0; opacity: 0;
-            background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,.7) 45%, rgba(0,0,0,.15) 100%); }
-  #choice .q { position:absolute; top: 560px; width:100%; text-align:center; font: 800 46px "Mont"; letter-spacing: 3px; color:#ffa53a; }
-  .card { position: absolute; left: 90px; right: 90px; height: 230px; border-radius: 28px; display: flex; align-items: center;
-          gap: 36px; padding: 0 44px; box-sizing: border-box; background: rgba(15,18,28,.92); border: 4px solid #fff; transform: scale(.85); opacity: 0; }
-  .card .k { width: 128px; height: 128px; border-radius: 22px; display:flex; align-items:center; justify-content:center; font: 400 92px "Anton"; flex: none; }
-  .card .l { font: 800 64px/1.05 "Mont"; }
-  #ca { top: 680px; } #ca .k { background: #2f7cff; }
-  #cb { top: 1010px; } #cb .k { background: #d72631; }
-  #vs { position:absolute; top: 918px; width:100%; text-align:center; font: 400 64px "Anton"; color:#fff; opacity:0; }
-  #bar { position:absolute; left:90px; right:90px; top:1290px; height:16px; border-radius:8px; background:rgba(255,255,255,.18); overflow:hidden; opacity:0; }
-  #bar i { display:block; height:100%; width:0; background:#ffa53a; }
-  #cta { position:absolute; top: 1340px; width:100%; text-align:center; font: 700 44px "Inter"; opacity:0; }
-  #cta b { color:#ffa53a; font-family:"Mont"; }
+  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+  .lab { position: absolute; font: 400 66px "Anton"; letter-spacing: 1px; padding: 6px 22px 8px; border-radius: 12px; opacity: 0;
+         white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+  #labl { background: #ff2b2b; color: #fff; }
+  #labr { background: #fff; color: #111; }
+  #comment { position: absolute; top: 1430px; width: 100%; text-align: center; font: 400 80px "Anton"; letter-spacing: 3px; opacity: 0;
+             -webkit-text-stroke: 4px #000; paint-order: stroke fill; }
 </style>
 </head>
 <body>
@@ -53,17 +59,22 @@
     <div class="clock" id="clock">02:14:07</div>
     <div class="place" id="place"></div>
   </div>
-  <div id="sub"><div class="t"></div><div class="h"></div></div>
-  <div id="choice">
-    <div class="q">À TOI DE CHOISIR</div>
-    <div class="card" id="ca"><div class="k">A</div><div class="l"></div></div>
-    <div id="vs">OU</div>
-    <div class="card" id="cb"><div class="k">B</div><div class="l"></div></div>
-    <div id="bar"><i></i></div>
-    <div id="cta"></div>
+  <div id="rule"><div class="k" id="rulek"></div><div class="t" id="rulet"></div></div>
+  <div id="sms">
+    <div class="h"><div class="av">M</div><span id="smsde"></span></div>
+    <div class="ts" id="smsts1"></div>
+    <div><span class="b" id="smsold"></span></div>
+    <div class="ts" id="smsts2"></div>
+    <div><span class="b" id="smsnew"></span></div>
+    <div class="ring" id="ring"></div>
   </div>
+  <div id="cap"></div>
+  <div class="lab" id="labl"></div>
+  <div class="lab" id="labr"></div>
+  <div id="comment">COMMENTE ↓</div>
   <div id="flash"></div>
 </div>
+
 
 <script type="importmap">
 { "imports": { "three": "/tueur/node_modules/three/build/three.module.js",
@@ -184,7 +195,7 @@ const LX = -3;
 box(TH, WALL_H, 3.8, WALL, LX, WALL_H / 2, -1.1);
 box(TH, WALL_H - 2.1, 0.95, WALL, LX, 2.1 + (WALL_H - 2.1) / 2, 1.675);
 box(TH, WALL_H, 0.85, WALL, LX, WALL_H / 2, 2.575);
-const bathDoor = box(0.06, 2.06, 0.9, 0xe2ddd2, LX + 0.06, 1.05, 1.675);
+const bathDoor = box(0.06, 2.06, 0.9, 0x5e5a54, LX + 0.06, 1.05, 1.675);
 box(0.06, 0.06, 0.06, 0xb8b8b8, LX + 0.12, 1.05, 1.3);
 const bathSign = new THREE.Mesh(new THREE.PlaneGeometry(0.3, 0.3), new THREE.MeshBasicMaterial({ map: canvasTex(128, 128, (g) => {
   g.fillStyle = "#e9e4da"; g.fillRect(0, 0, 128, 128); g.fillStyle = "#4a6fa8"; g.font = "bold 64px sans-serif";
@@ -273,11 +284,10 @@ function drawPhone(state, k) {
   const g = phoneTex.userData.ctx;
   g.fillStyle = state === 0 ? "#050505" : "#0d1424"; g.fillRect(0, 0, 256, 512);
   if (state > 0) {
-    g.fillStyle = "#cfd8ea"; g.font = "bold 62px Inter"; g.textAlign = "center"; g.fillText("02:14", 128, 110);
-    g.fillStyle = `rgba(255,255,255,${.9 * k})`; g.beginPath(); g.roundRect(16, 160, 224, state === 2 ? 190 : 110, 22); g.fill();
-    g.fillStyle = "#111"; g.textAlign = "left"; g.font = "bold 24px Inter"; g.fillText("Numéro inconnu", 34, 202);
-    g.font = "20px Inter"; g.fillStyle = "#555"; g.fillText("maintenant", 34, 236);
-    if (state === 2) { g.fillStyle = "#d72631"; g.font = "bold 27px Inter"; g.fillText("Je ne suis pas", 34, 288); g.fillText("dehors.", 34, 322); }
+    g.fillStyle = "#cfd8ea"; g.font = "bold 62px Inter"; g.textAlign = "center"; g.fillText("02:15", 128, 110);
+    g.fillStyle = `rgba(255,255,255,${.9 * k})`; g.beginPath(); g.roundRect(16, 160, 224, 120, 22); g.fill();
+    g.fillStyle = "#111"; g.textAlign = "left"; g.font = "bold 26px Inter"; g.fillText("Maman", 34, 202);
+    g.font = "21px Inter"; g.fillStyle = "#333"; g.fillText("Je finis à six heures.", 34, 238); g.fillText("Ouvre à personne…", 34, 264);
   }
   phoneTex.needsUpdate = true;
 }
@@ -294,6 +304,32 @@ for (let r = 0; r < 3; r++) for (let i = 0; i < 6; i++) if (rnd() > .25) {
 box(0.3, 0.32, 0.3, 0x8a5a3c, 2.55, 0.16, -2.5); const leaf = new THREE.Mesh(new THREE.IcosahedronGeometry(0.42, 0), mat(0x3f7a4a, { flatShading: true }));
 leaf.position.set(2.55, 0.75, -2.5); leaf.castShadow = true; scene.add(leaf);
 const frame = box(0.6, 0.45, 0.03, 0xe0d6c2, 0.2, 1.95, BZ + 0.1); box(0.5, 0.35, 0.01, 0x7a8fb0, 0.2, 1.95, BZ + 0.12);
+
+// ---------- épisode « Mon loup » : le petit frère, la chaîne, la salle de bain ----------
+killer.visible = false; eyes.forEach(e => e.visible = false);
+const brother = person({ top: 0xc9a24a, legs: 0x3a4a6a, skin: 0xe8bb95, hair: 0x3a2416 });
+brother.scale.setScalar(0.62); brother.rotation.x = -Math.PI / 2;   // allongé sur le dos
+const brotherBed = new THREE.Group(); brotherBed.add(brother); brotherBed.rotation.y = Math.PI / 2;  // tête vers -x
+brotherBed.position.set(0.95, 0.5, 2.15); scene.add(brotherBed);
+const blanket = box(0.78, 0.08, 0.44, 0x7d6aa8, 0.56, 0.57, 2.15);
+// chaîne de sécurité et verrou, côté intérieur
+const chainM = mat(0xc3c8d2, { emissive: 0x111318 });
+for (let i = 0; i < 7; i++) {
+  const k = i / 6, link = new THREE.Mesh(new THREE.TorusGeometry(0.016, 0.005, 6, 12), chainM);
+  link.position.set(1.93 - k * 0.2, 1.36 - Math.sin(Math.PI * k) * 0.05, BZ + 0.07); link.rotation.y = i % 2 ? Math.PI / 2 : 0;
+  scene.add(link);
+}
+box(0.05, 0.08, 0.03, 0xb8bcc6, 1.94, 1.36, BZ + 0.06); box(0.12, 0.03, 0.03, 0xb8bcc6, 1.7, 1.36, BZ + 0.08);
+box(0.07, 0.07, 0.04, 0xd9b45a, 1.78, 1.22, BZ + 0.07, scene, { emissive: 0x332200 });
+const doorFill = new THREE.PointLight(0x8fa6ff, 0.9, 2.5, 2); doorFill.position.set(1.2, 1.9, -2.2); scene.add(doorFill);
+// lumière sous la porte de la salle de bain
+const bathTex = canvasTex(64, 256, (g) => { const gr = g.createLinearGradient(0, 0, 64, 0);
+  gr.addColorStop(0, "rgba(235,245,255,.95)"); gr.addColorStop(.15, "rgba(220,235,255,.35)"); gr.addColorStop(1, "rgba(220,235,255,0)");
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 256); });
+const bathGlow = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 0.86),
+  new THREE.MeshBasicMaterial({ map: bathTex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
+bathGlow.rotation.x = -Math.PI / 2; bathGlow.position.set(LX + 0.38, 0.005, 1.675); bathGlow.visible = false; scene.add(bathGlow);
+const bathLight = new THREE.PointLight(0xdde8ff, 0, 1.2, 2); bathLight.position.set(LX + 0.35, 0.02, 1.675); scene.add(bathLight);
 
 // ---------- couloir (vu seulement par le judas) ----------
 const hall = new THREE.Group(); hall.visible = false; scene.add(hall);
@@ -318,143 +354,189 @@ const fill = new THREE.DirectionalLight(0x6070a0, 0.35); fill.position.set(6, 6,
 
 // ---------- timeline ----------
 let TL;
-const L = id => TL.lines.find(l => l.id === id);
 const ui = id => document.getElementById(id);
+const M = name => TL.marques[name];
+const lineN = n => TL.lines[n - 1];
+const STOP = new Set("le la les un une des de du d l t qu que qui à a au aux et ou en on y ta ton tes ma mon ses sa son ce ça est es pas plu ne tu te il elle".split(" "));
+const norm = w => w.toLowerCase().replace(/^(l|d|t|qu|j|c|n|s)['’]/, "").replace(/[.,!?;:«»"]/g, "");
 
-// plans de caméra : [début, fin, position départ, position fin, cible départ, cible fin, fov]
-function shots() {
-  const j = L("judas"), o = L("ombre"), t = L("tel"), m = L("message"), c = L("choix");
-  const peepAt = j.start + 1.55;
-  return [
-    [0, j.start, [5.0, 5.6, 6.0], [4.0, 4.4, 4.8], [0.3, 0.8, -0.6], [0.5, 0.9, -0.9], 40],
-    [j.start, peepAt, [3.6, 2.4, 1.6], [2.9, 2.1, -0.2], [0.9, 1.1, -1.4], [1.3, 1.3, -2.6], 42],
-    [peepAt, o.start, "peep"],
-    [o.start, t.start - 0.3, [2.2, 1.15, -0.9], [1.95, 0.9, -1.45], [1.35, 0.25, -2.95], [1.4, 0.15, -2.95], 46],
-    [t.start - 0.3, m.end + 0.1, [0.55, 1.25, 1.25], [0.55, 0.85, 0.98], [0.55, 0.43, 0.7], [0.55, 0.43, 0.69], 34],
-    [m.end + 0.1, c.start, [3.9, 1.75, -0.9], [3.3, 1.6, -1.0], [-1.6, 1.1, -1.7], [-2.2, 1.25, -1.6], 44],
-    [c.start, TL.duration + 1, [5.6, 6.6, 6.8], [5.2, 6.2, 6.3], [-0.4, 0.8, -0.6], [-0.4, 0.8, -0.6], 42],
-  ];
-}
-let SHOTS;
+// plans de caméra : position départ, position fin, cible départ, cible fin, fov
+const PRESETS = {
+  porte:            [[1.3, 1.2, -0.5], [1.32, 1.08, -1.45], [1.4, 0.95, -3.0], [1.4, 0.75, -3.0], 52],
+  salon_large:      [[4.6, 5.0, 5.4], [4.1, 4.5, 4.9], [0.2, 0.6, -0.2], [0.3, 0.6, -0.3], 42],
+  canape:           [[1.15, 1.35, 1.05], [0.95, 1.2, 1.25], [0.15, 0.6, 2.2], [0.1, 0.6, 2.2], 44],
+  serrure:          [[2.45, 1.5, -2.0], [2.3, 1.42, -2.3], [1.8, 1.22, -2.95], [1.82, 1.26, -2.95], 50],
+  porte_bas:        [[2.2, 1.15, -0.9], [1.95, 0.9, -1.45], [1.35, 0.25, -2.95], [1.4, 0.15, -2.95], 46],
+  heros_porte:      [[-0.45, 1.95, 0.45], [-0.25, 1.85, 0.05], [1.2, 1.0, -3.0], [1.3, 1.0, -3.0], 46],
+  porte_proche:     [[1.4, 1.0, -1.55], [1.4, 1.05, -2.05], [1.4, 1.15, -3.0], [1.4, 1.2, -3.0], 50],
+  heros_visage:     [[2.15, 1.72, -2.45], [2.0, 1.72, -2.35], [0.8, 1.66, -1.85], [0.8, 1.68, -1.85], 40],
+  telephone:        [[1.25, 1.05, 1.45], [0.95, 0.9, 1.2], [0.55, 0.43, 0.72], [0.55, 0.43, 0.72], 40],
+  telephone_proche: [[0.55, 1.05, 1.05], [0.55, 0.85, 0.95], [0.55, 0.43, 0.7], [0.55, 0.43, 0.7], 36],
+  entre_deux:       [[2.7, 1.65, -0.4], [2.6, 1.6, -0.3], [1.4, 0.9, -3.0], [0.55, 0.5, 0.7], 56],
+  canape_vide:      [[0.95, 1.65, -1.5], [0.75, 1.5, -0.8], [0.3, 0.5, 2.2], [0.3, 0.5, 2.2], 46],
+  salle_de_bain:    [[-1.1, 0.95, 0.95], [-1.75, 0.75, 1.25], [-2.95, 0.45, 1.675], [-2.95, 0.4, 1.675], 46],
+  final:            [[2.2, 6.6, 6.4], [2.0, 6.2, 6.0], [-0.6, 0.5, -0.4], [-0.6, 0.5, -0.4], 50],
+};
 
-function heroAt(t) {
-  const j = L("judas");
-  const a = new THREE.Vector3(0.6, 0, 0.0), b = new THREE.Vector3(1.4, 0, -2.45);
-  const w0 = j.start - 0.2, w1 = j.start + 1.4;
-  const k = ease(ramp(t, w0, w1));
-  hero.position.lerpVectors(a, b, k);
-  hero.rotation.y = lerp(Math.atan2(b.x - a.x, b.z - a.z), Math.PI, ease(ramp(t, w1 - 0.3, w1 + 0.3)));
-  const back = ease(ramp(t, w1 + 1.0, L("ombre").start + 0.2));
-  hero.position.x = lerp(hero.position.x, 0.75, back); hero.position.z = lerp(hero.position.z, -1.85, back);
-  const walking = t > w0 && t < w1 ? Math.sin(Math.PI * ramp(t, w0, w1)) ** .4 : 0;
-  pose(hero, (t - w0) * 10, walking);
-  hero.position.y = walking * Math.abs(Math.sin((t - w0) * 10)) * 0.03;
-  // tête qui se penche vers le bas pendant l'ombre, puis légèrement vers le salon
-  const o = L("ombre"), m = L("message");
-  hero.userData.head.rotation.x = 0.35 * ease(ramp(t, o.start, o.start + 0.6)) - 0.35 * ease(ramp(t, m.start, m.start + 0.8));
-  hero.userData.head.rotation.y = 0.5 * ease(ramp(t, m.end, m.end + 1.2));
+// découpage des sous-titres : 2 à 3 mots, coupe aux fins de phrase
+function chunks(line) {
+  const out = []; let cur = [];
+  line.words.forEach((w, i) => {
+    cur.push(w);
+    const end = /[.?!]$/.test(w.w), comma = /,$/.test(w.w);
+    if (cur.length >= 3 || end || (comma && cur.length >= 2) || i === line.words.length - 1) { out.push(cur); cur = []; }
+  });
+  // fusionne un mot seul avec le morceau d'avant si possible
+  for (let i = out.length - 1; i > 0; i--) if (out[i].length === 1 && out[i - 1].length === 1 && !/[.?!]$/.test(out[i - 1][0].w)) { out[i - 1].push(...out[i]); out.splice(i, 1); }
+  return out.map((ws, k) => {
+    let red = ws.findIndex(w => TL.rouge.includes(norm(w.w)));
+    if (red < 0) { let best = -1, len = 4; ws.forEach((w, j) => { const n = norm(w.w); if (!STOP.has(n) && n.length > len) { len = n.length; best = j; } }); red = best; }
+    return { ws, red, s: ws[0].s };
+  });
 }
 
 window.setup = (timeline) => {
-  TL = timeline; SHOTS = shots();
-  ui("epi").textContent = TL.hud.episode; ui("place").textContent = TL.hud.place;
-  ui("ca").querySelector(".l").textContent = TL.choice.a; ui("cb").querySelector(".l").textContent = TL.choice.b;
+  TL = timeline;
+  TL.lines.forEach(l => l.chunks = chunks(l));
+  TL.plans.forEach((p, i) => p.end = i + 1 < TL.plans.length ? TL.plans[i + 1].start : TL.duration + 1);
+  ui("epi").textContent = TL.hud.episode; ui("place").textContent = TL.hud.lieu;
+  ui("rulek").textContent = TL.regle.titre; ui("rulet").textContent = TL.regle.texte;
+  const tx = TL.texto, n = lineN(TL.lines.findIndex(l => TL.speakers[l.speaker] && TL.speakers[l.speaker].texto) + 1);
+  ui("smsde").textContent = tx.de; ui("smsts1").textContent = "Hier, " + tx.avant_heure; ui("smsts2").textContent = "Aujourd'hui, " + tx.heure;
+  ui("smsold").innerHTML = tx.avant + ' <span class="hrt" id="hrt">❤</span>';
+  ui("smsnew").textContent = n.text;
+  ui("labl").textContent = "← " + TL.choix.gauche; ui("labr").textContent = TL.choix.droite + " →";
 };
 
 function clock(t) {
-  const [h, m, s] = TL.hud.clock_start.split(":").map(Number);
+  const [h, m, s] = TL.hud.heure.split(":").map(Number);
   const tot = h * 3600 + m * 60 + s + Math.floor(t);
   const p = n => String(n).padStart(2, "0");
   return `${p(Math.floor(tot / 3600))}:${p(Math.floor(tot / 60) % 60)}:${p(tot % 60)}`;
 }
 
-window.renderAt = (t) => {
-  const j = L("judas"), o = L("ombre"), te = L("tel"), m = L("message"), c = L("choix"), cta = L("cta");
+function heroAt(t) {
+  const A = new THREE.Vector3(0.7, 0, -0.1), B = new THREE.Vector3(1.25, 0, -2.3), C = new THREE.Vector3(0.8, 0, -1.85);
+  const w0 = M("marche"), w1 = w0 + 1.7, b0 = M("pieds") - 0.4, b1 = b0 + 0.7;
+  const k1 = ease(ramp(t, w0, w1)), k2 = ease(ramp(t, b0, b1));
+  hero.position.lerpVectors(A, B, k1).lerp(C, k2);
+  const faceDoor = Math.atan2(1.4 - A.x, -3 - A.z);
+  let rot = lerp(faceDoor, Math.PI, ease(ramp(t, w0, w0 + 0.6)));
+  rot = lerp(rot, 2 * Math.PI - 0.12, ease(ramp(t, M("retour"), M("retour") + 1.0)));
+  hero.rotation.y = rot;
+  const walking = (t > w0 && t < w1 ? Math.sin(Math.PI * ramp(t, w0, w1)) ** .4 : 0) + (t > b0 && t < b1 ? Math.sin(Math.PI * ramp(t, b0, b1)) * 0.6 : 0);
+  pose(hero, t * 10, walking);
+  hero.position.y = walking * Math.abs(Math.sin(t * 10)) * 0.03;
+  hero.userData.head.rotation.x = 0.35 * ease(ramp(t, M("pieds"), M("pieds") + 0.6)) - 0.35 * ease(ramp(t, M("pieds") + 4, M("pieds") + 4.6));
+}
 
-  // -- porte qui tremble aux coups
+const v3 = new THREE.Vector3();
+function toScreen(p, cam) { v3.set(...p).project(cam); return [(v3.x + 1) / 2 * W, (1 - v3.y) / 2 * H]; }
+
+window.renderAt = (t) => {
+  const ev = TL.events, creak = (ev.creak || [1e9])[0], sting = (ev.sting || [1e9])[0], choix = M("choix");
+
+  // porte qui tremble aux coups
   let knock = 0;
-  for (const k of TL.events.knock) knock += Math.exp(-Math.max(0, t - k) * 18) * (t >= k ? 1 : 0);
+  for (const k of ev.knock || []) for (let j = 0; j < 3; j++) { const kk = k + j * 0.3; if (t >= kk) knock += Math.exp(-(t - kk) * 18); }
   doorPivot.rotation.y = -0.012 * knock * Math.sin(t * 90);
 
-  // -- ombre sous la porte : passe de gauche à droite puis s'arrête au centre
-  const sx = lerp(-0.25, 0.5, ease(ramp(t, o.start + 0.2, o.start + 2.4)));
+  // la lumière sous la porte, et les deux pieds immobiles
   drawGap(0, 0);
-  const pres = clamp(ramp(t, o.start, o.start + 0.3));
-  feet.forEach((f, i) => { f.position.x = 0.92 + (sx + 0.08) * 0.96 + (i ? 0.13 : -0.13); f.material.opacity = 0.92 * pres; f.visible = f.position.x > 0.85 && f.position.x < 1.95; });
-  gapLight.intensity = 0.7 - 0.35 * clamp(ramp(t, o.start + 1.4, o.start + 2.4)); gapLight.position.x = 1.4 - 0.4 * clamp(ramp(t, o.start, o.start + 2.4));
+  feet.forEach((f, i) => { f.position.x = 1.4 + (i ? 0.13 : -0.13); f.material.opacity = 0.45 + 0.47 * ramp(t, M("pieds"), M("pieds") + 0.5); });
+  gapLight.intensity = 0.6;
 
-  // -- téléphone
-  const buzzing = TL.events.buzz.some(b => t > b && t < b + 1.1);
-  const on = t > TL.events.buzz[0];
+  // téléphone
+  const b0 = (ev.buzz || [1e9])[0];
+  const buzzing = (ev.buzz || []).some(b => t > b && t < b + 1.1);
   phone.position.x = 0.55 + (buzzing ? Math.sin(t * 160) * 0.004 : 0);
-  phone.rotation.y = (buzzing ? Math.sin(t * 120) * 0.04 : 0);
-  drawPhone(on ? (t > m.start ? 2 : 1) : 0, clamp(ramp(t, TL.events.buzz[0], TL.events.buzz[0] + 0.3)));
-  phoneLight.intensity = on ? 0.35 : 0;
+  phone.rotation.y = buzzing ? Math.sin(t * 120) * 0.04 : 0;
+  drawPhone(t > b0 ? 1 : 0, clamp(ramp(t, b0, b0 + 0.3)));
+  phoneLight.intensity = t > b0 ? 0.35 : 0;
 
-  // -- placard qui s'ouvre, yeux qui apparaissent
-  const creak = TL.events.creak[0];
-  wdHinge.rotation.y = -0.85 * ease(ramp(t, creak, creak + 1.1));
-  eyes.forEach(e => e.material.opacity = ramp(t, creak + 0.7, creak + 1.0));
+  // le frère disparaît au grincement, la lumière de la salle de bain s'allume
+  brotherBed.visible = t < creak;
+  blanket.position.set(...(t < creak ? [0.56, 0.57, 2.15] : [0.75, 0.47, 1.95])); blanket.rotation.y = t < creak ? 0 : 0.6;
+  bathGlow.visible = t >= creak; bathLight.intensity = t >= creak ? 0.3 : 0;
 
-  // -- couloir : lampe qui grésille
+  // couloir : lampe qui grésille
   hallLamp.intensity = 6 * (Math.sin(t * 37) > 0.93 ? 0.25 : 1);
   bulb.material.color.setScalar(hallLamp.intensity > 3 ? 1 : 0.35);
 
   heroAt(t);
 
-  // -- caméra
-  const sh = SHOTS.find(s => t >= s[0] && t < s[1]) || SHOTS[SHOTS.length - 1];
+  // caméra
+  const pl = TL.plans.find(p => t >= p.start && t < p.end) || TL.plans[TL.plans.length - 1];
   let cam = camera;
-  if (sh[2] === "peep") {
+  if (pl.name === "judas") {
     hall.visible = true; door.visible = false; hero.visible = false;
     peepCam.position.set(1.4 + Math.sin(t * 2) * 0.03, 1.6, BZ - 0.13);
     peepCam.lookAt(1.4 + Math.sin(t * 0.9) * 0.35, 1.2, -5.5);
     cam = peepCam;
   } else {
     hall.visible = false; door.visible = true; hero.visible = true;
-    const k = ease(ramp(t, sh[0], sh[1]));
-    camera.fov = sh[6]; camera.updateProjectionMatrix();
-    camera.position.set(...sh[2].map((v, i) => lerp(v, sh[3][i], k)));
-    const tg = sh[4].map((v, i) => lerp(v, sh[5][i], k));
-    // tremblement léger aux coups et au cri du placard
-    const shake = knock * 0.03 + (t > creak ? 0.012 * Math.exp(-(t - creak) * 1.5) : 0);
+    const P = PRESETS[pl.name], k = ease(ramp(t, pl.start, pl.end));
+    camera.fov = P[4]; camera.updateProjectionMatrix();
+    camera.position.set(...P[0].map((v, i) => lerp(v, P[1][i], k)));
+    const shake = knock * 0.025 + (t > creak ? 0.012 * Math.exp(-(t - creak) * 1.5) : 0);
     camera.position.x += Math.sin(t * 71) * shake; camera.position.y += Math.cos(t * 63) * shake;
-    camera.lookAt(...tg);
+    camera.lookAt(...P[2].map((v, i) => lerp(v, P[3][i], k)));
   }
-  ui("peep").style.opacity = sh[2] === "peep" ? 1 : 0;
+  ui("peep").style.opacity = pl.name === "judas" ? 1 : 0;
 
-  // -- choix : scène assombrie
-  const ch = ramp(t, c.start - 0.1, c.start + 0.5);
-  renderer.toneMappingExposure = 1.25 - 0.45 * ch;
+  const ch = ramp(t, choix - 0.1, choix + 0.5);
+  renderer.toneMappingExposure = 1.25 - 0.4 * ch;
   outline.render(scene, cam);
 
-  // -- interface
+  // HUD
   ui("clock").textContent = clock(t);
-  ui("hud").style.opacity = 1 - ch;
-  const cur = TL.lines.find(l => t >= l.start - 0.15 && t < l.end + 0.35 && l.id !== "choix" && l.id !== "cta");
-  const sub = ui("sub");
-  if (cur) {
-    const a = ramp(t, cur.start - 0.15, cur.start + 0.1), z = 1 - ramp(t, cur.end + 0.15, cur.end + 0.35);
-    sub.style.opacity = Math.min(a, z); sub.style.transform = `translateY(${(1 - a) * 16}px)`;
-    sub.querySelector(".t").textContent = cur.text;
-    const hT = cur.start + (cur.end - cur.start) * cur.text.length / (cur.text.length + cur.hi.length + 1);
-    const h = sub.querySelector(".h"); h.textContent = cur.hi; h.style.display = cur.hi ? "block" : "none";
-    const hk = ramp(t, hT - 0.1, hT + 0.15); h.style.opacity = hk; h.style.transform = `scale(${1.15 - 0.15 * hk})`;
-  } else sub.style.opacity = 0;
 
-  ui("choice").style.opacity = ch;
-  const pa = ease(ramp(t, c.start, c.start + 0.35)), pb = ease(ramp(t, c.start + 1.3, c.start + 1.65));
-  ui("ca").style.opacity = pa; ui("ca").style.transform = `scale(${0.85 + 0.15 * pa})`;
-  ui("cb").style.opacity = pb; ui("cb").style.transform = `scale(${0.85 + 0.15 * pb})`;
-  ui("vs").style.opacity = ramp(t, c.start + 0.9, c.start + 1.2);
-  const pulse = 1 + 0.025 * Math.sin(t * 8) * ramp(t, cta.start, cta.start + 0.3);
-  if (t > c.start + 1.7) { ui("ca").style.transform = `scale(${pulse})`; ui("cb").style.transform = `scale(${2 - pulse})`; }
-  ui("bar").style.opacity = ramp(t, cta.start - 0.2, cta.start + 0.2);
-  ui("bar").firstElementChild.style.width = `${100 * ramp(t, cta.start, TL.duration - 0.3)}%`;
-  ui("cta").style.opacity = ramp(t, cta.start, cta.start + 0.3);
-  ui("cta").innerHTML = `Écris <b>A</b> ou <b>B</b> en commentaire 👇<br><span style="opacity:.75;font-size:36px">La partie 2 suit vos votes</span>`;
-  ui("flash").style.opacity = 0.5 * Math.exp(-Math.max(0, t - TL.events.sting[0]) * 6) * (t >= TL.events.sting[0] ? 1 : 0);
-  ui("vign").style.opacity = 1;
+  // carton de règle
+  const R = TL.regle, ra = ramp(t, R.start - 0.1, R.start + 0.2) * (1 - ramp(t, R.end + 0.5, R.end + 0.8));
+  ui("rule").style.opacity = ra; ui("rule").style.transform = `scale(${0.9 + 0.1 * ease(ramp(t, R.start - 0.1, R.start + 0.25))})`;
+
+  // texto
+  const txi = TL.lines.findIndex(l => TL.speakers[l.speaker] && TL.speakers[l.speaker].texto), tl = TL.lines[txi];
+  const sOn = ramp(t, tl.start - 0.4, tl.start - 0.1) * (1 - ramp(t, TL.lines[txi + 2].end + 0.2, TL.lines[txi + 2].end + 0.5));
+  ui("sms").style.opacity = sOn; ui("sms").style.transform = `translateY(${(1 - ease(ramp(t, tl.start - 0.4, tl.start))) * 40}px)`;
+  ui("smsnew").parentElement.style.opacity = ramp(t, tl.start, tl.start + 0.2);
+  const hl1 = TL.lines[txi + 1], hl2 = TL.lines[txi + 2];
+  const heartOn = t > hl1.start + (hl1.end - hl1.start) * 0.55 && t < hl2.start;
+  ui("hrt").style.transform = `scale(${heartOn ? 1.6 + 0.15 * Math.sin(t * 14) : 1})`;
+  const ring = ui("ring");
+  const target = t >= hl2.start ? ui("smsnew") : ui("hrt");
+  if (heartOn || t >= hl2.start) {
+    const box = target.getBoundingClientRect(), pbox = ui("sms").getBoundingClientRect();
+    const pad = t >= hl2.start ? 0 : 14;
+    Object.assign(ring.style, { left: `${box.right - pbox.left - (t >= hl2.start ? 90 : box.width) - pad}px`, top: `${box.top - pbox.top - pad}px`,
+      width: `${(t >= hl2.start ? 90 : box.width) + 2 * pad}px`, height: `${box.height + 2 * pad}px`, opacity: 1 });
+  } else ring.style.opacity = 0;
+
+  // sous-titres mot à mot
+  const cap = ui("cap");
+  const cur = TL.lines.find(l => t >= l.start - 0.05 && t < l.end + 0.3);
+  if (cur && !(TL.speakers[cur.speaker] && TL.speakers[cur.speaker].texto)) {
+    let c = cur.chunks[0];
+    for (const x of cur.chunks) if (t >= x.s - 0.05) c = x;
+    const dlg = cur.speaker !== "NARRATEUR";
+    cap.className = dlg ? "dlg" : "";
+    cap.innerHTML = c.ws.map((w, j) => j === c.red ? `<span class="r">${w.w}</span>` : w.w).join(" ");
+    const pop = ease(ramp(t, c.s - 0.05, c.s + 0.08));
+    cap.style.opacity = 1; cap.style.transform = `scale(${0.88 + 0.12 * pop})`;
+  } else cap.style.opacity = 0;
+
+  // écran final : flèches sur les deux options + COMMENTE
+  const la = ramp(t, choix + 0.2, choix + 0.5), lb = ramp(t, choix + 1.1, choix + 1.4);
+  if (cam === camera && pl.name === "final") {
+    const [lx, ly] = toScreen([-2.85, 1.3, 1.675], camera), [rx, ry] = toScreen([1.4, 2.0, -3.0], camera);
+    const lw = ui("labl").offsetWidth, rw = ui("labr").offsetWidth, cx = (x, w) => Math.min(W - 150 - w, Math.max(40, x));
+    Object.assign(ui("labl").style, { left: `${cx(lx + 20, lw)}px`, top: `${ly - 50}px`, opacity: lb });
+    Object.assign(ui("labr").style, { left: `${cx(rx - rw / 2, rw)}px`, top: `${ry - 120}px`, opacity: la });
+  } else { ui("labl").style.opacity = 0; ui("labr").style.opacity = 0; }
+  const fin = TL.lines[TL.lines.length - 1].end;
+  ui("comment").style.opacity = ramp(t, fin + 0.1, fin + 0.4);
+  ui("comment").style.transform = `scale(${1 + 0.05 * Math.sin(t * 7)})`;
+  ui("flash").style.opacity = t >= sting ? 0.45 * Math.exp(-(t - sting) * 6) : 0;
 };
 window.ready = true;
 </script>
