@@ -43,6 +43,12 @@ def verifier(chemin):
     reprise = bool(m and m.group(1) in chute.lower())
     (ok if reprise else ko).append(f"montant du hook repris dans la chute : {m.group(1) if m else '?'}")
 
+    entete = " ".join(l for l in lignes if l.startswith("#")).lower()
+    clivant = "zone grise" in entete or "geste clivant" in entete
+    (ok if clivant else ko).append("geste clivant / zone grise décrit dans l'en-tête")
+    doute = next((t for _, t in rep if re.search(r"honnêtement|je me demande|j'aurais (pas|peut-être)", t.lower())), None)
+    (ok if doute else ko).append(f"le doute de Kévin : « {doute[:70] + '…' if doute else 'absent'} »")
+
     print(f"── {chemin}")
     for x in ok:
         print("  ✅", x)
