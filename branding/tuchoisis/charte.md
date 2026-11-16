@@ -13,8 +13,8 @@ choix A ou B, la suite suit le vote. Un compte pour toutes les séries (tueur, i
 | Bio (76 caractères, max 80) | `Histoires d'horreur où c'est toi le héros. A ou B ? La suite suit ton vote 👇` |
 
 Autres bios possibles :
-- `Une nuit, un choix. Tu votes A ou B, la suite suit ton vote 👇` (62)
-- `C'est toi le héros. Tu choisis, tu survis ou pas. Vote en commentaire 👇` (73)
+- `Une nuit, un choix. Tu votes A ou B, la suite suit ton vote 👇` (61)
+- `C'est toi le héros. Tu choisis, tu survis ou pas. Vote en commentaire 👇` (71)
 
 ## Les couleurs
 
