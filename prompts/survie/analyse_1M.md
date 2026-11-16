@@ -138,6 +138,26 @@ Ce qu'on en tire :
 Les neuf gabarits, les sept verrous et les tests sont dans le moteur (BLOC 3 et annexe A) et dans
 `machine_a_hooks_survie.md`.
 
+## La voix
+
+Les 17 vidéos (hors histoire complète de 5 minutes) passées dans la transcription ElevenLabs avec
+détection des bruits, comparées à notre premier épisode avec un narrateur qui halète :
+
+| | Vidéos à plus d'un million | « Mon loup » avec respirations |
+|---|---|---|
+| Respirations du narrateur détectées | **0 dans les 17 vidéos** | 4 |
+| Premier mot | 0,08 à 0,74 s, 0,3 s en médiane | 0,66 s |
+| Débit | 1,7 à 2,9 mots par seconde, 2,3 en médiane | 2,33 |
+| Bruits détectés | coups à la porte, pas, porte qui grince, vibreur, musique tendue, coups de feu, et les personnages : cris, pleurs, rires, grognements | respirations du narrateur |
+
+- **Le narrateur est calme et posé**, sans souffle ni chuchotement. La tension vient des bruitages et
+  des autres personnages.
+- **Les émotions fortes sont dans la bouche des personnages** : la mère qui crie, l'enfant qui pleure, le
+  monstre qui grogne, la légende qui rit.
+
+Après correction (narrateur posé, aucune indication de jeu), notre épisode : 0 respiration, premier mot à
+0,22 s.
+
 ## À l'écran
 
 - Sous-titres de **2 à 4 mots** à la fois, en gros, au centre, **un mot en couleur**

@@ -203,6 +203,15 @@ prénoms américains.
 Relis à voix basse, lumière éteinte. Si une phrase a besoin d'une intonation dramatique pour faire peur,
 elle est mal écrite. La peur est dans les faits. Cette règle est capitale en voix IA.
 
+**Le narrateur reste calme.** Il respire pas fort, il halète pas, il chuchote pas. Sur les 17 vidéos à plus
+d'un million passées en transcription avec détection des bruits, on compte **zéro respiration de
+narrateur**. La peur à l'oreille vient des bruitages (coups, pas, porte qui grince, vibreur, musique) et
+des autres personnages (la menace qui grogne, l'allié qui crie, l'enfant qui pleure). Une voix grave et
+posée, qui raconte l'horreur sans trembler, fait plus peur qu'une voix qui panique.
+
+Tu écris donc jamais d'indication de jeu pour le narrateur (pas de « respire fort », pas de « inquiet »).
+Les cris, les pleurs et les halètements, c'est pour les répliques des personnages.
+
 ---
 
 ## BLOC 2 — LES DOUZE INGRÉDIENTS
@@ -445,7 +454,8 @@ silences et les bruitages, on rajoute pas de texte.
 la question. Tu les notes par une ligne `[PAUSE]` dans le script.
 
 **Les bruitages.** Note-les entre crochets sur leur propre ligne, au moment exact : `[TROIS COUPS]`,
-`[VIBREUR]`, `[GRINCEMENT]`, `[PAS DANS L'ESCALIER]`. Quatre à huit par épisode.
+`[VIBREUR]`, `[GRINCEMENT]`, `[PAS DANS L'ESCALIER]`. Quatre à huit par épisode. C'est eux, pas le narrateur, qui portent la
+tension à l'oreille (BLOC 1.7).
 
 ---
 

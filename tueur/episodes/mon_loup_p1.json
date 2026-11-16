@@ -9,10 +9,11 @@
     "id": "6DEjyaHWnTHsvXM5Byys",
     "nom": "Hugo, conteur français grave (bibliothèque ElevenLabs)",
     "settings": {
-     "stability": 0.35,
+     "stability": 0.55,
      "similarity_boost": 0.8,
-     "style": 0.45
-    }
+     "style": 0.3
+    },
+    "note": "Posé et sérieux, sans respiration ni chuchotement : 0 respiration de narrateur dans les 17 vidéos à 1 M"
    },
    "VOIX DERRIÈRE LA PORTE": {
     "id": "O31r762Gb3WFygrEOGh0",
@@ -42,8 +43,7 @@
   "entre_repliques": 0.28,
   "pause": 0.9,
   "tenue_finale": 3.2,
-  "duree_min": 62,
-  "gain_souffle": 3.0
+  "duree_min": 62
  },
  "bruitages": {
   "TROIS COUPS": {
@@ -142,22 +142,5 @@
   "texto": 11,
   "retour": 16,
   "choix": 18
- },
- "jeu": {
-  "1": "[nervous] Deux heures quatorze. On frappe à ta porte.",
-  "2": "[heavy breathing] Personne a sonné en bas. L'ascenseur a pas bougé.",
-  "3": "[nervous] Maman est de nuit à l'hôpital. T'es seul avec ton petit frère. Il dort sur le canapé.",
-  "4": "[whispers] La porte est fermée à clé. Chaîne mise. T'es en sécurité.",
-  "5": "[nervous] Tu regardes par le judas. Le couloir est vide.",
-  "6": "[gasps] Sauf que sous la porte, y a deux pieds. [breathing heavily] Ils bougent pas.",
-  "7": "[whispers] Maman t'a donné une règle. La nuit, tu ouvres à personne.",
-  "9": "[nervous] Mon loup. Personne d'autre t'appelle comme ça.",
-  "10": "[heavy breathing] Ton téléphone vibre. Un texto de maman.",
-  "12": "[nervous] Sauf que maman met toujours un cœur à la fin.",
-  "13": "[whispers] Là, rien.",
-  "15": "[breathing heavily] Alors tu crois qui ? La voix, ou le texto ?",
-  "16": "[nervous] Tu te retournes vers le canapé. [gasps] Ton frère est plu là.",
-  "17": "[whispers] La porte de la salle de bain est fermée. La lumière est allumée dessous.",
-  "18": "[heavy breathing] Tu ouvres à maman, ou tu vas chercher ton frère ?"
  }
 }
