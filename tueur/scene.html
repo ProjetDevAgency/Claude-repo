@@ -239,8 +239,9 @@ function person({ top, legs, skin, hair, dark = false }) {
   const head = new THREE.Group(); head.position.y = 1.78; g.add(head);
   const hm = new THREE.Mesh(new THREE.SphereGeometry(0.17, 18, 14), m(skin)); hm.scale.set(1, 1.08, 1); hm.castShadow = true; head.add(hm);
   if (!dark) {
-    const hr = new THREE.Mesh(new THREE.SphereGeometry(0.178, 18, 14, 0, Math.PI * 2, 0, Math.PI * 0.55), mat(hair));
-    hr.rotation.x = -0.35; head.add(hr);
+    // cheveux : même étirement que la tête, un peu plus grands, couvrent tout le dessus du crâne
+    const hr = new THREE.Mesh(new THREE.SphereGeometry(0.182, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.6), mat(hair));
+    hr.scale.set(1.04, 1.1, 1.05); hr.position.set(0, 0.012, -0.012); hr.rotation.x = -0.22; head.add(hr);
     for (const x of [-0.06, 0.06]) { const e = new THREE.Mesh(new THREE.SphereGeometry(0.02, 8, 6), new THREE.MeshBasicMaterial({ color: 0x111111 })); e.position.set(x, 0.0, 0.16); head.add(e); }
   }
   g.userData = { legL, legR, armL, armR, head };
