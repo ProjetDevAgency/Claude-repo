@@ -79,10 +79,25 @@ def decode(mp3_bytes, effet=None):
     return np.frombuffer(raw, np.float32).copy()
 
 
+TAG = re.compile(r"\[[^\]]*\]")
+
+
+def strip_tags(t):
+    return re.sub(r"\s+", " ", TAG.sub("", t)).strip()
+
+
 def words_from_alignment(al):
-    words, cur, start = [], "", None
+    words, cur, start, depth = [], "", None, 0
     chars, st, en = al["characters"], al["character_start_times_seconds"], al["character_end_times_seconds"]
     for c, s, e in zip(chars, st, en):
+        if c == "[":
+            depth += 1
+            continue
+        if c == "]":
+            depth = max(0, depth - 1)
+            continue
+        if depth:  # balise d'émotion : jouée, pas affichée
+            continue
         if c.isspace():
             if cur:
                 words.append({"w": cur, "s": start, "e": last})
@@ -95,6 +110,30 @@ def words_from_alignment(al):
     if cur:
         words.append({"w": cur, "s": start, "e": last})
     return words
+
+
+def boost_breaths(pcm, al, gain):
+    """Remonte le volume des respirations et halètements demandés par balise ([heavy breathing], [gasps]…).
+    ElevenLabs les joue environ 18 dB sous la voix, la musique les couvre sinon."""
+    if gain == 1.0:
+        return pcm
+    chars, st, en = al["characters"], al["character_start_times_seconds"], al["character_end_times_seconds"]
+    text = "".join(chars)
+    out = pcm.copy()
+    for m in TAG.finditer(text):
+        if not re.search(r"breath|gasp|pant|sigh", m.group(), re.I):
+            continue
+        a = st[m.start()]
+        nxt = next((j for j in range(m.end(), len(chars)) if not chars[j].isspace()), None)
+        b = st[nxt] if nxt is not None else en[m.end() - 1]  # jusqu'au premier mot qui suit
+        i0, i1 = int(a * SR), min(len(out), int(b * SR))
+        if i1 - i0 < int(0.08 * SR):
+            continue
+        ramp = int(0.03 * SR)
+        g = np.full(i1 - i0, gain, np.float32)
+        g[:ramp] = np.linspace(1, gain, ramp); g[-ramp:] = np.linspace(gain, 1, ramp)
+        out[i0:i1] *= g
+    return np.clip(out, -1, 1)
 
 
 # ---------- bruitages (fabriqués, aucun droit) ----------
@@ -232,15 +271,19 @@ def main(ep_path):
     items = parse_script((HERE / ep["script"]).read_text(encoding="utf-8"))
     voix, model = ep["tts"]["voix"], ep["tts"]["model"]
     speech = [it for it in items if it["type"] == "line"]
+    jeu = ep.get("jeu", {})
     clips = []
     for k, it in enumerate(speech):
         v = voix[it["speaker"]]
+        spoken = jeu.get(str(k + 1), it["text"])
+        assert strip_tags(spoken) == it["text"], f"réplique {k + 1} : le jeu ne correspond pas au script"
         same = lambda j: 0 <= j < len(speech) and speech[j]["speaker"] == it["speaker"]
-        d = tts_elevenlabs(it["text"], v, model,
+        d = tts_elevenlabs(spoken, v, model,
                            speech[k - 1]["text"] if same(k - 1) else None,
                            speech[k + 1]["text"] if same(k + 1) else None)
         pcm = decode(base64.b64decode(d["audio"]), v.get("effet"))
-        idx = np.where(np.abs(pcm) > 0.012)[0]
+        pcm = boost_breaths(pcm, d["alignment"], ep["rythme"].get("gain_souffle", 1.0))
+        idx = np.where(np.abs(pcm) > 0.006)[0]  # bas, pour garder les respirations
         a = max(0, idx[0] - int(0.03 * SR)) if len(idx) else 0
         b = min(len(pcm), idx[-1] + int(0.12 * SR)) if len(idx) else len(pcm)
         clips.append({"pcm": pcm[a:b], "trim": a / SR, "words": words_from_alignment(d["alignment"]),
