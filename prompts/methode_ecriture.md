@@ -41,3 +41,13 @@ Avant d'écrire, chaque sujet passe les 8 critères de la machine à sujets (pro
 client précis · prix précis et crédible · choc (une des 5 façons) · cohérence · tiers absent qui crée l'enjeu ·
 deadline réelle · zone grise morale (geste discutable de Kévin) · pas un sujet banal / « client normalement pénible ».
 Un seul critère manquant → on retravaille le sujet ou on le jette. Jamais de vidéo sous 8/8.
+
+## Contrôle avant de faire une vidéo (obligatoire, dans cet ordre)
+1. **Le sujet passe les 8 critères** (machine à sujets), notés dans l'en-tête du .dial.
+2. **La règle de loi est vérifiée** dans au moins 2 sources, et la référence est notée dans l'en-tête.
+3. **Le hook est clair en 2 secondes** : qui parle, de quoi, combien, compréhensible SANS contexte.
+   ✗ « 1 400 € la robe ? » (quelle robe ?) → ✓ « 1 400 € la robe de mariée de ta sœur ? »
+4. **`python3 scripts/verifier_script.py <fichier.dial>`** : longueur, ponctuation, négations, phrases longues,
+   montant et objet dans la 1re phrase, montant repris dans la chute. Tout doit être ✅.
+5. **Planche d'aperçu** (APERCU=…) : aucun texte sur un visage, aucun texte coupé, personnages reconnaissables.
+6. **Vérification du rendu final** : une image toutes les 5 s.
