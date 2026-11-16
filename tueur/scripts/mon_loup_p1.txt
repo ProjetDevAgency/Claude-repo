@@ -1,7 +1,7 @@
 PARTIE 1 — MON LOUP
-[TROIS COUPS]
 NARRATEUR > Deux heures quatorze. On frappe à ta porte.
-NARRATEUR > Trois coups. Doux. Comme un voisin.
+[TROIS COUPS]
+NARRATEUR > Personne a sonné en bas. L'ascenseur a pas bougé.
 [PAUSE]
 NARRATEUR > Maman est de nuit à l'hôpital. T'es seul avec ton petit frère. Il dort sur le canapé.
 NARRATEUR > La porte est fermée à clé. Chaîne mise. T'es en sécurité.
@@ -14,7 +14,7 @@ NARRATEUR > Mon loup. Personne d'autre t'appelle comme ça.
 NARRATEUR > Ton téléphone vibre. Un texto de maman.
 TEXTO DE MAMAN > Je finis à six heures. Ouvre à personne. Cache ton frère.
 NARRATEUR > Sauf que maman met toujours un cœur à la fin.
-NARRATEUR > Là, y a pas de cœur.
+NARRATEUR > Là, rien.
 [PAUSE]
 VOIX DERRIÈRE LA PORTE > Mon loup, il fait froid dans le couloir.
 NARRATEUR > Alors tu crois qui ? La voix, ou le texto ?

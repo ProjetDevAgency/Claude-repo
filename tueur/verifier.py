@@ -16,6 +16,7 @@ from pathlib import Path
 INTERDITS = ["effrayant", "terrifiant", "terrifié", "horrible", "angoissant", "glaçant", "mystérieux",
              "étrange", "sinistre", "cauchemar", "frisson", "surnaturel", "entité", "présence"]
 CTA = ["abonne", "commentaire", "commente", "like", "partage", "follow", "lien en bio"]
+ANNONCES = ["écoute bien", "histoire vraie", "âmes sensibles", "jusqu'à la fin", "storytime", "je vais te raconter"]
 PRISES = ["pancake", "trente-trois", "3 h 33", "3h33", "fenêtre d'en face", "immeuble d'en face"]
 PONCT = re.compile(r"[:;—–()«»\"…]|(?<!\w)-(?!\w)|[\U0001F300-\U0001FAFF]")
 DEUXIEME = re.compile(r"\b(tu|te|ta|ton|tes|toi)\b|\bt'", re.I)
@@ -85,11 +86,20 @@ def check(path):
     low = " ".join(t for _, t in voice).lower()
     found = [m for m in INTERDITS if re.search(r"\b" + m + r"\b", low)]
     ok(not found, "Aucun mot qui nomme la peur", ", ".join(found))
-    first2 = " ".join(sentences(" ".join(t for _, t in voice))[:2])
+    allsent = sentences(" ".join(t for _, t in voice))
+    first4 = " ".join(allsent[:4])
+    ok(bool(lines) and lines[0][0] not in ("SFX", "?"), "Hook : la voix démarre à 0 s (rien avant la 1re réplique)",
+       lines[0][1][:60] if lines else "")
+    n1 = len(allsent[0].split()) if allsent else 0
+    ok(n1 <= 14, "Hook couche 1 : 14 mots maximum", f"{n1} mots : {allsent[0] if allsent else ''}")
+    ann = [a for a in ANNONCES if a in " ".join(allsent[:4]).lower()]
+    ok(not ann, "Hook sans annonce", ", ".join(ann))
     if suite:
-        ok(re.search(r"\bchoisi\b", first2, re.I) is not None, "Suite : rappel + vote dans les 2 premières phrases", first2[:100])
+        ok(re.search(r"\bchoisi\b", first4, re.I) is not None, "Suite : le vote dans les 4 premières phrases", first4[:100])
+        ok(not re.search(r"\bchoisi\b", allsent[0] if allsent else "", re.I), "Suite : le vote est pas la 1re phrase (rappel-choc d'abord)",
+           allsent[0] if allsent else "", warn=True)
     else:
-        ok(HEURE.search(first2) is not None, "Partie 1 : l'heure dans les 2 premières phrases", first2[:100])
+        ok(HEURE.search(first4) is not None, "Partie 1 : l'heure dans les 4 premières phrases", first4[:100])
     ok(len(voice) - sum(1 for w, _ in voice if w == "NARRATEUR") >= 3, "Au moins 3 répliques hors narrateur",
        str(len(voice) - sum(1 for w, _ in voice if w == "NARRATEUR")))
     ok(len(menace) >= 2, "Au moins 2 voix hors narrateur", ", ".join(sorted(menace)))

@@ -1,5 +1,6 @@
 PARTIE 2 — MON LOUP
-NARRATEUR > Quelqu'un avec la voix de maman frappait à ta porte. T'as choisi ton frère.
+NARRATEUR > Quelque chose avec la voix de maman cognait à ta porte. Ton frère avait disparu.
+NARRATEUR > T'as choisi ton frère.
 NARRATEUR > Tu laisses la porte d'entrée. Tu traverses le salon sans allumer.
 VOIX DERRIÈRE LA PORTE > Mon loup ? Pourquoi tu m'ouvres pas ?
 NARRATEUR > La poignée de la salle de bain est froide. Tu pousses.
@@ -10,7 +11,7 @@ NARRATEUR > Maman ? Quand ça ?
 PETIT FRÈRE > Tout à l'heure. Elle est entrée par la fenêtre.
 NARRATEUR > Sixième étage.
 [PAUSE]
-NARRATEUR > Derrière toi, plus de coups. Plus de voix. Rien.
+NARRATEUR > Derrière toi, plus rien.
 [VIBREUR]
 TEXTO DE MAMAN > Je suis dans l'ascenseur. Une minute. Ouvre à personne.
 NARRATEUR > Règle deux. On s'enferme. Tu tournes le verrou.

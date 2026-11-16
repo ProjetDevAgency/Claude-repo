@@ -89,6 +89,55 @@ statistiques et les couvertures directement sur les pages des vidéos.
     Deux à trois mots par option, pas de bonne réponse évidente. Sinon un twist
     sec en dernière phrase : « Et toi, tu viens de répondre. »
 
+## Le hook
+
+Mesuré sur les sous-titres horodatés et les premières images de chaque vidéo.
+
+| Vues | Compte | Gabarit (moteur S1) | La voix démarre à | Mots dans les 3 premières s | Menace à l'image avant 3 s |
+|---|---|---|---|---|---|
+| 12,9 M | talkin_guy | G6 rappel-choc | 0,2 s | 8 | oui |
+| 6,1 M | creepydillemas | G1 question du témoin | 0,1 s | 11 | oui |
+| 5,7 M | talkin_guy | G6 rappel-choc | 0,0 s | 12 | oui |
+| 3,8 M | talkin_guy | G6 rappel-choc | 0,1 s | 11 | oui |
+| 3,3 M | creepydillemas | G1 question du témoin | 0,1 s | 10 | oui |
+| 3,2 M | talkin_guy | G6 rappel-choc | 0,0 s | 8 | oui |
+| 2,5 M | talkin_guy | G6 rappel-choc | 0,0 s | 10 | oui |
+| 2,1 M | velqenx6 | G9 signature | 0,0 s | 11 | oui |
+| 2,1 M | talkin_guy | le vote en 1re phrase | 0,0 s | 6 | oui |
+| 2,1 M | talkin_guy | G3 proche au mauvais endroit | 0,0 s | 9 | oui |
+| 2,0 M | creepydillemas | G8 en pleine action | 0,1 s | 3 | oui |
+| 1,9 M | velqenx6 | G9 signature | 0,0 s | 11 | oui |
+| 1,8 M | talkin_guy | G7 la menace parle | 0,0 s | 10 | oui |
+| 1,6 M | velqenx6 | G5 heure + fait brutal | 0,5 s | 5 | oui |
+| 1,5 M | velqenx6 | G2 heure + anomalie | 0,0 s | 7 | oui |
+| 1,3 M | creepydillemas | G4 message de la nuit | 0,3 s | 7 | non (le téléphone) |
+| 1,3 M | velqenx6 | G1 question du témoin | 0,0 s | 10 | oui |
+| 1,0 M | velqenx6 | G8 en pleine action | 0,1 s | 7 | non |
+
+Ce qu'on en tire :
+
+- **Zéro seconde perdue.** La voix démarre avant 0,3 s dans 17 vidéos sur 18. Pas d'intro, pas de
+  silence, pas de bruitage seul.
+- **Le hook est dit vite.** Neuf mots dans les trois premières secondes (médiane), soit 3,1 mots par
+  seconde, contre 2,3 sur le reste de la vidéo.
+- **La menace est à l'image tout de suite.** 16 vidéos sur 18 la montrent avant trois secondes : le visage
+  du tueur en gros plan, maman au cou étiré devant la cuisinière, le chat debout. Les deux qui la
+  montrent pas sont parmi les plus basses (1,3 M et 1,0 M).
+- **Le premier sous-titre est là à 0,0 s**, une à trois mots, le mot de la menace en couleur : « SOMETHING
+  WITH **MOM'S** FACE », « **CHASED** YOU », « BY THE **THROAT** ».
+- **Le rappel-choc gagne les suites.** Cinq des sept meilleures vidéos ouvrent sur la menace en action dans
+  la première phrase (« Something with Mom's face chased you up the stairs »). Le vote vient après, entre
+  trois et sept secondes. La seule suite qui ouvre directement sur le vote (« Chose the phone. ») fait
+  2,1 M. C'est aussi la partie 2, plus tôt dans la série, donc à prendre avec prudence.
+- **La question du témoin se partage.** « What do you do when a killer has seen you? » fait 6,1 M et le
+  meilleur taux de partage du corpus (9,8 pour 1 000 vues).
+- **Le verrou suit le choc entre trois et sept secondes** : un chrono (« Simple. You've got one minute. »),
+  une impossibilité (« But mom works nights. »), un indice (« Pumpkin wears a tiny bell. »), une règle
+  (« Grandma has two rules. »), une réplique de la menace, ou le vote.
+
+Les neuf gabarits, les sept verrous et les tests sont dans le moteur (BLOC 3 et annexe A) et dans
+`machine_a_hooks_survie.md`.
+
 ## À l'écran
 
 - Sous-titres de **2 à 4 mots** à la fois, en gros, au centre, **un mot en couleur**
