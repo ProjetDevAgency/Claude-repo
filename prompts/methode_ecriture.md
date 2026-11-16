@@ -35,3 +35,9 @@ Cette méthode REMPLACE le « Format Kévin v2 » de `consignes_eco.md` (formule
 ## Le méchant
 Le plus fort : un proche (mère, père, frère, belle-famille) ou quelqu'un qui a un vrai pouvoir sur Kévin (patron,
 proprio, gérant, banquier). Jamais un inconnu sans pouvoir. Il a toujours une petite part de raison.
+
+## Règle du 16 nov. : uniquement des sujets 8/8
+Avant d'écrire, chaque sujet passe les 8 critères de la machine à sujets (prompts/methode/machine_a_sujets.pdf) :
+client précis · prix précis et crédible · choc (une des 5 façons) · cohérence · tiers absent qui crée l'enjeu ·
+deadline réelle · zone grise morale (geste discutable de Kévin) · pas un sujet banal / « client normalement pénible ».
+Un seul critère manquant → on retravaille le sujet ou on le jette. Jamais de vidéo sous 8/8.
