@@ -170,9 +170,12 @@ SPACEX = (Recit("test_spacex", "scripts/modele/21_spacex_avant_anthropic.txt", "
            ("Deux minutes après", s_maman, ("notif", 0.9)), ("Six mille euros pour jeudi", s_fin, ("impact", 0.9))])
 
 
-# ═════════════ 2. CONCURRENT : la valise cassée ═════════════
+# ═════════════ 2. CONCURRENT reconstruit (8/8) : la robe de mariée dans la soute ═════════════
 
 AGENTE = dict(shirt=(30, 60, 130), pants=(30, 30, 40), hair=(40, 30, 25), long_hair=True, tie=True)
+SOEUR = dict(shirt=(230, 120, 160), pants=(50, 50, 70), hair=(110, 70, 40), long_hair=True)
+MARIEE = dict(shirt=(252, 252, 250), pants=(252, 252, 250), hair=(110, 70, 40), long_hair=True)
+RETOUCHEUSE = dict(shirt=(120, 90, 160), pants=(40, 40, 50), hair=(180, 180, 185), glasses=True)
 FILE = [dict(shirt=(90, 140, 90), pants=(40, 40, 50), hair=(60, 40, 30), mouth="flat", sc=0.8),
         dict(shirt=(200, 160, 60), pants=(40, 40, 50), hair=(30, 25, 20), long_hair=True, mouth="flat", sc=0.8),
         dict(shirt=(120, 120, 130), pants=(40, 40, 50), hair=(150, 150, 150), mouth="flat", sc=0.8)]
@@ -186,52 +189,69 @@ def comptoir_bag(d, t):
     d.text((810 * s, 1265 * s), "BAGAGES", font=FA(40 * s), fill=WHITE, anchor="mm")
 
 
-def valise(d, t, x=150, y=1520):
+def robe(d, x, y, sc=1.0, tache=True):
+    """La robe de mariée (sur cintre), avec la tache de graisse."""
     s = SS
-    d.rounded_rectangle([(x - 90) * s, (y - 300) * s, (x + 90) * s, (y - 20) * s], radius=24 * s, fill=(230, 120, 160), outline=INK, width=4 * s)
-    d.line([((x - 70) * s, (y - 240) * s), ((x + 10) * s, (y - 160) * s), ((x - 30) * s, (y - 80) * s)], fill=INK, width=6 * s)
-    d.rectangle([(x - 30) * s, (y - 340) * s, (x + 30) * s, (y - 300) * s], fill=(80, 80, 90))
-    d.ellipse([(x + 50) * s, (y - 30) * s, (x + 80) * s, y * s], fill=INK)            # une seule roue
+
+    def P(a, b):
+        return ((x + a * sc) * s, (y + b * sc) * s)
+    d.line([P(-40, -330), P(0, -360), P(40, -330)], fill=(120, 120, 130), width=int(6 * s))
+    d.polygon([P(-55, -330), P(55, -330), P(45, -200), P(-45, -200)], fill=(252, 252, 250), outline=INK)
+    d.polygon([P(-45, -200), P(45, -200), P(150, 40), P(-150, 40)], fill=(250, 250, 248), outline=INK)
+    for k in range(-2, 3):
+        d.line([P(k * 20, -195), P(k * 55, 35)], fill=(225, 225, 230), width=int(3 * s))
+    if tache:
+        d.ellipse([P(-10, -120), P(80, -40)], fill=(70, 55, 40))
+        d.ellipse([P(40, -60), P(100, 0)], fill=(85, 68, 50))
+
+
+def valise_ouverte(d, t, x=330, y=1530):
+    s = SS
+    d.rounded_rectangle([(x - 170) * s, (y - 120) * s, (x + 170) * s, y * s], radius=20 * s, fill=(230, 120, 160), outline=INK, width=4 * s)
+    d.line([((x - 150) * s, (y - 110) * s), ((x - 40) * s, (y - 30) * s), ((x + 30) * s, (y - 100) * s)], fill=INK, width=6 * s)
+    robe(d, x, y - 110, 0.55)
 
 
 def comptoir(t, kpose="neutre", agente=None, file=False, z=1.0, center=(540, 1000)):
     autres = [(420 + k * 90, FILE[k], {}, 0.7 * k, BASE - 60) for k in range(3)] if file else ()
     return plan(aeroport_bg, t, kpose, kx=270, mechant=agente or dict(mouth="flat"), look=AGENTE, mx=860, autres=autres,
-                devant=lambda d, tt: (comptoir_bag(d, tt), valise(d, tt)), z=z, center=center)
+                devant=comptoir_bag, z=z, center=center)
 
 
 def v_hook(lt, dur):
     img = gros_plan_mechant(aeroport_bg, AGENTE, lt, dur, arm=0.5, devant=comptoir_bag)
     badge(img, 540, 1190, "L'AGENTE DU COMPTOIR BAGAGES")
-    bubble(img, 540, 570, ["220 € POUR TA VALISE ?", "ELLE ÉTAIT DÉJÀ ABÎMÉE,", "ON REMBOURSE RIEN"], 58, (lt + 0.3) / 0.3,
-           tail_x=660)
+    bubble(img, 540, 570, ["1 400 € LA ROBE ?", "LE CONTENU, ON REMBOURSE PAS.", "FALLAIT LA PRENDRE EN CABINE"], 54,
+           (lt + 0.3) / 0.3, tail_x=660)
     return shake(img, lt)
 
 
 def v_couture(lt, dur):
-    img = comptoir(lt, "choc", dict(mouth="grin", arm=0.4), file=True, z=push(lt, dur, 1.0, 1.06))
-    tag(img, 540, 420, "DEVANT TOUTE LA FILE", 56, YEL, INK, rot=-3, k=(lt - 0.3) / 0.3)
-    tag(img, 540, 560, "LA ROUE ARRACHÉE", 50, RED, WHITE, rot=2, k=(lt - 2.6) / 0.3)
+    img = plan(aeroport_bg, lt, "choc", kx=760, devant=valise_ouverte, z=push(lt, dur, 1.0, 1.06))
+    tag(img, 540, 420, "LA ROBE DE MARIÉE DE SA SŒUR", 48, YEL, INK, rot=-3, k=(lt - 2.2) / 0.3)
+    if lt > 4.6:
+        tag(img, 540, 560, "TACHÉE DE GRAISSE", 54, RED, WHITE, rot=2, k=(lt - 4.6) / 0.3)
     return flash(img, lt)
 
 
 def v_montee(lt, dur):
-    img = plan(aeroport_bg, lt, "victoire", kx=380, autres=[(700, LEA, dict(mouth="grin", arm=0.9), 1.2)],
+    img = plan(salon_bg, lt, "victoire", kx=380, autres=[(720, SOEUR, dict(mouth="grin", arm=0.9), 1.2)],
                z=push(lt, dur, 1.0, 1.08))
-    tag(img, 540, 420, "SES PREMIÈRES VRAIES VACANCES", 48, YEL, INK, rot=-3, k=(lt - 0.2) / 0.3)
-    tag(img, 540, 560, "PAYÉES AVEC SES HEURES SUP", 46, GREEN, INK, rot=2, k=(lt - 1.8) / 0.3)
+    tag(img, 540, 420, "LA MISSION DE SA VIE", 54, YEL, INK, rot=-3, k=(lt - 0.6) / 0.3)
+    tag(img, 540, 560, "LE MARIAGE EST SAMEDI", 50, GREEN, INK, rot=2, k=(lt - 2.6) / 0.3)
     return flash(img, lt)
 
 
 def v_demande(lt, dur):
     img = comptoir(lt, "parle", dict(mouth="flat"), z=push(lt, dur, 1.05, 1.12))
-    tag(img, 540, 420, "UN FORMULAIRE, S'IL VOUS PLAÎT", 46, WHITE, INK, rot=-3, k=(lt - 0.2) / 0.3)
+    tag(img, 540, 420, "UN CONSTAT, S'IL VOUS PLAÎT", 48, WHITE, INK, rot=-3, k=(lt - 0.2) / 0.3)
     return flash(img, lt)
 
 
 def v_coup1(lt, dur):
     img = gros_plan_mechant(aeroport_bg, AGENTE, lt, dur, 1.95, 2.15, arm=0.4, devant=comptoir_bag)
-    bubble(img, 540, 560, ["UN FORMULAIRE POUR UNE ROUE ?", "LES ROUES, ÇA CASSE,", "C'EST L'USURE"], 54, lt / 0.25, tail_x=660)
+    bubble(img, 540, 560, ["UNE ROBE EN SOUTE ?", "FALLAIT RÉFLÉCHIR AVANT,", "C'EST PAS MON PROBLÈME"], 56, lt / 0.25,
+           tail_x=660)
     return flash(img, lt)
 
 
@@ -243,77 +263,84 @@ def v_geste(lt, dur):
 
 def v_coup2(lt, dur):
     img = gros_plan_mechant(aeroport_bg, AGENTE, lt, dur, 2.2, 2.4, arm=0.8, devant=comptoir_bag)
-    bubble(img, 540, 560, ["LES GENS COMME TOI,", "ÇA DEVRAIT VOYAGER", "AVEC UN SAC DE SPORT"], 58, lt / 0.25, tail_x=660)
+    bubble(img, 540, 560, ["TA SŒUR S'ACHÈTERA", "UNE ROBE CHEZ ZARA,", "COMME TOUT LE MONDE"], 60, lt / 0.25, tail_x=660)
     return shake(flash(img, lt), lt)
 
 
 def v_silence(lt, dur):
-    return plan(aeroport_bg, lt, "triste", kx=540, devant=lambda d, t: valise(d, t, x=760), z=push(lt, dur, 1.0, 1.05))
+    return plan(aeroport_bg, lt, "triste", kx=760, devant=valise_ouverte, z=push(lt, dur, 1.0, 1.05))
 
 
 def v_echo(lt, dur):
     img = dim(gros_plan_kevin(aeroport_bg, lt, dur), 0.75)
-    echo(img, "UN SAC DE SPORT")
+    echo(img, "COMME TOUT LE MONDE")
     return img
 
 
 def v_regle(lt, dur):
     img = dim(plan(aeroport_bg, lt, "neutre", kx=540), 0.9)
-    carte_sombre(img, "VALISE ABÎMÉE EN SOUTE", [("La compagnie est responsable", 0.4, False),
-                                                 ("L'usure ? À ELLE de la prouver", 2.0, True)], lt, y0=470,
-                 sous="CONVENTION DE MONTRÉAL · ARTICLE 17")
+    carte_sombre(img, "VALISE EN SOUTE", [("La compagnie paie la valise", 0.4, False),
+                                          ("ET ce qu'il y a dedans", 2.0, True),
+                                          ("Jusqu'à + de 1 500 €", 3.4, False)], lt, y0=470,
+                 sous="CONVENTION DE MONTRÉAL · ARTICLES 17 ET 22")
     return img
 
 
 def v_demitour(lt, dur):
     img = comptoir(lt, "parle", dict(mouth="o", brows="triste"), file=True, z=push(lt, dur, 1.0, 1.06))
-    tag(img, 540, 420, "LE CONSTAT AU COMPTOIR", 54, YEL, INK, rot=-3, k=(lt - 2.4) / 0.3)
+    tag(img, 540, 420, "LE CONSTAT, AVANT DE PARTIR", 50, YEL, INK, rot=-3, k=(lt - 1.6) / 0.3)
+    tag(img, 540, 560, "IL NE BOUGE PLUS", 50, WHITE, INK, rot=2, k=(lt - 4.0) / 0.3)
     return flash(img, lt)
 
 
-def v_file(lt, dur):
-    img = comptoir(lt, "neutre", dict(mouth="flat"), file=True, z=push(lt, dur, 1.05, 1.12))
-    tag(img, 540, 420, "20 PERSONNES · 15 MINUTES", 52, RED, WHITE, rot=-3, k=(lt - 0.2) / 0.3)
+def v_retouche(lt, dur):
+    img = plan(salon_bg, lt, "neutre", kx=260, autres=[(820, RETOUCHEUSE, dict(mouth="flat", arm=0.5), 0.8)],
+               devant=lambda d, t: robe(d, 540, 1480, 1.1, tache=t < 3.0), z=push(lt, dur, 1.0, 1.06))
+    tag(img, 540, 420, "3 NUITS · 400 € DE SA POCHE", 50, YEL, INK, rot=-3, k=(lt - 1.0) / 0.3)
+    return img
+
+
+def v_secret(lt, dur):
+    img = dim(plan(salon_bg, lt, "telephone", kx=300), 0.85, blur=6, dark=0.6)
+    phone_big(img, 620, 900, lt, "21:12", [("Messages", "Ma sœur", "Ma robe est arrivée ?", (220, 80, 140)),
+                                           ("Messages", "Moi", "Oui, elle est parfaite", (40, 160, 90))])
     return img
 
 
 def v_doute(lt, dur):
-    img = plan(aeroport_bg, lt, "triste", kx=540, z=push(lt, dur, 1.1, 1.18), center=(540, 1000))
-    tag(img, 540, 420, "TOUT ÇA POUR UNE VALISE ?", 52, WHITE, INK, rot=-3, k=(lt - 0.4) / 0.3)
+    img = plan(salon_bg, lt, "triste", kx=540, z=push(lt, dur, 1.1, 1.18), center=(540, 1000))
+    tag(img, 540, 420, "ELLE AVAIT LE DROIT DE SAVOIR ?", 48, WHITE, INK, rot=-3, k=(lt - 0.4) / 0.3)
     return img
 
 
-def v_reclam(lt, dur):
-    img = dim(plan(salon_bg, lt, "telephone", kx=540), 0.85)
-    card(img, 540, 760, "RÉCLAMATION", "SOUS 7 JOURS", [("1. Le constat du comptoir", "", 0.3, False),
-                                                        ("2. Les photos", "", 1.0, False),
-                                                        ("3. La facture de la valise", "", 1.7, True)], lt, rot=2)
-    return img
-
-
-def v_twist(lt, dur):
-    img = plan(salon_bg, lt, "victoire", kx=300)
-    phone_big(img, 620, 920, lt, "09:15", [("Mail", "Remboursement", "+220,00 €", (60, 110, 230))])
+def v_mariage(lt, dur):
+    tl = REC_VALISE.T.get("gain", 99) - REC_VALISE.T["v_mariage"]
+    img = plan(salon_bg, lt, "victoire", kx=300, autres=[(700, MARIEE, dict(mouth="grin", arm=0.6), 1.2)],
+               devant=lambda d, t: robe(d, 700, 1580, 0.95, tache=False), z=1.0)
+    tag(img, 540, 420, "SAMEDI", 66, YEL, INK, rot=-3, k=lt / 0.3)
+    if lt > tl:
+        tag(img, 540, 560, "LUNDI : +400 € REMBOURSÉS", 50, GREEN, INK, rot=2, k=(lt - tl) / 0.3)
     return flash(img, lt)
 
 
 def v_fin(lt, dur):
-    img = dim(plan(aeroport_bg, lt, z=1.0), 0.6)
-    big_number(img, (540, 470), "220 €", 150, GREEN, "POUR UNE VALISE « DÉJÀ ABÎMÉE »", k=lt / 0.25, rot=-3)
-    mention(img, "CAS TYPE · CONVENTION DE MONTRÉAL ART. 17 ET 31", lt)
+    img = dim(plan(salon_bg, lt, z=1.0), 0.6)
+    big_number(img, (540, 470), "1 400 €", 150, GREEN, "ET ELLE A JAMAIS SU", k=lt / 0.25, rot=-3)
+    mention(img, "CAS TYPE · CONVENTION DE MONTRÉAL ART. 17, 22 ET 31", lt)
     return img
 
 
-VALISE = (Recit("test_valise", "scripts/modele/22_valise_cassee.txt", "output/_work_test_valise/voice_duo.wav",
-                compteur=dict(label="REMBOURSÉ À KÉVIN", depart=0, montant=220, phrase="Dix jours après")),
-          [("Deux cent vingt euros", v_hook, ("impact", 1.0)), ("C'est ce que l'agente", v_couture, ("whoosh", 0.6)),
-           ("Et pourtant je revenais", v_montee, ("pop", 0.8)), ("Je lui demande juste", v_demande, None),
-           ("Un formulaire pour", v_coup1, ("impact", 0.8)), ("Et en appelant", v_geste, ("whoosh", 0.5)),
-           ("Les gens comme toi", v_coup2, ("impact", 1.0)), ("Je dis rien", v_silence, None),
-           ("Un sac de sport", v_echo, ("rate", 0.6)), ("Sauf que la loi", v_regle, ("pop", 0.8)),
-           ("Mais alors comment", v_demitour, ("whoosh", 0.6)), ("Vingt personnes", v_file, ("impact", 0.6)),
-           ("Honnêtement", v_doute, None), ("Le soir même", v_reclam, ("notif", 0.7)),
-           ("Dix jours après", v_twist, ("succes", 0.8)), ("Deux cent vingt euros, pour", v_fin, ("impact", 0.9))])
+REC_VALISE = Recit("test_valise", "scripts/modele/22_valise_cassee.txt", "output/_work_test_valise/voice_duo.wav",
+                   compteur=dict(label="REMBOURSÉ À KÉVIN", depart=0, montant=400, phrase="la compagnie me rembourse"))
+VALISE = (REC_VALISE,
+          [("Mille quatre cents euros la robe", v_hook, ("impact", 1.0)), ("C'est ce que l'agente", v_couture, ("whoosh", 0.6)),
+           ("Et pourtant j'étais", v_montee, ("pop", 0.8)), ("Je lui demande juste", v_demande, None),
+           ("Une robe dans", v_coup1, ("impact", 0.8)), ("Et en appelant", v_geste, ("whoosh", 0.5)),
+           ("Ta sœur s'achètera", v_coup2, ("impact", 1.0)), ("Je dis rien", v_silence, None),
+           ("Comme tout le monde", v_echo, ("rate", 0.6)), ("Sauf que ce que presque", v_regle, ("pop", 0.8)),
+           ("Mais alors il faut quoi", v_demitour, ("whoosh", 0.6)), ("Le soir, je trouve", v_retouche, ("ticks", 0.6)),
+           ("Et à ma sœur", v_secret, ("notif", 0.7)), ("Honnêtement", v_doute, None),
+           ("Samedi, elle remonte", v_mariage, ("succes", 0.8)), ("Mille quatre cents euros de robe", v_fin, ("impact", 0.9))])
 
 
 # ═════════════ 3. INVENTÉ : la prime de fin de CDD ═════════════
