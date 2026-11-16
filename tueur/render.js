@@ -1,5 +1,5 @@
 // Étape 2 : rend la scène 3D image par image et assemble la vidéo avec l'audio.
-//   node tueur/render.js [sortie.mp4] [--preview t1,t2,...] [--fps 30]
+//   node tueur/render.js [sortie.mp4] [--preview t1,t2,...] [--sans-ui] [--fps 30]
 // Par défaut la vidéo va dans output/<sortie de l'épisode>.mp4
 const http = require("http");
 const fs = require("fs");
@@ -13,6 +13,7 @@ const args = process.argv.slice(2);
 const opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
 const FPS = Number(opt("--fps", 30));
 const preview = opt("--preview", null);
+const sansUI = args.includes("--sans-ui");  // images du décor seul, pour les couvertures
 
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".ttf": "font/ttf", ".json": "application/json" };
 const server = http.createServer((req, res) => {
@@ -40,8 +41,9 @@ const server = http.createServer((req, res) => {
     fs.mkdirSync(path.join(BUILD, "preview"), { recursive: true });
     for (const t of preview.split(",").map(Number)) {
       await page.evaluate(t => window.renderAt(t), t);
-      const f = path.join(BUILD, "preview", `t${t.toFixed(1)}.jpg`);
-      await page.screenshot({ path: f, type: "jpeg", quality: 85 });
+      if (sansUI) await page.evaluate(() => { document.getElementById("ui").style.display = "none"; });
+      const f = path.join(BUILD, "preview", `${sansUI ? "decor_" : ""}t${t.toFixed(1)}.${sansUI ? "png" : "jpg"}`);
+      await page.screenshot(sansUI ? { path: f, type: "png" } : { path: f, type: "jpeg", quality: 85 });
       console.log(f);
     }
   } else {

@@ -11,6 +11,7 @@
   #ui { position: absolute; inset: 0; font-family: "Inter", sans-serif; color: #fff; pointer-events: none; }
 
   #hud { position: absolute; left: 56px; top: 140px; text-shadow: 0 3px 14px rgba(0,0,0,.8); }
+  #hud .handle { font: 700 26px "Inter"; letter-spacing: 1px; opacity: .8; margin-bottom: 10px; }
   #hud .ep { display: inline-block; background: #e3202b; color: #fff; font: 800 28px "Mont"; letter-spacing: 3px;
              padding: 8px 16px; border-radius: 8px; }
   #hud .rec { display:inline-block; width:16px; height:16px; border-radius:50%; background:#fff; margin-right:12px; }
@@ -55,6 +56,7 @@
   <div id="peep"></div>
   <div id="vign"></div>
   <div id="hud">
+    <div class="handle" id="handle"></div>
     <div class="ep"><span class="rec"></span><span id="epi"></span></div>
     <div class="clock" id="clock">02:14:07</div>
     <div class="place" id="place"></div>
@@ -400,7 +402,7 @@ window.setup = (timeline) => {
   TL = timeline;
   TL.lines.forEach(l => l.chunks = chunks(l));
   TL.plans.forEach((p, i) => p.end = i + 1 < TL.plans.length ? TL.plans[i + 1].start : TL.duration + 1);
-  ui("epi").textContent = TL.hud.episode; ui("place").textContent = TL.hud.lieu;
+  ui("epi").textContent = TL.hud.episode; ui("place").textContent = TL.hud.lieu; ui("handle").textContent = TL.hud.compte || "";
   ui("rulek").textContent = TL.regle.titre; ui("rulet").textContent = TL.regle.texte;
   const tx = TL.texto, n = lineN(TL.lines.findIndex(l => TL.speakers[l.speaker] && TL.speakers[l.speaker].texto) + 1);
   ui("smsde").textContent = tx.de; ui("smsts1").textContent = "Hier, " + tx.avant_heure; ui("smsts2").textContent = "Aujourd'hui, " + tx.heure;
