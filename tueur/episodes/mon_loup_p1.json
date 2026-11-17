@@ -6,14 +6,15 @@
   "model": "eleven_v4",
   "voix": {
    "NARRATEUR": {
-    "id": "6DEjyaHWnTHsvXM5Byys",
-    "nom": "Hugo, conteur français grave (bibliothèque ElevenLabs)",
+    "id": "UBXZKOKbt62aLQHhc1Jm",
+    "nom": "François Louis (bibliothèque ElevenLabs), retouché : jeu plat, plus sombre, un demi-ton plus grave",
     "settings": {
-     "stability": 0.55,
-     "similarity_boost": 0.8,
-     "style": 0.3
+     "stability": 0.9,
+     "similarity_boost": 0.85,
+     "style": 0.0
     },
-    "note": "Posé et sérieux, sans respiration ni chuchotement : 0 respiration de narrateur dans les 17 vidéos à 1 M"
+    "traitement": "rubberband=pitch=0.9439:formant=preserved,equalizer=f=150:t=q:w=1:g=2.5,equalizer=f=350:t=q:w=1:g=-2.5,equalizer=f=1200:t=q:w=1:g=-4,equalizer=f=3000:t=q:w=1:g=-6",
+    "note": "Choisi le 17/11/2026 après comparaison avec le narrateur de @mission.creepy : le plus proche au jeu et au débit sans copier sa voix"
    },
    "VOIX DERRIÈRE LA PORTE": {
     "id": "O31r762Gb3WFygrEOGh0",
@@ -48,7 +49,7 @@
   "silence_garde": 0.1,
   "silence_garde_ligne": 0.24,
   "seuil_silence_db": -40,
-  "vitesse": 1.08,
+  "vitesse": 1.1,
   "pause_max": 0.45,
   "silence_garde_phrase": 0.21,
   "note": "Rythme mesuré sur @mission.creepy (2,2 et 2,9 M) : pause de phrase 0,12 à 0,24 s, pauses longues 0,26 à 0,44 s, silence 10 à 18 %, 6,4 syllabes par seconde"

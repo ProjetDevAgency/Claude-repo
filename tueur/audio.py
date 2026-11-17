@@ -333,6 +333,8 @@ def voice_block(blk, k, blocks, ep, n0, vitesse):
     pcm, tmap = tighten(pcm, bounds, ep["rythme"], phrases)
     if abs(vitesse - 1.0) > 0.005:
         pcm = ffilter(pcm, f"atempo={vitesse:.3f}")
+    if v.get("traitement"):  # retouche propre à la voix (hauteur, égaliseur), sans changer le minutage
+        pcm = ffilter(pcm, v["traitement"])
     if v.get("effet"):
         pcm = ffilter(pcm, FILTRES[v["effet"]])
     T = lambda x: tmap(x) / vitesse
