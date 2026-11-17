@@ -101,6 +101,7 @@ body { background: #000; }
   await shot(avatarPortes, out("avatar_2_portes.png"), 1080, 1080);
   await shot(avatarTexte, out("avatar_3_texte.png"), 1080, 1080);
   await shot(cover("MON", "LOUP", "PARTIE 1", out("decor_mon_loup_p1.png")), out("couverture_mon_loup_p1.png"), 1080, 1920);
+  await shot(cover("MON", "LOUP", "PARTIE 2", out("decor_mon_loup_p2.png")), out("couverture_mon_loup_p2.png"), 1080, 1920);
   await shot(apercu([out("avatar_1_ab.png"), out("avatar_2_portes.png"), out("avatar_3_texte.png")], out("couverture_mon_loup_p1.png")),
              out("apercu_profil.png"), 1080, 1500);
   await b.close();
