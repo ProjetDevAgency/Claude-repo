@@ -1,6 +1,6 @@
 """Étape 1 : voix (ElevenLabs) + bruitages + timeline, à partir d'un script au format du moteur S1.
 
-Produit build/audio.wav et build/timeline.json (caméra, sous-titres mot à mot, événements).
+Produit build/<sortie>/audio.wav et build/<sortie>/timeline.json (caméra, sous-titres mot à mot, événements).
 
     python tueur/audio.py tueur/episodes/mon_loup_p1.json
 
@@ -69,6 +69,7 @@ def tts_elevenlabs(text, voice, model, prev_text=None, next_text=None):
 FILTRES = {
     "porte": "lowpass=f=950,aecho=0.8:0.6:35|70:0.25|0.12,volume=1.6",
     "telephone": "highpass=f=380,lowpass=f=3300,acompressor,volume=1.3",
+    "rideau": "lowpass=f=4200,aecho=0.6:0.4:18|31:0.2|0.1,volume=1.25",  # tout près, derrière un tissu, dans une pièce carrelée
 }
 
 
@@ -254,6 +255,30 @@ def steps(n=6, gap=0.42):
     return (out + rev) * 0.8
 
 
+def rideau(d=0.9):
+    """Les anneaux du rideau de douche qui glissent sur la tringle."""
+    out = np.zeros(int(SR * d), np.float32)
+    for i in range(9):
+        t = t_(0.06)
+        f = 2600 + rng.uniform(-400, 600)
+        click = np.sin(2 * np.pi * f * t) * env(len(t), 0.0005, 0.012) * rng.uniform(0.4, 0.8)
+        j = int((0.05 + i * 0.07 + rng.uniform(0, 0.02)) * SR)
+        out[j:j + len(click)] += click
+    swish = lp(rng.standard_normal(len(out)).astype(np.float32), 8) * np.sin(np.pi * np.linspace(0, 1, len(out))) * 0.12
+    return (out + swish) * 0.7
+
+
+def ding():
+    """Le ding de l'ascenseur, deux notes."""
+    out = np.zeros(int(SR * 1.6), np.float32)
+    for k, (f, at) in enumerate(((1046.5, 0.0), (830.6, 0.32))):
+        t = t_(1.2)
+        tone = (np.sin(2 * np.pi * f * t) + 0.3 * np.sin(2 * np.pi * 2 * f * t)) * env(len(t), 0.003, 0.45)
+        j = int(at * SR)
+        out[j:j + len(tone)] += tone * 0.45
+    return out
+
+
 def heartbeat(n_beats, bpm=72):
     one = np.zeros(int(SR * 60 / bpm), np.float32)
     for off, g in ((0, 1.0), (0.18, 0.7)):
@@ -279,8 +304,8 @@ def drone(d):
     return ((x * 0.07 + wind * 0.05) * np.minimum(1, t / 1.5)).astype(np.float32)
 
 
-SONS = {"knock3": knock3, "buzz": buzz, "creak": creak, "steps": steps, "sting": sting}
-EVENT = {"knock3": "knock", "buzz": "buzz", "creak": "creak", "steps": "steps", "sting": "sting"}
+SONS = {"knock3": knock3, "buzz": buzz, "creak": creak, "steps": steps, "sting": sting, "rideau": rideau, "ding": ding}
+EVENT = {"knock3": "knock", "buzz": "buzz", "creak": "creak", "steps": "steps", "sting": "sting", "rideau": "rideau", "ding": "ding"}
 
 
 def place(buf, clip, at, gain=1.0):
@@ -371,13 +396,16 @@ def layout(blocks, voiced, ep, extra_pause=0.0):
         prev = blk["speaker"]
     if "QUESTION" in sfx:
         events.setdefault("sting", []).append(round(lines[-1]["start"] - 0.1, 3))
+    for sd in ep.get("sons_sous_voix", []):  # bruitages posés sous la voix, sans arrêter le récit
+        events.setdefault(EVENT[sd["son"]], []).append(round(sd["a"], 3))
     return lines, events, t + ry["tenue_finale"], placed
 
 
 def main(ep_path):
     ep_path = Path(ep_path)
     ep = json.loads(ep_path.read_text(encoding="utf-8"))
-    BUILD.mkdir(exist_ok=True)
+    out_dir = BUILD / ep["sortie"]
+    out_dir.mkdir(parents=True, exist_ok=True)
     items = parse_script((HERE / ep["script"]).read_text(encoding="utf-8"))
     blocks = make_blocks(items)
     ry = ep["rythme"]
@@ -423,7 +451,7 @@ def main(ep_path):
     place(mix, heartbeat(int((total - hb) * 72 / 60) + 1), hb, 0.55)
 
     mix = mix / max(1e-6, np.abs(mix).max()) * 0.9
-    wav = BUILD / "audio.wav"
+    wav = out_dir / "audio.wav"
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "1",
                     "-i", "-", str(wav)], input=mix.astype(np.float32).tobytes(), check=True)
     voix = ep["tts"]["voix"]
@@ -433,9 +461,10 @@ def main(ep_path):
            "plans": [{"name": p, "start": 0 if i == 0 else lines[i]["start"] - 0.05} for i, p in enumerate(plans)],
            "marques": {k: lines[v - 1]["start"] for k, v in ep["marques"].items()},
            "speakers": {k: {"texto": bool(v.get("texto")), "effet": v.get("effet")} for k, v in voix.items()},
+           "scene": ep.get("scene", ep["sortie"]),
            **{k: ep[k] for k in ("hud", "regle", "texto", "choix", "rouge", "sortie")}}
     out["regle"]["start"], out["regle"]["end"] = lines[ep["regle"]["ligne"] - 1]["start"], lines[ep["regle"]["ligne"] - 1]["end"]
-    (BUILD / "timeline.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    (out_dir / "timeline.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"audio {total:.1f} s, {len(lines)} répliques, vitesse {vitesse} -> {wav}")
 
 

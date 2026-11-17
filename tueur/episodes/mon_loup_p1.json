@@ -6,15 +6,14 @@
   "model": "eleven_v4",
   "voix": {
    "NARRATEUR": {
-    "id": "UBXZKOKbt62aLQHhc1Jm",
-    "nom": "François Louis (bibliothèque ElevenLabs), retouché : jeu plat, plus sombre, un demi-ton plus grave",
+    "id": "6DEjyaHWnTHsvXM5Byys",
+    "nom": "Hugo, conteur français grave (bibliothèque ElevenLabs), sans retouche",
     "settings": {
-     "stability": 0.9,
-     "similarity_boost": 0.85,
-     "style": 0.0
+     "stability": 0.55,
+     "similarity_boost": 0.8,
+     "style": 0.3
     },
-    "traitement": "rubberband=pitch=0.9439:formant=preserved,equalizer=f=150:t=q:w=1:g=2.5,equalizer=f=350:t=q:w=1:g=-2.5,equalizer=f=1200:t=q:w=1:g=-4,equalizer=f=3000:t=q:w=1:g=-6",
-    "note": "Choisi le 17/11/2026 après comparaison avec le narrateur de @mission.creepy : le plus proche au jeu et au débit sans copier sa voix"
+    "note": "Posé, sans indication de jeu. Choisi le 17/11/2026 : le problème venait du rythme, pas de la voix."
    },
    "VOIX DERRIÈRE LA PORTE": {
     "id": "O31r762Gb3WFygrEOGh0",
@@ -41,35 +40,35 @@
  },
  "rythme": {
   "debut": 0.12,
-  "entre_repliques": 0.12,
-  "pause": 0.3,
+  "entre_repliques": 0.08,
+  "pause": 0.22,
   "tenue_finale": 3.2,
   "duree_min": 61.5,
   "silence_min": 0.14,
   "silence_garde": 0.1,
-  "silence_garde_ligne": 0.24,
+  "silence_garde_ligne": 0.2,
   "seuil_silence_db": -40,
-  "vitesse": 1.1,
-  "pause_max": 0.45,
+  "vitesse": 1.04,
+  "pause_max": 0.35,
   "silence_garde_phrase": 0.21,
   "note": "Rythme mesuré sur @mission.creepy (2,2 et 2,9 M) : pause de phrase 0,12 à 0,24 s, pauses longues 0,26 à 0,44 s, silence 10 à 18 %, 6,4 syllabes par seconde"
  },
  "bruitages": {
   "TROIS COUPS": {
    "son": "knock3",
-   "avance": 0.6
+   "avance": 0.5
   },
   "VIBREUR": {
    "son": "buzz",
-   "avance": 0.2
+   "avance": 0.15
   },
   "GRINCEMENT": {
    "son": "creak",
-   "avance": 0.35
+   "avance": 0.3
   },
   "PAS DANS L'ESCALIER": {
    "son": "steps",
-   "avance": 0.5
+   "avance": 0.4
   },
   "QUESTION": {
    "son": "sting"
