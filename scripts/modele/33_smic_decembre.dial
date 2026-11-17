@@ -1,23 +1,29 @@
-# ACTU : le gouvernement a annoncé le 9 nov. 2026 une hausse du SMIC de 1,6 % au 1er décembre 2026 (≈ 1 502 € net par
-# mois à temps plein, ≈ +24 €), un mois avant la revalorisation de janvier ; décret à paraître. Le SMIC est un minimum
-# légal : il s'applique à tous les salariés concernés sans accord de l'employeur. Sources : journaldeleconomie.fr,
-# selectra.info, connaissancedesenergies.org (AFP). Version 8/8 :
-# client précis (Kévin, ouvrier d'atelier au SMIC) · prix crédible (24 €) · choc (« pas chez moi » + mépris) ·
-# cohérence · tiers absent (les nièces, cadeaux de Noël) · deadline (1er décembre) · pas banal (actu).
-# Zone grise : Kévin monte les 8 collègues au SMIC dans un groupe sans le patron, et ils envoient 8 mails identiques à
-# la même minute. M = le patron.
-M: Tu crois que tu vas toucher vingt-quatre euros de plus en décembre ? Le SMIC augmente en janvier, et pas chez moi.
-N: C'est ce que mon patron m'a sorti, devant la machine à café de l'atelier. Cette année, les cadeaux de Noël de mes deux nièces, c'était moi.
-N: Et pourtant j'avais suivi l'actu. Le gouvernement l'avait annoncé le neuf novembre. Plus un virgule six pour cent, dès le premier décembre. Un mois plus tôt que d'habitude.
-N: Je lui demande juste si ce sera sur la paie. Il pose son gobelet et il me fait,
-M: Tu crois tout ce que tu lis sur ton téléphone ?
-N: Et en retournant à son bureau, il en rajoute une couche.
-M: Ici, c'est moi qui décide qui mérite une augmentation.
-N: Je dis rien. Je regarde l'article, encore ouvert sur mon téléphone, avec la date en gros.
-N: Qui mérite.
-N: Sauf que le SMIC, c'est pas une augmentation qu'on mérite. C'est un plancher fixé par l'État. Quand il monte, il monte pour tout le monde, sans l'accord du patron.
-N: Mais alors, ça fait combien ? Environ mille cinq cent deux euros net par mois, pour un temps plein. Le décret doit encore sortir pour le confirmer.
-N: Le soir, je crée un groupe avec les huit collègues au SMIC. Sans lui. Le lundi, il reçoit huit mails pareils, à la même minute.
-N: Honnêtement, j'ai monté tout l'atelier contre lui pour vingt-quatre euros. Il avait peut-être juste pas vu l'info.
-N: Fin décembre, la paie arrive. La ligne est là. Et devant la machine à café, il nous dit que chez lui, on respecte la loi.
-N: Vingt-quatre euros, et chez lui aussi.
+# MOTEUR H1 complet. ACTU : le SMIC augmente de 1,6 % au 1er décembre 2026 (≈ 1 502 € net, ≈ +24 €), annonce du
+# gouvernement du 9 nov., décret à paraître ; c'est un minimum légal qui s'applique sans l'accord de l'employeur.
+# Sources : journaldeleconomie.fr, selectra.info, connaissancedesenergies.org (AFP).
+# Transgression T1 + T4 · autorité : le patron (TIER A, il signe les paies) · verrou V2 double possibilité (la ligne sur la
+# fiche ou huit dans son bureau, fermé à 80 %) · entrée : il débarque à la pause · axe : mépris du métier · twist W4
+# l'aveu involontaire (il dit le contraire à la télé) · chute punchline chiffrée · mot-enjeu « Noël » ×3 · écho sur le
+# coup 1 · témoins 8 gars.
+# 8/8 : client précis (Kévin, menuisier au SMIC) · prix crédible · choc · cohérence · tiers absent (ses nièces) · deadline
+# (le 1er décembre) · zone grise (il organise les 8 collègues dans son dos) · pas banal (actu). M = le patron. N = Kévin.
+N: Mon patron veut garder vingt-quatre euros par mois sur la paie de huit ouvriers.
+N: Le premier décembre, soit la ligne est sur la fiche, soit on est huit dans son bureau.
+N: Une hausse du SMIC annoncée par le gouvernement, un atelier de menuiserie, et la machine à café.
+N: Un mois plus tôt que d'habitude, juste avant Noël. Moi, je pensais déjà aux cadeaux de mes deux nièces.
+N: Lundi, il débarque à la pause. Je lui dis, chef, ce sera sur la paie de décembre ? Il pose son gobelet et il me fait,
+M: Ton SMIC, c'est une annonce à la télé. Ici, c'est moi qui signe les chèques.
+N: Et en jetant son gobelet, il en rajoute une couche.
+M: Avec ce que tu fais derrière ta raboteuse, estime-toi déjà payé.
+N: Je dis rien. Je finis mon café.
+N: Une annonce à la télé.
+N: Et pourtant, le SMIC, c'est pas une prime. Pas un cadeau.
+N: Ce que peu de gens savent, c'est que c'est un plancher fixé par l'État. Quand il monte, c'est pour tous, sans l'accord du patron.
+N: Mais alors, ça fait combien ? À peu près mille cinq cent deux euros net par mois, si le décret le confirme.
+N: Sauf que les paies partent avant Noël. Donc ça se règle cette semaine.
+N: Honnêtement, je me demande s'il a pas raison. Huit paies d'un coup, pour un petit atelier, ça pèse.
+N: Vendredi, 8 gars posent leur fiche de paie sur son bureau, à la même minute.
+N: Sa secrétaire arrête de taper.
+N: Fin décembre. La ligne est sur la paie, avant Noël. Le soir, je le vois au journal régional.
+N: Il parle du SMIC comme d'une évidence.
+N: Vingt-quatre euros, et c'est lui à la télé.

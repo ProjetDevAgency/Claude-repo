@@ -1,24 +1,32 @@
-# Retard : seule une retenue strictement proportionnelle au temps non travaillé est licite ; retirer plus (une heure
-# pour 10 min, ou un forfait) est une sanction pécuniaire interdite (Code du travail, L1331-2 ; Cass. soc. 24 nov. 1992,
-# n° 90-42.520) ; amende de 3 750 € pour l'employeur (L1334-1). Sources : editions-tissot.fr, legisocial.fr, swim.legal.
-# Version 8/8 :
-# client précis (Kévin, vendeur en magasin, grève des bus) · prix crédible (9 retards × 1 h ≈ 108 €) · choc (« une heure
-# par retard, c'est la règle » + mépris) · cohérence · tiers absent (le petit frère, voyage scolaire) · deadline (à payer
-# vendredi) · pas banal.
-# Zone grise : Kévin photographie le tableau des retenues de toute l'équipe et l'envoie à l'inspection du travail sans
-# demander aux collègues. M = la gérante (voix féminine).
-M: Je t'ai retiré cent huit euros pour tes retards de dix minutes, oui. Une heure par retard, c'est la règle ici.
-N: C'est ce que ma gérante m'a sorti, en me tendant ma fiche de paie. Trois semaines de grève des bus, neuf retards. Et vendredi, je devais payer le voyage scolaire de mon petit frère.
-N: Et pourtant je partais une heure avant. Je marchais même les deux derniers arrêts.
-N: Neuf fois dix minutes, ça fait une heure et demie. Pas neuf heures. Je lui montre juste le calcul. Elle sourit et elle me fait,
-M: Le calcul, c'est moi qui le fais. T'es pas content, la porte est là.
-N: Et en rangeant les fiches de paie, elle en rajoute une couche.
-M: Ceux qui ont de l'ambition, ils habitent à côté de leur travail.
-N: Je dis rien. Je regarde l'horloge au-dessus de la caisse.
-N: Habiter à côté.
-N: Sauf que le Code du travail interdit les amendes. Pour un retard, ton patron peut retirer le temps exact que t'as raté. Dix minutes, c'est dix minutes.
-N: Mais alors, une heure pour dix minutes ? C'est une sanction d'argent, et elle est interdite. Le patron risque même une amende de trois mille sept cent cinquante euros.
-N: Le soir, je prends en photo le tableau des retenues de toute l'équipe. Sans leur demander. Et je l'envoie à l'inspection du travail.
-N: Honnêtement, j'aurais peut-être dû demander aux collègues avant. C'était aussi leurs noms.
-N: Le mois suivant, une nouvelle affiche dans le vestiaire. Retenue à la minute près. Et tout l'argent rendu à l'équipe.
-N: Cent huit euros, et la règle ici, c'est la loi.
+# MOTEUR H1 complet. Sujet : la tante boulangère retire une heure par retard de dix minutes pendant la grève des bus.
+# Loi : seule une retenue strictement proportionnelle au temps non travaillé est licite ; au-delà, sanction pécuniaire
+# interdite (C. trav. L1331-2 ; Cass. soc. 24 nov. 1992, n° 90-42.520). Sources : editions-tissot.fr, legisocial.fr.
+# Transgression T4 · autorité A2 + pouvoir (la tante ET la patronne, TIER S × A) · verrou V3 preuve conservée (la feuille
+# de pointage, sortie à 76 %) · entrée : un message, trois mots · axe : mépris du métier · twist W2 silence puis
+# capitulation (retournement social) · chute punchline chiffrée · mot-enjeu « fournil » ×3 · écho sur le coup 1 ·
+# témoins 5 collègues.
+# 8/8 : client précis (Kévin vendeur en boulangerie) · prix crédible (9 heures retirées) · choc · cohérence · tiers absent
+# (le petit frère) · deadline (le voyage à payer vendredi) · zone grise (il affiche le calcul de chaque collègue, avec leur
+# nom, sans leur demander) · pas banal. M = la tante (voix féminine). N = Kévin.
+N: Ma tante m'a retiré cent huit euros de paie pour neuf retards de dix minutes.
+N: Et j'ai gardé la feuille de pointage de toute l'équipe.
+N: Trois semaines de grève des bus. La boulangerie ouvre à six heures, moi j'arrive à six heures dix.
+N: Je pars à cinq heures, marche deux arrêts dans le noir, ouvre le fournil le premier.
+N: Vendredi, je dois payer le voyage scolaire de mon petit frère.
+N: Le soir de la paie, elle m'envoie la fiche en photo. Trois mots. C'est la règle.
+N: Je lui réponds, tata, c'est la grève. Elle m'appelle, elle rigole et elle me fait,
+M: Une heure ou dix minutes, pour un vendeur de croissants, ça change quoi ?
+N: Et avant de couper, elle insiste.
+M: Si t'étais sérieux, tu dormirais dans le fournil.
+N: Pas un mot.
+N: Un vendeur de croissants.
+N: Sur le papier, c'est sa boutique, ses règles.
+N: Ce que peu de gens savent, c'est que pour un retard, ton patron peut retirer le temps exact. Pas une minute de plus.
+N: Mais alors, une heure pour dix minutes ? C'est une amende sur le salaire, et le Code du travail les interdit.
+N: Neuf fois dix minutes, ça fait une heure et demie. Pas neuf heures.
+N: Honnêtement, je me demande si elle a pas raison. Sans croissants à six heures, elle perd les clients du matin.
+N: Samedi, 5 collègues dans le fournil. J'affiche le calcul de chacun, avec leur nom, sans leur demander.
+N: Le boulanger pose sa plaque.
+N: Ma tante me parle pas pendant trois jours. Le lundi, une feuille au mur. Retenue à la minute.
+N: Et elle me confie les paies.
+N: Cent huit euros, recalculés à la minute près.

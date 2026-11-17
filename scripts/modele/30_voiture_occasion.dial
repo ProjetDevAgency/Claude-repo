@@ -1,22 +1,32 @@
-# Voiture d'occasion vendue par un garage (professionnel) à un particulier : garantie légale de conformité
-# (Code de la consommation, L217-3 et suivants) ; pour un bien d'occasion, le défaut qui apparaît dans les 12 premiers
-# mois est présumé exister à la vente (L217-7) ; « vendu en l'état » ne l'écarte pas face à un consommateur.
-# Sources : DGCCRF, matmut.fr, eplaque.fr, largus.fr. Version 8/8 :
-# client précis (Kévin, CDI qui commence lundi) · prix crédible (embrayage 1 800 €, voiture 6 500 €) · choc
-# (« vendue en l'état » + mépris) · cohérence · tiers absent (le nouvel employeur) · deadline (CDI lundi) · pas banal.
-# Zone grise : Kévin fait déposer la voiture en panne devant la vitrine du garage, avec une pancarte. M = le garagiste.
-M: Tu veux que je paie ton embrayage à mille huit cents euros ? Vendue en l'état, t'as signé, c'est écrit.
-N: C'est ce que le garagiste m'a sorti, trois semaines après m'avoir vendu une petite citadine d'occasion à six mille cinq cents euros. Lundi, je commençais mon CDI, à quarante kilomètres.
-N: Et pourtant j'avais tout fait bien. Le crédit, l'assurance, même des tapis neufs pour être propre le premier jour. Ma mère avait même pris une photo de moi devant.
-N: Sur la rocade, l'embrayage lâche. Remorquage, devis, et je reviens au garage. Il rigole et il me fait,
-M: Une occasion, c'est un risque. Fallait prendre une neuve.
-N: Et en rangeant ses clés, il en rajoute une couche.
-M: À ton âge, on achète une trottinette, pas une voiture.
-N: Je dis rien. Je regarde ma voiture sur le plateau de la dépanneuse.
-N: Une trottinette.
-N: Sauf qu'un garage, c'est un professionnel. Et un pro qui vend une occasion à un particulier lui doit la garantie légale de conformité.
-N: Mais alors, vendue en l'état ? Face à un client comme moi, cette phrase vaut rien. Et la première année, la panne est présumée déjà là le jour de la vente.
-N: Le lendemain, je fais déposer la voiture devant sa vitrine. Avec une pancarte. Vendue ici, en l'état.
-N: Honnêtement, j'aurais peut-être dû lui laisser le temps de répondre à mon courrier.
-N: Deux heures plus tard, il appelle. Embrayage changé, gratuit, et une voiture de prêt pour lundi. Il me demande juste d'enlever la pancarte.
-N: Mille huit cents euros, et cette fois c'est lui qui signe.
+# MOTEUR H1 complet. Sujet : le cousin garagiste a vendu la voiture, l'embrayage lâche, « vendue en l'état ».
+# Loi : un professionnel qui vend une occasion à un consommateur doit la garantie légale de conformité (C. conso L217-3) ;
+# défaut apparu dans les 12 premiers mois présumé exister à la vente (L217-7) ; « vendu en l'état » ne l'écarte pas.
+# Sources : DGCCRF, matmut.fr, eplaque.fr, largus.fr.
+# Transgression T4 · autorité A2 + A5 (le cousin, TIER S, et c'est lui qui a vendu la voiture) · verrou V2 double
+# possibilité (en voiture ou pas du tout, fermé à 88 %) · entrée : il appelle à vingt-trois heures · axe : arnaque
+# familiale + urgence · twist W4 l'aveu involontaire (l'annonce Leboncoin) · chute punchline chiffrée · mot-enjeu
+# « famille » ×3 · écho sur le coup 1 · témoins 3 clients.
+# 8/8 : client précis (Kévin, CDI lundi) · prix crédible · choc · cohérence · tiers absent (le nouvel employeur) ·
+# deadline (lundi) · zone grise (la voiture en panne devant son garage, avec une pancarte) · pas banal.
+# M = le cousin. N = Kévin.
+N: Mon cousin garagiste me réclame mille huit cents euros pour l'embrayage de la voiture qu'il m'a vendue.
+N: Lundi, je commence mon CDI, soit en voiture, soit pas du tout.
+N: Une petite citadine, toutes mes économies, et l'embrayage qui lâche trois semaines après.
+N: Il m'avait fait un prix de famille. Même un sapin à la vanille au rétro.
+N: Je lui ai dit, cousin, tu me sauves.
+N: Le soir de la panne, il m'appelle à vingt-trois heures. Il rigole et il me fait,
+M: Une caisse à ce prix-là, c'est un ticket de loterie.
+N: Et avant de raccrocher, il en rajoute une couche.
+M: Si t'as pas de quoi réparer, retourne chez ta mère et prends le bus.
+N: Je raccroche sans un mot.
+N: Un ticket de loterie.
+N: Et pourtant, en famille, on signe sans lire. Vendue en l'état, c'est écrit en bas.
+N: Ce que peu de gens savent, c'est qu'un garage qui vend une occasion à un particulier lui doit la garantie légale de conformité. En l'état ou pas.
+N: Mais alors, faut prouver que la panne était déjà là ? Non. La première année, c'est présumé.
+N: Sauf que lundi arrive. Donc lettre recommandée, le soir même.
+N: Honnêtement, des fois je me demande s'il a pas raison. Une occasion pas chère, ça peut casser.
+N: Samedi, je fais déposer la voiture devant son garage, avec une pancarte. Vendue ici, en l'état.
+N: 3 clients s'arrêtent pour la lire.
+N: Deux heures après, il rappelle. Embrayage refait, gratuit, voiture de prêt pour lundi.
+N: Le soir, son annonce Leboncoin. La même citadine. Garantie un an, écrit en gros.
+N: Mille huit cents euros, sauf pour la famille.

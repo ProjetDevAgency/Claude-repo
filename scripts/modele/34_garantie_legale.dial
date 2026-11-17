@@ -1,23 +1,32 @@
-# Garantie légale de conformité : due par le VENDEUR, pas par le fabricant (le vendeur ne peut pas renvoyer vers la
-# marque) ; 2 ans à compter de la délivrance ; pour un bien neuf, le défaut qui apparaît dans les 2 ans est présumé
-# exister à la vente ; réparation ou remplacement sans frais (Code de la consommation, L217-3 et suivants).
-# Sources : DGCCRF (fiche garanties légales), préfecture de l'Orne, INC. Version 8/8 :
-# client précis (Kévin, papa d'un bébé de 8 mois) · prix crédible (machine à laver 650 €) · choc (« voyez avec la
-# marque » + mépris) · cohérence · tiers absent (le bébé) · deadline (une semaine de linge) · pas banal.
-# Zone grise : Kévin fait envoyer sa réclamation sur le papier du cabinet d'avocats où travaille sa cousine, sans que
-# son patron le sache. M = le vendeur du magasin.
-M: Votre machine à laver à six cent cinquante euros est en panne ? Elle a plus d'un an, voyez avec la marque, nous on vend.
-N: C'est ce que le vendeur du magasin m'a sorti au téléphone. À la maison, ma fille avait huit mois, et une semaine de linge sale dans la baignoire.
-N: Et pourtant on l'avait choisie avec soin. La plus solide du rayon, celle que ce vendeur nous avait conseillée.
-N: Quatorze mois après, plu d'essorage, une odeur de brûlé. Je demande juste une réparation. Il souffle et il me fait,
-M: La garantie, c'est un an. Après, c'est plu chez nous.
-N: Et avant de raccrocher, il en rajoute une couche.
-M: Avec un bébé, on prend l'extension de garantie. Ça s'appelle être un père responsable.
-N: Je dis rien. Je regarde les bodys qui sèchent sur le radiateur.
-N: Un père responsable.
-N: Sauf qu'il mélange deux choses. La garantie d'un an, c'est celle de la marque. Mais la loi en donne une autre, de deux ans. Et celle-là, c'est le magasin qui la doit.
-N: Mais alors, il peut me renvoyer vers la marque ? Non. Pendant deux ans, c'est au vendeur de réparer ou de remplacer, gratuitement.
-N: Ma cousine travaille dans un cabinet d'avocats. Je lui demande d'envoyer ma réclamation sur le papier du cabinet. Son patron en savait rien.
-N: Honnêtement, je me demande si j'avais le droit de la mettre en danger pour une machine à laver.
-N: Trois jours plus tard, un technicien sonne. Pièce changée, rien à payer. Et le vendeur au téléphone, beaucoup plu poli.
-N: Six cent cinquante euros, et c'est lui qui a vu avec la marque.
+# MOTEUR H1 complet. Sujet : la belle-mère accuse Kévin d'avoir cassé la machine à laver qu'elle a offerte.
+# Loi : garantie légale de conformité due par le VENDEUR (pas la marque), 2 ans ; sur un bien neuf, défaut apparu dans
+# les 2 ans présumé exister à l'achat ; réparation ou remplacement sans frais (C. conso L217-3 et suivants).
+# Sources : DGCCRF (fiche garanties légales), préfecture de l'Orne, INC.
+# Transgression T4 · autorité A2 (la belle-mère, TIER S, c'est elle qui a acheté) · verrou V4 (samedi, le bain de la
+# petite, fermé à 85 %) · entrée : déjà là, elle a les clés · axe : objet chargé d'histoire (le cadeau de naissance) ·
+# twist W6 l'effet de cascade · chute punchline chiffrée · mot-enjeu « cadeau » ×3 · écho sur le coup 1 · témoins le
+# beau-père et la belle-sœur.
+# 8/8 : client précis (Kévin, papa d'une petite de 8 mois) · prix crédible · choc · cohérence · tiers absent (le bébé) ·
+# deadline (samedi) · zone grise (il prend la facture dans le tiroir de sa belle-mère sans lui demander) · pas banal.
+# M = la belle-mère (voix féminine). N = Kévin.
+N: Ma belle-mère me réclame six cent cinquante euros pour la machine à laver qu'elle nous a offerte.
+N: Et samedi, elle revient pour le bain de la petite.
+N: Quatorze mois après, plu d'essorage, une odeur de brûlé, et une semaine de linge dans la baignoire.
+N: C'était son cadeau de naissance. Choisie par elle.
+N: Je lui ai dit, avec ça, on est tranquilles dix ans.
+N: Elle passe tous les soirs, elle a les clés. Ouvre la machine, renifle, rigole, et elle me fait,
+M: Tu la bourres comme un sac poubelle, et après tu t'étonnes.
+N: Et en refermant la porte, elle lâche encore un truc.
+M: Quand on vit à trois dans un deux-pièces, on lave à la main.
+N: Je laisse passer. Je rince les biberons.
+N: Un sac poubelle.
+N: Et pourtant, le magasin lui a déjà répondu. Voyez avec la marque.
+N: Ce que peu de gens savent, c'est qu'il y a deux garanties. La marque, un an. La loi, deux ans, et c'est le vendeur qui la doit.
+N: Mais alors, faut prouver que c'est pas moi ? Non. Pendant deux ans, la panne est présumée d'origine.
+N: Sauf qu'il faut la facture. Et la facture est chez elle.
+N: Honnêtement, je me demande si elle a pas un peu raison. C'est son cadeau, et je la remplis jusqu'en haut.
+N: Alors je la prends dans le tiroir de sa commode, sans lui demander.
+N: Samedi, elle est là pour le bain, avec mon beau-père. Le technicien change la pièce, et il me fait, défaut de fabrication.
+N: Ma belle-mère reste plantée là, la serviette à la main.
+N: Le lundi, elle m'envoie trois factures. Celles de ses copines.
+N: Six cent cinquante euros, son cadeau tourne encore.
