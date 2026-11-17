@@ -5,16 +5,16 @@ NARRATEUR > Personne a sonné en bas. L'ascenseur a pas bougé.
 [PAUSE]
 NARRATEUR > Maman est de nuit à l'hôpital. T'es seul avec ton petit frère. Il dort sur le canapé.
 NARRATEUR > La porte est fermée à clé. Chaîne mise. T'es en sécurité.
-NARRATEUR > Tu regardes par le judas. Le couloir est vide.
-NARRATEUR > Sauf que sous la porte, y a deux pieds. Ils bougent pas.
+NARRATEUR > Tu regardes par le judas. Le couloir est vide. Tu décolles vite ton œil. De l'autre côté, on voit le judas s'assombrir.
+NARRATEUR > Et là, sous la porte, y a deux pieds. Ils bougent pas.
 NARRATEUR > Maman t'a donné une règle. La nuit, tu ouvres à personne.
-VOIX DERRIÈRE LA PORTE > Ouvre, mon loup. C'est maman. J'ai oublié mes clés.
+VOIX DERRIÈRE LA PORTE > Ouvre, mon loup. C'est maman. J'ai fini plus tôt, j'ai oublié mes clés.
 NARRATEUR > Mon loup. Personne d'autre t'appelle comme ça.
 [VIBREUR]
 NARRATEUR > Ton téléphone vibre. Un texto de maman.
 TEXTO DE MAMAN > Je finis à six heures. Ouvre à personne. Cache ton frère.
 NARRATEUR > Sauf que maman met toujours un cœur à la fin.
-NARRATEUR > Là, rien.
+NARRATEUR > Là, rien. Pas de cœur.
 [PAUSE]
 VOIX DERRIÈRE LA PORTE > Mon loup, il fait froid dans le couloir.
 NARRATEUR > Et pourtant, sans ses clés, maman peut pas passer la porte d'en bas. Personne a sonné.

@@ -32,7 +32,7 @@ node tueur/render.js --preview 0.3,10,30                 # quelques images pour 
 node tueur/render.js                                     # la vidéo complète (~35 min pour 70 s)
 ```
 
-Les voix sont toujours faites avec ElevenLabs. Chaque réplique est mise en cache dans
+Les voix sont toujours faites avec ElevenLabs. Les répliques consécutives d'une même voix sont générées d'un seul tenant, pour une intonation continue. Chaque réplique est mise en cache dans
 `build/tts_cache` : relancer `audio.py` ne consomme rien tant que le texte ne change pas.
 Un épisode coûte environ 1 000 caractères.
 
@@ -42,7 +42,7 @@ Un épisode coûte environ 1 000 caractères.
 |---|---|
 | `script` | Le script du moteur, dans `scripts/` |
 | `tts.voix` | Une voix ElevenLabs par personnage. `effet` : `porte` (étouffée, derrière la porte) ou `telephone`. `texto: true` : la réplique s'affiche en texto au lieu des sous-titres. |
-| `rythme` | Silences entre répliques, durée d'une `[PAUSE]`, tenue de l'écran final, durée minimum (les pauses s'allongent toutes seules pour ne jamais passer sous 61 s) |
+| `rythme` | Comme la chaîne repost : silences ramenés à `silence_garde` (0,12 s) dans une phrase et `silence_garde_ligne` (0,22 s) entre deux répliques, voix accélérée de `vitesse` (1,08) sans changer la hauteur. Si l'épisode passe sous `duree_min`, les `[PAUSE]` s'allongent d'abord (jusqu'à `pause_max`), puis la voix ralentit par petits pas, puis le script affiche combien de caractères ajouter |
 | `bruitages` | Ce que donne chaque `[BRUITAGE]` du script : `knock3`, `buzz`, `creak`, `steps`, `sting`, et combien de temps il prend |
 | `plans` | Un plan caméra par réplique, dans l'ordre. Les plans existants sont dans `PRESETS` de `scene.html` |
 | `marques` | Les répliques où il se passe quelque chose (le héros marche, les pieds apparaissent, le texto, le retournement, le choix) |
