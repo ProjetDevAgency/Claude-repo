@@ -1,4 +1,4 @@
-"""Où va ton argent ? — les 8 vidéos 8/8 de la semaine du 18 au 22 nov. (méthode v3).
+"""Où va ton argent ? — les 8 vidéos du 18 au 22 nov., moteur H1 complet (méchants proches).
 
     python3 motion/semaine_ct.py carte      → 27_carte_piratee.dial
     python3 motion/semaine_ct.py colis      → 28_colis_perdu.dial
@@ -346,197 +346,359 @@ def recit(nom, dial, label, montant, phrase):
                  compteur=dict(label=label, depart=0, montant=montant, phrase=phrase))
 
 
-# ═════════════ 27. La carte piratée de mamie ═════════════
 
-CONSEILLER = dict(shirt=(40, 70, 130), pants=(36, 36, 44), hair=(50, 40, 30), tie=True, glasses=True)
+# ───────────── décors de la v2 (moteur H1 complet : méchants proches) ─────────────
+
+def table_fg(d, t, papiers=False):
+    """La table du repas de famille, au premier plan : nappe, assiettes, pain."""
+    s = SS
+    d.rectangle([0, 1260 * s, W * s, 1560 * s], fill=(240, 236, 226))
+    d.rectangle([0, 1260 * s, W * s, 1285 * s], fill=(200, 60, 60))
+    for x in (180, 420, 660, 900):
+        d.ellipse([(x - 70) * s, 1300 * s, (x + 70) * s, 1350 * s], fill=WHITE, outline=(170, 170, 175), width=3 * s)
+    d.rounded_rectangle([500 * s, 1380 * s, 640 * s, 1420 * s], radius=18 * s, fill=(210, 160, 90))
+    if papiers:
+        d.rectangle([250 * s, 1395 * s, 400 * s, 1500 * s], fill=WHITE, outline=INK, width=3 * s)
+        for y in (1415, 1440, 1465):
+            d.line([265 * s, y * s, 385 * s, y * s], fill=(150, 150, 160), width=4 * s)
+        d.rectangle([700 * s, 1390 * s, 880 * s, 1500 * s], fill=(60, 110, 200), outline=INK, width=3 * s)
+
+
+def table_papiers(d, t):
+    table_fg(d, t, papiers=True)
+
+
+def porte_mot(d, t):
+    s = SS
+    d.rectangle([760 * s, 700 * s, 1000 * s, 1560 * s], fill=(150, 100, 60), outline=INK, width=5 * s)
+    d.ellipse([780 * s, 1120 * s, 805 * s, 1145 * s], fill=YEL)
+    d.rectangle([800 * s, 900 * s, 960 * s, 1010 * s], fill=WHITE, outline=INK, width=3 * s)
+    d.text((880 * s, 935 * s), "SONNEZ", font=FA(int(34 * s)), fill=INK, anchor="mm")
+    d.text((880 * s, 980 * s), "FORT", font=FA(int(34 * s)), fill=RED, anchor="mm")
+
+
+def boulangerie_bg():
+    def f():
+        s = SS
+        im = room("vide").copy()
+        d = ImageDraw.Draw(im)
+        for y in (1000, 1130):                                                   # étagères à pain
+            d.rectangle([40 * s, y * s, 1040 * s, (y + 14) * s], fill=(120, 80, 50))
+            for x in range(70, 1020, 95):
+                d.rounded_rectangle([x * s, (y - 40) * s, (x + 75) * s, y * s], radius=18 * s, fill=(215, 160, 80))
+        _enseigne(d, "BOULANGERIE", (120, 70, 40), WHITE)
+        return im
+    return _cache("boulangerie", f)
+
+
+def comptoir_fg(d, t):
+    s = SS
+    d.rectangle([0, 1290 * s, W * s, 1560 * s], fill=(190, 140, 90))
+    d.rectangle([0, 1290 * s, W * s, 1310 * s], fill=(230, 220, 200))
+    for x in range(60, 1040, 110):                                               # les croissants
+        d.chord([x * s, 1250 * s, (x + 90) * s, 1320 * s], 180, 360, fill=(225, 160, 70), outline=(160, 100, 40), width=3 * s)
+
+
+def feuille_mur(d, t):
+    s = SS
+    d.rectangle([380 * s, 620 * s, 700 * s, 820 * s], fill=WHITE, outline=INK, width=4 * s)
+    d.text((540 * s, 670 * s), "RETENUE", font=FA(int(46 * s)), fill=INK, anchor="mm")
+    d.text((540 * s, 740 * s), "À LA MINUTE", font=FA(int(46 * s)), fill=RED, anchor="mm")
+
+
+def salon_machine_d(d, t):
+    machine(d, 960, 1560)
+
+
+def bandeau_tv(img, lt, titre, citation):
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 1180, W, 1330], fill=(20, 40, 110))
+    d.rectangle([0, 1180, 260, 1240], fill=(220, 40, 40))
+    d.text((130, 1210), "DIRECT", font=FA(38), fill=WHITE, anchor="mm")
+    d.text((300, 1210), titre, font=FA(38), fill=WHITE, anchor="lm")
+    if lt > 0.6:
+        d.text((540, 1285), citation, font=FA(46), fill=YEL, anchor="mm")
+
+
+class V2(Video):
+    def accroche(self, nom, badge_txt, tags, fond=None, autres=(), devant=None, kpose="choc", mechant=None, mx=MX):
+        """L'accroche dite par Kévin : plan large, le méchant étiqueté, les mots du choc en gros."""
+        def f(lt, dur):
+            img = plan(fond or self.fond, lt, kpose, mechant=mechant or dict(mouth="grin"), look=self.look, mx=mx,
+                       autres=autres, devant=devant, z=push(lt, dur, 1.0, 1.08), center=(540, 1000), **self.kx)
+            badge(img, mx, 1205, badge_txt)
+            _tags(img, lt, tags)
+            return shake(img, lt)
+        return _n(f, nom)
+
+    def muet(self, nom, txt, fond=None, devant=None, **pose):
+        """Le méchant réduit au silence : gros plan, bouche fermée, un seul mot à l'écran."""
+        def f(lt, dur):
+            img = gros_plan_mechant(fond or self.fond, self.look, lt, dur, 1.9, 2.15, devant=devant,
+                                    **{"mouth": "flat", "brows": None, **pose})
+            tag(img, 540, 430, txt, 56, WHITE, INK, rot=-3, k=(lt - 0.3) / 0.3)
+            return img
+        return _n(f, nom)
+
+    def tv(self, nom, titre, citation, fond=None):
+        def f(lt, dur):
+            img = gros_plan_mechant(fond or self.fond, self.look, lt, dur, 1.7, 1.8, mouth="smile", arm=0.3)
+            bandeau_tv(img, lt, titre, citation)
+            return img
+        return _n(f, nom)
+
+
+# ═════════════ 27. La carte piratée de mamie (l'oncle) ═════════════
+
+ONCLE = dict(shirt=(190, 170, 130), pants=(60, 60, 70), hair=(120, 110, 100), glasses=True)
 MAMIE = dict(shirt=(170, 120, 170), pants=(60, 60, 80), hair=(215, 215, 222), long_hair=True, glasses=True)
-V = Video(banque_bg, CONSEILLER)
-CARTE = (recit("s_carte", "27_carte_piratee", "REMBOURSÉ À MAMIE", 3200, "Deux jours plus tard"), [
-    ("Trois mille deux cents euros volés", V.hook("h", "LE CONSEILLER DE SA BANQUE", ["TA GRAND-MÈRE S'EST FAIT", "VOLER 3 200 € ?", "C'EST POUR ELLE"], devant=guichet_fg), ("impact", 1.0)),
-    ("C'est ce que le conseiller", V.scene("couture", "carte", [("LA CARTE DE MAMIE", YEL, 0.3), ("MAISON DE RETRAITE : J-5", RED, 3.2)], mechant=dict(mouth="grin", arm=0.3), devant=guichet_fg), ("whoosh", 0.6)),
-    ("Mamie, elle a", V.scene("montee", "neutre", [("MAMIE · 84 ANS", GREEN, 0.2), ("ELLE GÈRE TOUT SEULE", YEL, 1.6)], fond=salon_bg, sans_mechant=True, autres=[(780, MAMIE, dict(mouth="smile"), 0.4)]), ("pop", 0.8)),
-    ("Un faux SMS", V.tel("sms", "14:07", [("SMS", "Livraison", "Colis bloqué, payez", GRIS), ("Banque", "Paiement carte", "− 3 200,00 €", RED)], "choc", fond=salon_bg), ("notif", 0.7)),
-    ("Elle a donné ses codes", V.gp("coup1", ["ELLE A DONNÉ SES", "CODES. NÉGLIGENCE", "GRAVE"], devant=guichet_fg), ("impact", 0.8)),
-    ("Et en tapant", V.geste("geste", devant=guichet_fg), ("whoosh", 0.5)),
-    ("À son âge", V.gp("coup2", ["À SON ÂGE, ON LUI", "RETIRE SA CARTE"], (2.2, 2.4), True, devant=guichet_fg, arm=0.8), ("impact", 1.0)),
-    ("Je dis rien", V.silence("silence", "carte", devant=guichet_fg), None),
-    ("On lui retire sa carte", V.echo("echo", "ON LUI RETIRE SA CARTE", devant=guichet_fg), ("rate", 0.6)),
-    ("Sauf que la loi", V.carte("regle", "PAIEMENT PAS AUTORISÉ", [("La banque rembourse tout de suite", 0.4, True), ("au plus tard le jour ouvrable", 2.4, False), ("suivant", 3.2, False)], "CODE MONÉTAIRE ET FINANCIER · L133-18", fond=salon_bg), ("pop", 0.8)),
-    ("Mais alors, et la négligence", V.carte("preuve", "LA NÉGLIGENCE GRAVE", [("C'est à la banque de la prouver", 0.5, True), ("Un faux SMS, ça suffit pas", 2.8, False), ("Cour de cassation", 4.2, False)], "CODE MONÉTAIRE ET FINANCIER · L133-19", fond=salon_bg), ("impact", 0.6)),
-    ("Le lendemain, je reviens", V.scene("rec", "carte", [("LA LETTRE DE CONTESTATION", YEL, 0.3), ("REC · TÉLÉPHONE EN POCHE", RED, 2.2)], mechant=dict(mouth="grin", arm=0.4), devant=guichet_fg), ("ticks", 0.6)),
-    ("J'envoie l'audio", V.tel("audio", "18:40", [("Mail", "Directeur d'agence", "audio.m4a + lettre", BLEU)], fond=salon_bg), ("notif", 0.7)),
-    ("Honnêtement", V.doute("doute", "ENREGISTRÉ SANS LUI DIRE", fond=salon_bg), None),
-    ("Deux jours plus tard", V.tel("twist", "09:12", [("Banque", "Remboursement", "+ 3 200,00 €", GREEN), ("Appel", "Banque de mamie", "Une nouvelle carte ?", BLEU)], "victoire", fond=salon_bg), ("succes", 0.8)),
-    ("Trois mille deux cents euros, et", V.fin("fin", "3 200 €", "ET ELLE GARDE SA CARTE", "CAS TYPE · CODE MONÉTAIRE ET FINANCIER L133-18 ET L133-19", fond=salon_bg), ("impact", 0.9)),
+TANTE = dict(shirt=(80, 150, 120), pants=(50, 50, 60), hair=(70, 40, 25), long_hair=True)
+COUSINE = dict(shirt=(230, 120, 160), pants=(40, 50, 80), hair=(150, 90, 40), long_hair=True, sc=0.9)
+V = V2(salon_bg, ONCLE)
+M_TABLE = [(540, MAMIE, dict(mouth="flat", sc=0.92), 0.5)]
+CARTE = (recit("s_carte", "27_carte_piratee", "RENDU À MAMIE", 3200, "Lettre signée lundi"), [
+    ("Pour trois mille deux cents", V.accroche("h", "MON ONCLE", [("3 200 € VOLÉS À MAMIE", RED, 0.2), ("IL VEUT LA METTRE SOUS TUTELLE", YEL, 1.8)], autres=M_TABLE, devant=table_fg, mechant=dict(mouth="grin", clipboard=True)), ("impact", 1.0)),
+    ("Il dépose le dossier", V.fiche("dossier", "DEMANDE DE TUTELLE", "DÉPÔT : VENDREDI", [("Pour : mamie, 84 ans", "", 0.2, False), ("Motif : argent perdu", "", 0.6, True)], kpose="choc"), ("pop", 0.6)),
+    ("Un faux SMS", V.tel("sms", "14:07", [("SMS", "Livraison", "Colis bloqué, payez", GRIS), ("Banque", "Paiement carte", "− 3 200,00 €", RED)], "choc"), ("notif", 0.6)),
+    ("Mamie, quatre-vingt-quatre", V.scene("montee", "neutre", [("MAMIE · 84 ANS", GREEN, 0.2), ("SES COMPTES AU CRAYON", YEL, 1.4)], sans_mechant=True, autres=[(780, MAMIE, dict(mouth="smile"), 0.4)]), ("pop", 0.8)),
+    ("Je lui dis, mamie", V.scene("promesse", "parle", [("PAS BESOIN DE TUTEUR", WHITE, 1.8)], sans_mechant=True, autres=[(780, MAMIE, dict(mouth="grin"), 0.4)]), None),
+    ("Dimanche, mon oncle", V.scene("dimanche", "neutre", [("LE REPAS DU DIMANCHE", YEL, 0.2)], mechant=dict(mouth="flat", clipboard=True), autres=M_TABLE, devant=table_fg), ("whoosh", 0.5)),
+    ("Son cahier, c'est", V.gp("coup1", ["SON CAHIER, C'EST", "TROIS GRIBOUILLIS", "AU CRAYON"], devant=table_fg), ("impact", 0.8)),
+    ("Et en allant chercher", V.geste("geste", devant=table_fg), ("whoosh", 0.5)),
+    ("À son âge, on regarde", V.gp("coup2", ["À SON ÂGE, ON REGARDE", "LA TÉLÉ DANS SA CHAMBRE"], (2.2, 2.4), True, devant=table_fg, arm=0.8), ("impact", 1.0)),
+    ("Je dis rien. Je coupe", V.silence("silence", devant=table_fg, autres=M_TABLE), None),
+    ("Trois gribouillis", V.echo("echo", "TROIS GRIBOUILLIS", devant=table_fg), ("rate", 0.6)),
+    ("Et pourtant, la banque", V.fiche("refus", "TA BANQUE", "RÉPONSE À LA RÉCLAMATION", [("Remboursement", "REFUSÉ", 0.3, True), ("Motif", "négligence grave", 1.0, False)], kpose="choc"), ("impact", 0.6)),
+    ("Ce que peu de gens", V.carte("regle", "PAIEMENT PAS AUTORISÉ", [("La banque rembourse", 0.6, True), ("au plus tard le jour ouvrable", 2.2, False), ("suivant", 3.0, False)], "CODE MONÉTAIRE ET FINANCIER · L133-18"), ("pop", 0.8)),
+    ("Mais alors, et la", V.carte("preuve", "LA NÉGLIGENCE GRAVE", [("C'est à la banque de la prouver", 1.4, True), ("Un faux SMS, ça suffit pas", 2.8, False)], "L133-19 · COUR DE CASSATION"), ("impact", 0.6)),
+    ("Sauf que vendredi", V.tel("lettre", "09:30", [("Courrier", "Contestation", "Signée lundi", BLEU), ("Banque", "Mercredi", "+ 3 200,00 €", GREEN)]), ("ticks", 0.6)),
+    ("Honnêtement", V.doute("doute", "ET S'IL AVAIT RAISON ?"), None),
+    ("Jeudi, anniversaire", V.scene("riposte", "parle", [("12 PERSONNES À TABLE", YEL, 0.3), ("SON DOSSIER AU MILIEU DES PLATS", RED, 3.2)], mechant=dict(mouth="o"), devant=table_papiers, autres=[(540, MAMIE, dict(mouth="flat", sc=0.92), 0.5), (130, TANTE, dict(mouth="o", sc=0.8), 1.2, BASE - 50), (950, COUSINE, dict(mouth="o", sc=0.8), 2.0, BASE - 50)]), ("impact", 0.8)),
+    ("Il lit. Il cherche", V.muet("muet", "PLU RIEN", devant=table_papiers), None),
+    ("Vendredi, le dossier", V.scene("twist", "victoire", [("LE DOSSIER RESTE DANS LA VOITURE", WHITE, 0.2), ("+ 3 200 € DANS LE CAHIER", GREEN, 2.4)], sans_mechant=True, autres=[(780, MAMIE, dict(mouth="grin", arm=0.6), 0.4)]), ("succes", 0.8)),
+    ("Trois mille deux cents euros, en", V.fin("fin", "3 200 €", "EN GRIBOUILLIS", "CAS TYPE · CODE MONÉTAIRE ET FINANCIER L133-18 ET L133-19"), ("impact", 0.9)),
 ])
 
 
-# ═════════════ 28. Le colis jamais reçu ═════════════
+# ═════════════ 28. Le colis jamais reçu (le père) ═════════════
 
-SERVICE = dict(shirt=(60, 140, 200), pants=(36, 36, 44), hair=(30, 25, 20))
-V = Video(callcenter_bg, SERVICE)
+PERE = dict(shirt=(70, 110, 160), pants=(50, 50, 60), hair=(150, 150, 150), glasses=True)
 APPART = lambda: room("appart")  # noqa: E731
-COLIS = (recit("s_colis", "28_colis_perdu", "REMBOURSÉ PAR LE SITE", 1200, "Le vendredi, le site"), [
-    ("Mille deux cents euros d'ordinateur", V.hook("h", "LE SERVICE CLIENT", ["VOTRE ORDI À 1 200 €", "JAMAIS ARRIVÉ ? VOYEZ", "AVEC LE TRANSPORTEUR"], devant=casque), ("impact", 1.0)),
-    ("C'est ce que le service client", V.scene("couture", "telephone", [("MISSION DE GRAPHISTE : LUNDI", YEL, 0.3), ("PLUS D'ORDI", RED, 3.0)], fond=APPART, sans_mechant=True), ("whoosh", 0.6)),
-    ("Et pourtant j'étais fier", V.scene("montee", "victoire", [("3 MOIS DE PETITS BOULOTS", GREEN, 0.2), ("LE CONTRAT EST SIGNÉ", YEL, 2.0)], fond=APPART, sans_mechant=True), ("pop", 0.8)),
-    ("Le suivi dit livré", V.tel("suivi", "14:02", [("Suivi", "Colis 4471", "LIVRÉ · 14:02", GREEN)], "choc", fond=APPART, tags=[("PERSONNE A SONNÉ", RED, 2.5)]), ("notif", 0.7)),
-    ("Une fois chez le transporteur", V.gp("coup1", ["UNE FOIS CHEZ LE", "TRANSPORTEUR, C'EST", "PLUS NOTRE AFFAIRE"], devant=casque), ("impact", 0.8)),
-    ("Et en me mettant en attente", V.scene("geste", None, [("MISE EN ATTENTE", RED, 0.4)], mechant=dict(mouth="grin", arm=0.8), mx=540, z=(1.1, 1.2), devant=lambda d, t: headset(d, 540, BASE)), ("whoosh", 0.5)),
-    ("Vous les jeunes", V.gp("coup2", ["VOUS LES JEUNES,", "VOUS COMMANDEZ TOUT,", "APRÈS VOUS PLEUREZ"], (2.2, 2.4), True, devant=casque, arm=0.8), ("impact", 1.0)),
-    ("Je dis rien", V.scene("silence", "triste", fond=APPART, sans_mechant=True, z=(1.0, 1.04), fx=False), None),
-    ("Après vous pleurez", V.echo("echo", "APRÈS VOUS PLEUREZ", fond=APPART), ("rate", 0.6)),
-    ("Sauf que quand t'achètes", V.carte("regle", "ACHAT À DISTANCE", [("Tant que t'as pas le colis en main", 0.4, False), ("le risque est sur le VENDEUR", 2.2, True), ("pas sur toi, pas sur le livreur", 4.0, False)], "CODE DE LA CONSOMMATION · L216-4", fond=APPART), ("pop", 0.8)),
-    ("Mais alors s'il est marqué", V.gros_mots("preuve", [("UNE SIGNATURE ?", WHITE, 1.4), ("UNE PHOTO ?", WHITE, 2.4), ("SINON, IL REMBOURSE", GREEN, 3.4)], fond=APPART), ("impact", 0.6)),
-    ("Le soir même, je publie", V.tel("avis", "21:30", [("Avis", "1 sur 5 · le site", "Julien, du SAV", (240, 160, 0))], fond=APPART), ("notif", 0.7)),
-    ("Honnêtement", V.doute("doute", "SON PRÉNOM, EN PUBLIC", fond=APPART), None),
-    ("Le vendredi, le site", V.tel("twist", "10:05", [("Banque", "Remboursement", "+ 1 200,00 €", GREEN), ("Mail", "Vendeur au livreur", "Merci de payer", BLEU)], "victoire", fond=APPART), ("succes", 0.8)),
-    ("Mille deux cents euros, et", V.fin("fin", "1 200 €", "C'EST LE VENDEUR QUI VOIT AVEC LE LIVREUR", "CAS TYPE · CODE DE LA CONSOMMATION L216-4 ET L221-15", fond=APPART), ("impact", 0.9)),
+V = V2(salon_bg, PERE)
+COLIS = (recit("s_colis", "28_colis_perdu", "REMBOURSÉ PAR LE SITE", 1200, "Mardi, le site"), [
+    ("Tu me dois mille", V.hook("h", "MON PÈRE", ["TU ME DOIS 1 200 €", "POUR UN ORDI QUE T'ES", "PAS CAPABLE DE RECEVOIR"], phone=True), ("impact", 1.0)),
+    ("C'est ce que mon père", V.tel("message", "21:12", [("Papa", "Message", "Tu me dois 1 200 €", GREEN)], "choc", fond=APPART), ("notif", 0.5)),
+    ("Un ordi de graphiste", V.tel("suivi", "14:02", [("Suivi", "Colis 4471", "LIVRÉ · 14:02", GREEN)], "choc", fond=APPART, tags=[("PERSONNE A SONNÉ", RED, 2.6)]), ("notif", 0.6)),
+    ("Lundi, je commence", V.scene("montee", "victoire", [("1re MISSION : LUNDI", GREEN, 0.2), ("LE LOGO D'UNE BOULANGERIE", YEL, 1.6)], fond=APPART, sans_mechant=True), ("pop", 0.8)),
+    ("Mon père m'avait avancé", V.scene("avance", "parle", [("IL M'AVANCE L'ORDI", GREEN, 0.2), ("MON DEVIS IMPRIMÉ", YEL, 2.0)], mechant=dict(mouth="smile", clipboard=True)), ("pop", 0.6)),
+    ("Sur la porte", V.scene("porte", "neutre", [("SUR LA PORTE", YEL, 0.2)], fond=APPART, sans_mechant=True, devant=porte_mot), None),
+    ("Je lui réponds, papa", V.tel("reponse", "21:20", [("Moi", "À papa", "Je te rembourse", BLEU), ("Papa", "Vocal", "0:12", GREEN)], fond=APPART), ("notif", 0.6)),
+    ("Un ordi à ce prix", V.gp("coup1", ["UN ORDI À CE PRIX", "POUR FAIRE DES", "PETITS DESSINS"], phone=True), ("impact", 0.8)),
+    ("Et une heure après", V.geste("geste", "IL INSISTE", phone=True), ("whoosh", 0.5)),
+    ("À vingt-quatre ans", V.gp("coup2", ["À 24 ANS, TU BOSSES", "DANS TA CHAMBRE"], (2.2, 2.4), True, phone=True), ("impact", 1.0)),
+    ("Je réponds pas", V.scene("silence", "triste", fond=APPART, sans_mechant=True, z=(1.0, 1.04), fx=False), None),
+    ("Des petits dessins", V.echo("echo", "DES PETITS DESSINS", fond=APPART), ("rate", 0.6)),
+    ("Et pourtant, le site", V.tel("site", "10:15", [("Service client", "Le site", "Voyez avec le livreur", GRIS)], "choc", fond=APPART), ("notif", 0.6)),
+    ("Ce que peu de gens", V.carte("regle", "ACHAT À DISTANCE", [("Tant que t'as pas le colis en main", 0.8, False), ("le risque est pour le VENDEUR", 2.6, True)], "CODE DE LA CONSOMMATION · L216-4", fond=APPART), ("pop", 0.8)),
+    ("Mais alors, et le suivi", V.gros_mots("preuve", [("UNE SIGNATURE ?", WHITE, 1.4), ("UNE PHOTO ?", WHITE, 2.2), ("SINON, IL REMBOURSE", GREEN, 3.2)], fond=APPART), ("impact", 0.6)),
+    ("Sauf que lundi approche", V.tel("mail", "19:40", [("Mail", "Au vendeur", "Réclamation envoyée", BLEU)], fond=APPART), ("ticks", 0.6)),
+    ("Honnêtement", V.doute("doute", "C'EST LUI QUI A PAYÉ", fond=APPART), None),
+    ("Mardi, le site", V.tel("rembourse", "11:02", [("Banque", "Remboursement", "+ 1 200,00 €", GREEN), ("Famille", "14 personnes", "Capture envoyée", GREEN)], "victoire", fond=APPART), ("succes", 0.8)),
+    ("Il répond pas", V.tel("papa", "22:47", [("Papa", "Message", "Et le colis de ta mère ?", GREEN)], fond=APPART, tags=[("SILENCE TOUTE LA JOURNÉE", WHITE, 0.2)]), ("notif", 1.6)),
+    ("Maintenant, toute la famille", V.scene("cascade", "parle", [("TOUTE LA FAMILLE", YEL, 0.2), ("M'ENVOIE SES COLIS", GREEN, 1.0)], fond=APPART, sans_mechant=True), ("pop", 0.5)),
+    ("Mille deux cents euros, sans", V.fin("fin", "1 200 €", "SANS OUVRIR LA PORTE", "CAS TYPE · CODE DE LA CONSOMMATION L216-4 ET L221-15", fond=APPART), ("impact", 0.9)),
 ])
 
 
-# ═════════════ 29. Le salaire en retard ═════════════
+# ═════════════ 29. Le salaire en retard (le beau-père patron) ═════════════
 
-PATRON = dict(shirt=(245, 245, 248), pants=(50, 50, 60), hair=(80, 70, 60), glasses=True)
+BEAU_PERE = dict(shirt=(245, 245, 248), pants=(50, 50, 60), hair=(130, 120, 110), glasses=True)
 GILET = dict(shirt=(230, 120, 40))
-V = Video(chantier_bg, PATRON, GILET)
-SALAIRE = (recit("s_salaire", "29_salaire_retard", "RENDU PAR LE PATRON", 90, "Le mois suivant"), [
-    ("Quatre-vingt-dix euros de frais", V.hook("h", "MON PATRON", ["QUE JE TE PAIE", "TES 90 € DE FRAIS ?", "LE SALAIRE TOMBE", "QUAND IL TOMBE"]), ("impact", 1.0)),
-    ("C'est ce que mon patron", V.scene("couture", "choc", [("PAIE ATTENDUE LE 1er · ON EST LE 12", YEL, 0.3), ("LOYER REJETÉ", RED, 3.4)], mechant=dict(mouth="grin")), ("whoosh", 0.6)),
-    ("Et pourtant j'aimais", V.scene("montee", "victoire", [("2 ANS DE CHANTIERS", GREEN, 0.2), ("MÊME SOUS LA NEIGE", YEL, 2.4)]), ("pop", 0.8)),
-    ("Je lui montre juste", V.fiche("rejet", "AVIS DE REJET", "TA BANQUE", [("Prélèvement du loyer", "rejeté", 0.3, False), ("Frais de rejet", "90 €", 1.0, True)]), None),
-    ("T'as qu'à avoir", V.gp("coup1", ["T'AS QU'À AVOIR", "DE L'ÉPARGNE, COMME", "TOUT LE MONDE"]), ("impact", 0.8)),
-    ("Et en montant dans sa voiture", V.geste("geste", "SA VOITURE NEUVE", fond=lambda: chantier_bg(True)), ("whoosh", 0.5)),
-    ("À vingt-cinq ans", V.gp("coup2", ["À 25 ANS, T'AS MÊME", "PAS UN MOIS D'AVANCE"], (2.2, 2.4), True, fond=lambda: chantier_bg(True), arm=0.8), ("impact", 1.0)),
-    ("Je dis rien", V.silence("silence", "carte"), None),
-    ("Pas un mois d'avance", V.echo("echo", "PAS UN MOIS D'AVANCE"), ("rate", 0.6)),
-    ("Sauf qu'un salaire en retard", V.carte("regle", "SALAIRE EN RETARD", [("Des intérêts au taux légal", 0.4, True), ("dès la mise en demeure écrite", 2.0, False), ("automatiques", 3.6, False)], "CODE CIVIL · ARTICLE 1231-6", fond=salon_bg), ("pop", 0.8)),
-    ("Mais alors, et les frais", V.carte("frais", "ET LES FRAIS DE BANQUE ?", [("1. Un préjudice à part", 1.6, False), ("2. La mauvaise foi du patron", 2.8, True)], "IL FAUT PROUVER LES DEUX", fond=salon_bg), ("impact", 0.6)),
-    ("Et sa mauvaise foi, je l'avais", V.tel("vocal", "19:48", [("WhatsApp", "Groupe Ouvriers", "Vocal du patron · 0:07", GREEN), ("Texte", "Je les paie le 12,", "ça me fait de la tréso", GRIS)], "choc", fond=salon_bg), ("notif", 0.7)),
-    ("Il l'a effacé", V.tel("efface", "19:58", [("WhatsApp", "Groupe Ouvriers", "Message supprimé", GRIS), ("Fichiers", "Enregistré", "vocal_patron.opus", BLEU)], fond=salon_bg), ("ticks", 0.6)),
-    ("Honnêtement", V.doute("doute", "UN MESSAGE PAS POUR MOI", fond=salon_bg), None),
-    ("Le mois suivant", V.tel("twist", "08:01", [("Banque", "Salaire · le 1er", "+ 1 712,40 €", GREEN), ("Banque", "Frais + intérêts", "+ 96,80 €", GREEN)], "victoire", fond=salon_bg), ("succes", 0.8)),
-    ("Quatre-vingt-dix euros, et", V.fin("fin", "90 €", "ET CETTE FOIS, ÇA TOMBE À L'HEURE", "CAS TYPE · CODE CIVIL 1231-6 · CASS. SOC. 6 MAI 2025"), ("impact", 0.9)),
+GARS = [dict(shirt=(230, 120, 40), pants=(40, 40, 60), hair=c, mouth="flat", sc=0.85)
+        for c in ((30, 25, 20), (120, 70, 30), (90, 90, 95), (60, 40, 30))]
+OUVRIERS = [(x, g, {}, 0.7 * i, BASE - 60) for i, (x, g) in enumerate(zip((520, 650, 780, 910), GARS))]
+V = V2(chantier_bg, BEAU_PERE, GILET)
+CHANTIER_V = lambda: chantier_bg(True)  # noqa: E731
+SALAIRE = (recit("s_salaire", "29_salaire_retard", "RENDU PAR LE PATRON", 90, "Le premier, paie"), [
+    ("J'ai payé quatre-vingt-dix", V.accroche("h", "MON BEAU-PÈRE ET PATRON", [("90 € DE FRAIS DE BANQUE", RED, 0.2), ("À CAUSE DE MON BEAU-PÈRE", YEL, 2.0)]), ("impact", 1.0)),
+    ("Et j'ai gardé le vocal", V.tel("vocal", "18:03", [("Fichiers", "Enregistré", "vocal_patron.opus", BLEU)], tags=[("IL L'A EFFACÉ", RED, 0.8)]), ("notif", 0.5)),
+    ("Douze jours de retard", V.fiche("rejet", "AVIS DE REJET", "TA BANQUE", [("Loyer", "rejeté", 0.3, False), ("Frais", "90 €", 1.0, True)]), ("pop", 0.5)),
+    ("Deux ans de plomberie", V.scene("montee", "victoire", [("2 ANS DE CHANTIERS", GREEN, 0.2), ("TOUT GARDER PAR ÉCRIT", YEL, 1.6)], mechant=dict(mouth="smile", arm=0.4)), ("pop", 0.8)),
+    ("Aux clients, il me présente", V.scene("gendre", "neutre", [("SON FUTUR GENDRE", GREEN, 0.3)], mechant=dict(mouth="grin", arm=0.6)), None),
+    ("Lundi, il débarque", V.scene("demande", "parle", [("JUSTE LES FRAIS DE REJET", WHITE, 1.6)], mechant=dict(mouth="flat")), ("whoosh", 0.5)),
+    ("Pour trois sous", V.gp("coup1", ["POUR TROIS SOUS DE FRAIS,", "TU ME FAIS UNE SCÈNE ?"]), ("impact", 0.8)),
+    ("Et en remontant", V.geste("geste", fond=CHANTIER_V), ("whoosh", 0.5)),
+    ("Si t'as même pas", V.gp("coup2", ["MA FILLE A PAS FINI", "DE PAYER POUR TOI,", "DANS VOTRE STUDIO"], (2.2, 2.4), True, fond=CHANTIER_V, arm=0.8), ("impact", 1.0)),
+    ("Pas un mot", V.silence("silence", "carte", fond=CHANTIER_V), None),
+    ("Trois sous", V.echo("echo", "TROIS SOUS"), ("rate", 0.6)),
+    ("Sauf qu'un salaire", V.carte("regle", "SALAIRE EN RETARD", [("Des intérêts au taux légal", 0.4, True), ("dès la mise en demeure écrite", 2.0, False), ("automatiques", 3.4, False)], "CODE CIVIL · ARTICLE 1231-6", fond=salon_bg), ("pop", 0.8)),
+    ("Mais alors, et les frais", V.carte("frais", "ET LES FRAIS DE BANQUE ?", [("1. Un préjudice à part", 1.4, False), ("2. Sa mauvaise foi", 2.6, True)], "LES DEUX, À PROUVER", fond=salon_bg), ("impact", 0.6)),
+    ("Sur le papier", V.gros_mots("papier", [("SA MAUVAISE FOI ?", WHITE, 0.6), ("ÇA SE PROUVE JAMAIS", RED, 1.8)], fond=salon_bg), None),
+    ("Honnêtement", V.doute("doute", "LE PATRON TRINQUE AUSSI", fond=salon_bg), None),
+    ("Le lendemain, pause", V.scene("pause", "telephone", [("PAUSE DE MIDI · 6 GARS", YEL, 0.3), ("HAUT-PARLEUR", RED, 2.6)], sans_mechant=True, autres=OUVRIERS), ("ticks", 0.4)),
+    ("Je les paie le douze", V.gp("vocal_joue", ["JE LES PAIE LE 12,", "ÇA ME FAIT DE", "LA TRÉSORERIE"], (1.9, 2.0), phone=True), ("impact", 0.6)),
+    ("Le plus vieux arrête", V.scene("temoin", "neutre", [("SILENCE", WHITE, 0.2)], sans_mechant=True, autres=OUVRIERS, z=(1.1, 1.15), fx=False), None),
+    ("Le soir, ma copine", V.tel("copine", "20:31", [("Ma copine", "Appel", "Les 6 gars ont écrit", GREEN)], fond=salon_bg, tags=[("SA PROPRE LEÇON", YEL, 3.6)]), ("notif", 0.6)),
+    ("Le premier, paie", V.tel("twist", "08:01", [("Banque", "Salaire · le 1er", "+ paie + 90,00 €", GREEN)], "victoire", fond=salon_bg), ("succes", 0.6)),
+    ("Quatre-vingt-dix euros, payés", V.fin("fin", "90 €", "PAYÉS PAR SA PROPRE LEÇON", "CAS TYPE · CODE CIVIL 1231-6 · CASS. SOC. 6 MAI 2025"), ("impact", 0.9)),
 ])
 
 
-# ═════════════ 30. La voiture d'occasion ═════════════
+# ═════════════ 30. La voiture d'occasion (le cousin garagiste) ═════════════
 
-GARAGISTE = dict(shirt=(60, 90, 140), pants=(60, 90, 140), hair=(40, 30, 25))
-V = Video(garage_bg, GARAGISTE)
-VOITURE = (recit("s_voiture", "30_voiture_occasion", "PAYÉ PAR LE GARAGE", 1800, "Deux heures plus tard"), [
-    ("Mille huit cents euros l'embrayage", V.hook("h", "LE GARAGISTE", ["QUE JE PAIE TON", "EMBRAYAGE À 1 800 € ?", "VENDUE EN L'ÉTAT,", "T'AS SIGNÉ"]), ("impact", 1.0)),
-    ("C'est ce que le garagiste", V.scene("couture", "choc", [("OCCASION · 6 500 €", YEL, 0.3), ("3 SEMAINES APRÈS", RED, 1.6), ("CDI LUNDI · À 40 KM", WHITE, 5.0)], mechant=dict(mouth="grin")), ("whoosh", 0.6)),
-    ("Et pourtant j'avais tout fait", V.scene("montee", "victoire", [("LE CRÉDIT, L'ASSURANCE", GREEN, 0.3), ("DES TAPIS NEUFS", YEL, 2.0)], mechant=dict(mouth="smile")), ("pop", 0.8)),
-    ("Sur la rocade", V.scene("panne", "choc", [("L'EMBRAYAGE LÂCHE", RED, 0.2), ("REMORQUAGE · DEVIS", YEL, 1.6)], fond=route_bg, sans_mechant=True), ("impact", 0.6)),
-    ("Une occasion, c'est un risque", V.gp("coup1", ["UNE OCCASION,", "C'EST UN RISQUE.", "FALLAIT UNE NEUVE"]), ("impact", 0.8)),
-    ("Et en rangeant ses clés", V.geste("geste"), ("whoosh", 0.5)),
-    ("À ton âge", V.gp("coup2", ["À TON ÂGE, ON ACHÈTE", "UNE TROTTINETTE"], (2.2, 2.4), True, arm=0.8), ("impact", 1.0)),
-    ("Je dis rien", V.silence("silence"), None),
-    ("Une trottinette", V.echo("echo", "UNE TROTTINETTE"), ("rate", 0.6)),
-    ("Sauf qu'un garage", V.carte("regle", "UN GARAGE = UN PRO", [("Il te doit la garantie légale", 0.4, True), ("de conformité", 1.6, False), ("même sur une occasion", 3.0, False)], "CODE DE LA CONSOMMATION · L217-3", fond=salon_bg), ("pop", 0.8)),
-    ("Mais alors, vendue en l'état", V.carte("etat", "« VENDUE EN L'ÉTAT » ?", [("Face à un particulier : rien", 0.6, True), ("1re année : la panne est", 2.8, False), ("présumée là dès la vente", 3.6, False)], "CODE DE LA CONSOMMATION · L217-7", fond=salon_bg), ("impact", 0.6)),
-    ("Le lendemain, je fais déposer", V.scene("pancarte", None, [("DEVANT SA VITRINE", YEL, 0.3)], sans_mechant=True, devant=pancarte, z=(1.0, 1.08)), ("pop", 0.6)),
-    ("Honnêtement", V.doute("doute", "PAS LAISSÉ LE TEMPS DE RÉPONDRE", fond=salon_bg), None),
-    ("Deux heures plus tard", V.tel("twist", "11:20", [("Appel", "Le garagiste", "Embrayage : 0 €", GREEN), ("SMS", "Le garagiste", "Et la pancarte ?", BLEU)], "victoire", fond=salon_bg), ("succes", 0.8)),
-    ("Mille huit cents euros, et", V.fin("fin", "1 800 €", "ET CETTE FOIS, C'EST LUI QUI SIGNE", "CAS TYPE · CODE DE LA CONSOMMATION L217-3 ET L217-7"), ("impact", 0.9)),
+COUSIN = dict(shirt=(60, 90, 140), pants=(60, 90, 140), hair=(215, 175, 70))   # blond : pas confondu avec Kévin
+CLIENTS = [(560, dict(shirt=(200, 80, 60), pants=(40, 40, 60), hair=(60, 40, 30), sc=0.85), {}, 0.3, BASE - 60),
+           (720, dict(shirt=(90, 160, 90), pants=(40, 40, 60), hair=(200, 160, 80), long_hair=True, sc=0.85), {}, 1.1, BASE - 60),
+           (880, dict(shirt=(120, 120, 200), pants=(40, 40, 60), hair=(30, 25, 20), sc=0.85), {}, 1.9, BASE - 60)]
+V = V2(garage_bg, COUSIN)
+VOITURE = (recit("s_voiture", "30_voiture_occasion", "PAYÉ PAR LE COUSIN", 1800, "Deux heures après"), [
+    ("Mon cousin garagiste", V.accroche("h", "MON COUSIN GARAGISTE", [("1 800 € L'EMBRAYAGE", RED, 0.2), ("DE LA VOITURE QU'IL M'A VENDUE", YEL, 2.2)]), ("impact", 1.0)),
+    ("Lundi, je commence", V.gros_mots("verrou", [("CDI LUNDI", GREEN, 0.2), ("EN VOITURE", WHITE, 1.4), ("OU PAS DU TOUT", RED, 2.2)], kpose="choc"), ("pop", 0.6)),
+    ("Une petite citadine", V.scene("panne", "choc", [("3 SEMAINES APRÈS", WHITE, 1.4), ("L'EMBRAYAGE LÂCHE", RED, 2.4)], fond=route_bg, sans_mechant=True), ("impact", 0.6)),
+    ("Il m'avait fait", V.scene("montee", "victoire", [("UN PRIX DE FAMILLE", GREEN, 0.2), ("SAPIN À LA VANILLE", YEL, 1.6)], mechant=dict(mouth="smile", arm=0.5)), ("pop", 0.8)),
+    ("Je lui ai dit, cousin", V.scene("merci", "parle", [("TU ME SAUVES, COUSIN", WHITE, 0.3)], mechant=dict(mouth="grin")), None),
+    ("Le soir de la panne", V.tel("appel", "23:04", [("Cousin", "Appel", "Le devis", GREEN)], "choc", fond=salon_bg), ("notif", 0.6)),
+    ("Une caisse à ce", V.gp("coup1", ["UNE CAISSE À CE PRIX,", "C'EST UN TICKET", "DE LOTERIE"], phone=True), ("impact", 0.8)),
+    ("Et avant de raccrocher", V.geste("geste", phone=True), ("whoosh", 0.5)),
+    ("Si t'as pas de quoi", V.gp("coup2", ["RETOURNE CHEZ TA MÈRE", "ET PRENDS LE BUS"], (2.2, 2.4), True, phone=True), ("impact", 1.0)),
+    ("Je raccroche sans", V.scene("silence", "triste", fond=salon_bg, sans_mechant=True, z=(1.0, 1.04), fx=False), None),
+    ("Un ticket de loterie", V.echo("echo", "UN TICKET DE LOTERIE", fond=salon_bg), ("rate", 0.6)),
+    ("Et pourtant, en famille", V.fiche("facture", "FACTURE", "GARAGE · OCCASION", [("Citadine d'occasion", "", 0.3, False), ("Vendue en l'état", "", 1.4, True)], fond=salon_bg), ("pop", 0.5)),
+    ("Ce que peu de gens", V.carte("regle", "UN GARAGE = UN PRO", [("Garantie légale de conformité", 0.8, True), ("même sur une occasion", 2.4, False), ("en l'état ou pas", 3.8, False)], "CODE DE LA CONSOMMATION · L217-3", fond=salon_bg), ("pop", 0.8)),
+    ("Mais alors, faut prouver", V.gros_mots("preuve", [("LA PANNE ÉTAIT LÀ AVANT ?", WHITE, 0.4), ("1re ANNÉE : C'EST PRÉSUMÉ", GREEN, 2.0)], fond=salon_bg), ("impact", 0.6)),
+    ("Sauf que lundi arrive", V.fiche("lettre", "LETTRE RECOMMANDÉE", "ENVOYÉE LE SOIR MÊME", [("Garantie légale de conformité", "", 0.3, True), ("Réparation à vos frais", "", 1.0, False)], fond=salon_bg), ("ticks", 0.6)),
+    ("Honnêtement", V.doute("doute", "UNE OCCASION, ÇA CASSE", fond=salon_bg), None),
+    ("Samedi, je fais déposer", V.scene("pancarte", None, [("DEVANT SON GARAGE", YEL, 0.3)], sans_mechant=True, devant=pancarte, z=(1.0, 1.08)), ("pop", 0.6)),
+    ("s'arrêtent pour la lire", V.scene("clients", None, [("3 CLIENTS S'ARRÊTENT", WHITE, 0.2)], sans_mechant=True, devant=pancarte, autres=CLIENTS, z=(1.05, 1.1), fx=False), None),
+    ("Deux heures après", V.tel("rappel", "13:12", [("Cousin", "Appel", "Embrayage refait · 0 €", GREEN), ("Cousin", "SMS", "Prêt pour lundi", BLEU)], "victoire", fond=salon_bg), ("succes", 0.8)),
+    ("Le soir, son annonce", V.tel("annonce", "21:48", [("Leboncoin", "Citadine grise", "Garantie 1 an", (240, 120, 40))], "choc", fond=salon_bg, tags=[("GARANTIE UN AN, EN GROS", YEL, 2.0)]), ("notif", 0.5)),
+    ("Mille huit cents euros, sauf", V.fin("fin", "1 800 €", "SAUF POUR LA FAMILLE", "CAS TYPE · CODE DE LA CONSOMMATION L217-3 ET L217-7"), ("impact", 0.9)),
 ])
 
 
-# ═════════════ 31. La dentiste et le 100 % Santé ═════════════
+# ═════════════ 31. La couronne de maman (la sœur assistante dentaire) ═════════════
 
-DENTISTE = dict(shirt=(245, 245, 250), pants=(245, 245, 250), hair=(60, 40, 30), long_hair=True, glasses=True)
+SOEUR = dict(shirt=(240, 245, 250), pants=(90, 170, 190), hair=(200, 150, 80), long_hair=True)
 MAMAN = dict(shirt=(150, 92, 165), pants=(50, 50, 70), hair=(110, 70, 40), long_hair=True)
-V = Video(cabinet_bg, DENTISTE)
-MAMAN_C = [(560, MAMAN, dict(mouth="flat", sc=0.92), 0.8)]
-DENTISTE_V = (recit("s_dentiste", "31_dentiste", "ÉCONOMISÉ", 2400, "Trois semaines plus tard"), [
-    ("Deux mille quatre cents euros les deux", V.hook("h", "LA DENTISTE", ["C'EST CHER, 2 400 €", "LES COURONNES ? LE PAS", "CHER, C'EST DU CARTON"]), ("impact", 1.0)),
-    ("C'est ce que la dentiste", V.scene("couture", "carte", [("LE DEVIS", YEL, 0.3), ("RETRAITE DE MAMAN : J-21", RED, 2.6)], mechant=dict(mouth="grin"), autres=MAMAN_C, mx=840), ("whoosh", 0.6)),
-    ("Quarante-deux ans", V.scene("montee", "neutre", [("42 ANS À LA CANTINE", GREEN, 0.2), ("SOURIRE SUR LES PHOTOS", YEL, 3.4)], fond=salon_bg, sans_mechant=True, autres=[(760, MAMAN, dict(mouth="smile"), 0.8)]), ("pop", 0.8)),
-    ("Sur le devis", V.fiche("devis", "DEVIS · 2 COURONNES", "CABINET DENTAIRE", [("Céramique", "2 400 €", 0.3, True), ("Option 100 % Santé", "AUCUNE", 1.6, False)], kpose="carte"), None),
-    ("Moi, je fais du travail", V.gp("coup1", ["MOI, JE FAIS DU", "TRAVAIL PROPRE.", "LE BAS DE GAMME,", "ALLEZ À L'HÔPITAL"]), ("impact", 0.8)),
-    ("Et en raccompagnant", V.geste("geste", "ELLE EN RAJOUTE"), ("whoosh", 0.5)),
-    ("Fallait se brosser", V.gp("coup2", ["FALLAIT SE BROSSER", "LES DENTS AVANT,", "MADAME"], (2.2, 2.4), True, arm=0.8), ("impact", 1.0)),
-    ("Je dis rien", V.silence("silence", autres=MAMAN_C), None),
-    ("Se brosser les dents", V.echo("echo", "SE BROSSER LES DENTS"), ("rate", 0.6)),
-    ("Ce que la dentiste a pas dit", V.carte("regle", "COURONNE DENTAIRE", [("Le devis doit proposer", 0.5, False), ("une option 100 % Santé", 1.6, True), ("0 € avec une mutuelle responsable", 4.0, False)], "OBLIGATOIRE DEPUIS 2020 · DGCCRF", fond=salon_bg), ("pop", 0.8)),
-    ("Mais alors si elle veut pas", V.gros_mots("ailleurs", [("ELLE DOIT L'ÉCRIRE", WHITE, 1.4), ("TU PEUX ALLER AILLEURS", GREEN, 2.8)], fond=salon_bg), ("impact", 0.6)),
-    ("Le soir, j'envoie", V.tel("signal", "20:15", [("Mail", "Assurance maladie", "Signalement + devis", BLEU), ("Agenda", "Dentiste d'en face", "Mardi · 100 % Santé", GREEN)], fond=salon_bg), ("notif", 0.7)),
-    ("Honnêtement", V.doute("doute", "POUR UNE CASE OUBLIÉE ?", fond=salon_bg), None),
-    ("Trois semaines plus tard", V.scene("twist", "victoire", [("BONNE RETRAITE MAMAN", YEL, 0.3), ("0 € À PAYER", GREEN, 2.0)], fond=salon_bg, sans_mechant=True, devant=gateau, autres=[(760, MAMAN, dict(mouth="grin", arms_up=True), 0.8)]), ("succes", 0.8)),
-    ("Deux mille quatre cents euros de devis", V.fin("fin", "2 400 €", "DE DEVIS, ET ZÉRO À PAYER", "CAS TYPE · 100 % SANTÉ · CODE DE LA SANTÉ PUBLIQUE · DGCCRF", fond=salon_bg), ("impact", 0.9)),
+PATIENTS = [(790, dict(shirt=(120, 120, 130), pants=(40, 40, 60), hair=(180, 180, 185), sc=0.82), dict(mouth="o"), 0.3, BASE - 70),
+            (940, dict(shirt=(200, 160, 60), pants=(40, 40, 60), hair=(60, 40, 30), long_hair=True, sc=0.82), dict(mouth="o"), 1.3, BASE - 70)]
+V = V2(cabinet_bg, SOEUR)
+DENTISTE_V = (recit("s_dentiste", "31_dentiste", "ÉCONOMISÉ", 2400, "Le lendemain, la secrétaire"), [
+    ("Ma sœur veut faire payer", V.accroche("h", "MA SŒUR, ASSISTANTE DENTAIRE", [("2 400 € DE COURONNES", RED, 0.2), ("POUR NOTRE MÈRE", YEL, 1.8)], autres=[(600, MAMAN, dict(mouth="flat", sc=0.92), 0.8)], mx=860), ("impact", 1.0)),
+    ("Et maman fête sa retraite", V.scene("verrou", "neutre", [("SA RETRAITE DANS 3 SEMAINES", YEL, 0.2)], fond=salon_bg, sans_mechant=True, autres=[(780, MAMAN, dict(mouth="smile"), 0.8)]), ("pop", 0.5)),
+    ("Deux couronnes en céramique", V.fiche("devis", "DEVIS · 2 COURONNES", "CABINET DENTAIRE", [("Céramique", "2 400 €", 0.3, True), ("Option 100 % Santé", "AUCUNE", 1.6, False)], kpose="carte", fond=salon_bg), None),
+    ("Maman m'envoie la photo", V.scene("montee", "telephone", [("42 ANS DE CANTINE", GREEN, 0.4), ("SOURIRE SUR LES PHOTOS", YEL, 2.0)], fond=salon_bg, sans_mechant=True, autres=[(780, MAMAN, dict(mouth="smile"), 0.8)]), ("pop", 0.8)),
+    ("Je lui dis, maman", V.scene("promesse", "parle", [("CETTE FOIS, TU MONTRES TES DENTS", WHITE, 0.4)], fond=salon_bg, sans_mechant=True, autres=[(780, MAMAN, dict(mouth="grin"), 0.8)]), None),
+    ("J'appelle ma sœur", V.tel("appel", "19:15", [("Ma sœur", "Appel", "En cours", GREEN)], fond=salon_bg), ("notif", 0.5)),
+    ("Le moins cher, c'est", V.gp("coup1", ["LE MOINS CHER, C'EST", "DES DENTS EN PLASTIQUE"], phone=True), ("impact", 0.8)),
+    ("Elle rigole", V.geste("geste", "ELLE EN RAJOUTE", phone=True), ("whoosh", 0.5)),
+    ("Toi qui vis encore", V.gp("coup2", ["TOI, DANS TA CHAMBRE", "D'ÉTUDIANT, VIENS PAS", "M'APPRENDRE MON MÉTIER"], (2.2, 2.4), True, phone=True), ("impact", 1.0)),
+    ("Je dis rien. Maman", V.scene("silence", "triste", fond=salon_bg, sans_mechant=True, autres=[(780, MAMAN, dict(mouth="flat"), 0.8)], z=(1.0, 1.04), fx=False), None),
+    ("Des dents en plastique", V.echo("echo", "DES DENTS EN PLASTIQUE", fond=salon_bg), ("rate", 0.6)),
+    ("Ce que peu de gens", V.carte("regle", "COURONNE DENTAIRE", [("Le devis doit proposer", 0.6, False), ("une option 100 % Santé", 1.8, True), ("0 € avec une mutuelle responsable", 4.0, False)], "OBLIGATOIRE DEPUIS 2020 · DGCCRF", fond=salon_bg), ("pop", 0.8)),
+    ("Mais alors, si le cabinet", V.gros_mots("ailleurs", [("IL DOIT L'ÉCRIRE", WHITE, 1.8), ("TU PEUX ALLER AILLEURS", GREEN, 3.0)], fond=salon_bg), ("impact", 0.6)),
+    ("Sauf que la fête", V.gros_mots("urgence", [("LA FÊTE APPROCHE", YEL, 0.3), ("NOUVEAU DEVIS CETTE SEMAINE", WHITE, 1.4)], fond=salon_bg), ("ticks", 0.5)),
+    ("Honnêtement", V.doute("doute", "C'EST SON MÉTIER", fond=salon_bg), None),
+    ("Mardi, salle d'attente", V.scene("riposte", "parle", [("9 PATIENTS", YEL, 0.3), ("LE DEVIS AVEC L'OPTION, À VOIX HAUTE", WHITE, 2.6)], sans_mechant=True, autres=[(600, MAMAN, dict(mouth="flat", sc=0.92), 0.8)] + PATIENTS), ("impact", 0.6)),
+    ("Ma sœur sort du couloir", V.scene("soeur", "neutre", [("MA SŒUR", RED, 0.2)], mechant=dict(mouth="o", arms_up=False), mx=820), None),
+    ("Le lendemain, la secrétaire", V.tel("twist", "10:40", [("Cabinet", "Appel", "Nouveau devis · 0 €", GREEN)], "victoire", fond=salon_bg, tags=[("ELLE REFAIT CEUX DE TOUTE LA SEMAINE", YEL, 3.4)]), ("succes", 0.8)),
+    ("À la fête, maman", V.scene("fete", "victoire", [("BONNE RETRAITE MAMAN", YEL, 0.2)], fond=salon_bg, mechant=dict(mouth="smile", phone=True), mx=900, devant=gateau, autres=[(600, MAMAN, dict(mouth="grin", arms_up=True), 0.8)]), ("pop", 0.6)),
+    ("Deux mille quatre cents euros de", V.fin("fin", "2 400 €", "DE GAGNÉS", "CAS TYPE · 100 % SANTÉ · CODE DE LA SANTÉ PUBLIQUE · DGCCRF", fond=salon_bg), ("impact", 0.9)),
 ])
 
 
-# ═════════════ 32. 10 minutes de retard, 1 heure retirée ═════════════
+# ═════════════ 32. Une heure pour dix minutes (la tante boulangère) ═════════════
 
-GERANTE = dict(shirt=(140, 40, 70), pants=(30, 30, 40), hair=(90, 50, 30), long_hair=True, glasses=True)
-GILET_B = dict(shirt=(30, 90, 160))
-V = Video(boutique_bg, GERANTE, GILET_B)
-RETARD = (recit("s_retard", "32_retard_retenue", "RENDU PAR LA GÉRANTE", 108, "Le mois suivant"), [
-    ("Cent huit euros retirés", V.hook("h", "MA GÉRANTE", ["JE T'AI RETIRÉ 108 €,", "OUI. UNE HEURE PAR", "RETARD, C'EST LA RÈGLE"]), ("impact", 1.0)),
-    ("C'est ce que ma gérante", V.scene("couture", "choc", [("GRÈVE DES BUS : 9 RETARDS", YEL, 1.6), ("VOYAGE SCOLAIRE : VENDREDI", RED, 4.6)], mechant=dict(mouth="grin")), ("whoosh", 0.6)),
-    ("Et pourtant je partais", V.scene("montee", "marche", [("PARTI 1 H AVANT", GREEN, 0.2), ("2 ARRÊTS À PIED", YEL, 1.6)], fond=lambda: route_bg(True), sans_mechant=True), ("pop", 0.8)),
-    ("Neuf fois dix minutes", V.calcul("calcul", "9 RETARDS DE 10 MIN", [("RETARD RÉEL", 90, "1 H 30", GREEN, 0.4), ("RETIRÉ", 540, "9 H", RED, 2.2)], "EN MINUTES"), ("ticks", 0.6)),
-    ("Le calcul, c'est moi", V.gp("coup1", ["LE CALCUL, C'EST MOI.", "T'ES PAS CONTENT,", "LA PORTE EST LÀ"]), ("impact", 0.8)),
-    ("Et en rangeant les fiches", V.geste("geste", "ELLE EN RAJOUTE"), ("whoosh", 0.5)),
-    ("Ceux qui ont de l'ambition", V.gp("coup2", ["CEUX QUI ONT DE", "L'AMBITION, ILS", "HABITENT À CÔTÉ"], (2.2, 2.4), True, arm=0.8), ("impact", 1.0)),
-    ("Je dis rien", V.silence("silence"), None),
-    ("Habiter à côté", V.echo("echo", "HABITER À CÔTÉ"), ("rate", 0.6)),
-    ("Sauf que le Code du travail", V.carte("regle", "UN RETARD", [("Les amendes sont interdites", 0.4, True), ("On retire le temps exact", 2.4, False), ("10 minutes = 10 minutes", 4.4, False)], "CODE DU TRAVAIL · L1331-2", fond=salon_bg), ("pop", 0.8)),
-    ("Mais alors, une heure", V.gros_mots("sanction", [("1 HEURE POUR 10 MIN", WHITE, 0.6), ("SANCTION INTERDITE", RED, 2.0), ("AMENDE : 3 750 €", YEL, 4.0)], fond=salon_bg), ("impact", 0.6)),
-    ("Le soir, je prends en photo", V.tel("photo", "21:05", [("Photo", "Tableau des retenues", "Toute l'équipe", GRIS), ("Mail", "Inspection du travail", "Envoyé", BLEU)], fond=salon_bg), ("notif", 0.7)),
-    ("Honnêtement", V.doute("doute", "SANS DEMANDER AUX COLLÈGUES", fond=salon_bg), None),
-    ("Le mois suivant", V.fiche("note", "NOTE DE SERVICE", "AFFICHÉE AU VESTIAIRE", [("Retenue à la minute près", "", 0.3, True), ("Retenues rendues à l'équipe", "", 1.6, False)], kpose="victoire"), ("succes", 0.8)),
-    ("Cent huit euros, et", V.fin("fin", "108 €", "ET LA RÈGLE ICI, C'EST LA LOI", "CAS TYPE · CODE DU TRAVAIL L1331-2 · CASS. SOC. 24 NOV. 1992"), ("impact", 0.9)),
+TATA = dict(shirt=(250, 250, 250), pants=(60, 60, 70), hair=(120, 70, 40), long_hair=True)
+TABLIER = dict(shirt=(60, 110, 170))
+COLLEGUES = [(x, dict(shirt=(250, 250, 250), pants=(60, 60, 70), hair=c, sc=0.8, **({"long_hair": True} if i % 2 else {})),
+              {}, 0.6 * i, BASE - 60) for i, (x, c) in enumerate(zip((600, 730, 860, 990), ((30, 25, 20), (180, 120, 60), (90, 90, 95), (60, 40, 30))))]
+V = V2(boulangerie_bg, TATA, TABLIER)
+RETARD = (recit("s_retard", "32_retard_retenue", "RENDU PAR TATA", 90, "Ma tante me parle pas"), [
+    ("Ma tante m'a retiré", V.accroche("h", "MA TANTE ET PATRONNE", [("108 € RETIRÉS", RED, 0.2), ("POUR 9 RETARDS DE 10 MIN", YEL, 1.6)], devant=comptoir_fg), ("impact", 1.0)),
+    ("Et j'ai gardé la feuille", V.fiche("pointage", "FEUILLE DE POINTAGE", "TOUTE L'ÉQUIPE", [("6:10 · 6:10 · 6:10 · 6:10", "", 0.3, False), ("Gardée", "", 1.2, True)], kpose="carte"), ("pop", 0.5)),
+    ("Trois semaines de grève", V.scene("greve", "choc", [("GRÈVE DES BUS", RED, 0.2), ("ARRIVÉE : 6 H 10", WHITE, 2.4)], fond=lambda: route_bg(True), sans_mechant=True), ("impact", 0.5)),
+    ("Je pars à cinq heures", V.scene("montee", "marche", [("PARTI À 5 H", GREEN, 0.2), ("2 ARRÊTS À PIED", YEL, 1.2)], fond=lambda: route_bg(True), sans_mechant=True), ("pop", 0.6)),
+    ("Vendredi, je dois payer", V.fiche("voyage", "VOYAGE SCOLAIRE", "À PAYER VENDREDI", [("Mon petit frère", "", 0.3, True)], kpose="neutre", fond=salon_bg), None),
+    ("Le soir de la paie", V.tel("message", "20:02", [("Tata", "Photo", "C'est la règle.", GREEN)], "choc", fond=salon_bg), ("notif", 0.5)),
+    ("Je lui réponds, tata", V.tel("reponse", "20:05", [("Moi", "À tata", "C'est la grève", BLEU), ("Tata", "Appel", "En cours", GREEN)], fond=salon_bg), ("notif", 1.4)),
+    ("Une heure ou dix", V.gp("coup1", ["UNE HEURE OU DIX MINUTES,", "POUR UN VENDEUR DE", "CROISSANTS, ÇA CHANGE QUOI ?"], phone=True, devant=comptoir_fg), ("impact", 0.8)),
+    ("Et avant de couper", V.geste("geste", "ELLE INSISTE", devant=comptoir_fg, phone=True), ("whoosh", 0.5)),
+    ("Si t'étais sérieux", V.gp("coup2", ["SI T'ÉTAIS SÉRIEUX,", "TU DORMIRAIS", "DANS LE FOURNIL"], (2.2, 2.4), True, phone=True, devant=comptoir_fg), ("impact", 1.0)),
+    ("Pas un mot", V.scene("silence", "triste", fond=salon_bg, sans_mechant=True, z=(1.0, 1.04), fx=False), None),
+    ("Un vendeur de croissants", V.echo("echo", "UN VENDEUR DE CROISSANTS", fond=salon_bg), ("rate", 0.6)),
+    ("Sur le papier", V.gros_mots("papier", [("SA BOUTIQUE", WHITE, 0.3), ("SES RÈGLES", RED, 1.0)], fond=salon_bg), None),
+    ("Ce que peu de gens", V.carte("regle", "UN RETARD", [("On retire le temps exact", 0.8, True), ("pas une minute de plus", 2.6, False)], "CODE DU TRAVAIL · L1331-2", fond=salon_bg), ("pop", 0.8)),
+    ("Mais alors, une heure", V.gros_mots("sanction", [("1 HEURE POUR 10 MIN ?", WHITE, 0.3), ("AMENDE SUR LE SALAIRE", RED, 1.8), ("INTERDITE", RED, 3.4)], fond=salon_bg), ("impact", 0.6)),
+    ("Neuf fois dix minutes", V.calcul("calcul", "9 RETARDS DE 10 MIN", [("RÉEL", 90, "1 H 30", GREEN, 0.4), ("RETIRÉ", 540, "9 H", RED, 1.8)], "EN MINUTES", fond=salon_bg), ("ticks", 0.6)),
+    ("Honnêtement", V.doute("doute", "SANS CROISSANTS, PAS DE CLIENTS", fond=salon_bg), None),
+    ("Samedi", V.scene("riposte", "parle", [("5 COLLÈGUES", YEL, 0.3), ("LE CALCUL DE CHACUN, AVEC SON NOM", WHITE, 1.8)], sans_mechant=True, autres=COLLEGUES), ("pop", 0.6)),
+    ("Le boulanger pose", V.scene("temoin", "neutre", [("SILENCE", WHITE, 0.2)], sans_mechant=True, autres=COLLEGUES, z=(1.1, 1.15), fx=False), None),
+    ("Ma tante me parle pas", V.scene("note", None, [("3 JOURS SANS UN MOT", WHITE, 0.2)], sans_mechant=True, devant=feuille_mur, z=(1.0, 1.06)), ("pop", 2.2)),
+    ("Et elle me confie", V.scene("twist", "victoire", [("ELLE ME CONFIE LES PAIES", GREEN, 0.2)], mechant=dict(mouth="smile", clipboard=True)), ("succes", 0.5)),
+    ("Cent huit euros, recalculés", V.fin("fin", "108 €", "RECALCULÉS À LA MINUTE PRÈS", "CAS TYPE · CODE DU TRAVAIL L1331-2 · CASS. SOC. 24 NOV. 1992"), ("impact", 0.9)),
 ])
 
 
-# ═════════════ 33. ACTU : le SMIC au 1er décembre ═════════════
+# ═════════════ 33. ACTU : le SMIC au 1er décembre (le patron) ═════════════
 
 PATRON_A = dict(shirt=(60, 60, 70), pants=(40, 40, 50), hair=(50, 40, 30), glasses=True, tie=True)
 BLEU_TRAVAIL = dict(shirt=(50, 80, 150))
-V = Video(atelier_bg, PATRON_A, BLEU_TRAVAIL)
+GARS_A = [(x, dict(shirt=(50, 80, 150), pants=(40, 40, 60), hair=c, sc=0.85), {}, 0.6 * i, BASE - 60)
+          for i, (x, c) in enumerate(zip((150, 300, 450), ((30, 25, 20), (120, 70, 30), (90, 90, 95))))]
+V = V2(atelier_bg, PATRON_A, BLEU_TRAVAIL)
 SMIC = (recit("s_smic", "33_smic_decembre", "EN PLUS PAR MOIS", 24, "Fin décembre"), [
-    ("Vingt-quatre euros de plus", V.hook("h", "MON PATRON", ["TU CROIS TOUCHER 24 €", "DE PLUS ? LE SMIC, C'EST", "EN JANVIER. PAS CHEZ MOI"]), ("impact", 1.0)),
-    ("C'est ce que mon patron", V.scene("couture", "choc", [("SMIC : 1er DÉCEMBRE", YEL, 0.3), ("NOËL DE MES 2 NIÈCES", RED, 3.0)], mechant=dict(mouth="grin")), ("whoosh", 0.6)),
-    ("Et pourtant j'avais suivi", V.tel("actu", "07:45", [("Actu", "9 novembre", "SMIC + 1,6 %", BLEU), ("Actu", "Dès le 1er décembre", "Un mois plus tôt", GREEN)], fond=salon_bg), ("notif", 0.7)),
-    ("Je lui demande juste", V.scene("demande", "parle", [("SUR LA PAIE ?", WHITE, 0.3)], mechant=dict(mouth="flat")), None),
-    ("Tu crois tout", V.gp("coup1", ["TU CROIS TOUT", "CE QUE TU LIS SUR", "TON TÉLÉPHONE ?"]), ("impact", 0.8)),
-    ("Et en retournant", V.geste("geste"), ("whoosh", 0.5)),
-    ("Ici, c'est moi", V.gp("coup2", ["ICI, C'EST MOI QUI", "DÉCIDE QUI MÉRITE", "UNE AUGMENTATION"], (2.2, 2.4), True, arm=0.8), ("impact", 1.0)),
-    ("Je dis rien", V.silence("silence", "telephone"), None),
-    ("Qui mérite", V.echo("echo", "QUI MÉRITE"), ("rate", 0.6)),
-    ("Sauf que le SMIC", V.carte("regle", "LE SMIC", [("Un plancher fixé par l'État", 0.8, True), ("Il monte pour tout le monde", 3.0, False), ("sans l'accord du patron", 4.4, False)], "CODE DU TRAVAIL · L3231-2", fond=salon_bg), ("pop", 0.8)),
-    ("Mais alors, ça fait combien", V.carte("montant", "AU 1er DÉCEMBRE 2026", [("≈ 1 478 € → ≈ 1 502 € net", 0.6, True), ("pour un temps plein", 2.2, False), ("décret à paraître", 4.0, False)], "ANNONCE DU GOUVERNEMENT · 9 NOV.", fond=salon_bg), ("ticks", 0.6)),
-    ("Le soir, je crée un groupe", V.tel("groupe", "08:00", [("WhatsApp", "SMIC atelier", "8 participants", GREEN), ("Mail", "Envoyé à 8:00", "8 mails pareils", BLEU)], fond=salon_bg), ("notif", 0.7)),
-    ("Honnêtement", V.doute("doute", "TOUT L'ATELIER CONTRE LUI", fond=salon_bg), None),
-    ("Fin décembre", V.scene("twist", "victoire", [("PAIE DE DÉCEMBRE · LA LIGNE EST LÀ", GREEN, 0.3), ("CHEZ MOI, ON RESPECTE LA LOI", WHITE, 2.4)], mechant=dict(mouth="grin", arm=0.5)), ("succes", 0.8)),
-    ("Vingt-quatre euros, et", V.fin("fin", "24 €", "ET CHEZ LUI AUSSI", "SMIC + 1,6 % AU 1er DÉC. 2026 · ANNONCE DU 9 NOV. · DÉCRET À PARAÎTRE"), ("impact", 0.9)),
+    ("Mon patron veut garder", V.accroche("h", "MON PATRON", [("24 € PAR MOIS GARDÉS", RED, 0.2), ("SUR LA PAIE DE 8 OUVRIERS", YEL, 1.6)]), ("impact", 1.0)),
+    ("Le premier décembre, soit", V.gros_mots("verrou", [("1er DÉCEMBRE", YEL, 0.2), ("LA LIGNE SUR LA FICHE", GREEN, 1.2), ("OU 8 DANS SON BUREAU", RED, 2.6)], kpose="neutre"), ("pop", 0.6)),
+    ("Une hausse du SMIC", V.tel("actu", "07:45", [("Actu", "Gouvernement", "SMIC + 1,6 % au 1er déc.", BLEU)]), ("notif", 0.5)),
+    ("Un mois plus tôt", V.scene("montee", "victoire", [("JUSTE AVANT NOËL", GREEN, 0.2), ("LES CADEAUX DE MES NIÈCES", YEL, 2.0)], sans_mechant=True), ("pop", 0.8)),
+    ("Lundi, il débarque", V.scene("demande", "parle", [("SUR LA PAIE DE DÉCEMBRE, CHEF ?", WHITE, 0.8)], mechant=dict(mouth="flat")), ("whoosh", 0.4)),
+    ("Ton SMIC, c'est", V.gp("coup1", ["TON SMIC, C'EST", "UNE ANNONCE À LA TÉLÉ"]), ("impact", 0.8)),
+    ("Et en jetant son gobelet", V.geste("geste"), ("whoosh", 0.5)),
+    ("Avec ce que tu fais", V.gp("coup2", ["DERRIÈRE TA RABOTEUSE,", "ESTIME-TOI DÉJÀ PAYÉ"], (2.2, 2.4), True, arm=0.8), ("impact", 1.0)),
+    ("Je dis rien. Je finis", V.silence("silence"), None),
+    ("Une annonce à la télé", V.echo("echo", "UNE ANNONCE À LA TÉLÉ"), ("rate", 0.6)),
+    ("Et pourtant, le SMIC", V.gros_mots("prime", [("PAS UNE PRIME", WHITE, 0.8), ("PAS UN CADEAU", RED, 1.8)]), None),
+    ("Ce que peu de gens", V.carte("regle", "LE SMIC", [("Un plancher fixé par l'État", 0.8, True), ("il monte pour tous", 2.8, False), ("sans l'accord du patron", 3.8, False)], "CODE DU TRAVAIL · L3231-2", fond=salon_bg), ("pop", 0.8)),
+    ("Mais alors, ça fait", V.carte("montant", "AU 1er DÉCEMBRE 2026", [("≈ 1 502 € net par mois", 1.4, True), ("temps plein · décret à paraître", 3.0, False)], "ANNONCE DU GOUVERNEMENT · 9 NOV.", fond=salon_bg), ("ticks", 0.6)),
+    ("Sauf que les paies", V.gros_mots("urgence", [("LES PAIES PARTENT AVANT NOËL", YEL, 0.3), ("ÇA SE RÈGLE CETTE SEMAINE", WHITE, 1.8)], fond=salon_bg), None),
+    ("Honnêtement", V.doute("doute", "8 PAIES D'UN COUP, ÇA PÈSE", fond=salon_bg), None),
+    ("Vendredi", V.scene("riposte", "carte", [("8 FICHES DE PAIE", YEL, 0.3), ("À LA MÊME MINUTE", WHITE, 2.2)], mechant=dict(mouth="o"), kx=560, autres=GARS_A), ("impact", 0.6)),
+    ("Sa secrétaire arrête", V.muet("muet", "SILENCE"), None),
+    ("Fin décembre", V.fiche("paie", "BULLETIN DE PAIE", "DÉCEMBRE", [("SMIC revalorisé", "≈ 1 502 € net", 0.4, True)], kpose="victoire", fond=salon_bg), ("succes", 0.6)),
+    ("je le vois au journal", V.tv("tv", "JOURNAL RÉGIONAL", "« LE SMIC ? LA MOINDRE DES CHOSES »"), ("notif", 0.4)),
+    ("Vingt-quatre euros, et c'est", V.fin("fin", "24 €", "ET C'EST LUI À LA TÉLÉ", "SMIC + 1,6 % AU 1er DÉC. 2026 · ANNONCE DU 9 NOV. · DÉCRET À PARAÎTRE"), ("impact", 0.9)),
 ])
 
 
-# ═════════════ 34. La garantie légale de 2 ans ═════════════
+# ═════════════ 34. La machine offerte (la belle-mère) ═════════════
 
-VENDEUR = dict(shirt=(200, 40, 40), pants=(36, 36, 44), hair=(160, 110, 60))
+BELLE_MERE = dict(shirt=(190, 60, 60), pants=(50, 50, 60), hair=(200, 190, 170), long_hair=True, glasses=True)
 TECH = dict(shirt=(50, 80, 150), pants=(50, 80, 150), hair=(40, 30, 25), cap=(50, 80, 150))
-V = Video(magasin_bg, VENDEUR)
-GARANTIE = (recit("s_garantie", "34_garantie_legale", "PAYÉ PAR LE MAGASIN", 650, "Trois jours plus tard"), [
-    ("Six cent cinquante euros la machine", V.hook("h", "LE VENDEUR DU MAGASIN", ["VOTRE MACHINE À 650 €", "EN PANNE ? VOYEZ", "AVEC LA MARQUE"], phone=True), ("impact", 1.0)),
-    ("C'est ce que le vendeur", V.scene("couture", "telephone", [("MA FILLE A 8 MOIS", YEL, 1.4), ("1 SEMAINE DE LINGE SALE", RED, 3.0)], fond=salon_bg, sans_mechant=True, devant=salon_machine), ("whoosh", 0.6)),
-    ("Et pourtant on l'avait", V.scene("montee", "victoire", [("LA PLUS SOLIDE DU RAYON", GREEN, 0.3), ("650 €", YEL, 1.8)], mechant=dict(mouth="smile", arm=0.5)), ("pop", 0.8)),
-    ("Quatorze mois après", V.scene("panne", "choc", [("14 MOIS APRÈS", WHITE, 0.2), ("PLUS D'ESSORAGE", RED, 1.4)], fond=salon_bg, sans_mechant=True, devant=salon_fumee), ("impact", 0.6)),
-    ("La garantie, c'est un an", V.gp("coup1", ["LA GARANTIE, C'EST", "UN AN. APRÈS, C'EST", "PLUS CHEZ NOUS"], phone=True), ("impact", 0.8)),
-    ("Et avant de raccrocher", V.geste("geste", phone=True), ("whoosh", 0.5)),
-    ("Avec un bébé", V.gp("coup2", ["AVEC UN BÉBÉ, ON PREND", "L'EXTENSION. ÇA S'APPELLE", "ÊTRE UN PÈRE RESPONSABLE"], (2.2, 2.4), True, phone=True), ("impact", 1.0)),
-    ("Je dis rien", V.scene("silence", "triste", fond=salon_bg, sans_mechant=True, devant=radiateur, z=(1.0, 1.04), fx=False), None),
-    ("Un père responsable", V.echo("echo", "UN PÈRE RESPONSABLE", fond=salon_bg), ("rate", 0.6)),
-    ("Sauf qu'il mélange", V.carte("regle", "DEUX GARANTIES", [("La marque : 1 an, commerciale", 0.6, False), ("La loi : 2 ans", 3.0, True), ("et c'est le MAGASIN qui la doit", 4.6, False)], "CODE DE LA CONSOMMATION · L217-3", fond=salon_bg), ("pop", 0.8)),
-    ("Mais alors, il peut", V.gros_mots("marque", [("RENVOYER VERS LA MARQUE ?", WHITE, 0.4), ("NON", RED, 2.0), ("RÉPARER OU REMPLACER", GREEN, 3.0)], fond=salon_bg), ("impact", 0.6)),
-    ("Ma cousine travaille", V.fiche("lettre", "CABINET D'AVOCATS", "MISE EN DEMEURE · PAPIER À EN-TÊTE", [("Garantie légale de conformité", "", 0.3, False), ("Réparation ou remplacement", "", 1.0, True), ("sans frais", "", 1.8, False)], fond=salon_bg), ("notif", 0.7)),
-    ("Honnêtement", V.doute("doute", "MA COUSINE EN DANGER ?", fond=salon_bg), None),
-    ("Trois jours plus tard", V.scene("twist", "victoire", [("PIÈCE CHANGÉE", GREEN, 0.3), ("RIEN À PAYER", YEL, 1.6)], fond=salon_bg, sans_mechant=True, devant=lambda d, t: machine(d, 960, 1560), autres=[(740, TECH, dict(mouth="smile", arm=0.4), 1.1)]), ("succes", 0.8)),
-    ("Six cent cinquante euros, et", V.fin("fin", "650 €", "ET C'EST LUI QUI A VU AVEC LA MARQUE", "CAS TYPE · CODE DE LA CONSOMMATION L217-3 ET SUIVANTS", fond=salon_bg), ("impact", 0.9)),
+BEAU_PERE_B = dict(shirt=(110, 120, 140), pants=(50, 50, 60), hair=(170, 170, 170), sc=0.85)
+V = V2(salon_bg, BELLE_MERE)
+GARANTIE = (recit("s_garantie", "34_garantie_legale", "PAYÉ PAR LE MAGASIN", 650, "Samedi, elle est"), [
+    ("Ma belle-mère me réclame", V.accroche("h", "MA BELLE-MÈRE", [("650 € RÉCLAMÉS", RED, 0.2), ("POUR LA MACHINE QU'ELLE A OFFERTE", YEL, 1.6)], devant=salon_machine_d, mx=700), ("impact", 1.0)),
+    ("Et samedi, elle revient", V.scene("verrou", "neutre", [("SAMEDI : LE BAIN DE LA PETITE", YEL, 0.2)], sans_mechant=True, devant=salon_machine_d), ("pop", 0.5)),
+    ("Quatorze mois après", V.scene("panne", "choc", [("14 MOIS APRÈS", WHITE, 0.2), ("PLUS D'ESSORAGE", RED, 1.2)], sans_mechant=True, devant=salon_fumee), ("impact", 0.6)),
+    ("C'était son cadeau", V.scene("montee", "victoire", [("SON CADEAU DE NAISSANCE", GREEN, 0.2)], mechant=dict(mouth="smile", arm=0.5), mx=700, devant=salon_machine_d), ("pop", 0.8)),
+    ("Je lui ai dit, avec", V.scene("merci", "parle", [("TRANQUILLES DIX ANS", WHITE, 0.4)], mechant=dict(mouth="grin"), mx=700, devant=salon_machine_d), None),
+    ("Elle passe tous les soirs", V.scene("entree", "neutre", [("ELLE A LES CLÉS", YEL, 0.3)], mechant=dict(mouth="grin"), mx=700, devant=salon_machine_d), ("whoosh", 0.5)),
+    ("Tu la bourres", V.gp("coup1", ["TU LA BOURRES COMME", "UN SAC POUBELLE"]), ("impact", 0.8)),
+    ("Et en refermant la porte", V.geste("geste", "ELLE EN RAJOUTE"), ("whoosh", 0.5)),
+    ("Quand on vit à trois", V.gp("coup2", ["À TROIS DANS UN", "DEUX-PIÈCES, ON LAVE", "À LA MAIN"], (2.2, 2.4), True, arm=0.8), ("impact", 1.0)),
+    ("Je laisse passer", V.scene("silence", "triste", sans_mechant=True, devant=radiateur, z=(1.0, 1.04), fx=False), None),
+    ("Un sac poubelle", V.echo("echo", "UN SAC POUBELLE"), ("rate", 0.6)),
+    ("Et pourtant, le magasin", V.tel("magasin", "16:20", [("Magasin", "Réponse", "Voyez avec la marque", GRIS)], "choc"), ("notif", 0.5)),
+    ("Ce que peu de gens", V.carte("regle", "DEUX GARANTIES", [("La marque : 1 an", 0.8, False), ("La loi : 2 ans", 2.0, True), ("due par le VENDEUR", 3.4, False)], "CODE DE LA CONSOMMATION · L217-3"), ("pop", 0.8)),
+    ("Mais alors, faut prouver", V.gros_mots("preuve", [("PROUVER QUE C'EST PAS MOI ?", WHITE, 0.3), ("NON", RED, 1.6), ("PRÉSUMÉE D'ORIGINE", GREEN, 2.4)]), ("impact", 0.6)),
+    ("Sauf qu'il faut la facture", V.gros_mots("facture", [("IL FAUT LA FACTURE", YEL, 0.3), ("ELLE EST CHEZ ELLE", RED, 1.4)]), None),
+    ("Honnêtement", V.doute("doute", "JE LA REMPLIS TROP ?"), None),
+    ("Alors je la prends", V.fiche("tiroir", "FACTURE", "PRISE DANS SON TIROIR", [("Lave-linge", "650 €", 0.3, False), ("Réclamation au magasin", "", 1.4, True)], kpose="carte"), ("pop", 0.5)),
+    ("Samedi, elle est", V.scene("technicien", "neutre", [("DÉFAUT DE FABRICATION", GREEN, 3.4)], mechant=dict(mouth="flat"), mx=850, devant=salon_machine_d, autres=[(520, TECH, dict(mouth="smile", arm=0.3), 1.1), (690, BEAU_PERE_B, dict(mouth="o"), 0.4, BASE - 50)]), ("succes", 0.8)),
+    ("Ma belle-mère reste", V.muet("muet", "PLANTÉE LÀ"), None),
+    ("Le lundi, elle m'envoie", V.tel("twist", "09:05", [("Belle-maman", "3 photos", "Factures de ses copines", GREEN)], "victoire"), ("notif", 0.5)),
+    ("Six cent cinquante euros, son", V.fin("fin", "650 €", "SON CADEAU TOURNE ENCORE", "CAS TYPE · CODE DE LA CONSOMMATION L217-3 ET SUIVANTS"), ("impact", 0.9)),
 ])
 
 
