@@ -17,7 +17,8 @@ NARRATEUR > Sauf que maman met toujours un cœur à la fin.
 NARRATEUR > Là, rien.
 [PAUSE]
 VOIX DERRIÈRE LA PORTE > Mon loup, il fait froid dans le couloir.
-NARRATEUR > Alors tu crois qui ? La voix, ou le texto ?
+NARRATEUR > Et pourtant, sans ses clés, maman peut pas passer la porte d'en bas. Personne a sonné.
+NARRATEUR > Les pieds s'en vont. La lumière du couloir s'éteint. Plu un bruit.
 [GRINCEMENT]
 NARRATEUR > Tu te retournes vers le canapé. Ton frère est plu là.
 NARRATEUR > La porte de la salle de bain est fermée. La lumière est allumée dessous.

@@ -40,10 +40,16 @@
  },
  "rythme": {
   "debut": 0.12,
-  "entre_repliques": 0.28,
-  "pause": 0.9,
+  "entre_repliques": 0.15,
+  "pause": 0.75,
   "tenue_finale": 3.2,
-  "duree_min": 62
+  "duree_min": 61.5,
+  "silence_min": 0.16,
+  "silence_garde": 0.12,
+  "silence_garde_ligne": 0.22,
+  "seuil_silence_db": -40,
+  "vitesse": 1.08,
+  "pause_max": 1.4
  },
  "bruitages": {
   "TROIS COUPS": {
@@ -131,7 +137,8 @@
   "telephone_proche",
   "telephone_proche",
   "porte_bas",
-  "entre_deux",
+  "porte_proche",
+  "porte_bas",
   "canape_vide",
   "salle_de_bain",
   "final"
@@ -141,7 +148,8 @@
   "judas": 5,
   "pieds": 6,
   "texto": 11,
-  "retour": 16,
-  "choix": 18
+  "retour": 17,
+  "choix": 19,
+  "repit": 16
  }
 }

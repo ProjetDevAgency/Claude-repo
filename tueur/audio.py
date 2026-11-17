@@ -72,11 +72,64 @@ FILTRES = {
 }
 
 
-def decode(mp3_bytes, effet=None):
-    af = ["-af", FILTRES[effet]] if effet else []
-    raw = subprocess.run(["ffmpeg", "-v", "error", "-f", "mp3", "-i", "-", *af, "-ac", "1", "-ar", str(SR),
+def decode(mp3_bytes):
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-f", "mp3", "-i", "-", "-ac", "1", "-ar", str(SR),
                           "-f", "f32le", "-"], input=mp3_bytes, capture_output=True, check=True).stdout
     return np.frombuffer(raw, np.float32).copy()
+
+
+def ffilter(pcm, af):
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", "-", "-af", af,
+                          "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"], input=pcm.astype(np.float32).tobytes(),
+                         capture_output=True, check=True).stdout
+    return np.frombuffer(raw, np.float32).copy()
+
+
+def tighten(pcm, bounds, ry):
+    """Resserre la voix comme la chaîne repost : chaque silence trop long est ramené à une durée courte
+    (un peu plus longue entre deux répliques qu'à l'intérieur d'une phrase). Renvoie l'audio et une
+    fonction qui convertit un temps d'origine en temps resserré, pour garder les sous-titres calés."""
+    fr = int(0.01 * SR)
+    n = len(pcm) // fr
+    rms = np.sqrt(np.mean(pcm[: n * fr].reshape(n, fr) ** 2, axis=1) + 1e-12)
+    silent = 20 * np.log10(rms) < ry.get("seuil_silence_db", -40)
+    keep_mask = np.ones(n, bool)
+    i = 0
+    while i < n:
+        if not silent[i]:
+            i += 1
+            continue
+        j = i
+        while j < n and silent[j]:
+            j += 1
+        dur = (j - i) * 0.01
+        t0, t1 = i * 0.01, j * 0.01
+        if i == 0:
+            keep = 0.03
+        elif j == n:
+            keep = 0.10
+        elif any(t0 - 0.05 <= b <= t1 + 0.05 for b in bounds):
+            keep = ry.get("silence_garde_ligne", 0.22)
+        else:
+            keep = ry.get("silence_garde", 0.12)
+        if dur > max(keep, ry.get("silence_min", 0.16)) or i == 0 or j == n:
+            k = int(round(keep / 0.01))
+            a, b = i + k // 2, j - (k - k // 2)
+            if b > a:
+                keep_mask[a:b] = False
+        i = j
+    seg_o, seg_n, out, tn = [], [], [], 0.0
+    for f in range(n):
+        if keep_mask[f]:
+            seg_o.append(f * 0.01); seg_n.append(tn); out.append(pcm[f * fr:(f + 1) * fr]); tn += 0.01
+    seg_o, seg_n = np.array(seg_o), np.array(seg_n)
+
+    def tmap(t):
+        k = np.searchsorted(seg_o, t, side="right") - 1
+        if k < 0:
+            return 0.0
+        return float(seg_n[k] + min(0.01, t - seg_o[k]))
+    return (np.concatenate(out) if out else pcm), tmap
 
 
 TAG = re.compile(r"\[[^\]]*\]")
@@ -237,31 +290,82 @@ def place(buf, clip, at, gain=1.0):
 
 
 # ---------- montage ----------
-def layout(items, clips, ep, extra_pause=0.0):
-    ry, sfx = ep["rythme"], ep["bruitages"]
-    t, lines, events, prev = ry["debut"], [], {}, None
+def make_blocks(items):
+    """Regroupe les répliques consécutives d'une même voix, sans bruitage ni pause entre elles :
+    elles sont générées d'un seul tenant, pour une intonation continue, comme quelqu'un qui raconte."""
+    blocks, cur = [], None
     for it in items:
-        if it["type"] == "sfx":
-            if it["name"] == "PAUSE":
+        if it["type"] == "line" and cur and cur["speaker"] == it["speaker"]:
+            cur["lines"].append(it)
+            continue
+        if it["type"] == "line":
+            cur = {"speaker": it["speaker"], "lines": [it]}
+            blocks.append(cur)
+        else:
+            cur = None
+            blocks.append(it)
+    return blocks
+
+
+def voice_block(blk, k, blocks, ep, n0, vitesse):
+    v = ep["tts"]["voix"][blk["speaker"]]
+    jeu = ep.get("jeu", {})
+    spoken = []
+    for j, ln in enumerate(blk["lines"]):
+        t = jeu.get(str(n0 + j + 1), ln["text"])
+        assert strip_tags(t) == ln["text"], f"réplique {n0 + j + 1} : le jeu ne correspond pas au script"
+        spoken.append(t)
+    text = " ".join(spoken)
+    near = lambda d: next((" ".join(l["text"] for l in blocks[i]["lines"]) for i in range(k + d, -1 if d < 0 else len(blocks), d)
+                           if "lines" in blocks[i]), None)
+    d = tts_elevenlabs(text, v, ep["tts"]["model"], near(-1), near(1))
+    al = d["alignment"]
+    pcm = boost_breaths(decode(base64.b64decode(d["audio"])), al, ep["rythme"].get("gain_souffle", 1.0))
+    # position de chaque réplique dans le texte envoyé, puis dans le temps d'origine
+    st, en, spans, o = al["character_start_times_seconds"], al["character_end_times_seconds"], [], 0
+    for t in spoken:
+        spans.append((o, o + len(t))); o += len(t) + 1
+    bounds = [en[min(len(en) - 1, e - 1)] for _, e in spans[:-1]]
+    pcm, tmap = tighten(pcm, bounds, ep["rythme"])
+    if abs(vitesse - 1.0) > 0.005:
+        pcm = ffilter(pcm, f"atempo={vitesse:.3f}")
+    if v.get("effet"):
+        pcm = ffilter(pcm, FILTRES[v["effet"]])
+    T = lambda x: tmap(x) / vitesse
+    lines = []
+    for (s0, s1), ln in zip(spans, blk["lines"]):
+        sub = {key: al[key][s0:s1] for key in ("characters", "character_start_times_seconds", "character_end_times_seconds")}
+        ws = [{"w": w["w"], "s": T(w["s"]), "e": T(w["e"])} for w in words_from_alignment(sub)]
+        lines.append({"speaker": blk["speaker"], "text": ln["text"], "s": ws[0]["s"] - 0.03 if ws else T(st[s0]),
+                      "e": ws[-1]["e"] if ws else T(en[s1 - 1]), "words": ws})
+    return {"pcm": pcm, "gain": v.get("gain", 1.0), "lines": lines}
+
+
+def layout(blocks, voiced, ep, extra_pause=0.0):
+    ry, sfx = ep["rythme"], ep["bruitages"]
+    t, lines, events, prev, placed = ry["debut"], [], {}, None, []
+    for blk in blocks:
+        if "lines" not in blk:
+            if blk["name"] == "PAUSE":
                 t += ry["pause"] + extra_pause
             else:
-                s = sfx[it["name"]]
+                s = sfx[blk["name"]]
                 events.setdefault(EVENT[s["son"]], []).append(round(t, 3))
                 t += s.get("avance", 0.5)
             continue
-        c = clips[len(lines)]
+        vb = voiced[id(blk)]
         if prev is not None:
-            t += ry["entre_repliques"] + (0.1 if prev != it["speaker"] else 0)
-        d = len(c["pcm"]) / SR
-        lines.append({"i": len(lines) + 1, "speaker": it["speaker"], "text": it["text"],
-                      "start": round(t, 3), "end": round(t + d, 3),
-                      "words": [{"w": w["w"], "s": round(t + w["s"] - c["trim"], 3), "e": round(t + w["e"] - c["trim"], 3)}
-                                for w in c["words"]]})
-        t += d
-        prev = it["speaker"]
+            t += ry["entre_repliques"] + (0.05 if prev != blk["speaker"] else 0)
+        for ln in vb["lines"]:
+            lines.append({"i": len(lines) + 1, "speaker": ln["speaker"], "text": ln["text"],
+                          "start": round(t + max(0, ln["s"]), 3), "end": round(t + ln["e"], 3),
+                          "words": [{"w": w["w"], "s": round(t + w["s"], 3), "e": round(t + w["e"], 3)} for w in ln["words"]]})
+        placed.append((t, vb))
+        t += len(vb["pcm"]) / SR
+        prev = blk["speaker"]
     if "QUESTION" in sfx:
         events.setdefault("sting", []).append(round(lines[-1]["start"] - 0.1, 3))
-    return lines, events, t + ry["tenue_finale"]
+    return lines, events, t + ry["tenue_finale"], placed
 
 
 def main(ep_path):
@@ -269,34 +373,42 @@ def main(ep_path):
     ep = json.loads(ep_path.read_text(encoding="utf-8"))
     BUILD.mkdir(exist_ok=True)
     items = parse_script((HERE / ep["script"]).read_text(encoding="utf-8"))
-    voix, model = ep["tts"]["voix"], ep["tts"]["model"]
-    speech = [it for it in items if it["type"] == "line"]
-    jeu = ep.get("jeu", {})
-    clips = []
-    for k, it in enumerate(speech):
-        v = voix[it["speaker"]]
-        spoken = jeu.get(str(k + 1), it["text"])
-        assert strip_tags(spoken) == it["text"], f"réplique {k + 1} : le jeu ne correspond pas au script"
-        same = lambda j: 0 <= j < len(speech) and speech[j]["speaker"] == it["speaker"]
-        d = tts_elevenlabs(spoken, v, model,
-                           speech[k - 1]["text"] if same(k - 1) else None,
-                           speech[k + 1]["text"] if same(k + 1) else None)
-        pcm = decode(base64.b64decode(d["audio"]), v.get("effet"))
-        pcm = boost_breaths(pcm, d["alignment"], ep["rythme"].get("gain_souffle", 1.0))
-        idx = np.where(np.abs(pcm) > 0.006)[0]  # bas, pour garder les respirations
-        a = max(0, idx[0] - int(0.03 * SR)) if len(idx) else 0
-        b = min(len(pcm), idx[-1] + int(0.12 * SR)) if len(idx) else len(pcm)
-        clips.append({"pcm": pcm[a:b], "trim": a / SR, "words": words_from_alignment(d["alignment"]),
-                      "gain": v.get("gain", 1.0)})
+    blocks = make_blocks(items)
+    ry = ep["rythme"]
 
+    def voice_all(vitesse):
+        voiced, n0 = {}, 0
+        for k, blk in enumerate(blocks):
+            if "lines" in blk:
+                voiced[id(blk)] = voice_block(blk, k, blocks, ep, n0, vitesse)
+                n0 += len(blk["lines"])
+        return voiced
+
+    vitesse = ry.get("vitesse", 1.0)
     n_pauses = sum(1 for it in items if it.get("name") == "PAUSE")
-    lines, events, total = layout(items, clips, ep)
-    if total < ep["rythme"]["duree_min"] and n_pauses:  # jamais sous 61 s : on allonge les silences
-        lines, events, total = layout(items, clips, ep, (ep["rythme"]["duree_min"] - total) / n_pauses)
+    pause_max = ry.get("pause_max", 1.4)
+
+    def fit(voiced):
+        lines, events, total, placed = layout(blocks, voiced, ep)
+        if total < ry["duree_min"] and n_pauses:  # d'abord : allonger un peu les pauses dramatiques, sans dépasser pause_max
+            extra = min((ry["duree_min"] - total) / n_pauses, max(0.0, pause_max - ry["pause"]))
+            lines, events, total, placed = layout(blocks, voiced, ep, extra)
+        return lines, events, total, placed
+
+    voiced = voice_all(vitesse)
+    lines, events, total, placed = fit(voiced)
+    while total < ry["duree_min"] and vitesse > 1.0:  # ensuite seulement : ralentir la voix, par petits pas
+        vitesse = round(max(1.0, vitesse - 0.02), 3)
+        voiced = voice_all(vitesse)
+        lines, events, total, placed = fit(voiced)
+    if total < ry["duree_min"] - 0.5:
+        manque = ry["duree_min"] - total
+        print(f"ATTENTION : {total:.1f} s, il manque {manque:.1f} s. Ajoute environ {int(manque * 15)} caractères "
+              f"d'histoire au script (pas de description), comme le prévoit le moteur.")
 
     mix = drone(total)
-    for ln, c in zip(lines, clips):
-        place(mix, c["pcm"], ln["start"], c["gain"])
+    for t0, vb in placed:
+        place(mix, vb["pcm"], t0, vb["gain"])
     for name, times in events.items():
         son = {v: k for k, v in EVENT.items()}[name]
         for at in times:
@@ -308,16 +420,17 @@ def main(ep_path):
     wav = BUILD / "audio.wav"
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "1",
                     "-i", "-", str(wav)], input=mix.astype(np.float32).tobytes(), check=True)
+    voix = ep["tts"]["voix"]
     plans = ep["plans"]
     assert len(plans) == len(lines), f"{len(plans)} plans pour {len(lines)} répliques"
-    out = {"duration": round(total, 3), "lines": lines, "events": events,
+    out = {"duration": round(total, 3), "lines": lines, "events": events, "vitesse": vitesse,
            "plans": [{"name": p, "start": 0 if i == 0 else lines[i]["start"] - 0.05} for i, p in enumerate(plans)],
            "marques": {k: lines[v - 1]["start"] for k, v in ep["marques"].items()},
            "speakers": {k: {"texto": bool(v.get("texto")), "effet": v.get("effet")} for k, v in voix.items()},
            **{k: ep[k] for k in ("hud", "regle", "texto", "choix", "rouge", "sortie")}}
     out["regle"]["start"], out["regle"]["end"] = lines[ep["regle"]["ligne"] - 1]["start"], lines[ep["regle"]["ligne"] - 1]["end"]
     (BUILD / "timeline.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"audio {total:.1f} s, {len(lines)} répliques -> {wav}")
+    print(f"audio {total:.1f} s, {len(lines)} répliques, vitesse {vitesse} -> {wav}")
 
 
 if __name__ == "__main__":

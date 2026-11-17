@@ -446,8 +446,11 @@ window.renderAt = (t) => {
 
   // la lumière sous la porte, et les deux pieds immobiles
   drawGap(0, 0);
-  feet.forEach((f, i) => { f.position.x = 1.4 + (i ? 0.13 : -0.13); f.material.opacity = 0.45 + 0.47 * ramp(t, M("pieds"), M("pieds") + 0.5); });
-  gapLight.intensity = 0.6;
+  // le répit : les pieds s'en vont, puis la lumière du couloir s'éteint
+  const rp = TL.marques.repit ?? 1e9, part = ease(ramp(t, rp, rp + 1.0)), noir = ease(ramp(t, rp + 1.4, rp + 1.8));
+  feet.forEach((f, i) => { f.position.x = 1.4 + (i ? 0.13 : -0.13) + 0.9 * part; f.material.opacity = (0.45 + 0.47 * ramp(t, M("pieds"), M("pieds") + 0.5)) * (1 - part);
+    f.visible = f.position.x < 1.95; });
+  gapLight.intensity = 0.6 * (1 - noir); gap.material.opacity = 1 - noir; gapLine.material.opacity = 1 - noir; gapLine.material.transparent = true;
 
   // téléphone
   const b0 = (ev.buzz || [1e9])[0];
