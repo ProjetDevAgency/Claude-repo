@@ -85,7 +85,7 @@ def ffilter(pcm, af):
     return np.frombuffer(raw, np.float32).copy()
 
 
-def tighten(pcm, bounds, ry):
+def tighten(pcm, bounds, ry, phrases=()):
     """Resserre la voix comme la chaîne repost : chaque silence trop long est ramené à une durée courte
     (un peu plus longue entre deux répliques qu'à l'intérieur d'une phrase). Renvoie l'audio et une
     fonction qui convertit un temps d'origine en temps resserré, pour garder les sous-titres calés."""
@@ -110,6 +110,8 @@ def tighten(pcm, bounds, ry):
             keep = 0.10
         elif any(t0 - 0.05 <= b <= t1 + 0.05 for b in bounds):
             keep = ry.get("silence_garde_ligne", 0.22)
+        elif any(t0 - 0.05 <= b <= t1 + 0.05 for b in phrases):  # fin de phrase : une vraie petite pause
+            keep = ry.get("silence_garde_phrase", ry.get("silence_garde", 0.12))
         else:
             keep = ry.get("silence_garde", 0.12)
         if dur > max(keep, ry.get("silence_min", 0.16)) or i == 0 or j == n:
@@ -326,7 +328,9 @@ def voice_block(blk, k, blocks, ep, n0, vitesse):
     for t in spoken:
         spans.append((o, o + len(t))); o += len(t) + 1
     bounds = [en[min(len(en) - 1, e - 1)] for _, e in spans[:-1]]
-    pcm, tmap = tighten(pcm, bounds, ep["rythme"])
+    chars = al["characters"]
+    phrases = [en[i] for i, c in enumerate(chars) if c in ".?!" and i + 1 < len(chars)]
+    pcm, tmap = tighten(pcm, bounds, ep["rythme"], phrases)
     if abs(vitesse - 1.0) > 0.005:
         pcm = ffilter(pcm, f"atempo={vitesse:.3f}")
     if v.get("effet"):
