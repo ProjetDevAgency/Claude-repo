@@ -41,7 +41,7 @@ Un épisode coûte environ 1 000 caractères.
 | Champ | Rôle |
 |---|---|
 | `script` | Le script du moteur, dans `scripts/` |
-| `tts.voix` | Une voix ElevenLabs par personnage. `effet` : `porte` (étouffée, derrière la porte) ou `telephone`. `texto: true` : la réplique s'affiche en texto au lieu des sous-titres. |
+| `tts.voix` | Une voix ElevenLabs par personnage. `balise` : un ton joué sur toute la voix, jamais lu (le narrateur a `[ominous]`, un jeu menaçant). `traitement` : une retouche audio propre à la voix (hauteur, égaliseur), comme la voix d'enfant du petit frère. `effet` : `porte` (étouffée, derrière la porte) ou `telephone`. `texto: true` : la réplique s'affiche en texto au lieu des sous-titres. |
 | `rythme` | Comme la chaîne repost : silences ramenés à `silence_garde` (0,12 s) dans une phrase et `silence_garde_ligne` (0,22 s) entre deux répliques, voix accélérée de `vitesse` (1,08) sans changer la hauteur. Si l'épisode passe sous `duree_min`, les `[PAUSE]` s'allongent d'abord (jusqu'à `pause_max`), puis la voix ralentit par petits pas, puis le script affiche combien de caractères ajouter |
 | `bruitages` | Ce que donne chaque `[BRUITAGE]` du script : `knock3`, `buzz`, `creak`, `steps`, `sting`, et combien de temps il prend |
 | `plans` | Un plan caméra par réplique, dans l'ordre. Les plans existants sont dans `PRESETS` de `scene.html` |

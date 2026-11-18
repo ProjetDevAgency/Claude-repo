@@ -357,8 +357,12 @@ TROIS TESTS COMPLÉMENTAIRES :
 **Le narrateur reste calme.** Il respire pas fort, il halète pas, il chuchote pas. Sur les 17 vidéos à
 plus d'un million passées en transcription avec détection des bruits, on compte **zéro respiration de
 narrateur**. La peur à l'oreille vient des bruitages et des autres personnages. Tu écris jamais
-d'indication de jeu pour le narrateur. Les cris, les pleurs et les halètements, c'est pour les
-répliques des personnages.
+d'indication de jeu dans les répliques du narrateur. Les cris, les pleurs et les halètements, c'est pour
+les répliques des personnages.
+
+LE TON DE LA VOIX se règle une fois pour toute la série, dans la fabrication, pas dans le script : un ton
+sombre et menaçant, posé, au même rythme (choisi à l'écoute le 18/11/2026). Jamais de souffle, jamais de
+chuchotement pour le narrateur.
 
 ### 1.10 — Zéro redondance, avec trois exceptions
 
