@@ -1,11 +1,13 @@
 # Dailymotion — les 8 vidéos du 18 au 22 nov.
 
-Réglages communs : catégorie **Lifestyle** (33 SMIC : **Actualités**) · langue **Français** · public : **pas destiné
+Réglages communs : catégorie **Éducation** · langue **Français** · public : **pas destiné
 aux enfants** · visibilité **publique**. Titre ≤ 70 caractères (le mot-clé au début), description qui explique la règle
-(Dailymotion la lit pour le référencement), tags séparés par des virgules.
+(Dailymotion la lit pour le référencement), hashtags à coller à la fin de la description (Dailymotion n'a pas de champ tags : on tape #).
 
 ## 27 — Carte piratée de mamie
 **Titre :** Carte bancaire piratée : la banque doit rembourser mamie (3 200 €)
+
+**Invitation à la discussion :** J'ai été trop loin en posant son dossier de tutelle au milieu des plats, devant toute la famille ? Et vous, vous auriez fait quoi à ma place ?
 
 **Description :**
 Mamie, 84 ans, a cliqué sur un faux SMS de livraison : 3 200 € envolés. Mon oncle a voulu la mettre sous tutelle, la banque parlait de « négligence grave »… sauf que la loi dit l'inverse.
@@ -18,10 +20,12 @@ Ce qu'il faut savoir :
 
 Cas type, montants indicatifs. Chaque dossier est examiné au cas par cas. Vidéo réalisée avec l'aide de l'IA.
 
-**Tags :** carte bancaire piratée, phishing, arnaque SMS, remboursement banque, négligence grave, fraude bancaire, droits, argent, famille, grand-mère
+**Hashtags :** #CarteBancairePiratee #Phishing #ArnaqueSMS #RemboursementBanque #NegligenceGrave #FraudeBancaire #Droits #Argent #Famille #GrandMere
 
 ## 28 — Colis jamais reçu
 **Titre :** Colis marqué livré mais jamais reçu : c'est au vendeur de payer
+
+**Invitation à la discussion :** J'aurais dû garder le message de mon père pour moi au lieu de l'envoyer dans le groupe de la famille ? Dites-moi franchement.
 
 **Description :**
 Mon ordinateur à 1 200 € est marqué « livré », personne n'a sonné. Le site me dit de voir avec le transporteur, et mon père, qui m'avait avancé l'argent, me dit que je lui dois tout.
@@ -34,10 +38,12 @@ Ce qu'il faut savoir :
 
 Cas type, montants indicatifs. Règle valable entre un vendeur professionnel et un particulier. Vidéo réalisée avec l'aide de l'IA.
 
-**Tags :** colis non reçu, colis perdu, livraison, remboursement, achat en ligne, droits du consommateur, transporteur, argent, famille
+**Hashtags :** #ColisNonRecu #ColisPerdu #Livraison #Remboursement #AchatEnLigne #DroitsDuConsommateur #Transporteur #Argent #Famille
 
 ## 29 — Salaire en retard
 **Titre :** Salaire payé en retard : intérêts et frais de banque, tes droits
+
+**Invitation à la discussion :** J'avais le droit de faire écouter ce vocal aux autres ouvriers, alors qu'il l'avait effacé ? Vous auriez fait pareil ?
 
 **Description :**
 Mon beau-père est aussi mon patron. Il m'a payé le 12 au lieu du 1er, mon loyer a été rejeté avec 90 € de frais… et j'avais gardé le vocal qu'il a effacé.
@@ -50,10 +56,12 @@ Ce qu'il faut savoir :
 
 Cas type, montants indicatifs. Vidéo réalisée avec l'aide de l'IA.
 
-**Tags :** salaire en retard, retard de paiement, frais bancaires, droit du travail, mise en demeure, prud'hommes, patron, argent, famille
+**Hashtags :** #SalaireEnRetard #RetardDePaiement #FraisBancaires #DroitDuTravail #MiseEnDemeure #Prudhommes #Patron #Argent #Famille
 
 ## 30 — Voiture d'occasion
 **Titre :** Voiture d'occasion « vendue en l'état » : le garage doit réparer
+
+**Invitation à la discussion :** La pancarte devant le garage de mon cousin, c'était trop ? Ou il l'avait bien cherché ?
 
 **Description :**
 Mon cousin garagiste m'a vendu une petite citadine « en l'état ». Trois semaines après, l'embrayage lâche : 1 800 € de réparation, à trois jours de mon nouveau CDI.
@@ -66,10 +74,12 @@ Ce qu'il faut savoir :
 
 Cas type, montants indicatifs. Entre particuliers, ce sont d'autres règles (vices cachés). Vidéo réalisée avec l'aide de l'IA.
 
-**Tags :** voiture d'occasion, vendu en l'état, garantie légale de conformité, garage, embrayage, droits du consommateur, auto, argent, famille
+**Hashtags :** #VoitureOccasion #VenduEnLEtat #GarantieLegale #Garage #Embrayage #DroitsDuConsommateur #Auto #Argent #Famille
 
 ## 31 — Dentiste et 100 % Santé
 **Titre :** Couronne dentaire : le devis doit proposer le 100 % Santé
+
+**Invitation à la discussion :** J'ai eu raison de demander l'option 100 % Santé à voix haute, devant la salle d'attente où travaille ma sœur ?
 
 **Description :**
 Ma sœur est assistante dentaire. Pour les deux couronnes de notre mère, un devis à 2 400 € avec une seule option… et « le moins cher, c'est des dents en plastique ».
@@ -82,10 +92,12 @@ Ce qu'il faut savoir :
 
 Cas type, montants indicatifs. Sauf exception liée à la situation médicale. Vidéo réalisée avec l'aide de l'IA.
 
-**Tags :** dentiste, couronne dentaire, 100 % santé, reste à charge zéro, devis dentaire, mutuelle, santé, argent, famille
+**Hashtags :** #Dentiste #CouronneDentaire #100Sante #ResteAChargeZero #DevisDentaire #Mutuelle #Sante #Argent #Famille
 
 ## 32 — 10 minutes de retard, 1 heure retirée
 **Titre :** Retard au travail : ton patron peut-il retirer une heure de salaire ?
+
+**Invitation à la discussion :** J'aurais dû demander aux collègues avant d'afficher leur calcul avec leur nom ? Vous, on vous a déjà retiré une heure pour un retard ?
 
 **Description :**
 Ma tante est aussi ma patronne. Trois semaines de grève des bus, 9 retards de 10 minutes… et 108 € retirés sur ma paie, une heure par retard.
@@ -98,10 +110,12 @@ Ce qu'il faut savoir :
 
 Cas type, montants indicatifs. Vidéo réalisée avec l'aide de l'IA.
 
-**Tags :** retard au travail, retenue sur salaire, sanction pécuniaire, droit du travail, grève, salaire, patron, argent, famille
+**Hashtags :** #RetardAuTravail #RetenueSurSalaire #SanctionPecuniaire #DroitDuTravail #Greve #Salaire #Patron #Argent #Famille
 
 ## 33 — ACTU : le SMIC au 1er décembre
 **Titre :** SMIC : +1,6 % dès le 1er décembre 2026, ton patron doit suivre
+
+**Invitation à la discussion :** J'ai eu tort d'organiser les collègues dans le dos du patron pour 24 € ? Votre patron vous a parlé de la hausse du SMIC ?
 
 **Description :**
 Le gouvernement l'a annoncé le 9 novembre : le SMIC augmente dès le 1er décembre, un mois avant la date habituelle. Mon patron, lui, m'a dit que c'était « une annonce à la télé ».
@@ -114,10 +128,12 @@ Ce qu'il faut savoir :
 
 Montants nets indicatifs, selon l'annonce du gouvernement du 9 novembre 2026. Vidéo réalisée avec l'aide de l'IA.
 
-**Tags :** SMIC, SMIC décembre 2026, augmentation du SMIC, salaire minimum, pouvoir d'achat, actualité, droit du travail, salaire, argent
+**Hashtags :** #SMIC #SMIC2026 #AugmentationSMIC #SalaireMinimum #PouvoirDAchat #Actualite #DroitDuTravail #Salaire #Argent
 
 ## 34 — Garantie légale
 **Titre :** Panne après 1 an : la garantie légale de 2 ans, c'est le vendeur
+
+**Invitation à la discussion :** J'avais le droit de prendre la facture dans le tiroir de ma belle-mère sans lui demander ? Vous auriez fait quoi ?
 
 **Description :**
 Ma belle-mère nous avait offert la machine à laver. Quatorze mois après, elle tombe en panne, le magasin répond « voyez avec la marque »… et c'est moi qu'on accuse de l'avoir cassée.
@@ -130,4 +146,4 @@ Ce qu'il faut savoir :
 
 Cas type, montants indicatifs. Vidéo réalisée avec l'aide de l'IA.
 
-**Tags :** garantie légale, garantie 2 ans, panne électroménager, machine à laver, SAV, droits du consommateur, vendeur, argent, famille
+**Hashtags :** #GarantieLegale #Garantie2Ans #PanneElectromenager #MachineALaver #SAV #DroitsDuConsommateur #Vendeur #Argent #Famille
