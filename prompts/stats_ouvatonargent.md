@@ -67,3 +67,12 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
   famille) a 10 partages et dépasse 2 000 vues. Couple a 31 % en entier mais 0 partage → bloquée à 435.
 → 0 à 1 commentaire partout : la question en description ne suffit pas → commentaire épinglé par le compte.
 → 0,00 $ partout, même à 2 200 vues après ~46 h : à ajouter au ticket.
+
+## Boucle — 18 nov. 20 h 55 (1re exécution, test lancé par le client)
+- Vidéo d'hier : aucune nouvelle (le compte repart de zéro). Dernière publiée : carte de mamie (17 h 11, 3 h 45 en ligne) :
+  84 vues, 17 s, 83 % « Pour toi ». Trop tôt pour conclure (< 24 h). Taxes (8 h) : 245 vues, 16 s.
+- J-3 (15 nov., définitif) : quart d'heure gratuit 1 456 vues / 26 s ; tenue de travail 457 vues / 16 s.
+- Diagnostic : les 4 dernières histoires de réclamation plafonnent (16–19 s pour les inconnus, ≤ 600 vues) ; les 2 vidéos
+  qui ont décollé sont des astuces sur une étape de vie avec un ultimatum méprisant.
+- Décision : 1re vidéo de la nouvelle série = le modèle gagnant tel quel (ultimatum méprisant + étape de vie « premier
+  appart » + astuce légale qui évite une grosse somme). Variable observée : sujet « astuce » au lieu de « réclamation ».
