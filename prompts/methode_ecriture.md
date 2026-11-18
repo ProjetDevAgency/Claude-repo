@@ -55,3 +55,16 @@ Un seul critère manquant → on retravaille le sujet ou on le jette. Jamais de 
    s'il y a un prix : pas en 1er mot, avant l'objet, repris dans la chute. Tout doit être ✅.
 6. **Planche d'aperçu** (APERCU=…) : aucun texte sur un visage, aucun texte coupé, personnages reconnaissables.
 7. **Vérification du rendu final** : une image toutes les 5 s.
+
+## Le modèle gagnant (analyse du 18 nov., à réviser chaque semaine par la boucle)
+Tiré des 2 vidéos qui ont décollé (Anthropic 48,8 k, permis candidat libre 27,5 k) contre toutes les autres (< 2,3 k) :
+1. **Accroche = ultimatum méprisant du méchant, avec sa voix** : « [Tu me paies / Tu mets] X €, sinon [ta vie est
+   fichue] », puis « C'est ce que [proche / autorité] m'a sorti, devant [témoin] ». Le prix est facultatif, l'ultimatum non.
+2. **Une étape de vie de jeune adulte** que tout le monde a vécue ou va vivre : permis, premier appart, premier job,
+   épargne, première voiture, études. Jamais un cas rare (robe de mariée dans la soute, vase cassé).
+3. **Kévin gagne en faisant autrement, pas en réclamant** : une astuce légale que peu de gens connaissent, qui fait
+   économiser une grosse somme, ou un piège qu'il évite. C'est ce qui se partage et s'enregistre (permis : 190 partages,
+   369 enregistrements). Les histoires de réclamation (« la loi oblige X à te rembourser ») plafonnent sous 600 vues.
+4. **Méchant proche (TIER S) ou qui a du pouvoir (TIER A)**, jamais un inconnu au comptoir (TIER F : 16–19 s de
+   temps moyen, contre 24–26 s).
+5. **La fin referme l'ultimatum** : Kévin passe devant l'agence au volant ; le frère lui demande d'avancer son loyer.
