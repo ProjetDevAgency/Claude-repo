@@ -342,14 +342,15 @@ def voice_block(blk, k, blocks, ep, n0, vitesse):
         t = jeu.get(str(n0 + j + 1), ln["text"])
         assert strip_tags(t) == ln["text"], f"réplique {n0 + j + 1} : le jeu ne correspond pas au script"
         spoken.append(t)
-    text = " ".join(spoken)
+    balise = (v.get("balise", "") + " ") if v.get("balise") else ""  # ton de la voix, joué et pas lu (ex. [ominous])
+    text = balise + " ".join(spoken)
     near = lambda d: next((" ".join(l["text"] for l in blocks[i]["lines"]) for i in range(k + d, -1 if d < 0 else len(blocks), d)
                            if "lines" in blocks[i]), None)
     d = tts_elevenlabs(text, v, ep["tts"]["model"], near(-1), near(1))
     al = d["alignment"]
     pcm = boost_breaths(decode(base64.b64decode(d["audio"])), al, ep["rythme"].get("gain_souffle", 1.0))
     # position de chaque réplique dans le texte envoyé, puis dans le temps d'origine
-    st, en, spans, o = al["character_start_times_seconds"], al["character_end_times_seconds"], [], 0
+    st, en, spans, o = al["character_start_times_seconds"], al["character_end_times_seconds"], [], len(balise)
     for t in spoken:
         spans.append((o, o + len(t))); o += len(t) + 1
     bounds = [en[min(len(en) - 1, e - 1)] for _, e in spans[:-1]]

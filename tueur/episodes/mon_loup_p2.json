@@ -10,11 +10,12 @@
     "id": "6DEjyaHWnTHsvXM5Byys",
     "nom": "Hugo, conteur français grave (bibliothèque ElevenLabs), sans retouche",
     "settings": {
-     "stability": 0.55,
+     "stability": 0.45,
      "similarity_boost": 0.8,
-     "style": 0.3
+     "style": 0.45
     },
-    "note": "Posé, sans indication de jeu. Choisi le 17/11/2026 : le problème venait du rythme, pas de la voix."
+    "note": "Hugo sans retouche, jeu menaçant (balise [ominous], jouée et pas lue). Choisi le 18/11/2026 (comparatif n°2).",
+    "balise": "[ominous]"
    },
    "VOIX DERRIÈRE LA PORTE": {
     "id": "O31r762Gb3WFygrEOGh0",
