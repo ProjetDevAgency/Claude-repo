@@ -457,8 +457,8 @@ COUSINE = dict(shirt=(230, 120, 160), pants=(40, 50, 80), hair=(150, 90, 40), lo
 V = V2(salon_bg, ONCLE)
 M_TABLE = [(540, MAMIE, dict(mouth="flat", sc=0.92), 0.5)]
 CARTE = (recit("s_carte", "27_carte_piratee", "RENDU À MAMIE", 3200, "Lettre signée lundi"), [
-    ("Pour trois mille deux cents", V.accroche("h", "MON ONCLE", [("3 200 € VOLÉS À MAMIE", RED, 0.2), ("IL VEUT LA METTRE SOUS TUTELLE", YEL, 1.8)], autres=M_TABLE, devant=table_fg, mechant=dict(mouth="grin", clipboard=True)), ("impact", 1.0)),
-    ("Il dépose le dossier", V.fiche("dossier", "DEMANDE DE TUTELLE", "DÉPÔT : VENDREDI", [("Pour : mamie, 84 ans", "", 0.2, False), ("Motif : argent perdu", "", 0.6, True)], kpose="choc"), ("pop", 0.6)),
+    ("Pour trois mille deux cents", V.hook("h", "MON ONCLE", ["POUR 3 200 € VOLÉS,", "MAMIE A PLU SA TÊTE,", "ON LA MET SOUS TUTELLE"], devant=table_fg, clipboard=True), ("impact", 1.0)),
+    ("C'est ce que mon oncle", V.fiche("dossier", "DEMANDE DE TUTELLE", "DÉPÔT : VENDREDI", [("Pour : mamie, 84 ans", "", 0.2, False), ("Motif : argent perdu", "", 0.6, True)], kpose="choc"), ("whoosh", 0.4)),
     ("Un faux SMS", V.tel("sms", "14:07", [("SMS", "Livraison", "Colis bloqué, payez", GRIS), ("Banque", "Paiement carte", "− 3 200,00 €", RED)], "choc"), ("notif", 0.6)),
     ("Mamie, quatre-vingt-quatre", V.scene("montee", "neutre", [("MAMIE · 84 ANS", GREEN, 0.2), ("SES COMPTES AU CRAYON", YEL, 1.4)], sans_mechant=True, autres=[(780, MAMIE, dict(mouth="smile"), 0.4)]), ("pop", 0.8)),
     ("Je lui dis, mamie", V.scene("promesse", "parle", [("PAS BESOIN DE TUTEUR", WHITE, 1.8)], sans_mechant=True, autres=[(780, MAMIE, dict(mouth="grin"), 0.4)]), None),
