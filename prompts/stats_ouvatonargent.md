@@ -50,3 +50,20 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
 - Candidat libre : 26 400 vues · 1 265 j'aime · 4 com. · 176 partages · 369 enreg. · 26,7 s · 31,3 % en entier · 18 abonnés · 0,01 $
 → Le permis a explosé au 2e jour (pic ~5 000 vues/h) : meilleur taux de vue en entier de la chaîne (31 %) et 176 partages.
 → Récompenses quasi nulles (RPM ≈ 0,003–0,009 $) : ticket ouvert chez TikTok.
+
+## Relevé du 18 nov., 16 h 38 (vidéos du 15 au 18 nov.)
+| Vidéo | Méchant (tier) | Vues | J'aime | Com. | Part. | Enreg. | Temps moyen | En entier | Récomp. |
+|---|---|---|---|---|---|---|---|---|---|
+| Quart d'heure gratuit (15/11 18 h) | responsable magasin (A) | 1 455 | 53 | 0 | 1 | 2 | 26,9 s | 33,4 % | 0,00 $ |
+| Vase (16/11 12 h) | vendeur (F) | 391 | 10 | 0 | 0 | 0 | 19,3 s | 20,6 % | 0,00 $ |
+| Robe (16/11 14 h 44) | agente comptoir (F) | 292 | 9 | 0 | 0 | 1 | 16,7 s | 20,5 % | 0,00 $ |
+| SpaceX, actu (16/11 18 h) | grand frère (S) | 2 241 | 60 | 1 | 10 | 7 | 25,0 s | 27,0 % | 0,00 $ |
+| Couple, ancien hook (17/11 12 h) | copine (S) | 435 | 31 | 1 | 0 | 0 | 24,8 s | 30,7 % | 0,00 $ |
+| CDD, ancien hook (17/11 18 h) | DRH (A) | 528 | 30 | 0 | 2 | 3 | 25,1 s | 29,2 % | 0,00 $ |
+| Taxes (18/11 12 h, 4 h 30 en ligne) | meilleur pote (S) | 240 | 18 | 0 | 0 | 1 | 17,4 s | 21,3 % | 0,00 $ |
+→ Le casting se voit dans la rétention : méchant proche ou patron = 25–27 s et 27–33 % en entier ; inconnu au comptoir
+  (vase, robe) = 17–19 s et 20 %. Confirme la règle TIER S/A du moteur.
+→ Ce qui bloque la diffusion n'est plus la rétention, c'est le partage : seule SpaceX (actu, utile à envoyer à la
+  famille) a 10 partages et dépasse 2 000 vues. Couple a 31 % en entier mais 0 partage → bloquée à 435.
+→ 0 à 1 commentaire partout : la question en description ne suffit pas → commentaire épinglé par le compte.
+→ 0,00 $ partout, même à 2 200 vues après ~46 h : à ajouter au ticket.
