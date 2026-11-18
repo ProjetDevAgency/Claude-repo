@@ -1,5 +1,6 @@
 """Contrôle d'un script .dial AVANT de faire la vidéo : moteur H1 complet (prompts/methode/moteur_script_H1.pdf)
-+ règles maison (prix dans la 1re phrase mais jamais en 1er mot, zone grise, doute).
++ règles maison (zone grise, doute). Le prix dans l'accroche est FACULTATIF : s'il y en a un, il est dans la
+1re phrase, jamais en 1er mot, avant l'objet, et revient à l'identique dans la chute (2 fois en tout).
 
     python3 scripts/verifier_script.py scripts/modele/27_carte_piratee.dial
 
@@ -63,7 +64,8 @@ def verifier(chemin):
     # ── le hook (3.2, 3.5) : prix dans la 1re phrase, jamais en 1er mot, avant l'objet ; 10 à 18 mots
     premiere = phrases(rep[0][1])[0]
     m = re.search(MONTANT, premiere.lower())
-    test(bool(m), f"montant en toutes lettres dans la 1re phrase : « {premiere} »")
+    if not m:
+        ok.append(f"pas de prix dans l'accroche (facultatif) : « {premiere} »")
     if m:
         avant = mots(premiere[:m.start()])
         test(len(avant) >= 1, "le prix est DANS la phrase, pas en 1er mot")

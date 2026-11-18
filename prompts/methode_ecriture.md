@@ -19,7 +19,7 @@ Cette méthode REMPLACE le « Format Kévin v2 » de `consignes_eco.md` (formule
   « retiens bien », « il le sait pas encore, mais »). Chaque script trouve ses propres mots.
 
 ## L'ordre d'un script (60 à 65 s, 1 450 à 1 550 caractères)
-1. **Hook en 3 couches** (0–10 s) : le choc (le prix, dit par le méchant, dans la 1re phrase), le verrou (de préférence
+1. **Hook en 3 couches** (0–10 s) : le choc (de préférence le mépris dit par le méchant ; le prix est facultatif), le verrou (de préférence
    « C'est ce que X m'a sorti… », la phrase avant de savoir qui la dit), la couture (le lieu, l'objet, le moment).
 2. **Montée sincère** (20 %) : Kévin est content, il a un projet. Aucun signe avant-coureur.
 3. **Le conflit, deux coups** : coup 1 sur la chose (le permis, le contrat, la démarche), coup 2 sur la personne
@@ -45,11 +45,13 @@ Un seul critère manquant → on retravaille le sujet ou on le jette. Jamais de 
 ## Contrôle avant de faire une vidéo (obligatoire, dans cet ordre)
 1. **Le sujet passe les 8 critères** (machine à sujets), notés dans l'en-tête du .dial.
 2. **La règle de loi est vérifiée** dans au moins 2 sources, et la référence est notée dans l'en-tête.
-3. **Le prix est DANS la 1re phrase, jamais en 1er mot** (règle du moteur : « J'ai réparé … pour [prix] »).
+3. **Le prix dans l'accroche est FACULTATIF** (règle du 18 nov. : le moteur ne l'impose pas, c'est un des 9 chocs).
+   S'il y en a un : DANS la 1re phrase, jamais en 1er mot, avant l'objet (« J'ai réparé … pour [prix] »), et repris
+   à l'identique dans la chute. Sans prix, la chute prend une autre forme (maxime, geste, coda, réplique d'un tiers).
    ✗ « Mille cent quarante euros de prime ? » → ✓ « Tu veux ta prime de mille cent quarante euros ? »
 4. **Le hook est clair en 2 secondes** : qui parle, de quoi, combien, compréhensible SANS contexte.
    ✗ « 1 400 € la robe ? » (quelle robe ?) → ✓ « 1 400 € la robe de mariée de ta sœur ? »
 5. **`python3 scripts/verifier_script.py <fichier.dial>`** : longueur, ponctuation, négations, phrases longues,
-   montant et objet dans la 1re phrase, prix pas en 1er mot, montant repris dans la chute. Tout doit être ✅.
+   s'il y a un prix : pas en 1er mot, avant l'objet, repris dans la chute. Tout doit être ✅.
 6. **Planche d'aperçu** (APERCU=…) : aucun texte sur un visage, aucun texte coupé, personnages reconnaissables.
 7. **Vérification du rendu final** : une image toutes les 5 s.
