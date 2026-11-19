@@ -82,8 +82,9 @@ def barres(img, titre, items, lt, y0=470, sous=None):
 class Recit:
     """compteur = dict(label, depart, montant, phrase) : le compteur passe de depart à montant à la phrase donnée."""
 
-    def __init__(self, nom, script, voix, compteur=None):
+    def __init__(self, nom, script, voix, compteur=None, dynamique=False):
         self.nom, self.script, self.voix, self.cpt = nom, script, voix, compteur
+        self.dyn = dynamique
         self.T = {}
 
     def valeur(self, t):
@@ -107,6 +108,8 @@ class Recit:
         v = CartoonVideo(self.nom, self.script, "", "", corner="")
         v.hook_head_start = 0.0
         v.sub_y = 0.69
+        if self.dyn:                                   # chantier visuel du 19 nov. : sous-titres plus discrets
+            v.sub_size = 62
         v.voice(self.voix)
         T = self.T
         apres = 0.0
@@ -115,8 +118,11 @@ class Recit:
             apres = t0 + 0.01
             T[fn.__name__] = t0
 
-            def g(lt, dur, fn=fn, t0=t0):
+            def g(lt, dur, fn=fn, t0=t0, k=k):
                 img = fn(lt, dur)
+                if self.dyn and k and lt < 0.14:           # chaque coupe : zoom qui claque + coup de fouet
+                    from dynamique import claque, fouet, zoom_centre
+                    img = fouet(zoom_centre(img, 1 + claque(lt)), 1 - lt / 0.14, 1 if k % 2 else -1)
                 self.compteur(img, t0 + lt)
                 return img
             g.__name__ = fn.__name__

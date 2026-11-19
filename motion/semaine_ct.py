@@ -341,9 +341,9 @@ class Video:
         return _n(f, nom)
 
 
-def recit(nom, dial, label, montant, phrase):
+def recit(nom, dial, label, montant, phrase, dynamique=False):
     return Recit(nom, f"scripts/modele/{dial}.txt", f"output/_work_{nom}/voice_duo.wav",
-                 compteur=dict(label=label, depart=0, montant=montant, phrase=phrase))
+                 compteur=dict(label=label, depart=0, montant=montant, phrase=phrase), dynamique=dynamique)
 
 
 
