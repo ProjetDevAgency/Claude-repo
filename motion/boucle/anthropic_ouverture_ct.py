@@ -16,9 +16,9 @@ PARENTS = [(460, PERE, dict(mouth="flat", sc=0.92), 1.1), (675, MERE, dict(mouth
 PARENTS_CHOC = [(460, PERE, dict(mouth="o", sc=0.92), 1.1), (675, MERE, dict(mouth="o", sc=0.92), 2.3)]
 
 V = V2(salon_bg, FRERE)
-NOTE = "CAS TYPE · COURS DU 19/11/2026 (CNN, BLOOMBERG) · AMF · PAS UN CONSEIL EN INVESTISSEMENT"
+NOTE = "CAS TYPE · COURS DU 19/11/2026 EN SÉANCE (CNN, BLOOMBERG) · AMF · PAS UN CONSEIL EN INVESTISSEMENT"
 
-ANTHROPIC = (recit("b_anthropic_ouverture", "37_anthropic_ouverture", "PERTE DU FRÈRE", 1000, "Plus tard, l'action"), [
+ANTHROPIC = (recit("b_anthropic_ouverture", "37_anthropic_ouverture", "PERTE DU FRÈRE", 550, "Sur le papier, cinq"), [
     ("Ce soir, mes six mille", V.hook("h", "SON GRAND FRÈRE", ["MES 6 000 € SUR ANTHROPIC", "AURONT DOUBLÉ CE SOIR,", "ET TOI T'AURAS RIEN"], devant=table_fg, phone=True), ("impact", 1.0)),
     ("C'est ce que mon grand", V.scene("couture", "choc", [("JEUDI MIDI, CHEZ MES PARENTS", YEL, 0.3), ("SON APPLI DE BOURSE OUVERTE", WHITE, 2.4)], mechant=dict(mouth="grin", phone=True), autres=PARENTS, devant=table_fg, kx=190, mx=890), ("whoosh", 0.6)),
     ("Et pourtant, j'avais préparé", V.scene("montee", "victoire", [("2 ANS DE LIVRET", GREEN, 0.2), ("ET L'ENVIE D'ESSAYER", YEL, 1.6)], sans_mechant=True), ("pop", 0.8)),
@@ -32,10 +32,10 @@ ANTHROPIC = (recit("b_anthropic_ouverture", "37_anthropic_ouverture", "PERTE DU 
     ("Ce que peu de gens", V.carte("marche", "ORDRE AU MARCHÉ", [("Achète au 1er prix venu", 0.6, True), ("peu importe lequel", 2.6, False)], "AMF · CHOISIR ET PASSER UN ORDRE DE BOURSE", fond=salon_bg), ("pop", 0.8)),
     ("Mais alors, comment", V.fiche("limite", "ORDRE À COURS LIMITÉ", "TU FIXES TON PRIX MAX", [("Prix sous ta limite", "ACHAT", 1.6, True), ("Prix au-dessus", "RIEN", 2.8, False)], fond=salon_bg), ("ticks", 0.5)),
     ("Alors je mets le mien", V.gros_mots("mien", [("MOI : LIMITE À 83 $", GREEN, 0.3), ("PAS UN CENTIME DE PLUS", YEL, 1.6)], fond=salon_bg), ("pop", 0.6)),
-    ("Dans l'après-midi, son", V.tel("notif", "17:48", [("Bourse", "Ordre exécuté", "ANT · 111,50 $", RED)], "parle", tags=[("JE LIS SA NOTIF", RED, 2.0), ("DEVANT MES PARENTS", YEL, 3.0)]), ("notif", 0.4)),
+    ("En fin d'après-midi, son", V.tel("notif", "17:48", [("Bourse", "Ordre exécuté", "ANT · 111,50 $", RED)], "parle", tags=[("JE LIS SA NOTIF", RED, 2.0), ("DEVANT MES PARENTS", YEL, 3.0)]), ("notif", 0.4)),
     ("Ordre exécuté. Cent onze", V.scene("execute", "neutre", [("ORDRE EXÉCUTÉ", RED, 0.1), ("111,50 $", WHITE, 0.9)], mechant=dict(mouth="o", phone=True), autres=PARENTS_CHOC, devant=table_fg, kx=190, mx=890), ("impact", 0.5)),
-    ("Trente-quatre pour cent", V.gros_mots("plus34", [("+ 34 %", RED, 0.2), ("AU-DESSUS DU PRIX DES PROS", WHITE, 0.9)], fond=salon_bg), ("pop", 0.4)),
-    ("Plus tard, l'action", V.calcul("chute", "ANTHROPIC · 1er JOUR", [("OUVERTURE", 111.5, "111,50 $", YEL, 0.3), ("PLUS BAS", 92.72, "92,72 $", RED, 1.4)], "SUR 6 000 € : ≈ − 1 000 € SUR LE PAPIER", fond=salon_bg), ("ticks", 0.5)),
+    ("Le soir, elle redescend", V.calcul("soir", "ANTHROPIC · 1er JOUR", [("PRIX D'INTRO", 83, "83 $", GREEN, 0.3), ("SON ACHAT", 111.5, "111,50 $", RED, 1.0), ("LE SOIR", 101, "≈ 101 $", YEL, 1.8)], "PRIX D'INTRO : + 22 % · LUI : − 9 %", fond=salon_bg), ("ticks", 0.5)),
+    ("Sur le papier, cinq", V.gros_mots("papier", [("SUR SES 6 000 €", WHITE, 0.2), ("≈ − 550 € POUR LUI", RED, 0.9)], fond=salon_bg), ("pop", 0.4)),
     ("Honnêtement", V.doute("doute", "SUR 10 ANS, IL A PEUT-ÊTRE RAISON", fond=salon_bg), None),
     ("Mon ordre à moi", V.scene("pas_passe", "victoire", [("MON ORDRE À 83 $", GREEN, 0.2), ("TOUJOURS PAS PASSÉ", YEL, 1.0)], mechant=dict(mouth="flat", brows=None), devant=table_fg, mx=820), ("succes", 0.6)),
     ("Six mille euros pour", V.fin("fin", "6 000 €", "ET MON LIVRET DORT TRANQUILLE", NOTE), ("impact", 0.9)),
