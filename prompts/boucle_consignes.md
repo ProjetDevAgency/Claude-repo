@@ -23,8 +23,9 @@ fichiers cités. Compte TikTok : @souslesabot (cartoon, héros Kévin, voix narr
 - Thème différent de la veille.
 
 ## 1. Analyse (10 min)
-1. Metricool : `getAnalyticsDataByMetrics`, brandId **8206232**, métriques TKPO02, TKPO03, TKPO07, TKPO09, TKPO10,
-   TKPO15, TKPO16 sur les 30 derniers jours (heures en UTC : +1 h pour Paris).
+1. Metricool : `getAnalyticsDataByMetrics`, brandId **8206232**, métriques TKPO02, TKPO03, TKPO07, TKPO08 (j'aime), TKPO09,
+   TKPO10, TKPO11 (portée), TKPO15, TKPO16. TKPO13 (vue en entier) donne des valeurs incohérentes (0,3 % quand TikTok
+   Studio affiche 16 %) : ne pas l'utiliser. Enregistrements, rétention à 0:01 et récompenses : captures du client seulement. sur les 30 derniers jours (heures en UTC : +1 h pour Paris).
 2. Mettre à jour `prompts/videos_index.csv` (vues, partages, commentaires, temps moyen, % « Pour toi », date du relevé).
 3. Lire la vidéo d'hier à 24 h (temps moyen, partages, « Pour toi ») et celle de J-3 pour les vues définitives.
 4. Diagnostic (moteur 7.3) :
