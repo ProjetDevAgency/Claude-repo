@@ -84,3 +84,13 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
 - Décision : modèle gagnant gardé ; seule l'étape de vie change (premier CDI au lieu du premier appart). Méchant proche
   ET patron (le parrain). Vidéo programmée vendredi 20 à 18 h.
 - Vérificateur corrigé : « abonnement » déclenchait à tort les mots interdits (« abonne ») et les adverbes en -ment.
+
+## Relevé TikTok Studio — 19 nov. 20 h 22 (frais d'agence, 2 h 22 en ligne, capture du client)
+- 160 vues · 8 j'aime · 0 commentaire · 0 partage · 1 enregistrement · temps moyen 16,5 s · vue complète 16,16 % · 0 $.
+- Heure par heure : vues 121 → 66 → 11 ; temps moyen 10,5 s → 21,4 s → 53,1 s ; vue complète 7 % → 26 % → 55 %.
+- Lecture : le 1er lot d'inconnus (≈ 120 personnes, « Pour toi ») décroche vite (10,5 s, 7 % de vue complète), donc
+  TikTok coupe la diffusion. Les rares spectateurs suivants regardent presque tout : l'histoire tient, c'est
+  l'ouverture qui ne retient pas les inconnus. Même schéma que les vidéos à 300–600 vues.
+- À faire : demander la courbe « rétention » seconde par seconde pour savoir si la chute est à 0–3 s (image et premier
+  mot) ou plus loin. Variable à tester en priorité : les 3 premières secondes (image d'ouverture + 1re phrase), pas le
+  reste du script.
