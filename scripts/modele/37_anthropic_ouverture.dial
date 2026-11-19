@@ -4,7 +4,8 @@
 # → vers 101 $ dans l'après-midi new-yorkais (CNN 101,24 $ ; Yahoo ≈ 100 $) : +22 % depuis 83 $, -9 % depuis 111,50 $,
 # ≈ -550 € sur 6 000 € (sur le papier). Ordre au marché = quantité garantie, pas le prix ; ordre à cours limité = prix
 # maximum, peut ne pas être exécuté (AMF « Choisir et passer un ordre de bourse », Fortuneo « Ordre au marché »).
-# À VÉRIFIER après la clôture (22 h Paris) : le cours est resté au-dessus de 83 $ (sinon l'ordre de Kévin serait passé).
+# Clôture 97,17 $ (+17,07 % sur 83 $ ; CNBC, Forbes, Yahoo Finance) ; plus bas 92,72 $ > 83 $ → l'ordre de Kévin n'est jamais passé.
+# Frère : 97,17 / 111,50 = -12,9 % → ≈ -770 € sur 6 000 € (sur le papier).
 # À l'écran et dans la description : « Ceci n'est pas un conseil en investissement. »
 # Modèle gagnant : ultimatum méprisant du grand frère (TIER S, famille) + étape de vie (premier placement, l'épargne du
 # livret) + Kévin gagne en faisant autrement (ordre à cours limité au lieu d'ordre au marché) + la chute referme
@@ -29,8 +30,8 @@ N: Mais alors, comment on se protège ? Avec un ordre à cours limité. Tu fixes
 N: Alors je mets le mien à quatre-vingt-trois dollars. Pas un centime de plus.
 N: En fin d'après-midi, son téléphone vibre sur la nappe. Je lis la notif à voix haute, devant mes parents.
 N: Ordre exécuté. Cent onze dollars cinquante.
-N: Le soir, elle redescend vers cent un dollars. Ceux qui ont eu le prix d'intro, plus vingt-deux pour cent. Lui, moins neuf pour cent.
-N: Sur le papier, cinq cents euros envolés.
+N: À la clôture, elle finit à quatre-vingt-dix-sept dollars. Ceux du prix d'intro, plus dix-sept pour cent. Lui, moins treize pour cent.
+N: Sur le papier, sept cents euros envolés.
 N: Honnêtement, sur dix ans, il a peut-être raison.
 N: Mon ordre à moi, toujours pas passé.
 N: Six mille euros pour doubler. Et mon livret dort tranquille.

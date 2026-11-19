@@ -43,14 +43,14 @@ REMPLACE = {
     "Sauf que quatre-vingt-trois": (D.insert_etiquette(salon_bg, "PRIX D'INTRO", "83 $", mots=["SURTOUT", "POUR", "LES", "GROS"], accent="GROS"), ("pop", 0.3)),
     "Alors je mets le mien": (D.insert_document(salon_bg, "MON ORDRE · ANT", ["Achat", "Type : cours limité", "Limite :"], "83 $", tampon="EN ATTENTE", t_tampon=1.6, mots=["PAS", "UN", "CENTIME", "DE", "PLUS"]), ("pop", 0.3)),
     "En fin d'après-midi, son": (D.insert_notif(salon_bg, "Bourse", "Ordre exécuté", "ANT · 111,50 $", "17:48", RED, mots=["JE", "LIS", "SA", "NOTIF"], accent="NOTIF"), ("notif", 0.3)),
-    "Le soir, elle redescend": (D.sequence(
-        (1.7, D.insert_appli(salon_bg, "ANTHROPIC · ANT", 111.5, 101.0, unite="$", t_change=0.3, sous="− 9 % POUR LUI")),
-        (9.0, V.calcul("soir_b", "ANTHROPIC · 1er JOUR", [("PRIX D'INTRO", 83, "83 $", GREEN, 0.2), ("SON ACHAT", 111.5, "111,50 $", RED, 0.6), ("LE SOIR", 101, "≈ 101 $", (255, 204, 40), 1.0)], "PRIX D'INTRO : + 22 % · LUI : − 9 %", fond=salon_bg)),
+    "À la clôture, elle finit": (D.sequence(
+        (1.7, D.insert_appli(salon_bg, "ANTHROPIC · ANT", 111.5, 97.17, unite="$", t_change=0.3, sous="− 13 % POUR LUI")),
+        (9.0, V.calcul("soir_b", "ANTHROPIC · 1er JOUR", [("PRIX D'INTRO", 83, "83 $", GREEN, 0.2), ("SON ACHAT", 111.5, "111,50 $", RED, 0.6), ("CLÔTURE", 97.17, "97,17 $", (255, 204, 40), 1.0)], "PRIX D'INTRO : + 17 % · LUI : − 13 %", fond=salon_bg)),
         nom="soir"), ("ticks", 0.3)),
 }
 
 rec0, beats0 = ANTHROPIC
-REC = recit("b_anthropic_ouverture_v2", "37_anthropic_ouverture", "PERTE DU FRÈRE", 550, "Sur le papier, cinq", dynamique=True)
+REC = recit("b_anthropic_ouverture_v2", "37_anthropic_ouverture", "PERTE DU FRÈRE", 770, "Sur le papier, sept", dynamique=True)
 BEATS = [(cle, *REMPLACE[cle]) if cle in REMPLACE else (cle, fn, son) for cle, fn, son in beats0]
 
 if __name__ == "__main__":
