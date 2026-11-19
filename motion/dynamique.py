@@ -422,8 +422,8 @@ def defile_prix(fond, prix, titre="ORDRE AU MARCHÉ", fin_txt="ACHETÉ", unite="
         d.rounded_rectangle([110, 640, 970, 1320], radius=40, fill=(14, 16, 24), outline=INK, width=8)
         d.text((W / 2, 720), titre, font=FA(58), fill=YEL, anchor="mm")
         i = min(len(prix) - 1, int(max(0.0, lt) / pas))
-        for j in range(max(0, i - 2), i):                              # les prix précédents, plus petits, au-dessus
-            d.text((W / 2, 880 - (i - j) * 70), _fmt(prix[j], unite), font=FA(52), fill=(110, 115, 130), anchor="mm")
+        if i:                                                          # le prix précédent, plus petit, au-dessus
+            d.text((W / 2, 850), _fmt(prix[i - 1], unite), font=FA(52), fill=(110, 115, 130), anchor="mm")
         k = back(((lt % pas) / 0.15) if i < len(prix) - 1 else min(1, (lt - i * pas) / 0.15))
         d.text((W / 2, 1020), _fmt(prix[i], unite), font=FA(int(150 * (0.7 + 0.3 * k))), fill=RED if i else WHITE, anchor="mm")
         if i == len(prix) - 1 and lt > i * pas + 0.3:

@@ -145,3 +145,5 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
 - v2 (illustrations liées au texte, ouverture en 3 plans, fin avec la clôture réelle), programmée le 20 nov. à 12 h.
 - À comparer à 24 h : % à 0:01, temps moyen, vue en entier, enregistrements. Limite : horaire différent (jeudi soir
   contre vendredi midi) et la fin a changé (+22 / -9 % en séance → +17 / -13 % à la clôture).
+- 19 nov. 23 h : v2 terminée (dialogues vivants, illustrations liées au texte, fonds qui dérivent) : 6,2 % de l'image
+  qui bouge, 17 % d'images figées (v1 : environ 3 % / 30 % ; La Ficelle : 5–8 % / 4–27 %). Remplace la v2 programmée.
