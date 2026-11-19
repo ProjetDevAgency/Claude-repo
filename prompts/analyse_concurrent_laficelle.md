@@ -68,3 +68,17 @@ Même créneau (droits et argent, dessin animé, héros récurrent « Marc »). 
 | 3e personne | — | 24 k avec / 29 k sans | écarté | haute |
 Règles mises à jour en conséquence : `prompts/methode_ecriture.md` (modèle gagnant, points 1 à 4),
 `prompts/boucle_consignes.md` (diagnostic, test de la promesse).
+
+## Rythme des coupes sur toute la vidéo (détection automatique des changements de plan, seuil 0,25)
+| | coupes / s (0–5 s) | coupes / s (5–20 s) | coupes / s (20 s–fin) | plan médian |
+|---|---|---|---|---|
+| La Ficelle, vidéos depuis le 10 nov. | 0,2 à 3,8 | 0,13 à 0,93 | 0,3 à 0,7 | 1,0 à 2,7 s |
+| La Ficelle, depuis le 27 oct. (médiane) | — | — | — | 2,2 s (17,5 coupes / min) |
+| Nous : anthropic 48 k / permis 27 k / frais 160 | 0,2 | 0,2–0,27 | 0,21–0,26 | 2,4 / 3,6 / 3,3 s |
+| Nous : Anthropic v2 (chantier) | 0,6 | 0,27 | 0,31 | 2,8 s |
+- Leurs vidéos d'octobre étaient presque fixes (0 coupe détectée) ; elles coupent de plus en plus depuis fin octobre.
+- Moitié haute et moitié basse de leurs vidéos (depuis le 27 oct.) : même rythme (17,5 contre 17,4 coupes / min) → la
+  fréquence des coupes ne fait PAS la différence entre leurs succès et leurs flops.
+- Nous sommes proches de leur rythme moyen ; l'écart est surtout DANS le plan (objets qui bougent, chiffres animés,
+  pages, notifications), que ce compteur ne mesure pas. Cible retenue : plan médian ≈ 2 à 2,5 s sur toute la vidéo
+  (couper les scènes de plus de 6 s en 2 plans), sans accélérer l'ouverture (jugée trop rapide par le client).
