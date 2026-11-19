@@ -94,3 +94,26 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
 - À faire : demander la courbe « rétention » seconde par seconde pour savoir si la chute est à 0–3 s (image et premier
   mot) ou plus loin. Variable à tester en priorité : les 3 premières secondes (image d'ouverture + 1re phrase), pas le
   reste du script.
+
+## Longueur de la 1re phrase parlée vs vues (vérifié le 19 nov. 20 h 40 sur les sous-titres des vidéos)
+| vidéo | mots | fin de la phrase | vues | reste à 0:01 |
+|---|---|---|---|---|
+| anthropic | 17 | 4,2 s | 48 766 | ? |
+| permis | 14 | 2,9 s | 27 538 | ? |
+| spacex | 14 | 3,3 s | 2 251 | 79 % |
+| quart d'heure | 15 | 3,3 s | 1 456 | ? |
+| occasion | 7 | 1,2 s | 669 | ? |
+| congés | 6 | 1,1 s | 618 | ? |
+| cdd | 9 | 1,5 s | 538 | 83 % |
+| tenue | 11 | 2,4 s | 457 | ? |
+| couple | 17 | 4,0 s | 436 | 78 % |
+| vase | 13 | 3,4 s | 391 | ? |
+| robe | 6 | 1,4 s | 292 | ? |
+| taxes | 10 | 2,5 s | 245 | 77 % |
+| frais d'agence | 18 | 4,1 s | 160 | 64 % |
+| carte mamie | 17 | 3,5 s | 84 | 76 % |
+- Conclusion : la longueur de l'accroche N'explique PAS les vues. Les 2 succès ont des accroches longues (14 et 17 mots) ;
+  les accroches les plus courtes (6–7 mots) ont fait 300–700 vues. Frais d'agence a exactement la structure de permis
+  (« Tu me paies X euros …, sinon … ») : 160 vues contre 27 538. La règle « 12 mots max » n'est PAS adoptée.
+- Ce qui reste comme différence : le sujet (actu chaude / envie universelle des 18–25 ans) et ce qui suit la 1re seconde.
+- Manque : le « reste à 0:01 » et la courbe d'Anthropic et de permis pour comparer.
