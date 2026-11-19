@@ -35,3 +35,19 @@ Même créneau (droits et argent, dessin animé, héros récurrent « Marc »). 
   secondes + chiffres animés (moteur vidéo à enrichir).
 - Durée 75 à 90 s.
 - Narration à la 3e personne.
+
+## Contre-audit (même soir, sur les chiffres des 52 vidéos)
+| Affirmation | Vérification | Verdict |
+|---|---|---|
+| La promesse après l'accroche fait la différence | avec : 27 vidéos, médiane 28,7 k ; sans : 25, médiane 8,8 k. MAIS ils l'ont adoptée en même temps que le compte grandissait (médiane oct. 9,5 k → 11-18 nov. 106 k), et 4 de leurs 10 meilleures n'en ont pas (auto-école 874 k, prime d'activité 612 k, kit d'urgence 379 k, 6 règles 210 k) | probable, pas prouvé : à tester, ce n'est pas une garantie |
+| Les sujets « culture éco » échouent | ils sont presque tous du 21 au 25 oct., quand le compte était neuf | pas prouvé (âge du compte) |
+| Il faut 75 à 90 s | moitié haute : 83 s ; moitié basse : 79 s | **faux** : la durée ne sépare pas leurs succès de leurs flops |
+| La 3e personne (« Marc ») aide | depuis le 1er nov. : avec 24 k, sans 29 k | **faux** |
+| Les ouvertures variées font les succès | TOUTES leurs vidéos ont une ouverture variée, flops compris | faux à l'intérieur de leur compte ; vrai comme différence de niveau entre eux et nous (leur pire mois fait une médiane de 9,5 k, notre médiane est d'environ 450) |
+| Le sujet compte | mêmes sujets chez nous et chez eux : tenue de travail (eux 3,5 k / nous 457), argent prêté (8 k / 387), vice caché (1,9 k / 669) échouent des deux côtés ; colis, auto-école, caution, CAF, prime : 400 k à 1,5 M chez eux, 400 à 500 chez nous | **solide** : le sujet décide si ça PEUT marcher, l'exécution multiplie (×100 à ×1 000) |
+- Limites : transcription automatique (quelques mots faux), repérage de la promesse par mots-clés, aucune donnée de
+  rétention chez eux. Une vidéo (caution, 553 k) porte le filigrane d'un autre compte (@fortunexpress) : ils publient
+  probablement sur plusieurs comptes.
+- Conclusion révisée : 1) sujet universel (confirmé deux fois) ; 2) qualité visuelle = le multiplicateur le plus
+  probable (écart constant sur tout le compte) ; 3) promesse après l'accroche = test bon marché, sans garantie ;
+  durée et 3e personne : abandonnés.
