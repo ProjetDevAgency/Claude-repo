@@ -138,3 +138,10 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
   enregistrements (permis 190 / 369, anthropic 96 / 145 contre 0–2 ailleurs) → le SUJET (actu ou envie universelle).
 - Décision : filtre « l'enverrait / l'enregistrerait » ajouté en tête de l'étape 2 de la boucle. Ligne « temps < 18 s »
   du diagnostic précisée (ne conclure « hook » que si < 72 % à 0:01).
+
+## Test visuel A/B — Anthropic 1er jour (même script, même voix)
+- v1 (ancien visuel), publiée le 19 nov. à 21 h 05 par le client : à 1 h 40, 248 vues, 10 j'aime, 1 commentaire,
+  0 partage, 2 enregistrements, 15,2 s de temps moyen, 11,27 % vue en entier. Mise en privé.
+- v2 (illustrations liées au texte, ouverture en 3 plans, fin avec la clôture réelle), programmée le 20 nov. à 12 h.
+- À comparer à 24 h : % à 0:01, temps moyen, vue en entier, enregistrements. Limite : horaire différent (jeudi soir
+  contre vendredi midi) et la fin a changé (+22 / -9 % en séance → +17 / -13 % à la clôture).
