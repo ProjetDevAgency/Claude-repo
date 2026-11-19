@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import dynamique as D  # noqa: E402
-from anthropic_ouverture_ct import ANTHROPIC, FRERE, PARENTS, V  # noqa: E402
+from anthropic_ouverture_ct import ANTHROPIC, FRERE, NOTE, PARENTS, V  # noqa: E402
 from recit import gros_plan_mechant, plan  # noqa: E402
 from semaine_ct import GREEN, RED, WHITE, YEL, recit, salon_bg, table_fg  # noqa: E402
 from anthropic_ouverture_ct import PARENTS_CHOC  # noqa: E402
@@ -102,6 +102,12 @@ REMPLACE = {
 
 rec0, beats0 = ANTHROPIC
 REC = recit("b_anthropic_ouverture_v2", "37_anthropic_ouverture", "PERTE DU FRÈRE", 770, "Sur le papier, sept", dynamique=True)
+def fin_vivante(lt, dur):
+    img = V.fin("fin_b", "6 000 €", "ET MON LIVRET DORT TRANQUILLE", NOTE)(lt, dur)
+    return D.zoom_centre(img, 1 + 0.03 * lt, 540, 700)
+
+
+VIVANT["Six mille euros pour"] = (fin_vivante, ("impact", 0.9))
 REMPLACE.update(VIVANT)
 BEATS = [(cle, *REMPLACE[cle]) if cle in REMPLACE else (cle, fn, son) for cle, fn, son in beats0]
 

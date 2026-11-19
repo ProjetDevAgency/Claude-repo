@@ -78,7 +78,7 @@ def sequence(*plans, nom=None):
 
 def fond_flou(fond, lt, k=1.0):
     """Le décor de l'histoire, flouté et assombri : on reste dans le lieu, l'objet passe devant."""
-    return dim(plan(fond, lt, z=1.15), k, blur=16, dark=0.5)
+    return dim(plan(fond, lt, z=1.15 + 0.035 * lt, center=(540 + 30 * math.sin(lt * 0.8), 1000)), k, blur=16, dark=0.5)
 
 
 def rayons(img, lt, col=(255, 255, 255), alpha=26):
@@ -87,7 +87,7 @@ def rayons(img, lt, col=(255, 255, 255), alpha=26):
     d = ImageDraw.Draw(lay)
     cx, cy = W // 2, 860
     for i in range(12):
-        a = math.radians(i * 30 + lt * 12)
+        a = math.radians(i * 30 + lt * 22)
         b = a + math.radians(11)
         d.polygon([(cx, cy), (cx + 2000 * math.cos(a), cy + 2000 * math.sin(a)),
                    (cx + 2000 * math.cos(b), cy + 2000 * math.sin(b))], fill=col + (alpha,))
