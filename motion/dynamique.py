@@ -29,7 +29,7 @@ def fouet(img, k, sens=1):
     """Coup de fouet : flou de mouvement horizontal qui s'éteint (k = 1 au début du plan, 0 à la fin)."""
     if k <= 0:
         return img
-    dx = int(160 * k) * sens
+    dx = int(90 * k) * sens
     out = img.copy()
     for j in range(1, 5):
         dec = Image.new("RGB", img.size, (0, 0, 0))
@@ -38,7 +38,7 @@ def fouet(img, k, sens=1):
     return out
 
 
-def claque(lt, dur=0.18, amp=0.12):
+def claque(lt, dur=0.22, amp=0.06):
     """Zoom qui claque au début d'un plan : renvoie un facteur de zoom en plus (amp → 0)."""
     if lt >= dur:
         return 0.0
@@ -66,7 +66,7 @@ def sequence(*plans, nom=None):
                 img = fn(l, max(pl, 0.1))
                 if k:
                     img = zoom_centre(img, 1 + claque(l))
-                    img = fouet(img, 1 - l / 0.14 if l < 0.14 else 0, 1 if k % 2 else -1)
+                    img = fouet(img, 1 - l / 0.1 if l < 0.1 else 0, 1 if k % 2 else -1)
                 return img
             t0 += d
         return plans[-1][1](lt, dur)
@@ -138,7 +138,7 @@ def chiffre_anime(img, xy, a, b, lt, t0=0.3, dur=0.7, unite="€", size=170, sou
         d.text((x, y + size * 0.72), sous, font=FA(int(size * 0.3)), fill=WHITE, anchor="mm")
 
 
-def titre_choc(img, mots, lt, y=440, size=96, pas=0.18, col=WHITE, accent=None):
+def titre_choc(img, mots, lt, y=440, size=96, pas=0.26, col=WHITE, accent=None):
     """Les mots tombent un par un en haut de l'image (le mot `accent` en jaune, sur bandeau rouge)."""
     d = ImageDraw.Draw(img)
     f = FA(size)

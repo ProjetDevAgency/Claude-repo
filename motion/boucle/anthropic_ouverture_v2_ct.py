@@ -33,9 +33,8 @@ def table_large(mots, accent=None):
 
 
 OUVERTURE = D.sequence(
-    (0.95, D.insert_appli(salon_bg, "SON APPLI DE BOURSE", 6000, 12000, t_change=0.2, mots=["6 000 €", "SUR", "ANTHROPIC"], accent="6 000 €")),
-    (0.95, frere_gp(["SUR", "ANTHROPIC"])),
-    (0.70, table_large(["DOUBLÉ", "CE", "SOIR"], accent="DOUBLÉ")),
+    (1.45, D.insert_appli(salon_bg, "SON APPLI DE BOURSE", 6000, 12000, t_change=0.45, mots=["6 000 €", "SUR", "ANTHROPIC"], accent="6 000 €")),
+    (1.15, frere_gp(["DOUBLÉ", "CE", "SOIR"], accent="DOUBLÉ")),
     (9.0, D.reaction(salon_bg, mots=["ET", "TOI", "T'AURAS", "RIEN"], accent="RIEN", devant=table_fg)),
     nom="h")
 
