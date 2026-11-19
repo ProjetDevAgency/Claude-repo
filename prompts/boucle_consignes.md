@@ -33,8 +33,8 @@ fichiers cités. Compte TikTok : @souslesabot (cartoon, héros Kévin, voix narr
    |---|---|---|
    | temps moyen < 18 s ET < 72 % à 0:01 (capture client) | on part au hook | changer le type de choc (prix ↔ mépris), plus concret |
    | départ 5–15 s (temps moyen 18–22 s) | couture ou dette du hook | revoir la promesse du hook |
-   | temps moyen ≥ 24 s mais peu de vues | sujet peu partageable | plus d'étape de vie, plus d'astuce qui fait économiser |
-   | 0 partage | pas utile à envoyer | sujet « astuce / piège » plutôt que « réclamation » |
+   | temps moyen ≥ 24 s mais peu de vues | sujet pas assez universel | appliquer plus strictement le filtre n° 1 (étape 2) |
+   | 0 partage, 0 enregistrement | gain pas assez clair | chiffrer le gain de Kévin dès l'ouverture (astuce OU réclamation) |
    | 0 commentaire | pas de débat | geste de Kévin plus discutable, accroche T5 |
    | « Pour toi » < 85 % | diffusion | description et hashtags |
 5. **Une seule variable changée par vidéo.** Une tendance devient une règle après 2–3 confirmations seulement.
@@ -54,6 +54,9 @@ fichiers cités. Compte TikTok : @souslesabot (cartoon, héros Kévin, voix narr
   vase cassé, taxes d'aéroport, frais d'agence pour un seul public) = non, même s'il est 8/8. Relevé du 19 nov. : la
   rétention des 1res secondes est la même sur les succès et les flops (78–83 % à 0:01) ; ce qui sépare 48 k de 300 vues,
   ce sont les partages et enregistrements, donc le sujet.
+- Variable en test (1 vidéo sur 2) : une phrase de PROMESSE juste après l'accroche (« Il le sait pas encore, mais cette
+  phrase va lui coûter cher »). Noter « promesse oui/non » dans la colonne twist de l'index. Probable, pas prouvé
+  (voir `prompts/analyse_concurrent_laficelle.md`).
 - Proposer mentalement 3 accroches (PRIX, MÉPRIS, ENJEU) et garder la plus conforme au modèle gagnant et aux stats.
 
 ## 3. Script (15 min)

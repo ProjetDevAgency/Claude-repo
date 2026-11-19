@@ -56,15 +56,19 @@ Un seul critère manquant → on retravaille le sujet ou on le jette. Jamais de 
 6. **Planche d'aperçu** (APERCU=…) : aucun texte sur un visage, aucun texte coupé, personnages reconnaissables.
 7. **Vérification du rendu final** : une image toutes les 5 s.
 
-## Le modèle gagnant (analyse du 18 nov., à réviser chaque semaine par la boucle)
-Tiré des 2 vidéos qui ont décollé (Anthropic 48,8 k, permis candidat libre 27,5 k) contre toutes les autres (< 2,3 k) :
-1. **Accroche = ultimatum méprisant du méchant, avec sa voix** : « [Tu me paies / Tu mets] X €, sinon [ta vie est
-   fichue] », puis « C'est ce que [proche / autorité] m'a sorti, devant [témoin] ». Le prix est facultatif, l'ultimatum non.
-2. **Une étape de vie de jeune adulte** que tout le monde a vécue ou va vivre : permis, premier appart, premier job,
-   épargne, première voiture, études. Jamais un cas rare (robe de mariée dans la soute, vase cassé).
-3. **Kévin gagne en faisant autrement, pas en réclamant** : une astuce légale que peu de gens connaissent, qui fait
-   économiser une grosse somme, ou un piège qu'il évite. C'est ce qui se partage et s'enregistre (permis : 190 partages,
-   369 enregistrements). Les histoires de réclamation (« la loi oblige X à te rembourser ») plafonnent sous 600 vues.
-4. **Méchant proche (TIER S) ou qui a du pouvoir (TIER A)**, jamais un inconnu au comptoir (TIER F : 16–19 s de
-   temps moyen, contre 24–26 s).
+## Le modèle gagnant (analyse du 18 nov., réconciliée le 19 nov. avec les 52 vidéos de La Ficelle)
+Tiré de nos 2 vidéos qui ont décollé (Anthropic 48,8 k, permis 27,5 k) contre les autres (< 2,3 k), puis confronté au
+concurrent La Ficelle (`prompts/analyse_concurrent_laficelle.md`, 15 vidéos à plus de 100 k sur 43 depuis le 25 oct.) :
+1. **Accroche = la réplique du méchant, avec sa voix** (ultimatum ou mépris) : « [Tu me paies / Tu mets] X €, sinon
+   [ta vie est fichue] ». Chez La Ficelle : réplique du méchant en 1re phrase, médiane 41 k vues contre 24 k sans ; un
+   montant en 1re phrase, 44 k contre 14,5 k. Le prix reste facultatif (décision du client) mais il est **recommandé**.
+2. **Un sujet universel** : une situation que presque tout le monde a vécue ou redoute (permis, premier appart, salaire,
+   colis, CAF, caution, épargne, actu que tout le monde voit passer). Les étapes de vie en font partie, mais ne sont pas
+   obligatoires (colis perdu 1,5 M, salaire en retard 590 k). Jamais un cas rare (robe de mariée, vase cassé) : les
+   mêmes sujets de niche échouent chez eux comme chez nous (tenue de travail, argent prêté, vice caché).
+3. **Un gain clair et chiffré pour Kévin** : astuce légale peu connue, piège évité OU réclamation qui aboutit. *Corrigé
+   le 19 nov.* : on avait écrit que les réclamations plafonnent sous 600 vues ; chez La Ficelle, les réclamations font
+   400 k à 1,5 M (colis, caution, salaire, CAF). Ce qui plafonnait chez nous, c'était l'exécution, pas le type.
+4. **Méchant de préférence proche (TIER S) ou avec du pouvoir (TIER A)** : chez nous, TIER F = 16–19 s de temps moyen
+   contre 24–26 s. Mais un vendeur ou un service client peut marcher si le sujet est universel (colis, 1,5 M chez eux).
 5. **La fin referme l'ultimatum** : Kévin passe devant l'agence au volant ; le frère lui demande d'avancer son loyer.

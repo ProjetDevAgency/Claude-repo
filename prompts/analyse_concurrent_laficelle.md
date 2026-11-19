@@ -33,8 +33,8 @@ Même créneau (droits et argent, dessin animé, héros récurrent « Marc »). 
 - Phrase de promesse juste après l'accroche (texte) — test n° 1, gratuit.
 - Ouverture « objet du sujet » (notif, calendrier, devis, étiquette, appli bancaire) + 3 à 4 plans dans les 3 premières
   secondes + chiffres animés (moteur vidéo à enrichir).
-- Durée 75 à 90 s.
-- Narration à la 3e personne.
+- ~~Durée 75 à 90 s~~ (écarté au contre-audit).
+- ~~Narration à la 3e personne~~ (écarté au contre-audit).
 
 ## Contre-audit (même soir, sur les chiffres des 52 vidéos)
 | Affirmation | Vérification | Verdict |
@@ -51,3 +51,20 @@ Même créneau (droits et argent, dessin animé, héros récurrent « Marc »). 
 - Conclusion révisée : 1) sujet universel (confirmé deux fois) ; 2) qualité visuelle = le multiplicateur le plus
   probable (écart constant sur tout le compte) ; 3) promesse après l'accroche = test bon marché, sans garantie ;
   durée et 3e personne : abandonnés.
+
+## Réconciliation (audit + contre-audit + nos propres stats, 19 nov.)
+| Question | Nos chiffres | Les leurs | Position retenue | Confiance |
+|---|---|---|---|---|
+| Le sujet | succès = actu / permis ; niches < 700 vues | niches échouent aussi ; universels 400 k–1,5 M | sujet universel d'abord (filtre n° 1 de la boucle) | haute |
+| Réplique du méchant en ouverture | 2 succès sur 2 | 41 k avec / 24 k sans | on garde | moyenne |
+| Montant dans la 1re phrase | 2 succès sur 2 | 44 k avec / 14,5 k sans | facultatif (client), recommandé | moyenne |
+| Longueur de l'accroche | aucun lien | — | pas de règle | haute |
+| Rétention à 0:01 | 78–83 % succès comme flops | — | pas le problème | haute |
+| Réclamation vs astuce | réclamations < 600 vues | réclamations 400 k–1,5 M | les deux marchent : il faut un gain chiffré | moyenne |
+| Méchant TIER S/A | 24–26 s contre 16–19 s (TIER F) | colis 1,5 M avec un vendeur | préférence, pas interdiction | moyenne |
+| Promesse après l'accroche | jamais testée | 28,7 k avec / 8,8 k sans, confondu avec la croissance | test 1 vidéo sur 2 | basse |
+| Visuel (ouvertures variées, plans rapides, chiffres animés) | toujours le même | toujours varié, médiane ×20 à ×200 la nôtre | chantier prioritaire | moyenne |
+| Durée 75–90 s | — | 83 s contre 79 s | écarté | haute |
+| 3e personne | — | 24 k avec / 29 k sans | écarté | haute |
+Règles mises à jour en conséquence : `prompts/methode_ecriture.md` (modèle gagnant, points 1 à 4),
+`prompts/boucle_consignes.md` (diagnostic, test de la promesse).
