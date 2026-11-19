@@ -82,3 +82,14 @@ Règles mises à jour en conséquence : `prompts/methode_ecriture.md` (modèle g
 - Nous sommes proches de leur rythme moyen ; l'écart est surtout DANS le plan (objets qui bougent, chiffres animés,
   pages, notifications), que ce compteur ne mesure pas. Cible retenue : plan médian ≈ 2 à 2,5 s sur toute la vidéo
   (couper les scènes de plus de 6 s en 2 plans), sans accélérer l'ouverture (jugée trop rapide par le client).
+
+## Mouvement À L'INTÉRIEUR des plans (coupes retirées ; 10 images / s)
+| vidéo | part de l'image qui bouge | images quasi figées |
+|---|---|---|
+| La Ficelle : colis 1,5 M / salaire 590 k / auto-école 874 k / impôts 136 k / loyer 102 k / tenue 3,5 k / vice caché 1,9 k | 7,9 / 5,7 / 6,4 / 6,9 / 6,0 / 6,8 / 5,1 % | 13 / 14 / 4 / 14 / 18 / 21 / 27 % |
+| La Ficelle : candidat libre 803 k | 3,0 % | 41 % |
+| Nous : anthropic 48 k / permis 27 k / frais 160 / Anthropic v2 | 3,0 / 2,9 / 3,5 / 3,8 % | 35 / 31 / 19 / 24 % |
+- Chez eux, environ 2 fois plus de l'image bouge pendant un plan, et 2 fois moins d'images figées : hypothèse du client
+  confirmée (« les mouvements d'objets plus que les changements de plan »).
+- Mais leur vidéo à 803 k est aussi peu animée que les nôtres : le mouvement aide, il ne suffit pas seul.
+- Cible : part de l'image qui bouge ≥ 6 %, images figées ≤ 15 % (mesurable avec le même outil à chaque vidéo).
