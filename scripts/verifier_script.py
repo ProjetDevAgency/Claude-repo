@@ -15,7 +15,7 @@ NB = r"(?:cent|cents|mille|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|do
 MONTANT = rf"({NB}(?:[ -]{NB})*) euros"
 INTERDITS = ["avocat", "illégal", "porter plainte", "poursuites", "diffamation", "injuste", "irrespectueux", "humiliant",
              "minutieux", "méticuleux", "sublime", "exquis", "remarquable", "prestation", "premium", "haut de gamme",
-             "optimiser", "valoriser", "algorithme", "abonnés", "abonne", "commentaire", "partage", "la vidéo",
+             "optimiser", "valoriser", "algorithme", "abonnés", "abonne-toi", "abonnez", "commentaire", "partage", "la vidéo",
              "bouleversant", "émouvant", "magique", "inoubliable", "précieux", "néanmoins", "toutefois",
              "par conséquent", "en outre", "de plus,", "ainsi,", "cependant", "dès lors", "en effet", "je vous explique",
              "attendez", "écoutez bien", "laissez-moi", "basiquement", "impacter", "challenge", "ça fait sens"]
@@ -23,7 +23,7 @@ MENT_OK = {"honnêtement", "franchement", "exactement", "doucement", "carrément
 MENT_NOMS = {"moment", "comment", "paiement", "appartement", "remboursement", "prélèvement", "logement", "gouvernement",
              "changement", "enterrement", "département", "comportement", "traitement", "équipement", "argument",
              "document", "élément", "segment", "ment", "jument", "serment", "aliment", "vêtement", "bâtiment",
-             "signalement", "embarquement", "règlement", "versement", "jugement", "établissement", "testament"}
+             "signalement", "embarquement", "abonnement", "règlement", "versement", "jugement", "établissement", "testament"}
 
 
 def phrases(t):

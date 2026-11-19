@@ -76,3 +76,11 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
   qui ont décollé sont des astuces sur une étape de vie avec un ultimatum méprisant.
 - Décision : 1re vidéo de la nouvelle série = le modèle gagnant tel quel (ultimatum méprisant + étape de vie « premier
   appart » + astuce légale qui évite une grosse somme). Variable observée : sujet « astuce » au lieu de « réclamation ».
+
+## Boucle — 19 nov. 8 h 35
+- Metricool n'a pas rafraîchi les chiffres depuis la veille au soir (carte toujours à 84 vues, 17 s) : rien de neuf à
+  analyser. La 1re vidéo de la boucle (frais d'agence) sort ce soir à 18 h ; ses 24 h tomberont samedi.
+- Sujet « permis apprenti » écarté à la vérification (aide de 500 € supprimée en 2026, CPF permis restreint).
+- Décision : modèle gagnant gardé ; seule l'étape de vie change (premier CDI au lieu du premier appart). Méchant proche
+  ET patron (le parrain). Vidéo programmée vendredi 20 à 18 h.
+- Vérificateur corrigé : « abonnement » déclenchait à tort les mots interdits (« abonne ») et les adverbes en -ment.
