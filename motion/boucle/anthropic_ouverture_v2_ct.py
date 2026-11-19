@@ -12,7 +12,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import dynamique as D  # noqa: E402
 from anthropic_ouverture_ct import ANTHROPIC, FRERE, PARENTS, V  # noqa: E402
 from recit import gros_plan_mechant, plan  # noqa: E402
-from semaine_ct import GREEN, RED, recit, salon_bg, table_fg  # noqa: E402
+from semaine_ct import GREEN, RED, WHITE, YEL, recit, salon_bg, table_fg  # noqa: E402
+from anthropic_ouverture_ct import PARENTS_CHOC  # noqa: E402,F401
 
 
 def frere_gp(mots, accent=None):
@@ -33,18 +34,43 @@ def table_large(mots, accent=None):
 
 
 OUVERTURE = D.sequence(
-    (1.45, D.insert_appli(salon_bg, "SON APPLI DE BOURSE", 6000, 12000, t_change=0.45, mots=["6 000 €", "SUR", "ANTHROPIC"], accent="6 000 €")),
+    (1.45, D.graphique(salon_bg, [6000, 6900, 8100, 9800, 12000], t_trace=1.3, titre="SES 6 000 € · ANT", unite="€", mots=["6 000 €", "SUR", "ANTHROPIC"], accent="6 000 €")),
     (1.15, frere_gp(["DOUBLÉ", "CE", "SOIR"], accent="DOUBLÉ")),
     (9.0, D.reaction(salon_bg, mots=["ET", "TOI", "T'AURAS", "RIEN"], accent="RIEN", devant=table_fg)),
     nom="h")
 
+SEANCE = [111.5, 106, 99, 101.2, 97, 95, 92.72, 94, 96.5, 95.5, 97.17]     # repères réels : ouverture, plus bas, clôture
+REPERES = [(0, "OUVERTURE"), (6, "PLUS BAS 92,72"), (10, "CLÔTURE")]
+
+
+def couture_vapeur(lt, dur):
+    img = V.scene("couture_v", "choc", [("JEUDI MIDI, CHEZ MES PARENTS", YEL, 0.3), ("SON APPLI DE BOURSE OUVERTE", WHITE, 2.4)],
+                  mechant=dict(mouth="grin", phone=True), autres=PARENTS, devant=table_fg, kx=190, mx=890)(lt, dur)
+    return D.vapeur(img, lt, 575, 1350)
+
+
+def papier(lt, dur):
+    img = V.gros_mots("papier_b", [("SUR SES 6 000 €", WHITE, 0.2), ("≈ − 770 € POUR LUI", RED, 0.9)], fond=salon_bg)(lt, dur)
+    return D.billets_envoles(img, lt, 540, 1550, n=7, t0=0.3)
+
+
 REMPLACE = {
+    "C'est ce que mon grand": (couture_vapeur, ("whoosh", 0.6)),
+    "Et pourtant, j'avais préparé": (D.livret(salon_bg, "MON LIVRET", [("2024", "+ 150 € / mois"), ("2025", "+ 150 € / mois"), ("Intérêts", "+ 120 €")], "4 000 €", mots=["2", "ANS", "DE", "LIVRET"], accent="LIVRET"), ("pop", 0.8)),
+    "Toi, ton livret": (D.sequence((1.9, V.gp("coup2_a", ["TON LIVRET, IL VA DORMIR", "TOUTE TA VIE.", "COMME PAPA"], (2.2, 2.4), True, devant=table_fg, arm=0.8)),
+                                   (9.0, D.livret(salon_bg, "TON LIVRET", [], "4 000 €", dort=True, mots=["COMME", "PAPA"], t_ligne=0.0)), nom="coup2"), ("impact", 1.0)),
+    "Ce que peu de gens": (D.sequence((2.3, V.carte("marche_a", "ORDRE AU MARCHÉ", [("Achète au 1er prix venu", 0.5, True)], "AMF · CHOISIR ET PASSER UN ORDRE DE BOURSE", fond=salon_bg)),
+                                      (9.0, D.defile_prix(salon_bg, [98.0, 104.2, 107.9, 111.5], mots=["PEU", "IMPORTE", "LEQUEL"])), nom="marche"), ("pop", 0.8)),
+    "Mais alors, comment": (D.sequence((2.4, V.fiche("limite_a", "ORDRE À COURS LIMITÉ", "TU FIXES TON PRIX MAX", [("Prix sous ta limite", "ACHAT", 0.8, True)], fond=salon_bg)),
+                                       (9.0, D.graphique(salon_bg, [104.0, 99.5, 102.0, 97.0, 100.5], t_trace=1.2, titre="ANT", limite=90.0, limite_txt="TA LIMITE", mots=["AU-DESSUS", "RIEN", "PASSE"], accent="RIEN")), nom="limite"), ("ticks", 0.5)),
+    "Sur le papier, sept": (papier, ("pop", 0.4)),
+    "Mon ordre à moi": (D.graphique(salon_bg, SEANCE, t_trace=0.9, titre="ANT · 19 NOV.", reperes=[(6, "PLUS BAS 92,72")], limite=83.0, limite_txt="MON ORDRE · 83 $", mots=["TOUJOURS", "PAS", "PASSÉ"], accent="PASSÉ"), ("succes", 0.6)),
     "Ce soir, mes six mille": (OUVERTURE, ("impact", 0.0)),
     "Sauf que quatre-vingt-trois": (D.insert_etiquette(salon_bg, "PRIX D'INTRO", "83 $", mots=["SURTOUT", "POUR", "LES", "GROS"], accent="GROS"), ("pop", 0.3)),
     "Alors je mets le mien": (D.insert_document(salon_bg, "MON ORDRE · ANT", ["Achat", "Type : cours limité", "Limite :"], "83 $", tampon="EN ATTENTE", t_tampon=1.6, mots=["PAS", "UN", "CENTIME", "DE", "PLUS"]), ("pop", 0.3)),
     "En fin d'après-midi, son": (D.insert_notif(salon_bg, "Bourse", "Ordre exécuté", "ANT · 111,50 $", "17:48", RED, mots=["JE", "LIS", "SA", "NOTIF"], accent="NOTIF"), ("notif", 0.3)),
     "À la clôture, elle finit": (D.sequence(
-        (1.7, D.insert_appli(salon_bg, "ANTHROPIC · ANT", 111.5, 97.17, unite="$", t_change=0.3, sous="− 13 % POUR LUI")),
+        (2.6, D.graphique(salon_bg, SEANCE, t_trace=2.2, titre="ANT · 19 NOV.", reperes=REPERES, depart=111.5)),
         (9.0, V.calcul("soir_b", "ANTHROPIC · 1er JOUR", [("PRIX D'INTRO", 83, "83 $", GREEN, 0.2), ("SON ACHAT", 111.5, "111,50 $", RED, 0.6), ("CLÔTURE", 97.17, "97,17 $", (255, 204, 40), 1.0)], "PRIX D'INTRO : + 17 % · LUI : − 13 %", fond=salon_bg)),
         nom="soir"), ("ticks", 0.3)),
 }

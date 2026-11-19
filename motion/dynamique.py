@@ -348,3 +348,159 @@ def reaction(fond, mots=None, accent=None, devant=None, **kextra):
 __all__ = ["sequence", "fouet", "claque", "zoom_centre", "fond_flou", "rayons", "chiffre_anime", "titre_choc",
            "insert_notif", "insert_appli", "insert_document", "insert_calendrier", "insert_etiquette", "insert_compte",
            "reaction"]
+
+
+# ───────────── illustrations : ce qu'on voit = ce qui est dit (correction du client, 19 nov.) ─────────────
+
+def _lisse(t):
+    return ease(max(0.0, min(1.0, t)))
+
+
+def graphique(fond, points, t_trace=1.6, titre="ANT", reperes=(), limite=None, limite_txt=None, unite="$",
+              mots=None, accent=None, depart=None):
+    """Courbe de cours qui se dessine de gauche à droite, avec le prix qui suit la pointe.
+    points : prix successifs ; reperes : [(indice, texte)] posés sur la courbe une fois atteints ;
+    limite : prix d'une ligne horizontale pointillée (ordre à cours limité)."""
+    def f(lt, dur):
+        img = fond_flou(fond, lt)
+        d = ImageDraw.Draw(img)
+        x0, y0, x1, y1 = 90, 600, 990, 1420
+        d.rounded_rectangle([x0, y0, x1, y1], radius=40, fill=(18, 20, 30), outline=INK, width=8)
+        d.text((x0 + 50, y0 + 70), titre, font=FA(64), fill=WHITE, anchor="lm")
+        vals = list(points) + ([limite] if limite else [])
+        lo, hi = min(vals) * 0.97, max(vals) * 1.02
+        gx0, gx1, gy0, gy1 = x0 + 60, x1 - 60, y0 + 150, y1 - 80
+
+        def P(i, v):
+            return gx0 + (gx1 - gx0) * i / (len(points) - 1), gy1 - (gy1 - gy0) * (v - lo) / (hi - lo)
+        for k in range(1, 4):                                         # grille
+            yy = gy0 + (gy1 - gy0) * k / 4
+            d.line([gx0, yy, gx1, yy], fill=(45, 48, 62), width=2)
+        if limite:
+            ly = P(0, limite)[1]
+            for xx in range(int(gx0), int(gx1), 40):
+                d.line([xx, ly, xx + 22, ly], fill=YEL, width=6)
+            if limite_txt:
+                d.text((gx0 + 6, ly + 34), limite_txt, font=FA(40), fill=YEL, anchor="lm")
+        p = _lisse(lt / t_trace) * (len(points) - 1)
+        n = int(p)
+        pts = [P(i, points[i]) for i in range(n + 1)]
+        if n < len(points) - 1:
+            a, b = points[n], points[n + 1]
+            v = a + (b - a) * (p - n)
+            pts.append(P(p, v))
+        else:
+            v = points[-1]
+        ref = points[0] if depart is None else depart
+        col = GREEN if v >= ref else RED
+        if len(pts) > 1:
+            d.line(pts, fill=col, width=10, joint="curve")
+        tx, ty = pts[-1]
+        d.ellipse([tx - 16, ty - 16, tx + 16, ty + 16], fill=WHITE, outline=col, width=6)
+        txt = _fmt(round(v, 2) if isinstance(points[-1], float) or v % 1 else v, unite)
+        w = FA(54).getlength(txt)
+        bx = min(max(tx - w / 2 - 20, x0 + 20), x1 - w - 60)
+        d.rounded_rectangle([bx, ty - 110, bx + w + 40, ty - 40], radius=18, fill=col)
+        d.text((bx + 20 + w / 2, ty - 75), txt, font=FA(54), fill=INK if col == GREEN else WHITE, anchor="mm")
+        for i, lab in reperes:
+            if p >= i:
+                rx, ry = P(i, points[i])
+                d.ellipse([rx - 12, ry - 12, rx + 12, ry + 12], fill=YEL)
+                d.text((rx, ry + 52 if points[i] < points[0] else ry + 52), lab, font=FA(36), fill=YEL, anchor="mm")
+        if mots:
+            titre_choc(img, mots, lt - 0.1, accent=accent)
+        return img
+    return f
+
+
+def defile_prix(fond, prix, titre="ORDRE AU MARCHÉ", fin_txt="ACHETÉ", unite="$", pas=0.28, mots=None, accent=None):
+    """Écran de cotation : les prix défilent vite, chacun plus haut ; au dernier, le tampon tombe."""
+    def f(lt, dur):
+        img = fond_flou(fond, lt)
+        rayons(img, lt, col=RED, alpha=18)
+        d = ImageDraw.Draw(img)
+        d.rounded_rectangle([110, 640, 970, 1320], radius=40, fill=(14, 16, 24), outline=INK, width=8)
+        d.text((W / 2, 720), titre, font=FA(58), fill=YEL, anchor="mm")
+        i = min(len(prix) - 1, int(max(0.0, lt) / pas))
+        for j in range(max(0, i - 2), i):                              # les prix précédents, plus petits, au-dessus
+            d.text((W / 2, 880 - (i - j) * 70), _fmt(prix[j], unite), font=FA(52), fill=(110, 115, 130), anchor="mm")
+        k = back(((lt % pas) / 0.15) if i < len(prix) - 1 else min(1, (lt - i * pas) / 0.15))
+        d.text((W / 2, 1020), _fmt(prix[i], unite), font=FA(int(150 * (0.7 + 0.3 * k))), fill=RED if i else WHITE, anchor="mm")
+        if i == len(prix) - 1 and lt > i * pas + 0.3:
+            sk = back((lt - i * pas - 0.3) / 0.25)
+            sl = Image.new("RGBA", (560, 170), (0, 0, 0, 0))
+            sd = ImageDraw.Draw(sl)
+            sd.rounded_rectangle([8, 8, 551, 161], radius=20, outline=RED + (255,), width=10)
+            sd.text((280, 85), fin_txt, font=FA(int(84 * (1.5 - 0.5 * sk))), fill=RED + (255,), anchor="mm")
+            _pose(img, sl, W / 2, 1210, 1.0, rot=-10)
+        if mots:
+            titre_choc(img, mots, lt - 0.1, accent=accent)
+        return img
+    return f
+
+
+def livret(fond, titre="LIVRET", lignes=(), total=None, dort=False, mots=None, accent=None, t_ligne=0.35):
+    """Livret d'épargne ouvert : les lignes de versement s'ajoutent une par une ; dort=True → des « Z » qui montent."""
+    def f(lt, dur):
+        img = fond_flou(fond, lt)
+        d = ImageDraw.Draw(img)
+        x0, y0 = 170, 640
+        d.rounded_rectangle([x0 + 14, y0 + 18, x0 + 754, y0 + 718], radius=26, fill=(0, 0, 0))
+        d.rounded_rectangle([x0, y0, x0 + 740, y0 + 700], radius=26, fill=(60, 110, 200), outline=INK, width=8)
+        d.rectangle([x0 + 30, y0 + 120, x0 + 710, y0 + 670], fill=(252, 252, 246), outline=INK, width=4)
+        d.text((x0 + 370, y0 + 62), titre, font=FA(62), fill=WHITE, anchor="mm")
+        for j, (a, b) in enumerate(lignes):
+            if lt > 0.2 + j * t_ligne:
+                yy = y0 + 175 + j * 62
+                d.text((x0 + 60, yy), a, font=F(34), fill=(80, 80, 90), anchor="lm")
+                d.text((x0 + 680, yy), b, font=F(34), fill=(30, 130, 70), anchor="rm")
+        if total and lt > 0.2 + len(lignes) * t_ligne:
+            k = back((lt - 0.2 - len(lignes) * t_ligne) / 0.25)
+            d.text((x0 + 680, y0 + 610), total, font=FA(int(70 * (0.6 + 0.4 * k))), fill=INK, anchor="rm")
+        if dort:
+            for j in range(3):
+                ph = (lt * 0.7 + j / 3) % 1
+                zz = Image.new("RGBA", (160, 160), (0, 0, 0, 0))
+                ImageDraw.Draw(zz).text((80, 80), "Z", font=FA(int(70 + 50 * ph)), fill=WHITE + (int(255 * (1 - ph)),), anchor="mm")
+                _pose(img, zz, x0 + 640 + ph * 120, y0 - 40 - ph * 260, 1.0, rot=-15)
+        if mots:
+            titre_choc(img, mots, lt - 0.1, accent=accent)
+        return img
+    return f
+
+
+def billets_envoles(img, lt, cx=540, cy=1100, n=9, t0=0.0, seed=3):
+    """Des billets qui s'échappent d'un point et s'envolent en tournant (« envolés »)."""
+    if lt < t0:
+        return img
+    for j in range(n):
+        ph = (lt - t0) * 0.9 - j * 0.12
+        if ph <= 0 or ph > 1.6:
+            continue
+        ang = (j * 47 + seed * 13) % 360
+        dx = math.cos(math.radians(ang)) * 380 * ph + math.sin(ph * 6 + j) * 40
+        dy = -520 * ph - 80 * j % 120
+        b = Image.new("RGBA", (190, 100), (0, 0, 0, 0))
+        bd = ImageDraw.Draw(b)
+        bd.rounded_rectangle([4, 4, 185, 95], radius=10, fill=(110, 190, 120, 255), outline=INK + (255,), width=5)
+        bd.ellipse([70, 25, 120, 75], outline=INK + (255,), width=4)
+        bd.text((95, 50), "€", font=F(36), fill=INK + (255,), anchor="mm")
+        _pose(img, b, cx + dx, cy + dy, 1.0 - 0.3 * min(ph, 1), rot=ph * 260 + j * 30)
+    return img
+
+
+def vapeur(img, lt, x, y):
+    """Vapeur qui monte d'un plat chaud."""
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    for j in range(3):
+        ph = (lt * 0.6 + j / 3) % 1
+        xx = x + (j - 1) * 40 + math.sin(ph * 7 + j) * 18
+        yy = y - ph * 160
+        r = 14 + ph * 22
+        d.ellipse([xx - r, yy - r, xx + r, yy + r], fill=(255, 255, 255, int(150 * (1 - ph))))
+    img.paste(lay, (0, 0), lay)
+    return img
+
+
+__all__ += ["graphique", "defile_prix", "livret", "billets_envoles", "vapeur"]
