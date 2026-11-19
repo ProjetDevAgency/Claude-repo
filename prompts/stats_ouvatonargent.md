@@ -117,3 +117,24 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
   (« Tu me paies X euros …, sinon … ») : 160 vues contre 27 538. La règle « 12 mots max » n'est PAS adoptée.
 - Ce qui reste comme différence : le sujet (actu chaude / envie universelle des 18–25 ans) et ce qui suit la 1re seconde.
 - Manque : le « reste à 0:01 » et la courbe d'Anthropic et de permis pour comparer.
+
+## Rétention à 0:01 et % moyen regardé (captures TikTok Studio du client, 19 nov. 20 h 35)
+| vidéo | vues | reste à 0:01 | % moyen regardé |
+|---|---|---|---|
+| anthropic | 48 766 | 81 % | 40 % |
+| permis | 27 538 | 79 % | 42 % |
+| spacex | 2 251 | 79 % | 39 % |
+| quart d'heure | 1 456 | 83 % | ? |
+| occasion | 669 | 78 % | 32 % |
+| congés | 618 | 79 % | 39 % |
+| cdd | 538 | 83 % | 39 % |
+| couple | 436 | 78 % | 39 % |
+| robe | 292 | 68 % | ? |
+| taxes | 245 | 77 % | 26 % |
+| frais d'agence | 160 | 64 % | 27 % |
+| carte mamie | 84 | 76 % | 36 % |
+- Conclusion : les succès retiennent PAS mieux au départ (79–81 %) que les flops (78–83 %). Le départ est normal pour
+  notre format ; seuls robe et frais d'agence sont en dessous (< 70 %). Ce qui sépare les succès : partages et
+  enregistrements (permis 190 / 369, anthropic 96 / 145 contre 0–2 ailleurs) → le SUJET (actu ou envie universelle).
+- Décision : filtre « l'enverrait / l'enregistrerait » ajouté en tête de l'étape 2 de la boucle. Ligne « temps < 18 s »
+  du diagnostic précisée (ne conclure « hook » que si < 72 % à 0:01).

@@ -30,7 +30,7 @@ fichiers cités. Compte TikTok : @souslesabot (cartoon, héros Kévin, voix narr
 4. Diagnostic (moteur 7.3) :
    | Signal | Cause | Changement |
    |---|---|---|
-   | temps moyen < 18 s | on part au hook | changer le type de choc (prix ↔ mépris), plus concret |
+   | temps moyen < 18 s ET < 72 % à 0:01 (capture client) | on part au hook | changer le type de choc (prix ↔ mépris), plus concret |
    | départ 5–15 s (temps moyen 18–22 s) | couture ou dette du hook | revoir la promesse du hook |
    | temps moyen ≥ 24 s mais peu de vues | sujet peu partageable | plus d'étape de vie, plus d'astuce qui fait économiser |
    | 0 partage | pas utile à envoyer | sujet « astuce / piège » plutôt que « réclamation » |
@@ -47,6 +47,12 @@ fichiers cités. Compte TikTok : @souslesabot (cartoon, héros Kévin, voix narr
   `prompts/actu_argent.md`), concurrents (`prompts/sujets_concurrents.md`), ou invention.
 - Le sujet suit **le modèle gagnant** et passe les 8 critères. Vérifier la règle dans 2 sources ; noter références et
   sources dans l'en-tête du `.dial`.
+- **Filtre n° 1, avant les 8 critères : « est-ce qu'un 18–25 ans l'ENVERRAIT à un pote ou l'ENREGISTRERAIT ? »**
+  Oui seulement si : actu chaude que tout le monde voit passer (IPO, prix, nouvelle loi), OU envie / dépense que presque
+  tous les 18–25 ans ont (permis, premier appart, premier salaire, voiture, épargne). Un cas de niche (robe de mariée,
+  vase cassé, taxes d'aéroport, frais d'agence pour un seul public) = non, même s'il est 8/8. Relevé du 19 nov. : la
+  rétention des 1res secondes est la même sur les succès et les flops (78–83 % à 0:01) ; ce qui sépare 48 k de 300 vues,
+  ce sont les partages et enregistrements, donc le sujet.
 - Proposer mentalement 3 accroches (PRIX, MÉPRIS, ENJEU) et garder la plus conforme au modèle gagnant et aux stats.
 
 ## 3. Script (15 min)
