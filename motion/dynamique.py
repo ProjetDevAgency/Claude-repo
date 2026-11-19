@@ -504,3 +504,99 @@ def vapeur(img, lt, x, y):
 
 
 __all__ += ["graphique", "defile_prix", "livret", "billets_envoles", "vapeur"]
+
+
+# ───────────── scènes de dialogue vivantes (gestes liés au texte, caméra qui glisse) ─────────────
+
+def cle(lt, keys):
+    """Interpolation douce entre des clés [(t, valeur)]."""
+    if lt <= keys[0][0]:
+        return keys[0][1]
+    for (t0, v0), (t1, v1) in zip(keys, keys[1:]):
+        if lt <= t1:
+            return v0 + (v1 - v0) * ease((lt - t0) / max(t1 - t0, 0.01))
+    return keys[-1][1]
+
+
+def geste_parle(lt, base=0.35, amp=0.3, vite=3.5):
+    """Bras qui accompagne la parole + bouche qui bouge."""
+    return dict(arm=base + amp * abs(math.sin(lt * vite)), mouth="o" if int(lt * 7) % 2 else "grin")
+
+
+def tags_flottants(img, lt, tags, y0=420):
+    """Bandeaux qui arrivent puis flottent doucement (au lieu de rester figés)."""
+    from cartoon import tag
+    for k, (txt, col, t0) in enumerate(tags):
+        fg = INK if col in (YEL, WHITE, GREEN) else WHITE
+        rot = (-3, 2, -2)[k % 3] + 1.5 * math.sin(lt * 2.2 + k)
+        tag(img, 540 + 10 * math.sin(lt * 1.7 + k), y0 + 140 * k + 6 * math.sin(lt * 2.6 + k), txt,
+            54 if len(txt) < 22 else 46, col, fg, rot=rot, k=(lt - t0) / 0.3)
+
+
+def vapeur_devant(devant, x=570, y=1380):
+    """Le premier plan + de la vapeur qui monte du plat, dessinée dans le décor (elle suit la caméra)."""
+    from cartoon import SS
+    def g(d, t):
+        devant(d, t)
+        for j in range(3):
+            ph = (t * 0.6 + j / 3) % 1
+            xx = (x + (j - 1) * 36 + math.sin(ph * 7 + j) * 16) * SS
+            yy = (y - ph * 150) * SS
+            r = (16 - ph * 10) * SS
+            c = int(235 - ph * 60)
+            d.ellipse([xx - r, yy - r, xx + r, yy + r], fill=(c, c, c + 5))
+    return g
+
+
+def dialogue(fond, look, kpose="neutre", mechant=None, autres=(), devant=None, pan=((0, 540),), zoom=((0, 1.2),),
+             cy=1000, kx=None, mx=None, tags=(), mots=None, accent=None, kextra=None):
+    """Plan de dialogue vivant. mechant / autres / kextra peuvent être des fonctions du temps (lt → dict / liste)."""
+    from recit import KX, MX
+    def f(lt, dur):
+        m = mechant(lt) if callable(mechant) else mechant
+        a = autres(lt) if callable(autres) else autres
+        kx_ = kextra(lt) if callable(kextra) else (kextra or {})
+        img = plan(fond, lt, kpose, kx=kx or KX, mechant=m, look=look, mx=mx or MX, autres=a, devant=devant,
+                   z=cle(lt, list(zoom)), center=(cle(lt, list(pan)), cy), **kx_)
+        if tags:
+            tags_flottants(img, lt, tags)
+        if mots:
+            titre_choc(img, mots, lt - 0.05, accent=accent)
+        return img
+    return f
+
+
+def gp_vivant(fond, look, lignes, devant=None, z=(1.9, 2.1), secoue=False, base=0.4, amp=0.35, mots_bulle=56, **pose):
+    """Gros plan du méchant qui parle EN GESTICULANT, la caméra respire, la bulle arrive."""
+    from cartoon import bubble, flash, shake
+    from recit import MHEAD, push
+    def f(lt, dur):
+        p = {**geste_parle(lt, base, amp), **pose}
+        img = plan(fond, lt, mechant=p, look=look, devant=devant, z=push(lt, dur, *z),
+                   center=(MHEAD[0] - 40 + 18 * math.sin(lt * 1.4), MHEAD[1] + 40 + 10 * math.sin(lt * 1.1)))
+        bubble(img, 540, 560, lignes, mots_bulle, lt / 0.25, tail_x=660)
+        img = flash(img, lt)
+        return shake(img, lt) if secoue else img
+    return f
+
+
+def echo_vivant(fond, txt, devant=None, **kextra):
+    """L'écho : Kévin en gros plan qui encaisse, la caméra se rapproche, les mots pulsent."""
+    from cartoon import dim as _dim
+    from recit import KHEAD, push
+    def f(lt, dur):
+        img = plan(fond, lt, "triste", devant=devant, z=push(lt, dur, 1.95, 2.35), center=(KHEAD[0] + 40, KHEAD[1] + 40), **kextra)
+        img = _dim(img, 0.6)
+        t = f"« {txt} »"
+        size = 92
+        while FA(size).getlength(t) > 960 and size > 50:
+            size -= 4
+        s = int(size * (1 + 0.04 * math.sin(lt * 5)) * (0.6 + 0.4 * back(lt / 0.3)))
+        d = ImageDraw.Draw(img)
+        d.text((546, 478), t, font=FA(s), fill=(0, 0, 0), anchor="mm")
+        d.text((540, 470), t, font=FA(s), fill=WHITE, anchor="mm")
+        return img
+    return f
+
+
+__all__ += ["cle", "geste_parle", "tags_flottants", "vapeur_devant", "dialogue", "gp_vivant", "echo_vivant"]

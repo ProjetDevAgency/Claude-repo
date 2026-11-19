@@ -74,15 +74,26 @@ python3 motion/voix_duo.py scripts/modele/NN_slug.dial output/_work_b_slug/voice
 ```
 Si ElevenLabs échoue 3 fois (vérifier https://status.elevenlabs.io), **arrêter** et prévenir le client.
 
-## 5. Vidéo (20 min)
-- Créer `motion/boucle/slug_ct.py` sur le modèle de `motion/semaine_ct.py` : importer ses décors et la classe `V2`
-  (hook, accroche, scene, gp, geste, silence, echo, carte, gros_mots, tel, fiche, calcul, doute, muet, tv, fin), et la
-  fonction `recit(nom, dial, label, montant, phrase)`. Une scène par phrase-clé, dans l'ordre du script.
-  Décors existants : salon_bg, room("appart"), table_fg, garage_bg, route_bg, chantier_bg, cabinet_bg, boulangerie_bg,
-  atelier_bg, magasin_bg, banque_bg, callcenter_bg, boutique_bg, entrepot_bg. En ajouter si l'histoire l'exige.
+## 5. Vidéo (30 min) — style « chantier visuel » du 19 nov. (modèle : `motion/boucle/anthropic_ouverture_v2_ct.py`)
+- Créer `motion/boucle/slug_ct.py` : décors et classe `V2` de `motion/semaine_ct.py`, `recit(..., dynamique=True)`
+  (coupes avec zoom qui claque + flou de mouvement, sous-titres discrets), et le module `motion/dynamique.py`.
+- **Règle d'or (client) : ce qu'on voit = ce qui est dit.** Chaque phrase qui parle d'un objet, d'un chiffre ou d'une
+  action a son illustration animée : courbe (`graphique`), écran de prix (`defile_prix`), appli (`insert_appli`),
+  notification (`insert_notif`), devis / lettre / bail (`insert_document`), calendrier (`insert_calendrier`),
+  étiquette de prix (`insert_etiquette`), compte à rebours (`insert_compte`), livret (`livret`), billets qui
+  s'envolent (`billets_envoles`), vapeur d'un plat (`vapeur_devant`). En créer de nouveaux si le sujet l'exige.
+  Jamais de logo de marque réelle : le nom, un symbole, un objet générique.
+- **Ouverture** : `D.sequence` en 3 plans calés sur la voix (≥ 1,1 s chacun ; regarder les temps des mots dans
+  `output/_work_<nom>/subs.ass` après un premier aperçu) : l'objet du sujet avec le montant → le méchant en gros plan
+  → Kévin qui réagit (`D.reaction`). Pas plus rapide (le client a trouvé 4 plans en 2,6 s trop rapide).
+- **Dialogues vivants** : `D.dialogue` (caméra qui glisse vers celui qui parle, gestes liés au texte : téléphone
+  montré, plat servi, fourchette, parents qui réagissent), `D.gp_vivant` (méchant qui gesticule en parlant),
+  `D.echo_vivant`. Aucune scène de plus de 6 s sans changement de plan ou d'objet.
 - Aperçu : `APERCU=<png> python3 motion/boucle/slug_ct.py` → regarder la planche (règles d'image ci-dessus).
-- Rendu : `python3 motion/boucle/slug_ct.py` (≈ 5–10 min) → vérifier une image toutes les 5 s
+- Rendu : `python3 motion/boucle/slug_ct.py` (≈ 7–10 min) → vérifier une image toutes les 5 s
   (`ffmpeg -i out.mp4 -vf "fps=1/5,scale=180:320,tile=13x1" -frames:v 1 planche.png`) et la durée (≥ 61 s).
+- Mesurer : `python3 scripts/mesure_mouvement.py output/<nom>.mp4` (cible : ≥ 6 % de l'image qui bouge, ≤ 15 %
+  d'images figées) ; noter les deux chiffres dans le compte rendu.
 - Copier dans `output/a_publier_finance/NN_slug.mp4`.
 
 ## 6. Publication (5 min)
