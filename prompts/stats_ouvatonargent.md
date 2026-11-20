@@ -155,3 +155,5 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
 - Vidéo Anthropic 1er jour : v1 en privé, v2 (nouveau visuel) programmée par le client le 20 nov. à 12 h (test A/B).
 - Décision : feuilleton du grand frère, épisode 4 (sam. 21 nov. 18 h) — sujet universel (les « plateformes » à gains
   garantis vues sur les réseaux), gain chiffré (500 € gardés), nouveau visuel. Variable testée : le feuilleton.
+- Épisode 4 rendu : 62 s ; mouvement 7,5 % de l'image qui bouge, 6 % d'images figées (cibles atteintes : ≥ 6 % / ≤ 15 %).
+  Programmé sur Metricool (435219042) le 21 nov. à 18 h, étiquette IA.
