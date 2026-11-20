@@ -77,7 +77,8 @@ concurrent La Ficelle (`prompts/analyse_concurrent_laficelle.md`, 15 vidéos à 
 - **Ce qu'on voit = ce qui est dit** : chaque objet, chiffre ou action du texte a son illustration animée
   (`motion/dynamique.py`). Écrire le script en pensant à ce qu'on montrera : des objets concrets (devis, livret,
   appli, calendrier, notification, plat, billets) plutôt que des idées abstraites.
-- Ouverture en 3 plans calés sur la voix : l'objet du sujet avec le montant → le méchant → la réaction de Kévin.
+- Ouverture en 3 plans calés sur la voix : un VISAGE dès la 1re image (le méchant qui parle, le chiffre au-dessus de sa
+  tête) → l'objet du sujet → la réaction de Kévin. Jamais un chiffre ou un objet seul en ouverture.
 - Dialogues vivants : caméra vers celui qui parle, gestes que le texte décrit.
 - Jamais de logo de marque réelle.
 - Mesure : ≥ 6 % de l'image qui bouge, ≤ 15 % d'images figées (`scripts/mesure_mouvement.py`).

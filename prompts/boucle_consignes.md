@@ -88,9 +88,10 @@ Si ElevenLabs échoue 3 fois (vérifier https://status.elevenlabs.io), **arrête
   étiquette de prix (`insert_etiquette`), compte à rebours (`insert_compte`), livret (`livret`), billets qui
   s'envolent (`billets_envoles`), vapeur d'un plat (`vapeur_devant`). En créer de nouveaux si le sujet l'exige.
   Jamais de logo de marque réelle : le nom, un symbole, un objet générique.
-- **Ouverture** : `D.sequence` en 3 plans calés sur la voix (≥ 1,1 s chacun ; regarder les temps des mots dans
-  `output/_work_<nom>/subs.ass` après un premier aperçu) : l'objet du sujet avec le montant → le méchant en gros plan
-  → Kévin qui réagit (`D.reaction`). Pas plus rapide (le client a trouvé 4 plans en 2,6 s trop rapide).
+- **Ouverture** : `D.sequence` en 3 plans calés sur la voix (≥ 1,1 s chacun ; temps des mots : voir la méthode dans
+  `motion/boucle/frere_plateforme_ct.py`) : **1) un VISAGE dès la 1re image** — le méchant qui parle en gros plan avec
+  le chiffre au-dessus de sa tête (`D.visage_chiffre`) ; jamais un objet ou un chiffre seul en ouverture (correction du
+  client, 20 nov.) → 2) l'objet du sujet → 3) Kévin qui réagit (`D.reaction`). Pas plus rapide.
 - **Dialogues vivants** : `D.dialogue` (caméra qui glisse vers celui qui parle, gestes liés au texte : téléphone
   montré, plat servi, fourchette, parents qui réagissent), `D.gp_vivant` (méchant qui gesticule en parlant),
   `D.echo_vivant`. Aucune scène de plus de 6 s sans changement de plan ou d'objet.

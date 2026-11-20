@@ -28,8 +28,8 @@ def frere_gp(mots, accent=None):
 
 
 OUVERTURE = D.sequence(
-    (1.45, D.insert_appli(salon_bg, "SA PLATEFORME", 500, 1037, t_change=0.3, sous="+ 20 % / SEMAINE", mots=["500 €", "POUR", "SA", "PLATEFORME"], accent="500 €")),
-    (1.2, frere_gp(["SINON", "TU", "FINIS"])),
+    (1.45, D.visage_chiffre(salon_bg, FRERE, "500 €", "POUR SA PLATEFORME", devant=table_fg, phone=True)),
+    (1.2, D.insert_appli(salon_bg, "SA PLATEFORME", 500, 1037, t_change=0.15, sous="+ 20 % / SEMAINE", mots=["SINON", "TU", "FINIS"])),
     (9.0, D.reaction(salon_bg, mots=["TA", "VIE", "SUR", "TON", "LIVRET"], accent="LIVRET", devant=table_fg)),
     nom="h")
 

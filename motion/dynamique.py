@@ -750,3 +750,24 @@ def tel_voiture(fond, legende="+20 % / SEMAINE", mots=None, accent=None):
 
 
 __all__ += ["liste_noire", "recherche", "conversation", "tel_voiture"]
+
+
+# ───────────── ouverture : un visage dès la 1re image (correction du client, 20 nov.) ─────────────
+
+def visage_chiffre(fond, look, txt, sous=None, devant=None, couleur=None, mots=None, accent=None, **pose):
+    """1er plan de chaque vidéo : le méchant en gros plan qui parle (visage visible à la 1re image), le chiffre
+    en grand AU-DESSUS de sa tête (jamais sur le visage). Puis l'objet du sujet au plan suivant."""
+    from cartoon import big_number
+    from recit import MHEAD
+    def f(lt, dur):
+        p = {**geste_parle(lt, 0.45, 0.3), **pose}
+        img = plan(fond, lt, mechant=p, look=look, devant=devant, z=1.9 + 0.12 * ease(lt / max(dur, 0.1)),
+                   center=(MHEAD[0] - 40 + 14 * math.sin(lt * 1.4), MHEAD[1] + 40))
+        big_number(img, (540, 430), txt, 150, couleur or YEL, sous, k=min(1.0, 0.35 + lt / 0.25), rot=-3)
+        if mots:
+            titre_choc(img, mots, lt - 0.05, y=300, accent=accent)
+        return img
+    return f
+
+
+__all__ += ["visage_chiffre"]
