@@ -215,3 +215,42 @@ La grammaire (toujours la même) :
 6. **Celui qui parle est montré quand sa phrase passe** (gros plan sur « désolé », « gardez-les », « il sourit »).
 7. **Un changement à l'image à chaque mot important** (toutes les 0,5 à 1 s) : zoom sur l'étiquette au moment du
    montant, gros plan au moment de l'émotion, titre pour la formule choc (« CRISE », « PAS UNE ASSISTÉE »).
+
+## Comment leurs scripts sont écrits (longs, mais regardés) — top contre flop (20 nov.)
+Mesures sur les 52 transcriptions (vidéos depuis le 26 oct. pour comparer à âge de compte égal) :
+| | durée | mots | mots / s | phrases | mots / phrase | montants | articles de loi | promesse | mystère « un seul petit truc » | « Faux ! » | « abonné à La Ficelle » |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| top 10 (514 k médiane) | 75 s | 305 | 4,0 | 42 | 7,7 | 6 | 2 | 70 % | 50 % | 30 % | 30 % |
+| flop 10 (4 k médiane) | 78 s | 310 | 4,0 | 36 | 8,7 | 5 | 2 | 40 % | 30 % | 20 % | 0 % |
+| nous (8 derniers scripts) | 62 s | 257–278 | ≈ 4,3 | 30–36 | 7–9 | 2–4 | 0–1 | 0 | 0 | 0 | — |
+- **La longueur ne fait pas la différence** : tops et flops ont exactement la même longueur, le même débit (4 mots / s)
+  et des phrases aussi courtes (8 mots, une phrase toutes les 1,8 s). La « machine d'écriture » est la même partout.
+- **Ce qui sépare leurs tops de leurs flops** : un méchant à battre et un gain chiffré qu'on récupère. Flops : couple
+  et argent (pas de méchant), voyage scolaire (question au spectateur, aides éparpillées 200 + 70 €), tenue de travail
+  (question au spectateur, 10–20 € / mois). Plus de promesses et de mystères dans les tops (70 % / 50 % contre 40 % /
+  30 %), mais 10 vidéos de chaque côté et compte qui grossit : tendance, pas preuve.
+- **Fin en boucle** : dans la majorité des vidéos, la dernière phrase est coupée et retombe sur la 1re réplique
+  (« Signé par le vendeur qui lui avait dit… » → « Ton colis de 480 €, on l'a perdu »).
+
+Leur squelette (en % de la durée), identique dans colis 1,5 M, salaire 590 k, permis 803 k, auto-école 874 k :
+1. **0–5 %** : réplique du méchant + montant + son excuse (« désolé, c'est la crise dans la boîte »).
+2. **5–15 %** : « Faux ! » ou promesse (« il ne le sait pas encore, mais cette phrase va lui coûter 240 € de plus »)
+   + **mystère** (« à cause d'un seul petit truc que Marc a fait, que presque personne ne fait »), résolu à la toute fin.
+3. **15–35 %** : **l'escalade** avec dates et coûts qui s'empilent (« Le 5, la banque refuse… 20 €. Le 6, encore 20 €.
+   Chaque paiement à découvert, 8 € de plus »), 2e réplique du méchant qui refuse, le héros coincé (« le sapin reste vide »).
+4. **≈ 31 %** : **bascule** « Sauf que… » (souvent « heureusement, Marc est abonné à La Ficelle ») → **la loi** : numéro
+   d'article, puis chaque réplique du méchant démontée une par une (« Et un retard, c'est pas illégal ? Faux. »).
+5. **40–70 %** : **la méthode en étapes numérotées** (« en trois étapes : d'abord un mail… alors une lettre
+   recommandée… alors la dernière lettre » ; « Première règle… Deuxième… Troisième ») avec **le texte exact** à envoyer ;
+   le méchant retente un coup (« Un bon d'achat ? Refusez. »).
+6. **≈ 60–70 %** : « **Fais le calcul avec Marc** » : le montant monte (528 → 576 → 720 €).
+7. **85–100 %** : le méchant cède (« 4 jours plus tard, 117 € tombent »), « **Et le petit truc de Marc ?** » révélé,
+   dernière phrase inachevée qui boucle sur la réplique d'ouverture.
+Ils tiennent 75 à 110 s parce que chaque phrase apporte un fait neuf (date, montant, réplique, étape), qu'il reste
+toujours une question ouverte (le petit truc, la preuve « à la fin », l'étape suivante) et qu'on sait combien d'étapes
+il reste.
+
+Même sujet chez eux et chez nous — salaire en retard : eux 590 k (tutoriel déguisé en revanche : 3 règles, article
+1231-6 du Code civil, texte de la mise en demeure, calcul 117 €, mystère résolu) ; nous (`29_salaire_retard.dial`) : un
+drame de famille (beau-père patron, futur gendre, vocal diffusé aux 6 gars) avec la loi en une phrase, 1 montant, aucune
+étape, aucun article, pas de boucle.
