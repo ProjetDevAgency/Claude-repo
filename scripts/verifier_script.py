@@ -1,6 +1,8 @@
 """Contrôle d'un script .dial AVANT de faire la vidéo : moteur H1 complet (prompts/methode/moteur_script_H1.pdf)
 + règles maison (zone grise, doute). Le prix dans l'accroche est FACULTATIF : s'il y en a un, il est dans la
-1re phrase, jamais en 1er mot, avant l'objet, et revient à l'identique dans la chute (2 fois en tout).
+1re phrase, jamais en 1er mot, avant l'objet, et revient à l'identique dans la chute.
++ les 7 points du 20 nov. (prompts/methode_ecriture.md) : 1re ligne = réplique du méchant à « tu », promesse dans les
+3 phrases qui suivent, au moins 6 montants, des étapes, longueur 1 450 à 1 800 caractères.
 
     python3 scripts/verifier_script.py scripts/modele/27_carte_piratee.dial
 
@@ -47,7 +49,7 @@ def verifier(chemin):
 
     # ── longueur (7.1) et forme (1.3, 1.8)
     n = len(texte)
-    test(1450 <= n <= 1500, f"longueur {n} caractères (moteur : 1 450 à 1 500, plancher 1 350)")
+    test(1450 <= n <= 1800, f"longueur {n} caractères (1 450 à 1 800 depuis le squelette du 20 nov.)")
     interdits = [c for c in ":;…«»()—/*#&€[]" if c in texte] + (["tiret"] if re.search(r"\s-\s", texte) else [])
     test(not interdits, f"ponctuation interdite : {interdits or 'aucune'}")
     test(texte.count("!") <= 1, f"points d'exclamation : {texte.count('!')} (1 maximum)")
@@ -72,12 +74,28 @@ def verifier(chemin):
         test(len(avant) <= 6, f"le prix arrive tôt, avant l'objet (mots avant : {' '.join(avant)})")
     test(10 <= len(mots(premiere)) <= 18, f"couche 1 : {len(mots(premiere))} mots (10 à 18)")
 
-    # ── le montant deux fois, à l'identique (1.10) : hook + punchline
+    # ── le montant du hook revient à l'identique dans la chute (1.10)
     if m:
         montant = m.group(1)
         nb = len(re.findall(rf"(?<![\w-]){re.escape(montant)} euros", bas))
-        test(nb == 2, f"montant « {montant} » dit {nb} fois (exactement 2 : hook + punchline)")
+        test(nb >= 2, f"montant « {montant} » dit {nb} fois (au moins 2 : hook + punchline)")
         test(montant in " ".join(t for _, t in rep[-2:]).lower(), "le montant revient dans la chute")
+
+    # ── les 7 points du 20 nov.
+    test(rep[0][0] == "M" and bool(re.search(r"\b(tu|ton|ta|tes|toi|te)\b|\bt'", premiere.lower())),
+         "point 2 : la 1re ligne est la réplique du méchant (M:) adressée à « tu »")
+    test(not premiere.rstrip().endswith("?") or rep[0][0] == "M", "point 2 : pas de question au spectateur en ouverture")
+    suite = [x for _, t in rep[1:] for x in phrases(t)][:3]          # les 3 phrases après la réplique d'ouverture
+    promesse = re.search(r"\b(va|vont|vas|allait|allaient)\s+(?:\w+\s+){0,2}(coûter|payer|perdre|rendre|rembourser|"
+                         r"regretter|cracher|sortir|lâcher|devoir|toucher|récupérer|signer|plier|reculer|céder|changer)"
+                         r"|sait pas encore|à la fin|dans (?:\w+ ){1,2}jours?,? c'est (?:lui|elle|eux)",
+                         " ".join(suite).lower())
+    test(bool(promesse), "point 3 : promesse dans les 3 phrases après l'accroche (ce que le méchant va perdre / ce que "
+                         "Kévin va récupérer)")
+    nb_montants = len(re.findall(MONTANT, bas))
+    test(nb_montants >= 6, f"point 4 : {nb_montants} montants (au moins 6)")
+    etapes = re.findall(r"\b(d'abord|ensuite|la dernière|le dernier|première|deuxième|troisième|étape)\b", narr)
+    test(len(etapes) >= 2, f"point 7 : étapes de la méthode ({len(etapes)} marqueurs : d'abord, ensuite, la dernière…)")
 
     # ── dialogue (1.4) : au moins 3 répliques, au moins 2 bouches
     m_lignes = [t for k, t in rep if k == "M"]

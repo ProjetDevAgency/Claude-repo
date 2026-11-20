@@ -179,3 +179,12 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
 - Décision : dans le feuilleton, préférer les épisodes accrochés à une actu argent du moment (le frère fonce sur ce que
   tout le monde voit passer aux infos). Pic d'activité indiqué : jeudi 0 h–1 h (une seule semaine de données) → à
   surveiller avant de toucher aux horaires.
+
+## 20 nov. — décision du client : les 7 points du contre-audit La Ficelle
+Inscrits dans `prompts/boucle_consignes.md` (« Les 7 points du 20 nov. ») et `prompts/methode_ecriture.md` (v4) :
+sujet avec méchant à battre + gain chiffré ; 1re phrase = réplique du méchant à « tu » ; promesse juste après ;
+≥ 6 montants ; dessin animé sans photo ni image IA ; image = ce que dit la phrase en cours (lieu, méchant, objet avec
+prix, geste), changement fort toutes les 1 à 1,5 s ; squelette accroche → promesse → escalade → règle → étapes →
+calcul → résolution (1 450 à 1 800 caractères). `scripts/verifier_script.py` contrôle les points 2, 3, 4 et 7.
+**Exception à « une seule variable par vidéo »** (décision du client) : les 7 points changent en bloc. À partir de la
+vidéo du 21 nov., comparer le bloc « 7 points » aux vidéos d'avant (vues, temps moyen, partages, enregistrements).

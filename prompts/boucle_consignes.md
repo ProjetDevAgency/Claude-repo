@@ -18,9 +18,26 @@ fichiers cités. Compte TikTok : @souslesabot (cartoon, héros Kévin, voix narr
 - Prix dans l'accroche **facultatif** ; s'il y en a un : dans la 1re phrase, jamais en 1er mot, avant l'objet, repris à
   l'identique dans la chute.
 - Un **geste discutable de Kévin** (zone grise) **et** un **doute** dans chaque script. Le geste reste légal.
-- Vidéo de **61 s minimum** (monétisation) : script de 1 450 à 1 500 caractères.
+- Vidéo de **61 s minimum** (monétisation) : script de 1 450 à 1 800 caractères (62 à 75 s ; le squelette du 20 nov.
+  demande plus de place : escalade, étapes, calcul).
 - Aucun texte sur un visage, aucun texte coupé, méchant reconnaissable (jamais le sosie de Kévin).
 - Thème différent de la veille.
+- **Chaque vidéo crée son propre décor** (20 nov.) : pas de décor réutilisé tel quel d'une vidéo à l'autre.
+- **Dessin animé uniquement** : jamais de photo ni d'image IA dans la vidéo.
+
+## Les 7 points du 20 nov. (validés par le client, à appliquer à CHAQUE vidéo)
+Issus du contre-audit de La Ficelle à dates égales (`prompts/analyse_concurrent_laficelle.md`) ; détail dans
+`prompts/methode_ecriture.md` (« Les 7 points » et « L'ordre d'un script »).
+1. Sujet universel avec **un méchant à battre et un gain chiffré**.
+2. **1re phrase = réplique du méchant adressée à « tu »** (ligne M:) ; jamais une question au spectateur ni un sujet
+   abstrait.
+3. **Promesse juste après l'accroche**, dans nos mots (ce que le méchant va perdre / ce que Kévin va récupérer).
+4. **Au moins 6 montants** dans le script (frais qui s'empilent, calcul qui monte).
+5. **Dessin animé, jamais de photo ni d'image IA.**
+6. **L'image montre ce dont parle la phrase en cours** (lieu déduit, méchant, objet avec son prix collé dessus, geste
+   du verbe), **un changement fort toutes les 1 à 1,5 s**.
+7. **Le squelette** accroche → promesse → escalade → règle → étapes → calcul → résolution est le minimum.
+Le compte rendu au client dit, pour chacun des 7 points, comment la vidéo du jour l'applique.
 
 ## 1. Analyse (10 min)
 1. Metricool : `getAnalyticsDataByMetrics`, brandId **8206232**, métriques TKPO02, TKPO03, TKPO07, TKPO08 (j'aime), TKPO09,
@@ -56,6 +73,8 @@ fichiers cités. Compte TikTok : @souslesabot (cartoon, héros Kévin, voix narr
   `prompts/actu_argent.md`), concurrents (`prompts/sujets_concurrents.md`), ou invention.
 - Le sujet suit **le modèle gagnant** et passe les 8 critères. Vérifier la règle dans 2 sources ; noter références et
   sources dans l'en-tête du `.dial`.
+- **Point 1 du 20 nov.** : le sujet doit avoir un méchant à battre ET un gain chiffré pour Kévin. Sans méchant (couple,
+  conseil d'épargne) ou avec un gain éparpillé, on change d'angle ou de sujet (ce sont les flops de La Ficelle).
 - **Filtre n° 1, avant les 8 critères : « est-ce qu'un 18–25 ans l'ENVERRAIT à un pote ou l'ENREGISTRERAIT ? »**
   Oui seulement si : actu chaude que tout le monde voit passer (IPO, prix, nouvelle loi), OU envie / dépense que presque
   tous les 18–25 ans ont (permis, premier appart, premier salaire, voiture, épargne). Un cas de niche (robe de mariée,
@@ -68,7 +87,10 @@ fichiers cités. Compte TikTok : @souslesabot (cartoon, héros Kévin, voix narr
 
 ## 3. Script (15 min)
 - Écrire `scripts/modele/NN_slug.dial` (NN = numéro suivant ; `M:` méchant, `N:` Kévin), en-tête complet : sources,
-  transgression, verrou, entrée, axe, twist, chute, mot-enjeu, tier, 8/8, zone grise.
+  transgression, verrou, entrée, axe, twist, chute, mot-enjeu, tier, 8/8, zone grise, **promesse**.
+- Suivre « L'ordre d'un script » (squelette du 20 nov.) : la 1re ligne est la réplique du méchant à « tu » (M:), la
+  promesse arrive dans les 3 phrases suivantes, au moins 6 montants, des étapes (« D'abord… Ensuite… La dernière… »),
+  un calcul qui monte.
 - `python3 scripts/verifier_script.py scripts/modele/NN_slug.dial` → **zéro ❌**. Relire à la main : casting, dette du
   hook, twist qui referme une prémisse, test de la banane.
 
@@ -90,13 +112,19 @@ Si ElevenLabs échoue 3 fois (vérifier https://status.elevenlabs.io), **arrête
   étiquette de prix (`insert_etiquette`), compte à rebours (`insert_compte`), livret (`livret`), billets qui
   s'envolent (`billets_envoles`), vapeur d'un plat (`vapeur_devant`). En créer de nouveaux si le sujet l'exige.
   Jamais de logo de marque réelle : le nom, un symbole, un objet générique.
+- **Avant de coder, écrire la liste des images** (point 6 du 20 nov.) : pour chaque phrase du script, le LIEU
+  (déduit : « où ça se passerait si on le filmait ? »), le MÉCHANT, l'OBJET avec son PRIX COLLÉ DESSUS, le GESTE du
+  verbe ; une date → calendrier / compte à rebours ; un message → notification. Le décor du lieu est créé pour la
+  vidéo (pas de décor réutilisé tel quel).
 - **Ouverture** : `D.sequence` en 3 plans calés sur la voix (≥ 1,1 s chacun ; temps des mots : voir la méthode dans
-  `motion/boucle/frere_plateforme_ct.py`) : **1) un VISAGE dès la 1re image** — le méchant qui parle en gros plan avec
-  le chiffre au-dessus de sa tête (`D.visage_chiffre`) ; jamais un objet ou un chiffre seul en ouverture (correction du
-  client, 20 nov.) → 2) l'objet du sujet → 3) Kévin qui réagit (`D.reaction`). Pas plus rapide.
+  `motion/boucle/frere_plateforme_ct.py`) : **1) le méchant qui dit sa réplique DANS le lieu de la phrase**, visage
+  visible dès la 1re image (correction du client, 20 nov.), avec l'objet du conflit et son prix collé dessus (panneau
+  du lieu, étiquette, facture, affiche ; `D.visage_chiffre` seulement si aucun objet ne porte le prix) → 2) le geste du
+  verbe (l'objet tombe, l'affiche se colle, les pages s'envolent…) → 3) Kévin qui réagit (`D.reaction`).
 - **Dialogues vivants** : `D.dialogue` (caméra qui glisse vers celui qui parle, gestes liés au texte : téléphone
   montré, plat servi, fourchette, parents qui réagissent), `D.gp_vivant` (méchant qui gesticule en parlant),
-  `D.echo_vivant`. Aucune scène de plus de 6 s sans changement de plan ou d'objet.
+  `D.echo_vivant`. **Un changement fort à l'image toutes les 1 à 1,5 s** (coupe, zoom, objet qui arrive, geste) ;
+  aucune scène de plus de 3 s sans changement.
 - Aperçu : `APERCU=<png> python3 motion/boucle/slug_ct.py` → regarder la planche (règles d'image ci-dessus).
 - Rendu : `python3 motion/boucle/slug_ct.py` (≈ 7–10 min) → vérifier une image toutes les 5 s
   (`ffmpeg -i out.mp4 -vf "fps=1/5,scale=180:320,tile=13x1" -frames:v 1 planche.png`) et la durée (≥ 61 s).
@@ -116,5 +144,6 @@ Si ElevenLabs échoue 3 fois (vérifier https://status.elevenlabs.io), **arrête
 ## 7. Compte rendu au client
 - `git add` des fichiers créés/modifiés (scripts, motion/boucle, prompts) → commit → `git push -u origin ccr-dd26f1b1-ihm967`.
 - Envoyer au client (SendUserFile, status proactive) la vidéo + un message court : sujet, date de publication,
-  script complet, description, **commentaire à épingler**, ce que l'analyse a appris, ce qui a changé et pourquoi.
+  script complet, description, **commentaire à épingler**, ce que l'analyse a appris, ce qui a changé et pourquoi,
+  et **comment la vidéo applique chacun des 7 points du 20 nov.**
 - En cas d'échec à n'importe quelle étape : ne rien publier, dire au client ce qui bloque.
