@@ -26,12 +26,12 @@ from dessin import (FPS, H, INK, LW, ROOT, W, back, circle, couche_floue, dark, 
                     mix, paint, pil_to_surface, poly, rrect, stroke, texte, tube)
 from film import Film  # noqa: E402
 from perso import Perso, traits_choc  # noqa: E402
-from remake_aides_texte import DUREE, PHRASES, VOIX  # noqa: E402
+from remake_aides_texte import DUREE, MODELE, PHRASES, VOIX  # noqa: E402
 from six_aides_31dec import KEVIN, MECANOS, PATRON, SOL, Y_SOUS, assombrir, deg, enseigne, fenetre, feuille, \
     horloge, lumiere_sol, piece, reflet_doux  # noqa: E402
 
 OUT = ROOT / "output/trait/remake_aides.mp4"
-WORK = ROOT / "output/trait/_work_remake"
+WORK = ROOT / "output/trait/_work_remake_v4"
 PHOTOS = ROOT / "assets/photos_libres"
 VIE = {"pousse": 0.08, "derive": 42.0, "roulis": 0.018}
 
@@ -210,7 +210,7 @@ def fiche(ctx, t, lt, n, nom, champs, limite, fond=None):
 
 
 def construire(work):
-    voice, words = voix.build_cale(PHRASES, VOIX, work, fin=DUREE)
+    voice, words = voix.build_cale(PHRASES, VOIX, work, model=MODELE, fin=DUREE)
     f = Film(voice, words, fin=DUREE + 0.2)
     f.vie = VIE
 

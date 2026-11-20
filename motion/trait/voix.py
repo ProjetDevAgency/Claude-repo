@@ -97,7 +97,10 @@ def build(lines, voices, work: Path, model="eleven_multilingual_v2", gap=0.22, s
     work.mkdir(parents=True, exist_ok=True)
     pistes, words, t = [], [], 0.0
     for li, (who, text) in enumerate(lines):
-        clean, marked = _parse(text)
+        # <émotion> = balise de jeu ElevenLabs v4 (« [excited] »), jouée mais ni lue ni sous-titrée
+        clean, marked = _parse(re.sub(r"<[^>]+>\s*", "", text))
+        if "<" in text:
+            clean = re.sub(r"<([^>]+)>", r"[\1]", re.sub(r"[\[\]{}]", "", text))
         vid, st = voices[who]
         audio, al = _tts(clean, vid, model, work, st)
         audio, cut = _trim(audio)
@@ -113,11 +116,13 @@ def build(lines, voices, work: Path, model="eleven_multilingual_v2", gap=0.22, s
                     spans.append(cur)
                 cur = None
             elif cur is None:
-                cur = [s0, s1]
+                cur = [s0, s1, c]
             else:
                 cur[1] = s1
+                cur[2] += c
         if cur:
             spans.append(cur)
+        spans = [sp[:2] for sp in spans if not re.fullmatch(r"\[[^\]]*\]", sp[2])]   # balises v4 retirées
         if len(spans) != len(marked):           # sécurité : on répartit au prorata
             tot = len(audio) / SR
             spans = [[tot * i / len(marked), tot * (i + 1) / len(marked)] for i in range(len(marked))]
