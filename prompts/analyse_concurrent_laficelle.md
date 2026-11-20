@@ -254,3 +254,44 @@ Même sujet chez eux et chez nous — salaire en retard : eux 590 k (tutoriel d�
 1231-6 du Code civil, texte de la mise en demeure, calcul 117 €, mystère résolu) ; nous (`29_salaire_retard.dial`) : un
 drame de famille (beau-père patron, futur gendre, vocal diffusé aux 6 gars) avec la loi en une phrase, 1 montant, aucune
 étape, aucun article, pas de boucle.
+
+## Contre-audit des analyses du 20 nov. (on casse, on garde ce qui tient)
+Méthode : chaque vidéo comparée aux vidéos publiées à ± 3 jours (le compte grossissait très vite), test de
+permutation (5 000 tirages). « × 2 » = deux fois plus de vues que les vidéos des mêmes jours ; p < 0,05 = peu probable
+par hasard. Synchro image / mots : détection des changements d'image sur les 9 premières secondes de 10 vidéos.
+| Affirmation | Vérification | Verdict |
+|---|---|---|
+| Ouverture « plan large du décor » = la meilleure (102 k) | à dates égales ×1,1 (p = 0,87) | **cassé** : c'était la croissance du compte |
+| Ouverture « héros bras en l'air + gros chiffre » | ×1,5 (p = 0,45) | pas de preuve |
+| Ouverture « gros plan d'un personnage » | ×3,8 (p = 0,08, n = 7) | tendance |
+| Photos / images IA / émojis échouent | ×0,27 (p = 0,025) | **tient** |
+| 1re phrase = réplique du méchant à « tu » | ×2,45 (p = 0,09) ; avec promesse ×2,2 | tendance forte |
+| 1re phrase = question au spectateur / sujet abstrait | ×0,35 (p = 0,08) | tendance : à éviter |
+| Promesse juste après l'accroche (« il ne le sait pas encore, mais… ») | ×4,0 (p = 0,005) ; dessin animé seul : ×2,2 avec / ×0,8 sans | **tient** (le signal le plus solide) |
+| ≥ 6 montants dans le script | ×2,75 (p = 0,04) ; dessin animé seul : ×1,33 / ×0,49 | **tient** |
+| ≥ 300 mots | ×2,4 (p = 0,09) ; la durée, elle, ×1,2 (p = 0,74) | densité : tendance ; durée : sans effet (3e confirmation) |
+| Mystère « un seul petit truc » | ×1,9 (p = 0,21) | pas prouvé |
+| « Faux ! » | ×1,6 (p = 0,48) | pas prouvé |
+| « Marc est abonné à La Ficelle » dans l'histoire | ×0,84 (p = 0,79) | **cassé** (mon « 30 % des tops / 0 % des flops » était du bruit) |
+| « Fais le calcul », ≥ 2 articles de loi | ×1,1 / ×1,0 | sans effet : c'est leur standard, présent partout |
+| Fin en boucle (« la majorité ») | 25 vidéos sur 52, ×0,8 | **cassé** : la moitié, et sans effet mesurable |
+| Le squelette (escalade, loi, étapes, calcul, boucle) fait leurs tops | leurs flops ont le même (tenue de travail : promesse, petite note, calcul, loi, mystère résolu) | **cassé comme facteur de succès** : c'est leur standard de fabrication |
+| « Chaque mot important a son image dans les 0,3 s » | changement d'image après un mot plein : 38 % ; après un montant : 20 % ; à un instant au hasard : 38 % ; début de phrase : 43 % contre 39 % | **cassé** : pas de synchro au mot. Ce qui reste vrai : l'image montre ce dont parle la phrase en cours ; un changement fort toutes les ~1,4 s |
+| « Le lieu n'est jamais dit, il est déduit » | « caisse » est dit (#12), « tapis » ne l'est pas (#1) | « souvent », pas « jamais » |
+| Qualité constante = kit (troupe fixe, briques de décor, caméra, 5 modèles) | visible sur toutes les planches ; leurs outils sont invisibles | gardé comme description, non testable |
+| « Nous : 0 promesse » | **faux** : `11_conges` et `12_occasion` avaient « Faux. Et ce patron le sait pas encore, mais… » → 618 et 669 vues (notre médiane ≈ 450) | corrigé : testé 2 fois, un peu mieux, trop peu pour conclure |
+
+**Ce qu'on garde :**
+1. Sujet universel avec un méchant à battre et un gain chiffré (confirmé dans tous les audits).
+2. 1re phrase = réplique du méchant à « tu » ; jamais une question au spectateur ni un sujet abstrait.
+3. Promesse juste après l'accroche, à chaque vidéo (le seul signal net chez eux ; chez nous 2 essais au-dessus de la
+   médiane).
+4. Au moins 6 montants dans le script (frais qui s'empilent, calcul qui monte).
+5. Dessin animé, pas de photos ni d'images IA.
+6. Image : montrer ce dont parle la phrase en cours (lieu, méchant, objet avec son prix, verbe joué), un changement
+   fort toutes les 1 à 1,5 s ; pas besoin de caler au mot près.
+7. Leur squelette (escalade, loi, étapes, calcul) = le niveau standard à atteindre, sans en attendre un effet à lui seul.
+**Abandonné :** plan large comme meilleure ouverture, synchro au mot, « abonné à La Ficelle », fin en boucle comme
+levier, longueur / durée.
+Limites : 52 vidéos d'un seul compte, transcription automatique, classements faits à la main, aucune donnée de
+rétention chez eux.
