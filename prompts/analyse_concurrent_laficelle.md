@@ -93,3 +93,44 @@ Règles mises à jour en conséquence : `prompts/methode_ecriture.md` (modèle g
   confirmée (« les mouvements d'objets plus que les changements de plan »).
 - Mais leur vidéo à 803 k est aussi peu animée que les nôtres : le mouvement aide, il ne suffit pas seul.
 - Cible : part de l'image qui bouge ≥ 6 %, images figées ≤ 15 % (mesurable avec le même outil à chaque vidéo).
+
+## Pourquoi leur qualité ne baisse jamais (20 nov., 8 images × 52 vidéos + 1re image des 52)
+Ce n'est pas un dessin inventé à chaque vidéo : c'est un **kit** dessiné une fois avec soin, puis assemblé.
+1. **Une troupe fixe** : le même héros (Marc, pull orange, jean) dans presque toutes les vidéos, le même patron
+   (chauve, lunettes, costume, cravate rouge), 5 ou 6 seconds rôles (Lina, Nadia, Inès, Karim, Damien…). Dessin
+   identique d'une vidéo à l'autre → personnages préparés une fois (pantins articulés), pas regénérés.
+2. **Un décor par histoire, monté avec des pièces communes** : guichet des impôts, caisse de supermarché, garage,
+   bureau du patron, appartement… Chaque décor est différent, mais fait des mêmes briques : mur du fond sombre,
+   fenêtre, horloge murale, étagères à classeurs colorés, bureau / comptoir au premier plan, panneau au nom du lieu,
+   plantes, cartons. Même lumière partout : fond bleu nuit, une lampe chaude, le héros orange qui ressort.
+3. **Une caméra de théâtre** : vue de face, à hauteur d'yeux, sol horizontal, personnages toujours en pied ou à mi-corps,
+   à la même échelle. On se déplace DANS le décor (travelling, léger zoom), on ne colle jamais la caméra sur un visage
+   sauf pour le choc.
+4. **5 modèles d'incrustation, toujours les mêmes** : gros chiffre (police haute, jaune / vert / rouge, ombre) ; compteur
+   en haut à gauche (« CE QUE LE VENDEUR DOIT », « DÛ PAR LE PATRON », « CE QUE LES IMPÔTS DOIVENT » : seul le titre
+   change) ; feuille de papier (loi, lettre recommandée, relevé : papier crème penché, titre en capitales, surligné
+   jaune, signature bleue) ; écran de téléphone / notification ; étapes « 1 · 2 · 3 ». Quand une incrustation arrive,
+   le décor derrière devient flou et sombre.
+5. **Sous-titres toujours au même endroit** (≈ 72 % de la hauteur, sur la ligne du sol), mot en cours mis en avant.
+6. **Fin = début** : la dernière image reprend la première (boucle).
+
+Ouvertures des 52 vidéos (classées à la main sur la 1re image) :
+| type d'ouverture | vidéos | période | vues médianes |
+|---|---|---|---|
+| photos, images IA, émojis (style d'avant) | 12 | 21–25 oct. (+2 début nov.) | 1 k |
+| infographie sans décor | 6 | 25 oct.–7 nov. | 8 k |
+| héros bras en l'air + gros chiffre | 16 | 25 oct.–3 nov. | 32 k |
+| gros plan d'un personnage + objet / chiffre | 7 | 27 oct.–9 nov. | 44 k |
+| plan large du décor de l'histoire, troupe dedans | 11 | 27 oct.–18 nov. | 102 k |
+- Leurs débuts en photos / images IA (une image porte même la mention « AI-generated ») ont fait ~1 k : ils ont
+  abandonné ce style le 25 oct. pour le dessin animé avec troupe fixe.
+- Leur style actuel (depuis le 10 nov.) = plan large du décor de l'histoire. Attention : le compte grossit en même
+  temps, donc les vidéos récentes sont avantagées ; mais la bascule photo → dessin animé est nette.
+
+Conséquence pour nous (compatible avec la règle client « chaque vidéo crée son propre décor ») :
+- préparer UNE FOIS une troupe soignée (Kévin, le patron, le grand frère, 3 ou 4 seconds rôles) et des briques de décor
+  soignées (murs, fenêtres sur ville floue, horloge, étagères, comptoirs, portes, panneaux, sol brillant) ;
+- chaque vidéo construit SON décor avec ces briques + les objets propres au sujet (pompe, dominos, guichet…) ;
+- une recette fixe de lumière (fond froid et flou, sujet chaud et net, halo, vignette) et de caméra (large, de face,
+  sol fixe, sous-titres sur le sol) ;
+- 5 modèles d'incrustation fixes (gros chiffre, compteur, feuille, téléphone, étapes).
