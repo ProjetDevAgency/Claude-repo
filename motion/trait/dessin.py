@@ -16,8 +16,8 @@ W, H, FPS = 1080, 1920, 30
 F_TXT = str(ROOT / "assets/fonts/Montserrat-ExtraBold.ttf")
 F_BIG = str(ROOT / "assets/fonts/Anton-Regular.ttf")
 
-INK = (30, 27, 36)
-LW = 6                      # épaisseur du contour (à l'échelle 1)
+INK = (34, 32, 50)          # encre bleu nuit plutôt que noir pur (trait moins « clip-art »)
+LW = 4.5                    # épaisseur du contour (à l'échelle 1) ; 6 donnait des traits trop épais
 
 
 def rgb(c):
@@ -168,6 +168,72 @@ def halo(ctx, x, y, r, color, alpha=0.5):
     ctx.set_source(g)
     circle(ctx, x, y, r)
     ctx.fill()
+
+
+# ───────────── calques flous (profondeur de champ, reflets doux) ─────────────
+
+def _box(a, r, ax, bord):
+    n = a.shape[ax]
+    pad = [(0, 0)] * a.ndim
+    pad[ax] = (r + 1, r)
+    c = np.cumsum(np.pad(a, pad, mode=bord), axis=ax)
+    hi = [slice(None)] * a.ndim
+    lo = [slice(None)] * a.ndim
+    hi[ax] = slice(2 * r + 1, 2 * r + 1 + n)
+    lo[ax] = slice(0, n)
+    return (c[tuple(hi)] - c[tuple(lo)]) / (2 * r + 1)
+
+
+def flou_tableau(a, r, bord="edge"):
+    """Flou quasi gaussien (3 passes de flou-boîte) sur un tableau H x W x C."""
+    a = a.astype(np.float32)
+    if r < 1:
+        return a
+    for _ in range(3):
+        a = _box(_box(a, r, 0, bord), r, 1, bord)
+    return a
+
+
+def couche_floue(ctx, dessin, rayon=14, alpha=1.0, red=4, bord="edge", masque=None):
+    """Dessine `dessin(ctx)` dans un calque basse définition, le floute, puis le pose sur l'image.
+
+    Sert au fond flou (profondeur de champ) et aux reflets doux sur le sol. `rayon` en pixels écran.
+    `masque` : motif Cairo en coordonnées ÉCRAN (ex. dégradé qui efface le reflet en s'éloignant du sol).
+    bord="constant" pour un calque transparent (reflet), "edge" pour un fond plein.
+    """
+    m = ctx.get_matrix()
+    w, h = W // red, H // red
+    s = cairo.ImageSurface(cairo.FORMAT_ARGB32, w, h)
+    c2 = cairo.Context(s)
+    c2.scale(1 / red, 1 / red)
+    c2.transform(m)
+    dessin(c2)
+    s.flush()
+    st = s.get_stride()
+    a = np.ndarray((h, st // 4, 4), np.uint8, s.get_data())[:, :w]
+    b = np.clip(flou_tableau(a, max(1, int(round(rayon / red))), bord), 0, 255).astype(np.uint8)
+    out = cairo.ImageSurface(cairo.FORMAT_ARGB32, w, h)
+    np.ndarray((h, out.get_stride() // 4, 4), np.uint8, out.get_data())[:, :w] = b
+    out.mark_dirty()
+    pat = cairo.SurfacePattern(out)
+    pat.set_matrix(cairo.Matrix(1 / red, 0, 0, 1 / red, 0, 0))
+    pat.set_filter(cairo.FILTER_GOOD)
+    pat.set_extend(cairo.EXTEND_PAD)
+    ctx.save()
+    ctx.identity_matrix()
+    ctx.set_source(pat)
+    if masque is not None:
+        ctx.mask(masque)
+    else:
+        ctx.paint_with_alpha(alpha)
+    ctx.restore()
+
+
+def camera_de(ctx):
+    """(x du monde au centre de l'écran, y du monde au centre, zoom) d'après la transformation en cours."""
+    m = ctx.get_matrix()
+    xx, x0, y0 = m.xx, m.x0, m.y0
+    return (W / 2 - x0) / xx, (H / 2 - y0) / xx, xx
 
 
 def vignette(ctx, force=0.55):

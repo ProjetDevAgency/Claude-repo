@@ -37,8 +37,10 @@ def _lerp_pose(a, b, k):
 class Perso:
     def __init__(self, peau=(240, 192, 152), cheveux="court", couleur_cheveux=(70, 46, 34),
                  haut="sweat", couleur_haut=(46, 170, 120), bas=(58, 84, 150), chaussures=(245, 245, 245),
-                 barbe=False, moustache=False, lunettes=False, badge=None, seed=0):
+                 barbe=False, moustache=False, lunettes=False, badge=None, seed=0, tete=1.0, mince=1.0):
+        """tete : taille de la tête (0,8 = silhouette plus élancée) ; mince : largeur du corps et des membres."""
         self.peau, self.cheveux, self.cc = peau, cheveux, couleur_cheveux
+        self.tete, self.mince = tete, mince
         self.haut, self.ch, self.bas, self.chaus = haut, couleur_haut, bas, chaussures
         self.barbe, self.moustache, self.lunettes, self.badge = barbe, moustache, lunettes, badge
         self.seed = seed
@@ -90,24 +92,27 @@ class Perso:
         ombre_sol(ctx, 0, 0, 150)
         ctx.translate(0, sursaut)
 
+        m = self.mince
         # jambes + chaussures
         for sx in (-1, 1):
-            tube(ctx, [(sx * 40, -430), (sx * 42, -40)], 66, self.bas, lw)
-            ellipse(ctx, sx * 52, -22, 52, 26)
+            tube(ctx, [(sx * 40 * m, -430), (sx * 42 * m, -40)], 66 * m, self.bas, lw)
+            ellipse(ctx, sx * 52 * m, -22, 52 * (0.5 + 0.5 * m), 26)
             paint(ctx, self.chaus, lw, shade=0.85)
 
         ctx.rotate(math.radians(bal))
         ctx.translate(0, souffle * 0.4)
         # torse
         top, bot = -770, -410
-        poly(ctx, [(-118, top + 30), (118, top + 30), (110, bot), (-110, bot)])
         ctx.new_path()
-        rrect(ctx, -122, top, 244, bot - top + 12, 46)
+        rrect(ctx, -122 * m, top, 244 * m, bot - top + 12, 46 * m)
         paint(ctx, self.ch, lw, shade=0.78)
+        ctx.save()
+        ctx.scale(m, 1)
         self._details_haut(ctx, top, bot, lw)
+        ctx.restore()
 
         # bras
-        epaules = {-1: (-112, top + 52), 1: (112, top + 52)}
+        epaules = {-1: (-112 * m, top + 52), 1: (112 * m, top + 52)}
         mains = {}
         for sx, (a_ep, a_co) in ((-1, pg), (1, pd)):
             ex, ey = epaules[sx]
@@ -116,26 +121,29 @@ class Perso:
             a2 = a1 + math.radians(a_co)
             hx, hy = cx_ + sx * math.sin(a2) * 165, cy_ + math.cos(a2) * 165
             mains[sx] = (hx, hy)
-            tube(ctx, [(ex, ey), (cx_, cy_), (hx, hy)], 60, self.ch, lw)
-            circle(ctx, hx, hy, 30)
+            tube(ctx, [(ex, ey), (cx_, cy_), (hx, hy)], 60 * m, self.ch, lw)
+            circle(ctx, hx, hy, 30 * (0.6 + 0.4 * m))
             paint(ctx, self.peau, lw, shade=0.85)
 
         # tête
-        hx, hy = 0, -880 + souffle * 0.6
+        kt = self.tete
+        hx, hy = 0, -760 - 120 * kt + souffle * 0.6          # le cou reste posé sur le torse quelle que soit la tête
         if pose_nom in ("leve", "leve_d"):
             hy -= 4
         ctx.save()
         ctx.translate(hx, hy)
+        ctx.scale(kt, kt)
+        lwt = lw / kt                                          # même épaisseur de trait que le corps
         ctx.rotate(math.radians(math.sin(t * 0.9 + ph) * 2.5 + regard * 4))
         rrect(ctx, -26, 70, 52, 50, 10)
-        paint(ctx, dark(self.peau, 0.9), lw, shade=1)
+        paint(ctx, dark(self.peau, 0.9), lwt, shade=1)
         for sx in (-1, 1):
             circle(ctx, sx * 110, 8, 24)
-            paint(ctx, self.peau, lw, shade=1)
+            paint(ctx, self.peau, lwt, shade=1)
         circle(ctx, 0, 0, 112)
-        paint(ctx, self.peau, lw, shade=0.86)
-        self._visage(ctx, t, emo, de, bouche, regard, lw)
-        self._cheveux(ctx, lw)
+        paint(ctx, self.peau, lwt, shade=0.86)
+        self._visage(ctx, t, emo, de, bouche, regard, lwt)
+        self._cheveux(ctx, lwt)
         ctx.restore()
 
         # objet tenu + main droite par-dessus
@@ -149,11 +157,11 @@ class Perso:
                 circle(ctx, *mains[sx], 30)
                 paint(ctx, self.peau, lw, shade=0.85)
         if pose_nom == "facepalm":
-            circle(ctx, 30, -870, 34)
+            circle(ctx, 30 * kt, -760 - 110 * kt, 34)
             paint(ctx, self.peau, lw, shade=0.85)
         ctx.restore()
         # point d'ancrage pour les badges, bulles, traits de choc (coordonnées monde)
-        return {"tete": (x, y + (hy - 0 + sursaut) * s), "haut_tete": (x, y + (hy - 150 + sursaut) * s),
+        return {"tete": (x, y + (hy - 0 + sursaut) * s), "haut_tete": (x, y + (hy - 150 * kt + sursaut) * s),
                 "main_d": (x + mains[1][0] * s, y + mains[1][1] * s)}
 
     def _details_haut(self, ctx, top, bot, lw):

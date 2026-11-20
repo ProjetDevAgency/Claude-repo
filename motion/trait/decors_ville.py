@@ -67,11 +67,11 @@ def reflet(ctx, dessin, alpha=0.18):
 
 # ───────────── icônes ─────────────
 
-def icone(ctx, nom, x, y, s=1.0, c=(40, 120, 230)):
+def icone(ctx, nom, x, y, s=1.0, c=(40, 120, 230), lw=None):
     ctx.save()
     ctx.translate(x, y)
     ctx.scale(s, s)
-    lw = LW * 0.8
+    lw = (lw or LW) * 0.8 / s
     if nom == "essence":
         rrect(ctx, -28, -34, 44, 70, 6)
         paint(ctx, (240, 120, 40), lw, shade=1)
@@ -128,38 +128,64 @@ def icone(ctx, nom, x, y, s=1.0, c=(40, 120, 230)):
 # ───────────── dominos ─────────────
 
 def domino(ctx, x, y, s, angle=0.0, haut=None, bas=None, montant=None, lueur=0.0, couleur=(250, 246, 232)):
-    """Domino debout : (x, y) = coin bas-GAUCHE ; il bascule autour du coin bas-droit (angle en radians, + = vers la droite)."""
-    w, h, d = 150, 280, 26
+    """Domino debout vu de 3/4 : face avant arrondie + épaisseur visible en haut et à droite.
+
+    (x, y) = coin bas-GAUCHE de la face avant ; il bascule autour du coin bas-droit (angle en radians, + = droite).
+    Le trait garde la même épaisseur quel que soit `s` (sinon les gros dominos ont un contour énorme).
+    """
+    w, h, r = 150, 280, 16
+    ox, oy = 24, -15                       # épaisseur : vers le haut à droite
     ctx.save()
     ctx.translate(x + w * s, y)
     ctx.rotate(angle)
     ctx.translate(-w * s, 0)
     ctx.scale(s, s)
+    lw = LW / s * 1.1
     if lueur > 0:
-        halo(ctx, w / 2, -h / 2, 360, (255, 220, 120), 0.35 * lueur)
-    poly(ctx, [(w, -h + 10), (w + d, -h - 6), (w + d, -16), (w, 0)])
-    paint(ctx, dark(couleur, 0.78), LW, shade=1)
-    poly(ctx, [(10, -h), (w + d - 6, -h - 6 - 4), (w + d, -h - 6), (w, -h + 10)])
-    rrect(ctx, 0, -h, w, h, 18)
-    paint(ctx, couleur, LW, shade=0.9)
-    ctx.move_to(18, -h / 2)
-    ctx.line_to(w - 18, -h / 2)
-    stroke(ctx, LW)
+        halo(ctx, w / 2, -h / 2, 420, (255, 214, 110), 0.42 * lueur)
+    clair, sombre = mix(couleur, (255, 255, 255), 0.35), dark(couleur, 0.74)
+    # dessus (bande claire) puis côté droit (plus sombre), dessinés derrière la face avant
+    poly(ctx, [(r * 0.7, -h + 1), (r * 0.7 + ox, -h + oy), (w - r * 0.3 + ox, -h + oy), (w - 2, -h + 2)])
+    paint(ctx, clair, lw, shade=1)
+    poly(ctx, [(w - 2, -h + r * 0.6), (w - r * 0.3 + ox, -h + oy), (w + ox, -h + oy + r * 0.8), (w + ox, oy - 2),
+               (w - 1, -3)])
+    g = cairo.LinearGradient(0, -h, 0, 0)
+    g.add_color_stop_rgb(0, *rgb(sombre))
+    g.add_color_stop_rgb(1, *rgb(dark(sombre, 0.82)))
+    ctx.set_source(g)
+    ctx.fill_preserve()
+    stroke(ctx, lw)
+    # face avant : lumière du haut-gauche vers le bas-droit
+    rrect(ctx, 0, -h, w, h, r)
+    g = cairo.LinearGradient(0, -h, w * 0.6, 0)
+    g.add_color_stop_rgb(0, *rgb(mix(couleur, (255, 255, 255), 0.25)))
+    g.add_color_stop_rgb(0.55, *rgb(couleur))
+    g.add_color_stop_rgb(1, *rgb(dark(couleur, 0.9)))
+    ctx.set_source(g)
+    ctx.fill_preserve()
+    stroke(ctx, lw)
+    # biseau clair à l'intérieur du bord
+    rrect(ctx, lw * 1.2, -h + lw * 1.2, w - lw * 2.4, h - lw * 2.4, r * 0.75)
+    stroke(ctx, lw * 0.7, (255, 255, 255), alpha=0.45)
+    # barre du milieu
+    ctx.move_to(22, -h / 2)
+    ctx.line_to(w - 22, -h / 2)
+    stroke(ctx, lw * 0.9, INK, alpha=0.75)
     if haut == "points":
         for px, py in ((-1, -1), (0, 0), (1, 1)):
             circle(ctx, w / 2 + px * 36, -h * 0.75 + py * 36, 11)
             flat(ctx, INK)
     elif haut == "soleil":
         circle(ctx, w / 2, -h * 0.75, 26)
-        paint(ctx, (255, 206, 40), LW * 0.8, shade=1)
+        paint(ctx, (255, 206, 40), lw * 0.8, shade=1)
     elif haut:
-        icone(ctx, haut, w / 2, -h * 0.75, 1.1)
+        icone(ctx, haut, w / 2, -h * 0.75, 1.1, lw=lw)
     if montant:
         ecrit(ctx, montant, w / 2, -h * 0.42, 40, INK, big=True)
         if bas:
-            icone(ctx, bas, w / 2, -h * 0.18, 0.75)
+            icone(ctx, bas, w / 2, -h * 0.18, 0.75, lw=lw)
     elif bas:
-        icone(ctx, bas, w / 2, -h * 0.25, 1.1)
+        icone(ctx, bas, w / 2, -h * 0.25, 1.1, lw=lw)
     ctx.restore()
 
 
