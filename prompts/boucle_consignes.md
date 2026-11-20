@@ -44,7 +44,11 @@ fichiers cités. Compte TikTok : @souslesabot (cartoon, héros Kévin, voix narr
    capture TikTok Studio (enregistrements, vue en entier, récompenses : Metricool ne les donne pas).
 
 ## 2. Sujet (10 min)
-- Sources : actu (service-public.fr, Légifrance, economie.gouv.fr, franceinfo, BFM Éco, Capital, Selectra, Que Choisir +
+- **D'abord la veille (client, 20 nov.)** : `python3 scripts/veille_actu.py` → lire `prompts/veille_actu.md`. Ce sont
+  les sujets des comptes d'actu que regardent nos spectateurs (HugoDécrypte, TF1 Info, BFMTV, Franceinfo, Le Parisien,
+  Loopsider…). Choisir en priorité une actu argent de la veille (la plus vue, qui touche les 18–25 ans), la raconter
+  avec Kévin et le méchant / le frère. On reprend le SUJET, vérifié dans 2 sources, jamais leurs images ni leur texte.
+- Autres sources : actu (service-public.fr, Légifrance, economie.gouv.fr, franceinfo, BFM Éco, Capital, Selectra, Que Choisir +
   `prompts/actu_argent.md`), concurrents (`prompts/sujets_concurrents.md`), ou invention.
 - Le sujet suit **le modèle gagnant** et passe les 8 critères. Vérifier la règle dans 2 sources ; noter références et
   sources dans l'en-tête du `.dial`.
