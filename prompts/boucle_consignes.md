@@ -54,9 +54,10 @@ fichiers cités. Compte TikTok : @souslesabot (cartoon, héros Kévin, voix narr
   vase cassé, taxes d'aéroport, frais d'agence pour un seul public) = non, même s'il est 8/8. Relevé du 19 nov. : la
   rétention des 1res secondes est la même sur les succès et les flops (78–83 % à 0:01) ; ce qui sépare 48 k de 300 vues,
   ce sont les partages et enregistrements, donc le sujet.
-- Variable en test (1 vidéo sur 2) : une phrase de PROMESSE juste après l'accroche (« Il le sait pas encore, mais cette
-  phrase va lui coûter cher »). Noter « promesse oui/non » dans la colonne twist de l'index. Probable, pas prouvé
-  (voir `prompts/analyse_concurrent_laficelle.md`).
+- **Test en cours (depuis le 20 nov.) : le feuilleton du grand frère** — lire `prompts/feuilleton_grand_frere.md`.
+  Une vidéo sur deux est un épisode (sam. 21 = épisode 4, dim. 22 = sans frère, lun. 23 = épisode 5…). Respecter la
+  bible et la continuité, ajouter l'épisode à la liste du fichier. Colonne `format` de l'index : `feuilleton ep N` ou
+  `hors feuilleton`. Le test de la « promesse après l'accroche » est suspendu pendant ce test.
 - Proposer mentalement 3 accroches (PRIX, MÉPRIS, ENJEU) et garder la plus conforme au modèle gagnant et aux stats.
 
 ## 3. Script (15 min)
