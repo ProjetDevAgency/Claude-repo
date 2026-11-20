@@ -171,3 +171,11 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
   le premier lot de spectateurs « Pour toi » peut contenir des gens qui ne parlent pas français (départ à 0:01) et le
   programme Récompenses pour les créateurs n'est peut-être pas disponible pour le compte (0,00 $). Demander au client
   l'onglet « Spectateurs » (pays) d'une vidéo et la région / langue du compte.
+- 20 nov. 14 h — capture « Spectateurs » (client) : France 88,8 %, Belgique 2,9 %, Suisse 2,2 %, Brésil 1,6 %,
+  La Réunion 1,6 % → HYPOTHÈSE « région Israël » ÉCARTÉE pour la diffusion (le support en hébreu vient d'ailleurs :
+  langue du téléphone ou routage du support). Le 0,00 $ reste inexpliqué.
+- Nos spectateurs regardent aussi : Brut, HugoDécrypte, TF1 Info, Ulyces, Le Parisien, BFMTV, Loopsider, M6+ Magazines,
+  Franceinfo, AlloCiné → un public d'ACTU / décryptage. Cohérent avec Anthropic (actu) = meilleur succès.
+- Décision : dans le feuilleton, préférer les épisodes accrochés à une actu argent du moment (le frère fonce sur ce que
+  tout le monde voit passer aux infos). Pic d'activité indiqué : jeudi 0 h–1 h (une seule semaine de données) → à
+  surveiller avant de toucher aux horaires.

@@ -36,6 +36,9 @@ Hypothèse, pas certitude : on la teste.
    écrit au « conseiller » en se faisant passer pour un client (bloqué en 2 minutes) ; le lendemain l'offre est toujours
    là ; le soir, c'est le frère qui lui demande la liste. Kévin garde ses 500 €.
 
+**Priorité (20 nov.) : nos spectateurs regardent surtout de l'actu (Brut, HugoDécrypte, TF1 Info, BFMTV, Franceinfo).
+Chaque fois que possible, accrocher l'épisode à une actu argent du moment : le frère fonce sur ce qu'on voit aux infos.**
+
 ## Pistes d'épisodes (toujours : sujet universel, 8/8, faits vérifiés dans 2 sources, une astuce que Kévin applique)
 - ~~Il veut « se refaire » : plateforme / liste noire AMF~~ → fait (épisode 4).
 - **Voiture en LOA / crédit** pour frimer : coût total, kilométrage, frais de fin de contrat ; droit de rétractation de
