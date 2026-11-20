@@ -1,0 +1,39 @@
+# Refait du sujet La Ficelle « 6 aides à récupérer avant le 31 décembre » (décision du client du 20 nov.),
+# avec NOS mots, Kévin et notre méchant ; moteur « trait » ; les 7 points du 20 nov.
+# Faits 2026 (vérifiés dans 2 sources chacun, repris de 39_cinq_aides_31_decembre.dial + CCAS) :
+# 1. Indemnité carburant 100 € : 2e versement oct.-déc. 2026, RFR ≤ 22 770 €/part, formulaire impots.gouv jusqu'au 31/12
+#    (selectra.info 27 oct. ; bulletindescommunes.net ; prix-carburant.eu).
+# 2. Chèque énergie : à réclamer en ligne avant le 31/12/2026 s'il n'a pas été reçu (déménagement), numéro fiscal,
+#    RFR < 11 000 €/UC ; 48 € pour une personne seule entre 7 850 et 11 000 € (seloger ; contact-administratif).
+# 3. CCAS : aides facultatives de la commune (secours, aide au chauffage), règles et calendrier fixés par chaque ville
+#    (Code de l'action sociale et des familles, L123-5 ; service-public.fr « CCAS »).
+# 4. Don à un organisme d'aide aux personnes en difficulté : réduction de 75 % jusqu'à 2 000 € (art. 200 CGI ;
+#    economie.gouv.fr ; BOFiP). Être imposable, garder le reçu, donner avant le 31/12.
+# 5. Rachat de RTT jusqu'au 31/12/2026, majoration ≥ 25 %, exonéré d'impôt dans la limite de 7 500 €/an, accord de
+#    l'employeur (extencia ; tyls).
+# 6. Prime transport / carburant : jusqu'à 1 000 € exonérés de cotisations pour oct.-déc. 2026 (décrets n° 2026-973 et
+#    2026-974 du 20 oct. 2026), FACULTATIVE (legisocial ; axens-audit).
+# Cas type : 100 + 48 + 75 + 450 + 1 000 = 1 673 € (CCAS : montant selon la ville, non compté).
+# Méchant TIER A : le parrain, patron du garage. Transgression : mépris (« les aides, c'est pour les assistés »).
+# Verrou V3 deadline (31 décembre). Mot-enjeu « le trente et un ». Twist W2 : il signe pour tout l'atelier.
+# Promesse : « d'ici le trente et un, c'est lui qui va payer ces mille euros ».
+# Zone grise : Kévin fait le calcul DEVANT les quatre mécanos pour le coincer.
+# 7 points : 1 méchant + gain chiffré ; 2 réplique à « tu » ; 3 promesse ; 4 montants ; 5 dessin animé ;
+# 6 image = phrase en cours ; 7 squelette accroche → promesse → escalade → règle → 6 étapes → calcul → résolution.
+M: Une prime de mille euros pour ton essence avant le trente et un, tu rêves ? Ici on paie les heures, pas tes kilomètres.
+N: Sauf que d'ici le trente et un, c'est lui qui va payer ces mille euros. Et cinq autres aides avant.
+N: Lundi, je fais le plein avant le garage. Quatre-vingt-dix euros pour vingt kilomètres. Je lui montre le ticket. Je lui dis, y a des aides pour ça. Il me fait,
+M: Les aides, c'est pour les assistés. Toi, t'as un salaire.
+N: Je dis rien.
+N: Pour les assistés.
+N: Sauf que six aides s'arrêtent le trente et un décembre. Et pourtant presque personne les réclame.
+N: D'abord, l'aide carburant. Revenu modeste et tu roules pour bosser ? L'État te verse cent euros. Formulaire aux impôts.
+N: Ensuite, le chèque énergie. J'ai déménagé, je l'ai jamais reçu. Ce que peu de gens savent, c'est qu'il suit pas ton adresse. Il se réclame en ligne. Pour moi, quarante-huit euros.
+N: La troisième, la mairie. Ma voisine garde son manteau chez elle. Le centre d'action sociale peut l'aider pour le chauffage, selon la ville.
+N: La quatrième, le don. Ma mère hésitait à donner cent euros à une asso d'aide alimentaire. Si tu payes l'impôt, l'État t'en rend soixante-quinze pour cent. Ses cent euros lui coûtent vingt-cinq.
+N: La cinquième, les RTT. Mon père en a trois qui sautent au trente et un. Il les revend à son patron, majorés d'un quart, sans impôt. Quatre cent cinquante euros.
+N: Et la dernière, la plus grosse. Jusqu'au trente et un, un patron peut verser mille euros par salarié pour le trajet, sans cotisations. Rien l'oblige.
+N: Alors je lui fais le calcul, devant les quatre mécanos. Une augmentation lui coûterait bien plus, avec les charges.
+N: Honnêtement, je l'ai peut-être un peu coincé devant ses gars.
+N: Il signe pour tout l'atelier.
+N: Total, mille six cent soixante-treize euros. Dont mille euros signés par lui.
