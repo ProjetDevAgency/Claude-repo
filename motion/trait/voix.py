@@ -72,8 +72,17 @@ def _trim(x, thr=0.012):
     return x[a:b], a / SR
 
 
-def build(lines, voices, work: Path, model="eleven_multilingual_v2", gap=0.22, speed=1.0):
-    """lines : [(clé de voix, texte marqué)] ; voices : {clé: (voice_id, réglages)}."""
+def _atempo(audio, v, work):
+    a, b = work / "_l.f32", work / "_l2.f32"
+    audio.astype(np.float32).tofile(a)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", str(a),
+                    "-af", f"atempo={v}", "-f", "f32le", str(b)], check=True)
+    return np.fromfile(b, np.float32)
+
+
+def build(lines, voices, work: Path, model="eleven_multilingual_v2", gap=0.22, speed=1.0, vitesses=None):
+    """lines : [(clé de voix, texte marqué)] ; voices : {clé: (voice_id, réglages)}.
+    vitesses : une vitesse par ligne (1 = normale), pour caler le rythme ligne par ligne."""
     work.mkdir(parents=True, exist_ok=True)
     pistes, words, t = [], [], 0.0
     for li, (who, text) in enumerate(lines):
@@ -81,6 +90,9 @@ def build(lines, voices, work: Path, model="eleven_multilingual_v2", gap=0.22, s
         vid, st = voices[who]
         audio, al = _tts(clean, vid, model, work, st)
         audio, cut = _trim(audio)
+        vl = vitesses[li] if vitesses else 1.0
+        if vl != 1.0:
+            audio = _atempo(audio, vl, work)
         chars, starts, ends = al["characters"], al["character_start_times_seconds"], al["character_end_times_seconds"]
         # mots ElevenLabs (séparés par des espaces) → mêmes mots que le texte marqué
         spans, cur = [], None
@@ -99,7 +111,7 @@ def build(lines, voices, work: Path, model="eleven_multilingual_v2", gap=0.22, s
             tot = len(audio) / SR
             spans = [[tot * i / len(marked), tot * (i + 1) / len(marked)] for i in range(len(marked))]
         for (w, k), (s0, s1) in zip(marked, spans):
-            words.append({"w": w, "t0": t + max(0, s0 - cut) / speed, "t1": t + max(0, s1 - cut) / speed,
+            words.append({"w": w, "t0": t + max(0, s0 - cut) / vl / speed, "t1": t + max(0, s1 - cut) / vl / speed,
                           "mark": k, "line": li, "who": who})
         pistes.append(audio)
         pistes.append(np.zeros(int(gap * SR), np.float32))
