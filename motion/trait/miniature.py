@@ -44,7 +44,7 @@ def miniature(question, choc, avant, apres, perso, emotion, sortie):
     p = Perso(**perso)
     p.emotion(0, emotion).pose(0, "repos")
     s = 2.6
-    ancre = p.draw(ctx, W / 2, H + 1000, s, 0.4, bouche=0.6 if emotion == "choc" else 0.0)
+    ancre = p.draw(ctx, W / 2, H + 1180, s, 0.4, bouche=0.6 if emotion == "choc" else 0.0)
     if emotion == "triste":                                   # larmes sous les yeux
         hx, hy = ancre["tete"]
         k = perso.get("tete", 1.0) * s
@@ -53,16 +53,16 @@ def miniature(question, choc, avant, apres, perso, emotion, sortie):
             for j in range(3):
                 circle(ctx, ex + sx * 4 * j, hy + 14 * k + j * 20 * k, (9 - 2 * j) * k)
                 paint(ctx, (120, 190, 255), LW * 0.8, shade=1)
-    bandeau(ctx, 150, question, 108, (255, 214, 40), INK, rot=-0.015)
-    bandeau(ctx, 1450, choc, 76, (34, 32, 44), (255, 255, 255), rot=0.01)
+    bandeau(ctx, 370, question, 100, (255, 214, 40), INK, rot=-0.015)   # zone visible 3:4 : y 240 à 1680
+    bandeau(ctx, 1330, choc, 70, (34, 32, 44), (255, 255, 255), rot=0.01)
     # « 0 € barré → gain »
-    ecrit(ctx, avant, 230, 1680, 150, (230, 230, 235), big=True, outline=6)
-    ctx.move_to(110, 1700)
-    ctx.line_to(360, 1650)
+    ecrit(ctx, avant, 230, 1525, 130, (230, 230, 235), big=True, outline=6)
+    ctx.move_to(120, 1545)
+    ctx.line_to(350, 1500)
     stroke(ctx, 20, (232, 52, 60))
-    poly(ctx, [(380, 1660), (470, 1660), (470, 1630), (530, 1685), (470, 1740), (470, 1710), (380, 1710)])
+    poly(ctx, [(380, 1505), (460, 1505), (460, 1478), (515, 1528), (460, 1578), (460, 1551), (380, 1551)])
     paint(ctx, (255, 170, 40), LW, shade=1)
-    ecrit(ctx, apres, 790, 1680, 190, (60, 220, 110), big=True, outline=7)
+    ecrit(ctx, apres, 785, 1525, 165, (60, 220, 110), big=True, outline=7)
     surf.write_to_png(str(sortie) + ".png")
     from PIL import Image
     Image.open(str(sortie) + ".png").convert("RGB").save(str(sortie) + ".jpg", quality=92)

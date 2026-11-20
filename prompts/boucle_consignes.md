@@ -37,7 +37,7 @@ Ce mode REMPLACE les étapes 2 (sujet), 3 (script), 4 (voix) et 5 (vidéo) ci-de
    20 nov.), lister chaque écart (cadrage, objet manquant, texte trop petit ou caché, marque visible, personnage
    coupé), corriger, refaire la planche. Mesure `scripts/mesure_mouvement.py` : au moins le niveau de l'original.
    Aucun texte sur un visage, aucun texte coupé.
-7. **Miniature** comme La Ficelle (modèle fixe, `motion/trait/miniature.py`) : bandeau jaune avec la question du sujet en haut (« AIDES AVANT LE 31/12 ? »), gros plan d'un personnage qui réagit (larmes / choc), bandeau sombre avec la phrase choc, puis « 0 € barré → gain en vert » en bas → `output/trait/miniature_<slug>.jpg`, passée dans `videoThumbnailUrl` (uguu) au moment de programmer.
+7. **Miniature** comme La Ficelle (modèle fixe, `motion/trait/miniature.py`, tout dans la zone visible 3:4 : y 240 à 1680) : bandeau jaune avec la question du sujet en haut (« AIDES AVANT LE 31/12 ? »), gros plan d'un personnage qui réagit (larmes / choc), bandeau sombre avec la phrase choc, puis « 0 € barré → gain en vert » en bas → `output/trait/miniature_<slug>.jpg`, passée dans `videoThumbnailUrl` (uguu) au moment de programmer.
 8. **Publier** (étape 6) : description à nous (accroche, 4 à 6 ✅ avec références, question 👇, « Cas type, montants
    indicatifs. », 5 hashtags), isAigc true, lendemain 18 h. Ajouter la ligne dans `prompts/remakes/journal.md`
    (date, vidéo d'origine, slug, durée, mouvement, post Metricool) et dans `prompts/videos_index.csv`.
