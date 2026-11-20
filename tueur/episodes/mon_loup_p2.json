@@ -1,0 +1,213 @@
+{
+ "script": "scripts/mon_loup_p2.txt",
+ "sortie": "mon_loup_p2",
+ "scene": "mon_loup_p2",
+ "tts": {
+  "provider": "elevenlabs",
+  "model": "eleven_v4",
+  "voix": {
+   "NARRATEUR": {
+    "id": "6DEjyaHWnTHsvXM5Byys",
+    "nom": "Hugo, conteur français grave (bibliothèque ElevenLabs), sans retouche",
+    "settings": {
+     "stability": 0.45,
+     "similarity_boost": 0.8,
+     "style": 0.45
+    },
+    "note": "Hugo sans retouche, jeu menaçant (balise [ominous], jouée et pas lue). Choisi le 18/11/2026 (comparatif n°2).",
+    "balise": "[ominous]"
+   },
+   "VOIX DERRIÈRE LA PORTE": {
+    "id": "O31r762Gb3WFygrEOGh0",
+    "nom": "Victoire",
+    "effet": "porte",
+    "settings": {
+     "stability": 0.55,
+     "similarity_boost": 0.8,
+     "style": 0.15
+    }
+   },
+   "TEXTO DE MAMAN": {
+    "id": "O31r762Gb3WFygrEOGh0",
+    "nom": "Victoire",
+    "effet": "telephone",
+    "texto": true,
+    "settings": {
+     "stability": 0.6,
+     "similarity_boost": 0.8,
+     "style": 0.1
+    }
+   },
+   "VOIX DERRIÈRE LE RIDEAU": {
+    "id": "O31r762Gb3WFygrEOGh0",
+    "nom": "Victoire, tout près, derrière le rideau",
+    "effet": "rideau",
+    "settings": {
+     "stability": 0.6,
+     "similarity_boost": 0.8,
+     "style": 0.1
+    }
+   },
+   "PETIT FRÈRE": {
+    "id": "Y2uuwzlt8SyNkjrPovVI",
+    "nom": "Natacha (bibliothèque ElevenLabs), montée de 4 demi-tons pour une voix d'enfant",
+    "settings": {
+     "stability": 0.4,
+     "similarity_boost": 0.8,
+     "style": 0.35
+    },
+    "traitement": "rubberband=pitch=1.26:formant=shifted"
+   }
+  }
+ },
+ "rythme": {
+  "debut": 0.12,
+  "entre_repliques": 0.08,
+  "pause": 0.22,
+  "tenue_finale": 3.2,
+  "duree_min": 61.5,
+  "silence_min": 0.14,
+  "silence_garde": 0.1,
+  "silence_garde_ligne": 0.2,
+  "seuil_silence_db": -40,
+  "vitesse": 1.04,
+  "pause_max": 0.35,
+  "silence_garde_phrase": 0.21,
+  "note": "Même rythme que la partie 1"
+ },
+ "bruitages": {
+  "GRINCEMENT": {
+   "son": "creak",
+   "avance": 0.3
+  },
+  "VIBREUR": {
+   "son": "buzz",
+   "avance": 0.15
+  },
+  "RIDEAU QUI BOUGE": {
+   "son": "rideau",
+   "avance": 0.35
+  },
+  "DING DE L'ASCENSEUR": {
+   "son": "ding",
+   "avance": 0.45
+  },
+  "QUESTION": {
+   "son": "sting"
+  }
+ },
+ "sons_sous_voix": [
+  {
+   "son": "knock3",
+   "a": 0.35
+  }
+ ],
+ "battements_depuis": 5,
+ "hud": {
+  "episode": "PARTIE 2",
+  "heure": "02:15:12",
+  "lieu": "6E ÉTAGE · TON SALON",
+  "compte": "@tuchoisis.fr",
+  "lieux": [
+   [
+    5,
+    "6E ÉTAGE · SALLE DE BAIN"
+   ]
+  ]
+ },
+ "regle": {
+  "ligne": 13,
+  "titre": "RÈGLE N°2",
+  "texte": "ON S'ENFERME"
+ },
+ "texto": {
+  "de": "Maman",
+  "avant": "Je finis à six heures. Ouvre à personne. Cache ton frère.",
+  "avant_label": "Aujourd'hui, 02:15",
+  "label": "Aujourd'hui, 02:15",
+  "coeur": false,
+  "entourer": false,
+  "fin_ligne": 12
+ },
+ "choix": {
+  "gauche": "LE RIDEAU",
+  "droite": "LE VERROU",
+  "ancre_gauche": [
+   -5.25,
+   1.45,
+   0.9
+  ],
+  "ancre_droite": [
+   -3.0,
+   1.2,
+   1.35
+  ]
+ },
+ "rouge": [
+  "cognait",
+  "porte",
+  "disparu",
+  "frère",
+  "salon",
+  "loup",
+  "douze",
+  "poignée",
+  "froide",
+  "oreilles",
+  "jeu",
+  "maman",
+  "fenêtre",
+  "étage",
+  "trente",
+  "papier",
+  "rien",
+  "minute",
+  "règle",
+  "verrou",
+  "souffles",
+  "miroir",
+  "rideau",
+  "pieds",
+  "vernis",
+  "rouge",
+  "chut",
+  "dame",
+  "couloir",
+  "elle",
+  "tires",
+  "ouvres"
+ ],
+ "plans": [
+  "porte",
+  "canape_vide",
+  "traverse",
+  "porte_proche",
+  "poignee_sdb",
+  "sdb_frere",
+  "frere_proche",
+  "sdb_heros",
+  "frere_proche",
+  "sdb_fenetre",
+  "sdb_porte",
+  "sdb_large",
+  "verrou",
+  "sdb_large",
+  "miroir",
+  "rideau_bas",
+  "rideau",
+  "sdb_heros2",
+  "sdb_large",
+  "sdb_final"
+ ],
+ "marques": {
+  "traverse": 3,
+  "entree": 5,
+  "texto": 12,
+  "verrou": 13,
+  "repit": 14,
+  "miroir": 15,
+  "pieds": 16,
+  "rideau": 17,
+  "choix": 20
+ }
+}
