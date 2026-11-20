@@ -72,3 +72,13 @@ concurrent La Ficelle (`prompts/analyse_concurrent_laficelle.md`, 15 vidéos à 
 4. **Méchant de préférence proche (TIER S) ou avec du pouvoir (TIER A)** : chez nous, TIER F = 16–19 s de temps moyen
    contre 24–26 s. Mais un vendeur ou un service client peut marcher si le sujet est universel (colis, 1,5 M chez eux).
 5. **La fin referme l'ultimatum** : Kévin passe devant l'agence au volant ; le frère lui demande d'avancer son loyer.
+
+## Mise en image (chantier visuel du 19 nov., obligatoire)
+- **Ce qu'on voit = ce qui est dit** : chaque objet, chiffre ou action du texte a son illustration animée
+  (`motion/dynamique.py`). Écrire le script en pensant à ce qu'on montrera : des objets concrets (devis, livret,
+  appli, calendrier, notification, plat, billets) plutôt que des idées abstraites.
+- Ouverture en 3 plans calés sur la voix : l'objet du sujet avec le montant → le méchant → la réaction de Kévin.
+- Dialogues vivants : caméra vers celui qui parle, gestes que le texte décrit.
+- Jamais de logo de marque réelle.
+- Mesure : ≥ 6 % de l'image qui bouge, ≤ 15 % d'images figées (`scripts/mesure_mouvement.py`).
+Détails techniques : `prompts/boucle_consignes.md`, étape 5.
