@@ -2,7 +2,8 @@
 
     python3 motion/trait/miniature_piscine.py   → output/trait/piscine_dauphin_miniature.png
 
-Le texte reste dans la zone sûre : TikTok recouvre le bas (description) et la droite (boutons).
+Zone sûre : TikTok recadre la couverture en 3:4 (seul le centre, y de 240 à 1680, est sûr) et recouvre la droite
+(boutons) dans le fil. Tout ce qui compte tient entre y 300 et y 1650.
 """
 import sys
 from pathlib import Path
@@ -39,9 +40,9 @@ def main():
     dame.objet = lambda c, x, y, s: P.cheque(c, x, y - 175, 0.95, "6 000 €")
     fils.pose(0, "oreille").emotion(0, "colere")
     fils.objet = lambda c, x, y, s: __import__("decors").telephone(c, x + 35, y - 95, 0.7, rot=0.35)
-    fils.draw(ctx, 905, 2120, 0.95, t)
-    traits_choc(ctx, 905, 2120 - 0.95 * 880, 150, 0.5)
-    dame.draw(ctx, 215, 2260, 1.15, t)
+    fils.draw(ctx, 890, 2080, 0.92, t)
+    traits_choc(ctx, 890, 2080 - 0.92 * 880, 145, 0.5)
+    dame.draw(ctx, 225, 2190, 1.1, t)
     vignette(ctx, 0.45)
 
     # titre (zone sûre : haut de l'image, à gauche des boutons)
@@ -61,9 +62,10 @@ def main():
         ctx.paint()
         ctx.restore()
 
-    ligne("6 000 €", 250, 170, (255, 210, 40), INK, -0.04)
-    ligne("POUR UNE PISCINE VIDE", 440, 84, (250, 250, 250), INK, 0.02)
-    ligne("« ARNAQUEUR »", 590, 76, (232, 52, 60), (255, 255, 255), -0.03)
+    # La couverture est recadrée en 3:4 par TikTok (centre de l'image : y de 240 à 1680) → titres à partir de y 360.
+    ligne("6 000 €", 380, 160, (255, 210, 40), INK, -0.04)
+    ligne("POUR UNE PISCINE VIDE", 560, 82, (250, 250, 250), INK, 0.02)
+    ligne("« ARNAQUEUR »", 700, 74, (232, 52, 60), (255, 255, 255), -0.03)
 
     out = ROOT / "output/trait/piscine_dauphin_miniature.png"
     surf.write_to_png(str(out))
