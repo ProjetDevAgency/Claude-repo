@@ -110,6 +110,7 @@ class Recit:
         v.sub_y = 0.69
         if self.dyn:                                   # chantier visuel du 19 nov. : sous-titres plus discrets
             v.sub_size = 62
+            v.sub_surligne = True
         v.voice(self.voix)
         T = self.T
         apres = 0.0

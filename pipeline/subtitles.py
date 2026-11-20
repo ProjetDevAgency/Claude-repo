@@ -116,6 +116,7 @@ ScaledBorderAndShadow: yes
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: Word,{cfg['font_name']},{size},{cfg['color']},&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,1,0,1,{cfg['outline']},{cfg['shadow']},5,40,40,0,1
+Style: Cle,{cfg['font_name']},{size},&H001E1818,&H000000FF,&H0028CCFF,&H0028CCFF,-1,0,0,0,100,100,1,0,3,10,0,5,40,40,0,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -132,11 +133,14 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         txt = re.sub(r"\b([Pp])lu\b", r"\1lus", w["text"])  # « plu » écrit pour la voix IA, « plus » à l'écran
         txt = txt.upper() if cfg.get("uppercase", True) else txt
         txt = txt.replace("{", "(").replace("}", ")")
-        color = ""
+        color, style = "", "Word"
         if _norm(w["text"]) in _NUMBER_WORDS or re.search(r"\d", w["text"]):
-            color = f"\\c{cfg['highlight_color']}"
+            if cfg.get("surligne"):              # mot-clé dans une case jaune (chantier visuel, 20 nov.)
+                style = "Cle"
+            else:
+                color = f"\\c{cfg['highlight_color']}"
         pop = "\\fscx86\\fscy86\\t(0,70,\\fscx100\\fscy100)"
-        lines.append(f"Dialogue: 0,{_ts(start)},{_ts(end)},Word,,0,0,0,,"
+        lines.append(f"Dialogue: 0,{_ts(start)},{_ts(end)},{style},,0,0,0,,"
                      f"{{\\an5\\pos({width // 2},{y}){pop}{color}}}{txt}")
     out_path.write_text(header + "\n".join(lines) + "\n", encoding="utf-8")
     return out_path
