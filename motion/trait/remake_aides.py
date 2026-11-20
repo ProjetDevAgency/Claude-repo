@@ -157,10 +157,10 @@ def carte_numero(ctx, t, lt, n, nom, sous):
     else:
         ecrit(ctx, "AIDE", 90, 560, 30, c, ax=0, big=True, alpha=min(1, lt * 4))
     ecrit(ctx, str(n), 90, 700, 320, (255, 255, 255), ax=0, big=True, scale=k)
-    ctx.rectangle(90, 820, 90 * ease(lt / 0.5), 10)
+    ctx.rectangle(90, 880, 90 * ease(lt / 0.5), 10)
     flat(ctx, c)
-    ecrit(ctx, nom, 90, 900, 84, (255, 255, 255), ax=0, big=True, alpha=ease((lt - 0.15) / 0.3))
-    ecrit(ctx, sous, 90, 985, 44, (200, 200, 210), ax=0, alpha=ease((lt - 0.3) / 0.3))
+    ecrit(ctx, nom, 90, 950, 84, (255, 255, 255), ax=0, big=True, alpha=ease((lt - 0.15) / 0.3))
+    ecrit(ctx, sous, 90, 1035, 44, (200, 200, 210), ax=0, alpha=ease((lt - 0.3) / 0.3))
     # domino qui arrive en tournant
     u = ease_out(lt / 0.6)
     s = ECH[n] * (0.6 + 0.4 * u)
@@ -311,7 +311,7 @@ def construire(work):
         fi = min(5.0, max(0.0, lt / 0.45 - 0.2 + 0.6 * ease(lt / 1.4)))
         i = min(4, int(fi))
         k = fi - i
-        cx = CENTRE[i] + (CENTRE[i + 1] - CENTRE[i]) * k - 420 * (1 - ease(lt / 1.0))
+        cx = CENTRE[i] + (CENTRE[i + 1] - CENTRE[i]) * k - 420 * (1 - ease(lt / 2.2))
         z = 1.18 * 1.236 ** (-0.38 * fi)
         return cx, SOL - 370 / z, z
 
