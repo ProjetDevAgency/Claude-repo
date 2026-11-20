@@ -121,3 +121,40 @@ def enveloppe(voice, fps=30):
     env = np.array([np.sqrt(np.mean(voice[i * hop:(i + 1) * hop] ** 2) + 1e-12) for i in range(n)])
     env = np.nan_to_num(env)
     return np.clip(env / (np.percentile(env, 95) + 1e-9), 0, 1)
+
+
+def _norm(s):
+    s = s.lower().replace("’", "'").replace("-", " ")
+    s = re.sub(r"\b(\w)'", r"\1", s)                      # c'est → cest, l'âge → lâge
+    return re.sub(r"[^\w\s]", "", s).split()
+
+
+def verifier(voice, words, work: Path):
+    """Fait retranscrire la voix (ElevenLabs Scribe) et liste les mots entendus différents du texte.
+    Les écarts de pure écriture (apostrophes, traits d'union, nombres en chiffres) sont ignorés.
+    Renvoie [(temps, texte, entendu)]."""
+    import difflib
+    wav, mp3 = work / "_verif.f32", work / "_verif.mp3"
+    voice.astype(np.float32).tofile(wav)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", str(wav),
+                    "-ar", "16000", str(mp3)], check=True)
+    out = subprocess.run(["curl", "-s", "https://api.elevenlabs.io/v1/speech-to-text", "-H",
+                          f"xi-api-key: {os.environ.get('ELEVENLABS_API_KEY', 'proxy')}", "-F", "model_id=scribe_v1",
+                          "-F", "language_code=fra", "-F", f"file=@{mp3}"], capture_output=True, text=True).stdout
+    stt = [x for x in json.loads(out)["words"] if x.get("type") == "word"]
+    ref, hyp, t_hyp = [], [], []
+    for w in words:
+        ref += _norm(w["w"])
+    for x in stt:
+        for n in _norm(x["text"]):
+            hyp.append(n)
+            t_hyp.append(x["start"])
+    ecarts = []
+    for op, a1, a2, b1, b2 in difflib.SequenceMatcher(a=ref, b=hyp, autojunk=False).get_opcodes():
+        if op == "equal":
+            continue
+        txt, ent = " ".join(ref[a1:a2]), " ".join(hyp[b1:b2])
+        if any(c.isdigit() for c in ent + txt):
+            continue                                       # « quatorze » transcrit « 14 » : pas une erreur
+        ecarts.append((t_hyp[min(b1, len(t_hyp) - 1)] if t_hyp else 0.0, txt, ent))
+    return ecarts

@@ -22,14 +22,14 @@ from film import Film  # noqa: E402
 from perso import Perso, traits_choc  # noqa: E402
 
 YANN = os.environ.get("YANN_VOICE_ID", "nr2EGJNe96rzn9FRlTId")          # « Yann » dans ElevenLabs
-VOIX = {"nar": (YANN, {"stability": 0.45, "similarity_boost": 0.8, "style": 0.2, "speed": 1.2})}
+VOIX = {"nar": (YANN, {"stability": 0.5, "similarity_boost": 0.75})}   # vitesse normale, aucun réglage d'émotion
 
 # Le texte est celui de scripts/trait/piscine_dauphin.txt (vérifié par pipeline.script verifier),
 # avec seulement les marques de couleur des sous-titres : [jaune] {rouge}.
 LIGNES = [
     "[Six mille euros], c'est ce qu'une dame de [quatre-vingt-un ans] m'a payé pour remplir une piscine abandonnée.",
     "Vide depuis vingt ans, et elle se baigne même plus.",
-    "Un bassin carrelé main, des feuilles jusqu'aux genoux, une {fissure} sur tout le fond.",
+    "Un bassin carrelé à la main, des feuilles jusqu'aux genoux, une {fissure} sur tout le fond.",
     "Elle m'appelle un mardi matin. Elle veut que ce soit fini pour le [quatorze juillet]. "
     "Et elle me dit juste, le [dauphin] au fond, vous y touchez pas.",
     "Le deuxième jour, c'est son fils qui m'appelle. Il a vu le virement. Il me fait, six mille balles pour un trou "
@@ -64,7 +64,7 @@ GAMIN = dict(cheveux="court", couleur_cheveux=(52, 38, 32), peau=(230, 180, 140)
 
 
 def construire(work):
-    voice, words = voix.build([("nar", l) for l in LIGNES], VOIX, work, gap=0.24, speed=1.1)
+    voice, words = voix.build([("nar", l) for l in LIGNES], VOIX, work, model="eleven_v4", gap=0.3)
     f = Film(voice, words)
     T = f.t
     moi, dame, fils, petite = Perso(**MOI), Perso(**DAME), Perso(**FILS), Perso(**PETITE)
