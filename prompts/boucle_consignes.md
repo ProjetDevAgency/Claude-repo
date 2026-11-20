@@ -33,7 +33,7 @@ Ce mode REMPLACE les étapes 2 (sujet), 3 (script), 4 (voix) et 5 (vidéo) ci-de
    Décors dessinés pour la vidéo ; plans photo de l'original → photos libres de droits (Openverse, licence cc0/pdm,
    via curl), aucune marque lisible, sources dans `assets/photos_libres/SOURCES.md`. **Caméra calme**
    (`VIE = {"pousse": 0.02, "derive": 8, "roulis": 0}`), **coupes nettes** (fouet=False). Rendu `--jobs 4`.
-6. **Vérifier et corriger** : planches original / remake à la même seconde (1 image/s, voir la méthode du
+6. **Vérifier et corriger** (règle du client du 20 nov. : sur leur 1re image, le héros est bien visible) : **la 1re image compte double** — même place, même taille de personnage (en pied, ≈ la moitié de la hauteur), mêmes objets visibles et déjà en mouvement que l'original ; le comparer côte à côte à 0,2 s avant tout le reste. Puis : planches original / remake à la même seconde (1 image/s, voir la méthode du
    20 nov.), lister chaque écart (cadrage, objet manquant, texte trop petit ou caché, marque visible, personnage
    coupé), corriger, refaire la planche. Mesure `scripts/mesure_mouvement.py` : au moins le niveau de l'original.
    Aucun texte sur un visage, aucun texte coupé.

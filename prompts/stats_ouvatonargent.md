@@ -188,3 +188,9 @@ prix, geste), changement fort toutes les 1 à 1,5 s ; squelette accroche → pro
 calcul → résolution (1 450 à 1 800 caractères). `scripts/verifier_script.py` contrôle les points 2, 3, 4 et 7.
 **Exception à « une seule variable par vidéo »** (décision du client) : les 7 points changent en bloc. À partir de la
 vidéo du 21 nov., comparer le bloc « 7 points » aux vidéos d'avant (vues, temps moyen, partages, enregistrements).
+
+## 20 nov. 19 h 55 — remake « 6 aides » (posté à la main 19 h 07), après 48 min
+23 vues, 40 % encore là à 0:01 (habituel chez nous : 78–83 %), visionnage moyen 9,3 s, 2,6 % jusqu'au bout,
+0 like / partage / enregistrement. Trop tôt (23 vues) pour conclure ; à relire demain 19 h.
+Écart repéré par le client : sur la 1re image de l'original, Marc est bien visible (en pied, quart gauche) ;
+chez nous Kévin était petit et au bord → corrigé dans le moteur et règle « 1re image compte double » ajoutée à la boucle.

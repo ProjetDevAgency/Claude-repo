@@ -265,7 +265,7 @@ def construire(work):
            ("points", "calendrier")]
 
     def ang(i, t, pas=0.45):
-        t0 = i * pas
+        t0 = i * pas - 0.3            # le 1er domino penche déjà sur la 1re image, comme l'original
         u = (t - t0) / pas
         if u <= 0:
             return 0.0
@@ -289,7 +289,7 @@ def construire(work):
         fenetre(ctx, t, -300, -500, 5600, 1600, seed=7, montants=12)
 
         def objets(c):
-            kev.draw(c, 300, SOL, 0.72, t, regard=0.6)
+            kev.draw(c, 150, SOL, 0.9, t, regard=0.6)
             for i, (hh, bb) in enumerate(PET):
                 V.domino(c, XD[i], SOL, E[i], ang(i, t), hh, bb)
             V.domino(c, XD[5], SOL, E[5], ang_geant(t), "soleil", "bus", "1 000 €", lueur=1.0 if t > 3.2 else 0.0,
@@ -311,7 +311,7 @@ def construire(work):
         fi = min(5.0, max(0.0, lt / 0.45 - 0.2 + 0.6 * ease(lt / 1.4)))
         i = min(4, int(fi))
         k = fi - i
-        cx = CENTRE[i] + (CENTRE[i + 1] - CENTRE[i]) * k - 420 * (1 - ease(lt / 2.2))
+        cx = CENTRE[i] + (CENTRE[i + 1] - CENTRE[i]) * k - 200 * (1 - ease(lt / 2.2))
         z = 1.18 * 1.236 ** (-0.38 * fi)
         return cx, SOL - 370 / z, z
 
