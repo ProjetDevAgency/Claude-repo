@@ -25,8 +25,35 @@ from six_aides_31dec import (KEVIN, MECANOS, MERE, PATRON, SOL, Y_SOUS, assombri
                              fenetre, feuille, horloge, lumiere_sol, piece, reflet_doux, ticket)
 from six_aides_v2_texte import LIGNES, VITESSES, VOIX  # noqa: E402
 
-OUT = ROOT / "output/trait/six_aides_v2.mp4"
-WORK = ROOT / "output/trait/_work_six_v2"
+OUT = ROOT / "output/trait/six_aides_v2_hugo.mp4"
+WORK = ROOT / "output/trait/_work_six_v2"            # voix de Yann : sert de grille de temps aux images
+WORK_H = ROOT / "output/trait/_work_six_v2_hugo"     # voix de Hugo : la piste finale (demande du client)
+HUGO = ("6DEjyaHWnTHsvXM5Byys", {"stability": 0.45, "similarity_boost": 0.8, "style": 0.45})
+VITESSES_H = [1.0] + [1.15] * 17
+VIE = {"pousse": 0.09, "derive": 46.0, "roulis": 0.02}   # caméra qui ne s'arrête jamais (≥ 10 % de mouvement)
+
+
+def neige(ctx, t, x0, y0, x1, y1, n=120, seed=1, taille=1.0):
+    """Flocons qui tombent (décembre), découpés au rectangle donné."""
+    ctx.save()
+    ctx.rectangle(x0, y0, x1 - x0, y1 - y0)
+    ctx.clip()
+    w, h = x1 - x0, y1 - y0
+    for i in range(n):
+        r1 = (math.sin(i * 12.9898 + seed * 78.233) * 43758.5453) % 1
+        r2 = (math.sin(i * 39.346 + seed * 11.135) * 24634.6345) % 1
+        r3 = (math.sin(i * 73.156 + seed * 52.235) * 12345.678) % 1
+        vit = 110 + 170 * r3
+        y = y0 + (r2 * h + vit * t) % h
+        x = x0 + (r1 * w + 40 * math.sin(t * 1.1 + i)) % w
+        circle(ctx, x, y, (5 + 9 * r3) * taille)
+        flat(ctx, (255, 255, 255), 0.5 + 0.4 * r3)
+    ctx.restore()
+
+
+def fen(ctx, t, x, y, w, h, **kw):
+    fenetre(ctx, t, x, y, w, h, **kw)
+    neige(ctx, t, x + 8, y + 8, x + w - 8, y + h - 8, n=max(30, int(w * h / 9000)), seed=int(x) % 97)
 INES = dict(cheveux="chignon", couleur_cheveux=(40, 28, 24), peau=(200, 140, 100), haut="sweat",
             couleur_haut=(190, 70, 70), bas=(60, 60, 90), chaussures=(240, 240, 240), seed=13, tete=0.84, mince=0.86)
 PETITS = [("points", "essence"), ("soleil", "flamme"), ("points", "maison"), ("soleil", "coeur"),
@@ -54,9 +81,10 @@ def ecran_texte(lignes, haut=(40, 120, 220), titre="MA BANQUE"):
     return e
 
 
-def construire(work):
+def construire(work, hugo=True):
     voice, words = voix.build(LIGNES, VOIX, work, vitesses=VITESSES)
     f = Film(voice, words)
+    f.vie = VIE
 
     kev, pat, ines, mere = Perso(**KEVIN), Perso(**PATRON), Perso(**INES), Perso(**MERE)
     mecs = [Perso(**m) for m in MECANOS]
@@ -108,7 +136,7 @@ def construire(work):
 
     def dominos(ctx, t, lt, tombes=True, actif=None, gris=False, cal=True, chute=(0.1, 0.4)):
         piece(ctx, mur=(38, 44, 84), mur2=(20, 24, 50), sol=(34, 34, 56), x0=-2000, x1=4200)
-        fenetre(ctx, t, -900, -200, 4500, 1300, seed=7, montants=10)
+        fen(ctx, t, -900, -200, 4500, 1300, seed=7, montants=10)
 
         def objets(c):
             if t < 8:
@@ -170,6 +198,7 @@ def construire(work):
                                      V.immeubles(c, -600, 1900, SOLX - 160, t, seed=9, col=(64, 70, 116), hmin=140,
                                                  hmax=380)), rayon=12, bord="constant")
         deg(ctx, -800, SOLX - 180, 2000, 2600, (74, 74, 90), (44, 44, 56))
+        neige(ctx, t, -800, -900, 2000, 2600, n=230, seed=3)
         for i in range(-2, 8):
             x = i * 260 - (route * 900) % 260
             rrect(ctx, x, SOLX + 120, 140, 18, 8)
@@ -210,7 +239,8 @@ def construire(work):
         def s(ctx, t, lt):
             fond(ctx, t, lt)
             assombrir(ctx, dim)
-            feuille(ctx, 540, 840, 1.12, titre, lignes, k=lt / 0.5, rot=-0.03, surl=surl, prix=prix, tampon=tampon,
+            feuille(ctx, 540 + 14 * math.sin(t * 1.6), 840 + 18 * math.sin(t * 2.1), 1.12, titre, lignes, k=lt / 0.5,
+                    rot=-0.03 + 0.025 * math.sin(t * 1.3), surl=surl, prix=prix, tampon=tampon,
                     tampon_k=max(0.0, (t - t_tampon) / 0.4), couleur=couleur)
         return s
 
@@ -254,7 +284,7 @@ def construire(work):
     # ═════════ chez Inès : le froid ═════════
     def salon_froid(ctx, t, lt, chaud=0.0):
         piece(ctx, mur=(120, 140, 170), mur2=(80, 96, 130), sol=(110, 96, 90))
-        fenetre(ctx, t, 620, 360, 360, 460, seed=17, ciel=((20, 26, 60), (60, 70, 120)))
+        fen(ctx, t, 620, 360, 360, 460, seed=17, ciel=((20, 26, 60), (60, 70, 120)))
         rrect(ctx, 640, 1000, 300, 190, 10)
         paint(ctx, mix((226, 230, 236), (255, 170, 110), chaud), LW, shade=0.85)
         for i in range(5):
@@ -370,7 +400,7 @@ def construire(work):
 
     def studio_kevin(ctx, t, lt):
         piece(ctx, mur=(86, 110, 150), mur2=(56, 72, 110), sol=(120, 92, 70))
-        fenetre(ctx, t, 560, 380, 420, 520, seed=11, ciel=((70, 90, 140), (170, 190, 220)), montants=2)
+        fen(ctx, t, 560, 380, 420, 520, seed=11, ciel=((70, 90, 140), (170, 190, 220)), montants=2)
         kev.objet = lambda c, x, y, s: DC.telephone(c, x, y - 40, 0.9, t=t)
         kev.draw(ctx, 420, SOL + 100, 0.86, t, regard=0.3)
     f.plan(52.0, tel(studio_kevin, ecran_message), [(0, 540, 960, 1.0), (2.6, 540, 960, 1.04)])
@@ -400,6 +430,7 @@ def construire(work):
             flat(ctx, c_)
         deg(ctx, -800, SOL, 2000, 2600, (150, 150, 156), (90, 90, 96))
         enseigne(ctx, 540, 820, "CENTRE D'ACTION SOCIALE", 0.62, fond=(250, 250, 250))
+        neige(ctx, t, -800, -900, 2000, 2600, n=230, seed=5)
         kev.objet = None
         ines.objet = None
         kev.draw(ctx, 240, SOL + 260, 0.9, t, regard=0.4)
@@ -428,7 +459,7 @@ def construire(work):
     # ═════════ n° 3 : le don ═════════
     def cuisine(ctx, t, lt):
         piece(ctx, mur=(230, 196, 150), mur2=(200, 160, 120), sol=(150, 110, 80))
-        fenetre(ctx, t, 640, 320, 380, 420, seed=19, ciel=((30, 40, 90), (120, 90, 140)))
+        fen(ctx, t, 640, 320, 380, 420, seed=19, ciel=((30, 40, 90), (120, 90, 140)))
         # sapin
         for k_ in range(3):
             poly(ctx, [(140 - 110 + k_ * 22, 820 - k_ * 150), (140, 640 - k_ * 150), (140 + 110 - k_ * 22, 820 - k_ * 150)])
@@ -488,7 +519,7 @@ def construire(work):
     # ═════════ n° 2 : les RTT (au garage) ═════════
     def garage(ctx, t, lt, patron=False, porte=False, cal=False):
         piece(ctx, mur=(70, 84, 120), mur2=(40, 46, 76), sol=(56, 56, 70))
-        fenetre(ctx, t, 640, 330, 380, 520, seed=3, ciel=((40, 50, 96), (200, 140, 130)))
+        fen(ctx, t, 640, 330, 380, 520, seed=3, ciel=((40, 50, 96), (200, 140, 130)))
         enseigne(ctx, 300, 300, "GARAGE · BUREAU", 0.95)
         horloge(ctx, 110, 560, 70, t)
         if cal:
@@ -571,7 +602,7 @@ def construire(work):
 
     def atelier(ctx, t, lt, tableau=True, signe=False):
         piece(ctx, mur=(96, 104, 120), mur2=(60, 66, 80), sol=(70, 70, 76), x0=-1600, x1=2800)
-        fenetre(ctx, t, -300, 200, 800, 460, seed=29, ciel=((60, 80, 130), (200, 170, 150)), montants=4)
+        fen(ctx, t, -300, 200, 800, 460, seed=29, ciel=((60, 80, 130), (200, 170, 150)), montants=4)
         enseigne(ctx, 1000, 260, "ATELIER", 1.0)
         if tableau:
             rrect(ctx, 600, 380, 620, 440, 10)
@@ -643,6 +674,18 @@ def construire(work):
         f.son(t_, son, g)
     f.secousse(2.1, 8)
     f.secousse(10.7, 14)
+    if hugo:
+        import numpy as np
+        vh, wh = voix.build(LIGNES, {"nar": HUGO, "pat": VOIX["pat"]}, WORK_H, vitesses=VITESSES_H)
+        assert len(wh) == len(words), (len(wh), len(words))
+        fin_h = len(vh) / voix.SR + 0.4
+        old = np.maximum.accumulate(np.array([0.0] + [float(w["t0"]) for w in words] + [f.dur]))
+        new = np.maximum.accumulate(np.array([0.0] + [float(w["t0"]) for w in wh] + [fin_h]))
+        image = f.frame
+        f.frame = lambda T: image(float(np.interp(T, new, old)))
+        f.sons = [(float(np.interp(t_, old, new)), n_, g_) for t_, n_, g_ in f.sons]
+        f.voice = vh
+        f.dur = fin_h
     return f
 
 

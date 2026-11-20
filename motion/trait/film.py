@@ -27,6 +27,7 @@ class Film:
         self.env = voix.enveloppe(voice, FPS)
         self.dur = fin or (len(voice) / voix.SR + 0.4)
         self.plans, self.hud, self.sons, self.secousses = [], [], [], []
+        self.vie = None      # {"pousse": zoom/s, "derive": px, "roulis": rad} : caméra qui ne s'arrête jamais
 
     # ── temps des mots ──
     def t(self, mot, n=0, fin=False):
@@ -96,8 +97,17 @@ class Film:
                 a = f * (1 - d / 0.4)
                 sx += a * np.sin(d * 90)
                 sy += a * np.cos(d * 70)
+        rot = 0.0
+        if self.vie:
+            i = self.plans.index(plan)
+            z *= 1 + self.vie.get("pousse", 0.0) * min(lt, 5.0)
+            a = self.vie.get("derive", 0.0) / z
+            cx += a * (np.sin(t * 1.7 + i) + 0.5 * np.sin(t * 3.1 + 2 * i))
+            cy += a * 0.7 * np.sin(t * 2.3 + 3 * i)
+            rot = self.vie.get("roulis", 0.0) * np.sin(t * 1.3 + i)
         ctx.save()
         ctx.translate(W / 2 + sx, H / 2 + sy)
+        ctx.rotate(rot)
         ctx.scale(z, z)
         ctx.translate(-cx, -cy)
         plan["scene"](ctx, t, lt)

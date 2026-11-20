@@ -47,10 +47,16 @@ def _tts(text, voice_id, model, cache: Path, settings):
         req = urllib.request.Request(API.format(voice_id), data=body, method="POST", headers={
             "xi-api-key": os.environ.get("ELEVENLABS_API_KEY", "proxy"), "Content-Type": "application/json"})
         with urllib.request.urlopen(req, timeout=300) as r:
-            f.write_bytes(r.read())
+            tmpj = cache / f"{key}.{os.getpid()}.jtmp"
+            tmpj.write_bytes(r.read())
+            os.replace(tmpj, f)
     d = json.loads(f.read_text())
     mp3 = cache / f"{key}.mp3"
-    mp3.write_bytes(base64.b64decode(d["audio_base64"]))
+    if not mp3.exists():                     # écrit UNE fois, de façon atomique (rendus en parallèle)
+        import os
+        tmp = cache / f"{key}.{os.getpid()}.tmp"
+        tmp.write_bytes(base64.b64decode(d["audio_base64"]))
+        os.replace(tmp, mp3)
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(mp3), "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"],
                          capture_output=True, check=True).stdout
     al = d.get("normalized_alignment") or d["alignment"]
@@ -73,11 +79,17 @@ def _trim(x, thr=0.012):
 
 
 def _atempo(audio, v, work):
-    a, b = work / "_l.f32", work / "_l2.f32"
+    import os
+    import uuid
+    u = f"{os.getpid()}_{uuid.uuid4().hex[:8]}"          # noms uniques : rendus en parallèle sans collision
+    a, b = work / f"_l_{u}.f32", work / f"_l2_{u}.f32"
     audio.astype(np.float32).tofile(a)
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", str(a),
                     "-af", f"atempo={v}", "-f", "f32le", str(b)], check=True)
-    return np.fromfile(b, np.float32)
+    out = np.fromfile(b, np.float32)
+    a.unlink(missing_ok=True)
+    b.unlink(missing_ok=True)
+    return out
 
 
 def build(lines, voices, work: Path, model="eleven_multilingual_v2", gap=0.22, speed=1.0, vitesses=None):
@@ -118,7 +130,8 @@ def build(lines, voices, work: Path, model="eleven_multilingual_v2", gap=0.22, s
         t += (len(audio) / SR + gap) / speed
     voice = np.concatenate(pistes)
     if speed != 1.0:
-        tmp_in, tmp_out = work / "_v.f32", work / "_v2.f32"
+        import os
+        tmp_in, tmp_out = work / f"_v_{os.getpid()}.f32", work / f"_v2_{os.getpid()}.f32"
         voice.tofile(tmp_in)
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", str(tmp_in),
                         "-af", f"atempo={speed}", "-f", "f32le", str(tmp_out)], check=True)
