@@ -33,7 +33,7 @@ from six_aides_31dec import KEVIN, MECANOS, PATRON, SOL, Y_SOUS, assombrir, deg,
 OUT = ROOT / "output/trait/remake_aides.mp4"
 WORK = ROOT / "output/trait/_work_remake_v4"
 PHOTOS = ROOT / "assets/photos_libres"
-VIE = {"pousse": 0.08, "derive": 42.0, "roulis": 0.018}
+VIE = {"pousse": 0.02, "derive": 8.0, "roulis": 0.0}      # caméra calme (client : « trop de mouvement caméra »)
 
 YANIS = dict(cheveux="court", couleur_cheveux=(40, 30, 26), peau=(170, 120, 90), haut="sweat",
              couleur_haut=(90, 96, 110), bas=(50, 56, 70), chaussures=(40, 40, 46), lunettes=True, seed=31, tete=0.84,
@@ -156,11 +156,11 @@ def carte_numero(ctx, t, lt, n, nom, sous):
         ecrit(ctx, "LA PLUS GROSSE", 90, 560, 30, c, ax=0, big=True, alpha=min(1, lt * 4))
     else:
         ecrit(ctx, "AIDE", 90, 560, 30, c, ax=0, big=True, alpha=min(1, lt * 4))
-    ecrit(ctx, str(n), 90, 700, 230, (255, 255, 255), ax=0, big=True, scale=k)
+    ecrit(ctx, str(n), 90, 700, 320, (255, 255, 255), ax=0, big=True, scale=k)
     ctx.rectangle(90, 820, 90 * ease(lt / 0.5), 10)
     flat(ctx, c)
-    ecrit(ctx, nom, 90, 880, 64, (255, 255, 255), ax=0, big=True, alpha=ease((lt - 0.15) / 0.3))
-    ecrit(ctx, sous, 90, 950, 36, (200, 200, 210), ax=0, alpha=ease((lt - 0.3) / 0.3))
+    ecrit(ctx, nom, 90, 900, 84, (255, 255, 255), ax=0, big=True, alpha=ease((lt - 0.15) / 0.3))
+    ecrit(ctx, sous, 90, 985, 44, (200, 200, 210), ax=0, alpha=ease((lt - 0.3) / 0.3))
     # domino qui arrive en tournant
     u = ease_out(lt / 0.6)
     s = ECH[n] * (0.6 + 0.4 * u)
@@ -197,11 +197,11 @@ def fiche(ctx, t, lt, n, nom, champs, limite, fond=None):
     circle(ctx, -370, -hh / 2 + 80, 34)
     paint(ctx, c, LW * 0.7, shade=1)
     ecrit(ctx, f"AIDE N° {n} · À GARDER", -320, -hh / 2 + 60, 24, c, ax=0, big=True)
-    ecrit(ctx, nom, -320, -hh / 2 + 104, 48, INK, ax=0, big=True)
+    ecrit(ctx, nom, -320, -hh / 2 + 108, 60, INK, ax=0, big=True)
     for i, (lab, val) in enumerate(champs):
         yy = -hh / 2 + 190 + i * 110
-        ecrit(ctx, lab.upper(), -380, yy, 20, (130, 130, 140), ax=0, big=True)
-        ecrit(ctx, val, -380, yy + 40, 34, INK, ax=0, big=True)
+        ecrit(ctx, lab.upper(), -380, yy, 26, (130, 130, 140), ax=0, big=True)
+        ecrit(ctx, val, -380, yy + 44, 42, INK, ax=0, big=True)
     yy = hh / 2 - 70
     rrect(ctx, -400, yy - 30, 800, 60, 10)
     flat(ctx, (232, 52, 60), 0.12)
@@ -212,6 +212,8 @@ def fiche(ctx, t, lt, n, nom, champs, limite, fond=None):
 def construire(work):
     voice, words = voix.build_cale(PHRASES, VOIX, work, model=MODELE, fin=DUREE, vmax=2.0)
     f = Film(voice, words, fin=DUREE + 0.2)
+    _plan = f.plan
+    f.plan = lambda debut, scene, cam=None, **kw: _plan(debut, scene, cam, **{**kw, 'fouet': False})
     f.vie = VIE
 
     kev, pat, yan, sar, lea, age = (Perso(**d) for d in (KEVIN, PATRON, YANIS, SARAH, LEA, AGENTE))
@@ -299,7 +301,7 @@ def construire(work):
         if t >= 2.0:
             u = t - 2.0
             y = -900 + (SOL - HT[5] - 200 + 900) * min(1.15, 1 - math.exp(-u * 6) * math.cos(u * 12))
-            xc = XD[5] - 170
+            xc = XD[5] + 60
             ctx.move_to(xc, -1800)
             ctx.line_to(xc, y - 150)
             stroke(ctx, 4)
@@ -309,7 +311,7 @@ def construire(work):
         fi = min(5.0, max(0.0, lt / 0.45 - 0.2 + 0.6 * ease(lt / 1.4)))
         i = min(4, int(fi))
         k = fi - i
-        cx = CENTRE[i] + (CENTRE[i + 1] - CENTRE[i]) * k - 330 * (1 - ease(lt / 1.0))
+        cx = CENTRE[i] + (CENTRE[i + 1] - CENTRE[i]) * k - 420 * (1 - ease(lt / 1.0))
         z = 1.18 * 1.236 ** (-0.38 * fi)
         return cx, SOL - 370 / z, z
 
@@ -350,9 +352,9 @@ def construire(work):
             k = back((t - 8.0) / 0.35)
             s = photo("pistolet.jpg")
             ctx.save()
-            ctx.translate(770, 520)
+            ctx.translate(760, 560)
             ctx.rotate(0.08)
-            ctx.scale(k * 0.3, k * 0.3)
+            ctx.scale(k * 0.48, k * 0.48)
             rrect(ctx, -s.get_width() / 2 - 30, -s.get_height() / 2 - 30, s.get_width() + 60, s.get_height() + 120, 10)
             paint(ctx, (250, 250, 250), LW * 3, shade=1)
             ctx.set_source_surface(s, -s.get_width() / 2, -s.get_height() / 2)
@@ -395,18 +397,18 @@ def construire(work):
         rrect(ctx, 110, 640, 860, 12, 6)
         flat(ctx, COUL[6])
         ecrit(ctx, "AIDE CARBURANT · CONDITION", 150, 700, 22, COUL[6], ax=0, big=True)
-        ecrit(ctx, "Plafond de revenus", 150, 750, 46, INK, ax=0, big=True)
+        ecrit(ctx, "Plafond de revenus", 150, 755, 60, INK, ax=0, big=True)
         for i, (lab, val, t0, c) in enumerate((("SEUL", "22 770 € / an", 20.0, (60, 120, 220)),
                                                ("EN COUPLE", "45 540 € / an", 22.3, (150, 80, 220)))):
             yy = 860 + i * 140
-            ecrit(ctx, lab, 150, yy, 24, (130, 130, 140), ax=0, big=True)
+            ecrit(ctx, lab, 150, yy, 32, (130, 130, 140), ax=0, big=True)
             rrect(ctx, 150, yy + 40, 780, 30, 15)
             flat(ctx, (232, 232, 238))
             k = ease((t - t0) / 0.8)
             if k > 0:
                 rrect(ctx, 150, yy + 40, 780 * 0.62 * k, 30, 15)
                 flat(ctx, c)
-                ecrit(ctx, val, 930, yy, 30, INK, ax=1, big=True, alpha=k)
+                ecrit(ctx, val, 930, yy, 40, INK, ax=1, big=True, alpha=k)
         ctx.restore()
     f.plan(18.07, bareme, [(0, 540, 960, 1.0), (5.9, 540, 960, 1.05)])
 
@@ -803,7 +805,7 @@ def construire(work):
         rrect(ctx, 0, SOL - 230, 1080, 40, 8)                          # bureau
         paint(ctx, (230, 232, 236), LW, shade=0.9)
         kev.objet = None
-        kev.draw(ctx, 330, SOL + 150, 0.82, t, regard=0.3)
+        kev.draw(ctx, 190, SOL + 150, 0.82, t, regard=0.4)
         circle(ctx, 880, SOL - 260, 34)                                 # tasse
         paint(ctx, (250, 250, 250), LW, shade=0.9)
         if gain and t > 121.4:
@@ -845,7 +847,7 @@ def construire(work):
         ctx.line_to(625, 875)
         stroke(ctx, 14, (255, 255, 255))
         ecrit(ctx, "ENVOYÉ", 590, 1010, 34, (40, 170, 90), big=True)
-    f.plan(123.0, lambda c, t, lt: bureau(c, t, lt, ecran_txt=ecran_message), [(0, 590, 900, 1.5), (3.0, 590, 900, 1.56)])
+    f.plan(123.0, lambda c, t, lt: bureau(c, t, lt, ecran_txt=ecran_message), [(0, 520, 900, 1.15), (3.0, 540, 900, 1.2)])
     f.plan(125.83, lambda c, t, lt: fiche(c, t, lt, 2, "Rachat de RTT",
                                           [("Gain", "+25 % par jour"), ("Impôt", "0 €"),
                                            ("Comment", "demande écrite au patron")], "31/12"), [(0, 540, 960, 1.0)])
@@ -942,9 +944,9 @@ def construire(work):
             p_.draw(ctx, x_, SOL + 120, 0.78, t)
         pat.objet = None
         pat.draw(ctx, 900, SOL + 40, 0.8, t)
-        for i in range(26):
-            v = ((t - 152.0) * 0.8 + i * 0.07) % 1.2
-            V.billet(ctx, (i * 97) % 1100, -200 + 2000 * v, 1.1, t * (2 + i % 4) * (1 if i % 2 else -1))
+        for i in range(10):
+            v = ((t - 152.0) * 0.8 + i * 0.13) % 1.2
+            V.billet(ctx, (i * 113) % 1100, -200 + 2000 * v, 0.8, t * (2 + i % 4) * (1 if i % 2 else -1))
     f.plan(152.0, fete, [(0, 540, 900, 1.0), (3.7, 560, 880, 1.06)])
 
     def recap(ctx, t, lt):
