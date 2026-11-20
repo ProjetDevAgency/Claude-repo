@@ -10,6 +10,38 @@ fichiers cités. Compte TikTok : @souslesabot (cartoon, héros Kévin, voix narr
 4. `prompts/stats_ouvatonargent.md` (carnet d'expériences) et `prompts/videos_index.csv` (une ligne par vidéo).
 5. `prompts/actu_argent.md` (calendrier de l'actu) et `prompts/sujets_concurrents.md`.
 
+## MODE ACTUEL (décision du client, 20 nov. soir) : REMAKE QUOTIDIEN de la dernière vidéo de La Ficelle
+Ce mode REMPLACE les étapes 2 (sujet), 3 (script), 4 (voix) et 5 (vidéo) ci-dessous. Les étapes 1 (analyse),
+6 (publication) et 7 (compte rendu) restent valables. Règle : `prompts/regle_remake.md` (l'original fait foi ; les
+« 7 points » ne s'appliquent pas). Modèle complet : `motion/trait/remake_aides.py` + `motion/trait/remake_aides_texte.py`
++ `prompts/remakes/aides_31dec_decoupage.md`.
+1. **Choisir la vidéo** : `yt-dlp --flat-playlist -J https://www.tiktok.com/@laficelle_off` → la plus récente qui
+   n'est pas dans `prompts/remakes/journal.md`. La télécharger (yt-dlp). Si TikTok la bloque : prendre la précédente
+   accessible, ou demander au client de la déposer sur son Drive. Une vidéo « actu / photos / interview » qui ne se
+   refait pas en dessin animé : la sauter et le dire dans le compte rendu.
+2. **Découper** : coupes (`ffmpeg … select='gt(scene,0.22)'`), une image par seconde, transcription horodatée
+   (faster_whisper « small », audio en numpy). Écrire `prompts/remakes/<slug>_decoupage.md` : chaque plan avec son
+   temps, son décor, ce qui bouge, les textes à l'écran.
+3. **Texte** : une phrase à nous en face de chaque phrase de l'original, même idée, même longueur, au même instant
+   (`motion/trait/<slug>_texte.py`, liste PHRASES (t0, voix, texte)). Leurs personnages → les nôtres (Marc → Kévin ;
+   seconds rôles : Yanis, Sarah, Léa ; le patron). Chaque chiffre vérifié dans 2 sources ; un chiffre non vérifiable
+   est remplacé par nos sources ou retiré, et noté dans l'en-tête. Jamais leur nom, ni « abonné à La Ficelle ».
+4. **Voix** : Yann (rlqCQzyNTVyUMPGBqC31), modèle **eleven_v4, SANS balise d'émotion** ; `voix.build_cale(…, vmax=2.0)`
+   (chaque phrase posée à l'instant de l'original). Personnages : voix distinctes (Hugo, Victoire, Paul K).
+5. **Images** : `motion/trait/<slug>.py` sur le modèle de remake_aides.py : chaque plan au même instant, même décor,
+   même cadrage, mêmes objets qui racontent (tailles, progressions, compteurs, cartes, fiches, récapitulatif).
+   Décors dessinés pour la vidéo ; plans photo de l'original → photos libres de droits (Openverse, licence cc0/pdm,
+   via curl), aucune marque lisible, sources dans `assets/photos_libres/SOURCES.md`. **Caméra calme**
+   (`VIE = {"pousse": 0.02, "derive": 8, "roulis": 0}`), **coupes nettes** (fouet=False). Rendu `--jobs 4`.
+6. **Vérifier et corriger** : planches original / remake à la même seconde (1 image/s, voir la méthode du
+   20 nov.), lister chaque écart (cadrage, objet manquant, texte trop petit ou caché, marque visible, personnage
+   coupé), corriger, refaire la planche. Mesure `scripts/mesure_mouvement.py` : au moins le niveau de l'original.
+   Aucun texte sur un visage, aucun texte coupé.
+7. **Publier** (étape 6) : description à nous (accroche, 4 à 6 ✅ avec références, question 👇, « Cas type, montants
+   indicatifs. », 5 hashtags), isAigc true, lendemain 18 h. Ajouter la ligne dans `prompts/remakes/journal.md`
+   (date, vidéo d'origine, slug, durée, mouvement, post Metricool) et dans `prompts/videos_index.csv`.
+8. **Compte rendu** : la vidéo + la planche de comparaison + la liste des écarts corrigés et de ceux qui restent.
+
 ## Règles du client (jamais d'exception)
 - Uniquement des sujets **8/8** (machine à sujets). La loi est vérifiée dans **2 sources**, une officielle si possible.
 - **Jamais d'insulte** (idiot, pigeon, abruti, radin…) ni de « Faux ». Le méchant est violent par ce qu'il dit de la vie
