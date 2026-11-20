@@ -170,3 +170,48 @@ Type de 1re phrase (52 vidéos) :
 Recette à appliquer chez nous (étape « Mise en image » de la boucle) : écrire la 1re phrase comme la réplique du méchant
 à « tu », puis remplir LIEU (avec panneau), MÉCHANT (étiqueté), OBJET + PRIX COLLÉ, VERBE JOUÉ ; Kévin petit dans la
 scène. Liste ou sujet abstrait : un seul objet physique qui porte l'idée.
+
+## Mot dit → image montrée (20 nov., timing au mot près, 10 vidéos, image prise 0,3 s après le début du mot)
+Chaque mot important a son image dans les 0,3 s. Exemples :
+| vidéo | mot dit (temps) | ce qu'on voit |
+|---|---|---|
+| colis 1,5 M | « Ton colis de 480 € » (0,2 s) | centre de tri, tapis roulant, colis avec étiquette 480 €, manutentionnaire en gilet qui tire un levier, panneau « PERDUS » |
+| | « perdu » (1,7 s) | le colis bascule dans la trappe « PERDUS », Marc lève les bras |
+| | « Faux ! » (4,3 s) | Marc tape sur le bouton rouge qui arrête le tapis ; compteur « CE QUE LE VENDEUR DOIT 0 € » |
+| camion de Noël 18 k | « Livrer avant Noël » (0 s) | camionnette sur une route enneigée la nuit, cadeaux dedans ; en bas, le conseiller au casque |
+| | « votre cadeau de 340 € » (2,1 s) | le cadeau dans le camion reçoit l'étiquette 340 € |
+| | « arrive le 30 » (3,5 s) | panneaux routiers « NOËL 24 ↑ » et « 30 DÉC SORTIE » : le camion prend la sortie du 30 |
+| 400 € 9 k | « 400 euros par mois » (0 s) | une porte « 400 € » d'où débordent des billets, la mère les balaie |
+| | « Gardez-les ! » (1,4 s) | gros plan de la mère, en colère |
+| | « un seul bouton » (4,5 s) | un bouton jaune sous un projecteur, pluie de billets |
+| 6 aides (Drive) | « 6 aides » (0 s) | 6 dominos alignés, une icône par aide (essence, énergie, maison, santé…) à côté du héros |
+| | « à récupérer » (1 s) | les dominos tombent l'un sur l'autre |
+| | « avant le 31 décembre » (2,4 s) | un calendrier « DÉC 31 » descend au-dessus du dernier domino |
+| | « La plus grosse vaut 1 000 € » (3,4 s) | domino géant doré « 1 000 € » ; compteur « RÉCUPÉRÉ AVANT LE 31/12 0 € » |
+| | « et ton patron » (5,2 s) | le patron apparaît à côté du domino géant, qui penche vers lui |
+| salaire 590 k | « Ton salaire » (0,2 s) | bureau « DIRECTION », calendrier mural « 1 NOVEMBRE · JOUR DE PAIE · 2 000 € » |
+| | « dans deux semaines » (2,2 s) | les pages du calendrier s'envolent : 2, 3, 4… 14 |
+| | « la crise » (3,9 s) | panneau « CRISE » avec rayons, le patron derrière |
+| caisse 134 k | « erreur de caisse » (0,2 s) | caisse de supermarché, file de clients, Marc caissier, le gérant |
+| | « 180 € » (1,3 s) | gros ticket « −180 € » qui sort de la caisse |
+| cadeau 106 k | « Ton cadeau à 290 € » (0,2 s) | hall d'immeuble, un cadeau étiqueté 290 € tombe du palier |
+| | « arrivé cassé » (1,6 s) | gros plan : le cadeau dégringole l'escalier |
+| | « signer le bon » (2,7 s) | la conseillère tient le bon de livraison signé |
+| loyer 101 k | « Ton loyer va augmenter » (0,2 s) | couloir d'immeuble : le proprio colle l'affiche « AVIS DE HAUSSE +500 € / MOIS » |
+| impôts 136 k | « Votre fils est au lycée » (0,4 s) | guichet « IMPÔTS · ACCUEIL », agente, calendrier « J-43 AVANT LE 31/12 » |
+| | « on vous doit 367 € » (1,4 s) | zoom sur le ticket 367 € posé sur le comptoir |
+| caution 552 k | « Marc rend les clés » (0 s) | Marc bras levés, « 600 € DE CAUTION », une clé qui vole |
+| | « le proprio signe l'état des lieux » (1,6 s) | l'appartement, le proprio et sa planche « ÉTAT DES LIEUX ✓ CONFORME » |
+
+La grammaire (toujours la même) :
+1. **Le lieu n'est jamais dit, il est DÉDUIT** du premier nom : « où ça se passerait si on le filmait ? »
+   colis perdu → centre de tri avec tapis ; livrer avant Noël → camion sur la route ; loyer → couloir de l'immeuble ;
+   salaire → bureau du patron ; impôts → guichet.
+2. **Le montant est COLLÉ sur l'objet** (étiquette, ticket, affiche, calendrier de paie), jamais seul dans le vide.
+3. **Le verbe est UN geste simple** : perdu → tombe dans la trappe ; cassé → dégringole l'escalier ; en retard → les
+   pages s'envolent ; augmenter → il colle l'affiche ; refuser → elle balaie les billets ; récupérer → les dominos tombent.
+4. **Une date devient un objet** : calendrier, « J-43 », panneaux routiers « NOËL 24 / 30 DÉC ».
+5. **Une comparaison devient une taille** : « la plus grosse » → domino géant ; un nombre de choses → autant d'objets.
+6. **Celui qui parle est montré quand sa phrase passe** (gros plan sur « désolé », « gardez-les », « il sourit »).
+7. **Un changement à l'image à chaque mot important** (toutes les 0,5 à 1 s) : zoom sur l'étiquette au moment du
+   montant, gros plan au moment de l'émotion, titre pour la formule choc (« CRISE », « PAS UNE ASSISTÉE »).
