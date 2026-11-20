@@ -134,3 +134,39 @@ Conséquence pour nous (compatible avec la règle client « chaque vidéo crée 
 - une recette fixe de lumière (fond froid et flou, sujet chaud et net, halo, vignette) et de caméra (large, de face,
   sol fixe, sous-titres sur le sol) ;
 - 5 modèles d'incrustation fixes (gros chiffre, compteur, feuille, téléphone, étapes).
+
+## Comment ils INVENTENT l'accroche visuelle (20 nov. ; 6 images entre 0 et 4,2 s × 52 vidéos, + phrase d'ouverture)
+Ils n'inventent pas une image « créative » : ils **mettent en scène la 1re phrase au pied de la lettre**.
+La 1re phrase est le plus souvent une **réplique du méchant adressée à « tu »** (« Ton colis de 480 €, on l'a perdu »,
+« Ton loyer va augmenter de 500 € », « Tu paies 1 430 €, sinon ta voiture reste au garage »). De cette phrase, ils tirent
+4 éléments, et l'image d'accroche = ces 4 éléments ensemble :
+1. **LE LIEU où la phrase est dite**, nommé par un panneau : dépôt de colis, auto-école, « IMPÔTS · ACCUEIL », « CAISSE »,
+   garage « ACCUEIL », bureau « DIRECTION », couloir d'immeuble.
+2. **LE MÉCHANT qui la dit**, reconnaissable et étiqueté (« LA GÉRANTE », « LE PROPRIO », « LE MONITEUR », badge « NADIA »).
+3. **L'OBJET du conflit avec son PRIX COLLÉ DESSUS** : colis + étiquette 480 €, cadeau + 290 €, facture 1 430 €, devis
+   1 800 €, affiche « AVIS DE HAUSSE +500 € / MOIS », ticket de caisse −180 €, liasse de 800 €.
+4. **LE VERBE joué en vrai** : « perdu » → le colis tombe dans le bac « PERDUS » ; « en retard » → les pages du calendrier
+   s'envolent après le jour de paie ; « cassé » → le cadeau dégringole l'escalier ; « je le prends sur ton salaire » → le
+   ticket −180 € sort de la caisse ; « tu les reverras jamais » → il range les billets dans un coffre.
+Le héros est là, petit, en victime. Chaque groupe de mots suivant reçoit la même traduction littérale : un montant →
+une étiquette ; une date limite → calendrier / compte à rebours « J-43 » ; un message → vraie notification de
+téléphone ; une règle → feuille avec surligné jaune. Le retournement (« Faux ! », « Elle a tort », « Il ne le sait pas
+encore ») → l'image passe en noir et blanc, étiquette « VOIX OFF », tampon « FAUX » sur le chiffre, ou cadenas « ???? ».
+Sujet abstrait ou liste (6 aides, 6 règles, de 1 € à 1 000 milliards) → UN objet physique qui porte toute l'idée
+(dominos de plus en plus gros, pile de règles, pyramide, coffre, cadenas).
+
+Pourquoi leurs accroches changent à chaque vidéo : parce que chaque sujet a son lieu, son méchant et son objet.
+La variété vient du sujet, la recette ne change pas. Chez nous : toujours le même modèle (visage + chiffre), sans lieu,
+sans méchant, sans objet → toutes nos accroches se ressemblent.
+
+Type de 1re phrase (52 vidéos) :
+| 1re phrase | vidéos | vues médianes | dans le top 10 |
+|---|---|---|---|
+| réplique du méchant à « tu » (lieu + objet chiffré à l'image) | 21 | 86 k | 6 |
+| récit « Marc / Lina + action + montant » | 13 | 24 k | 3 |
+| question au spectateur, liste, chiffre abstrait | 12 | 3 k | 1 |
+| photos, actualité | 6 | 2 k | 0 |
+
+Recette à appliquer chez nous (étape « Mise en image » de la boucle) : écrire la 1re phrase comme la réplique du méchant
+à « tu », puis remplir LIEU (avec panneau), MÉCHANT (étiqueté), OBJET + PRIX COLLÉ, VERBE JOUÉ ; Kévin petit dans la
+scène. Liste ou sujet abstrait : un seul objet physique qui porte l'idée.
