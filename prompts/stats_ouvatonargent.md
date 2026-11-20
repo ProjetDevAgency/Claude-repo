@@ -157,3 +157,17 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
   garantis vues sur les réseaux), gain chiffré (500 € gardés), nouveau visuel. Variable testée : le feuilleton.
 - Épisode 4 rendu : 62 s ; mouvement 7,5 % de l'image qui bouge, 6 % d'images figées (cibles atteintes : ≥ 6 % / ≤ 15 %).
   Programmé sur Metricool (435219042) le 21 nov. à 18 h, étiquette IA.
+
+## Analyse Metricool complète — 20 nov. 11 h 45 (30 derniers jours, 28 vidéos)
+- Abonnés : 13 144 (19 nov.) ; +8 depuis le 17 nov. malgré 80 k vues sur Anthropic + permis. Visites de profil :
+  124 (14 nov.), 246 (15), 94 (16), 103 (17), 25 (18).
+- Vues du compte par jour : 650 à 2 100 du 7 au 13 nov. ; 18,5 k / 37,1 k / 13,3 k / 13,8 k du 14 au 17 ; 4,4 k le 18.
+- Les 2 succès font environ 85 % des vues du mois. Médiane par vidéo : environ 440 vues, stable quel que soit le format.
+- Temps moyen : 6–13 s (7–10 nov., format court) → 17–24 s (v2) → 15–26 s (v3) : la rétention a nettement progressé.
+- Trafic « Suivis » ≈ 0 % sur toutes les vidéos : les 13 k abonnés ne regardent pas ces vidéos (audience venue d'un
+  autre contenu ?). « Recherche » : Anthropic 8 %, CAF 14 %, SMIC 13 %, dossier auto-école 9 % → les sujets que les gens
+  tapent dans la recherche ramènent des vues durables.
+- HYPOTHÈSE À VÉRIFIER (urgente) : le support TikTok répond en hébreu → la région du compte est peut-être Israël. Si oui,
+  le premier lot de spectateurs « Pour toi » peut contenir des gens qui ne parlent pas français (départ à 0:01) et le
+  programme Récompenses pour les créateurs n'est peut-être pas disponible pour le compte (0,00 $). Demander au client
+  l'onglet « Spectateurs » (pays) d'une vidéo et la région / langue du compte.
