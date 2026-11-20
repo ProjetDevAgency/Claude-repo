@@ -17,7 +17,7 @@ import numpy as np
 from dessin import FPS, H, W, ease, vignette
 import voix
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.append(str(Path(__file__).resolve().parents[1]))   # après motion/trait : motion/decors.py ne doit pas masquer le nôtre
 import sfx  # noqa: E402  (bruitages fabriqués par le code, motion/sfx.py)
 
 
