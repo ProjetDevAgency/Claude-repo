@@ -44,10 +44,14 @@ fichiers cités. Compte TikTok : @souslesabot (cartoon, héros Kévin, voix narr
    capture TikTok Studio (enregistrements, vue en entier, récompenses : Metricool ne les donne pas).
 
 ## 2. Sujet (10 min)
-- **D'abord la veille (client, 20 nov.)** : `python3 scripts/veille_actu.py` → lire `prompts/veille_actu.md`. Ce sont
-  les sujets des comptes d'actu que regardent nos spectateurs (HugoDécrypte, TF1 Info, BFMTV, Franceinfo, Le Parisien,
-  Loopsider…). Choisir en priorité une actu argent de la veille (la plus vue, qui touche les 18–25 ans), la raconter
-  avec Kévin et le méchant / le frère. On reprend le SUJET, vérifié dans 2 sources, jamais leurs images ni leur texte.
+- **Décision du client (20 nov.) : chaque jour, on refait un sujet de La Ficelle.** Prendre dans
+  `prompts/sujets_laficelle.md` le sujet le mieux classé qui n'a pas encore été refait dans le NOUVEAU style (même s'il
+  a déjà été traité chez nous dans l'ancien style), en sautant les sujets « culture éco » du bas du tableau. Noter
+  « refait le JJ/MM » dans la dernière colonne. On reprend le sujet et les faits (vérifiés dans 2 sources), jamais leur
+  texte, leurs personnages ni leurs images : script écrit par nous, moteur H1, Kévin et nos méchants. Le grand frère
+  peut être le méchant quand le sujet s'y prête (le test du feuilleton en alternance est suspendu).
+- La veille actu (`python3 scripts/veille_actu.py` → `prompts/veille_actu.md`) sert seulement à donner un angle
+  d'actualité au sujet du jour, si une actu de la veille s'y rattache.
 - Autres sources : actu (service-public.fr, Légifrance, economie.gouv.fr, franceinfo, BFM Éco, Capital, Selectra, Que Choisir +
   `prompts/actu_argent.md`), concurrents (`prompts/sujets_concurrents.md`), ou invention.
 - Le sujet suit **le modèle gagnant** et passe les 8 critères. Vérifier la règle dans 2 sources ; noter références et
@@ -58,10 +62,8 @@ fichiers cités. Compte TikTok : @souslesabot (cartoon, héros Kévin, voix narr
   vase cassé, taxes d'aéroport, frais d'agence pour un seul public) = non, même s'il est 8/8. Relevé du 19 nov. : la
   rétention des 1res secondes est la même sur les succès et les flops (78–83 % à 0:01) ; ce qui sépare 48 k de 300 vues,
   ce sont les partages et enregistrements, donc le sujet.
-- **Test en cours (depuis le 20 nov.) : le feuilleton du grand frère** — lire `prompts/feuilleton_grand_frere.md`.
-  Une vidéo sur deux est un épisode (sam. 21 = épisode 4, dim. 22 = sans frère, lun. 23 = épisode 5…). Respecter la
-  bible et la continuité, ajouter l'épisode à la liste du fichier. Colonne `format` de l'index : `feuilleton ep N` ou
-  `hors feuilleton`. Le test de la « promesse après l'accroche » est suspendu pendant ce test.
+- Feuilleton du grand frère (`prompts/feuilleton_grand_frere.md`) : test en alternance SUSPENDU le 20 nov. (décision du
+  client : sujets de La Ficelle chaque jour). Si le frère est le méchant, respecter la bible et la continuité.
 - Proposer mentalement 3 accroches (PRIX, MÉPRIS, ENJEU) et garder la plus conforme au modèle gagnant et aux stats.
 
 ## 3. Script (15 min)
