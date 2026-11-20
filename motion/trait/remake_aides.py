@@ -210,7 +210,7 @@ def fiche(ctx, t, lt, n, nom, champs, limite, fond=None):
 
 
 def construire(work):
-    voice, words = voix.build_cale(PHRASES, VOIX, work, model=MODELE, fin=DUREE)
+    voice, words = voix.build_cale(PHRASES, VOIX, work, model=MODELE, fin=DUREE, vmax=2.0)
     f = Film(voice, words, fin=DUREE + 0.2)
     f.vie = VIE
 
