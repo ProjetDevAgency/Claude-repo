@@ -49,7 +49,7 @@ COUL = {6: (240, 120, 40), 5: (60, 130, 240), 4: (60, 170, 110), 3: (230, 50, 70
         1: (255, 196, 30)}
 ICONE = {6: ("points", "essence"), 5: ("points", "flamme"), 4: ("points", "maison"), 3: ("points", "coeur"),
          2: ("points", "calendrier"), 1: ("soleil", "bus")}
-ECH = {6: 0.8, 5: 0.92, 4: 1.06, 3: 1.22, 2: 1.4, 1: 1.7}      # le domino de chaque aide grossit
+ECH = {6: 1.05, 5: 1.2, 4: 1.38, 3: 1.58, 2: 1.8, 1: 2.1}      # le domino de chaque aide grossit
 
 
 # ═════════════ outils d'écran ═════════════
@@ -89,18 +89,20 @@ def avatar(ctx, x, y, s=1.0, nom="LE PATRON"):
     ctx.scale(s, s)
     rrect(ctx, -60, -60, 120, 120, 24)
     paint(ctx, (60, 90, 150), LW, shade=0.9)
-    circle(ctx, 0, 6, 40)
-    paint(ctx, (236, 186, 150), LW * 0.8, shade=0.9)
-    for sx in (-1, 1):
-        circle(ctx, sx * 14, 0, 9)
-        stroke(ctx, 3)
-    ctx.move_to(-14, 24)
-    ctx.curve_to(-6, 18, 6, 18, 14, 24)
-    stroke(ctx, 4)
+    ctx.save()
+    rrect(ctx, -60, -60, 120, 120, 24)
+    ctx.clip()
+    _PORTRAIT.draw(ctx, 0, 380, 0.42, 1.0)
+    ctx.restore()
+    rrect(ctx, -60, -60, 120, 120, 24)
+    stroke(ctx, LW)
     rrect(ctx, -70, 52, 140, 34, 10)
     paint(ctx, (250, 250, 250), LW * 0.6, shade=1)
     ecrit(ctx, nom, 0, 69, 18, INK, big=True)
     ctx.restore()
+
+
+_PORTRAIT = Perso(**{**PATRON, "yeux": "grands"})
 
 
 def mains(ctx, xg, xd, y, couleur=(46, 170, 120)):
@@ -132,9 +134,20 @@ def doc_tenu(ctx, t, lt, titre, lignes, surl=(), couleur=(60, 110, 220), y=760, 
         for j, (ts, s) in enumerate(surl):
             if s == i and lt > ts:
                 sw = texte(l, 44, INK).get_width()
-                rrect(ctx, x0 + 50, yy - 34, (sw + 30) * ease((lt - ts) / 0.4), 68, 8)
+                e = ease((lt - ts) / 0.4)
+                rrect(ctx, x0 + 50, yy - 34, (sw + 30) * e, 68, 8)
                 flat(ctx, (255, 214, 60), 0.95)
-        ecrit(ctx, l, x0 + 64, yy, 44, INK, ax=0, big=i > 0)
+                if e < 1 or lt - ts < 0.9:                      # stylo rouge qui surligne
+                    px, py = x0 + 50 + (sw + 30) * e, yy + 20
+                    ctx.save()
+                    ctx.translate(px, py)
+                    ctx.rotate(-0.9)
+                    rrect(ctx, 0, -12, 190, 24, 10)
+                    paint(ctx, (220, 40, 60), LW * 0.7, shade=0.85)
+                    poly(ctx, [(0, -12), (-30, 0), (0, 12)])
+                    paint(ctx, (240, 220, 200), LW * 0.7, shade=1)
+                    ctx.restore()
+        ecrit(ctx, l, x0 + 64, yy, 52 if i > 0 else 44, INK, ax=0, big=i > 0)
     ctx.restore()
     mains(ctx, x0 + 60, x0 + w - 60, y + h - 40 + bob)
     if avatar_ok:
@@ -156,14 +169,14 @@ def carte_numero(ctx, t, lt, n, nom, sous):
         ecrit(ctx, "LA PLUS GROSSE", 90, 560, 30, c, ax=0, big=True, alpha=min(1, lt * 4))
     else:
         ecrit(ctx, "AIDE", 90, 560, 30, c, ax=0, big=True, alpha=min(1, lt * 4))
-    ecrit(ctx, str(n), 90, 700, 320, (255, 255, 255), ax=0, big=True, scale=k)
+    ecrit(ctx, str(n), 80, 700, 300, (255, 255, 255), ax=0, big=False, scale=k)
     ctx.rectangle(90, 880, 90 * ease(lt / 0.5), 10)
     flat(ctx, c)
-    ecrit(ctx, nom, 90, 950, 84, (255, 255, 255), ax=0, big=True, alpha=ease((lt - 0.15) / 0.3))
+    ecrit(ctx, nom, 90, 950, 66, (255, 255, 255), ax=0, big=False, alpha=ease((lt - 0.15) / 0.3))
     ecrit(ctx, sous, 90, 1035, 44, (200, 200, 210), ax=0, alpha=ease((lt - 0.3) / 0.3))
     # domino qui arrive en tournant
     u = ease_out(lt / 0.6)
-    s = ECH[n] * (0.6 + 0.4 * u)
+    s = 1.35 * ECH[n] * (0.6 + 0.4 * u)
     ang = (1 - u) * 1.4 - 0.25 + 0.04 * math.sin(t * 2)
     hx, bx = ICONE[n]
     halo(ctx, 800, 600, 320 * ECH[n], c, 0.25)
@@ -197,11 +210,11 @@ def fiche(ctx, t, lt, n, nom, champs, limite, fond=None):
     circle(ctx, -370, -hh / 2 + 80, 34)
     paint(ctx, c, LW * 0.7, shade=1)
     ecrit(ctx, f"AIDE N° {n} · À GARDER", -320, -hh / 2 + 60, 24, c, ax=0, big=True)
-    ecrit(ctx, nom, -320, -hh / 2 + 108, 60, INK, ax=0, big=True)
+    ecrit(ctx, nom, -320, -hh / 2 + 108, 54, INK, ax=0, big=False)
     for i, (lab, val) in enumerate(champs):
         yy = -hh / 2 + 190 + i * 110
         ecrit(ctx, lab.upper(), -380, yy, 26, (130, 130, 140), ax=0, big=True)
-        ecrit(ctx, val, -380, yy + 44, 42, INK, ax=0, big=True)
+        ecrit(ctx, val, -380, yy + 44, 36, INK, ax=0, big=False)
     yy = hh / 2 - 70
     rrect(ctx, -400, yy - 30, 800, 60, 10)
     flat(ctx, (232, 52, 60), 0.12)
@@ -216,8 +229,11 @@ def construire(work):
     f.plan = lambda debut, scene, cam=None, **kw: _plan(debut, scene, cam, **{**kw, 'fouet': False})
     f.vie = VIE
 
-    kev, pat, yan, sar, lea, age = (Perso(**d) for d in (KEVIN, PATRON, YANIS, SARAH, LEA, AGENTE))
-    mecs = [Perso(**m) for m in MECANOS]
+    kev, pat, yan, sar, lea, age = (Perso(**{**d, "yeux": "grands"}) for d in (KEVIN, PATRON, YANIS, SARAH, LEA,
+                                                                                AGENTE))
+    yan.bonnet = (214, 160, 60)
+    mecs = [Perso(**{**m, "yeux": "grands"}) for m in MECANOS]
+    f.musique = True
 
     def bouche(t, qui):
         return f.bouche(t, qui)
@@ -229,7 +245,7 @@ def construire(work):
     kev.pose(58.4, "repos").emotion(71.0, "choc").emotion(73.0, "neutre").pose(85.1, "pointe").emotion(85.1, "malin")
     kev.pose(86.5, "repos").emotion(106.0, "neutre").emotion(112.0, "triste").emotion(121.2, "content")
     kev.emotion(127.0, "neutre").emotion(131.0, "malin").pose(142.0, "repos").emotion(144.2, "malin")
-    kev.pose(144.2, "pointe").pose(152.0, "leve").emotion(152.0, "content")
+    kev.pose(144.2, "objet").pose(152.0, "leve").emotion(152.0, "content")
     pat.pose(0, "mains_hanches").emotion(0, "neutre").pose(4.2, "pointe_g").emotion(4.2, "malin").pose(6.0, "repos")
     pat.pose(126.2, "repos").emotion(126.2, "malin").pose(129.6, "haussement").emotion(131.0, "neutre")
     pat.pose(142.0, "leve").emotion(142.0, "colere").pose(143.3, "mains_hanches").emotion(143.3, "malin")
@@ -264,8 +280,8 @@ def construire(work):
     PET = [("points", "essence"), ("points", "flamme"), ("points", "maison"), ("points", "coeur"),
            ("points", "calendrier")]
 
-    def ang(i, t, pas=0.45):
-        t0 = i * pas - 0.3            # le 1er domino penche déjà sur la 1re image, comme l'original
+    def ang(i, t, pas=0.46):
+        t0 = i * pas + 0.05           # à 0,5 s le 1er domino penche encore, le 2e est debout (comme l'original)
         u = (t - t0) / pas
         if u <= 0:
             return 0.0
@@ -292,6 +308,8 @@ def construire(work):
             kev.draw(c, 150, SOL, 0.9, t, regard=0.6)
             for i, (hh, bb) in enumerate(PET):
                 V.domino(c, XD[i], SOL, E[i], ang(i, t), hh, bb)
+            if t > 3.0:
+                halo(c, XD[5] + LG[5] / 2, SOL - HT[5] / 2, 760, (255, 236, 190), 0.3 * ease((t - 3.0) / 0.4))
             V.domino(c, XD[5], SOL, E[5], ang_geant(t), "soleil", "bus", "1 000 €", lueur=1.0 if t > 3.2 else 0.0,
                      couleur=(250, 236, 170))
             pat.draw(c, X_PAT, SOL, 0.78, t, regard=-0.6)
@@ -301,6 +319,8 @@ def construire(work):
         if t >= 2.0:
             u = t - 2.0
             y = -900 + (SOL - HT[5] - 200 + 900) * min(1.15, 1 - math.exp(-u * 6) * math.cos(u * 12))
+            if t > 2.9:
+                y -= 1600 * ease((t - 2.9) / 0.5)
             xc = XD[5] + 60
             ctx.move_to(xc, -1800)
             ctx.line_to(xc, y - 150)
@@ -308,7 +328,8 @@ def construire(work):
             DC.calendrier(ctx, xc, y, 0.9, "DÉC", "31")
 
     def cam_chaine(lt):
-        fi = min(5.0, max(0.0, lt / 0.45 - 0.2 + 0.6 * ease(lt / 1.4)))
+        lt = max(0.0, lt - 0.6)                    # la caméra tient le 1er plan comme l'original
+        fi = min(5.0, max(0.0, lt / 0.36 - 0.2 + 0.6 * ease(lt / 1.2)))
         i = min(4, int(fi))
         k = fi - i
         cx = CENTRE[i] + (CENTRE[i + 1] - CENTRE[i]) * k - 200 * (1 - ease(lt / 2.2))
@@ -317,7 +338,7 @@ def construire(work):
 
     gx = XD[5] + LG[5] / 2
     f.plan(0, dominos, cam_chaine, fouet=False)
-    f.plan(2.4, dominos, [(0, gx + 140, SOL - 380 / 0.95, 0.95), (1.6, gx + 200, SOL - 380 / 0.95, 0.95),
+    f.plan(2.4, dominos, [(0, gx + 260, SOL - 380 / 0.86, 0.86), (1.6, gx + 300, SOL - 380 / 0.86, 0.86),
                           (3.4, gx + 330, SOL - 380 / 0.9, 0.9)], fouet=False)
 
     # ═════════ 6,4 – 18 : la station, la pompe, le panneau ═════════
@@ -327,12 +348,14 @@ def construire(work):
     def montant(t):
         return 89.98 * ease((t - 7.6) / 2.2) if t >= 7.6 else 0.0
 
-    def dehors(ctx, t, lt, pompe=True, prix=None, pistolet=False, medaille=False, pieces=False):
+    def dehors(ctx, t, lt, pompe=True, prix=None, pistolet=False, medaille=False, pieces=False, nu=False):
         deg(ctx, -800, -900, 2000, SX - 300, (40, 52, 100), (226, 160, 140))
         couche_floue(ctx, lambda c: (V.immeubles(c, -700, 1900, SX - 220, t, seed=5, col=(84, 90, 140), hmin=260, hmax=620),
                                      V.immeubles(c, -600, 1900, SX - 160, t, seed=9, col=(64, 70, 116), hmin=140, hmax=380)),
                      rayon=12, bord="constant")
         deg(ctx, -800, SX - 180, 2000, 2600, (74, 74, 90), (44, 44, 56))
+        if nu:
+            return
         V.panneau_route(ctx, 860, 640, "BUREAU →", "20 km")
         if medaille and t > 14.0:
             k = back((t - 14.0) / 0.3)
@@ -374,7 +397,7 @@ def construire(work):
                 paint(ctx, (230, 190, 70), LW * 0.6, shade=0.9)
         if pieces and t > 17.0:
             DC.etiquette(ctx, 720, 760, 0.8, "100 €", t - 17.0, couleur=(110, 220, 140))
-    f.plan(7.5, lambda c, t, lt: dehors(c, t, lt, pistolet=True), [(0, 520, 1000, 1.0), (2.6, 500, 980, 1.08)])
+    f.plan(7.5, lambda c, t, lt: dehors(c, t, lt, pistolet=True), [(0, 470, 1080, 1.32), (2.6, 470, 1070, 1.36)])
     f.plan(10.17, lambda c, t, lt: dehors(c, t, lt), [(0, 820, 760, 1.25), (1.3, 820, 740, 1.32)])
 
     # ═════════ les cartes « numéro » et les fiches « à garder » ═════════
@@ -397,7 +420,7 @@ def construire(work):
         rrect(ctx, 110, 640, 860, 12, 6)
         flat(ctx, COUL[6])
         ecrit(ctx, "AIDE CARBURANT · CONDITION", 150, 700, 22, COUL[6], ax=0, big=True)
-        ecrit(ctx, "Plafond de revenus", 150, 755, 60, INK, ax=0, big=True)
+        ecrit(ctx, "Plafond de revenus", 150, 755, 52, INK, ax=0, big=False)
         for i, (lab, val, t0, c) in enumerate((("SEUL", "22 770 € / an", 20.0, (60, 120, 220)),
                                                ("EN COUPLE", "45 540 € / an", 22.3, (150, 80, 220)))):
             yy = 860 + i * 140
@@ -414,7 +437,7 @@ def construire(work):
 
     # ═════════ 24 – 30 : la demande en ligne ═════════
     def demande(ctx, t, lt):
-        dehors(ctx, t, lt, pompe=False)
+        dehors(ctx, t, lt, pompe=False, nu=True)
         assombrir(ctx, 0.35)
         jour = "5" if t < 28.0 else ("10" if t < 29.0 else "15")
         DC.calendrier(ctx, 230, 760, 0.95, "NOV", jour)
@@ -480,21 +503,27 @@ def construire(work):
         if cercle and t > 54.0:
             circle(ctx, 860, 450, 110 + 6 * math.sin(t * 6))
             stroke(ctx, 10, (255, 214, 60))
-        DC.canape(ctx, 330, SOL, 560, (60, 70, 100))
-        yan.draw(ctx, 330, SOL + 130, 0.8, t, bouche=bouche(t, "yan"), regard=0.5)
-        hd = yan.draw  # (le bonnet est dessiné après)
-        DC.canape_avant(ctx, 330, SOL, 560, (60, 70, 100))
+        for i in range(7):                                      # stalactites
+            poly(ctx, [(70 + i * 55, 300), (100 + i * 55, 300), (85 + i * 55, 340 + (i % 3) * 22)])
+            paint(ctx, (230, 244, 255), LW * 0.5, shade=1)
+        for j, lab in enumerate(("LIVRES", "CUISINE")):            # cartons de déménagement
+            rrect(ctx, 840, SOL - 230 - j * 150, 200, 150, 8)
+            paint(ctx, (196, 150, 100), LW, shade=0.85)
+            ecrit(ctx, lab, 940, SOL - 155 - j * 150, 28, INK, big=True)
+        DC.canape(ctx, 330, SOL, 620, (60, 70, 100))
+        yan.draw(ctx, 330, SOL + 40, 0.92, t, bouche=bouche(t, "yan"), regard=0.5, assis=True)
+        DC.canape_avant(ctx, 330, SOL + 40, 620, (60, 70, 100))
+        circle(ctx, 80, SOL + 60, 46)                              # tasse
+        paint(ctx, (240, 240, 240), LW, shade=0.9)
         for i in range(2):                                      # buée
             v = (t * 0.7 + i * 0.5) % 1
             circle(ctx, 360 + 20 * math.sin(v * 6), 600 - 120 * v, 14 + 22 * v)
             flat(ctx, (255, 255, 255), 0.35 * (1 - v))
-        rrect(ctx, 880, SOL - 110, 140, 110, 10)                # carton
-        paint(ctx, (196, 150, 100), LW, shade=0.85)
         kev.objet = None
-        kev.draw(ctx, 820, SOL + 140, 0.86, t, regard=-0.6)
+        kev.draw(ctx, 760, SOL + 180, 1.0, t, regard=-0.6)
         if gain and t > 57.4:
             DC.etiquette(ctx, 600, 860, 0.9, "+48 €", t - 57.4, couleur=(110, 220, 140))
-    f.plan(32.5, salon, [(0, 540, 900, 1.0), (1.8, 540, 880, 1.04)])
+    f.plan(32.5, salon, [(0, 540, 960, 1.08), (1.8, 540, 950, 1.12)])
     f.plan(34.3, salon, [(0, 700, 760, 1.3), (2.4, 700, 760, 1.35)])
     f.plan(36.7, salon, [(0, 330, 760, 1.7), (1.6, 330, 760, 1.76)])
     f.plan(40.2, lambda c, t, lt: cartons(c, t, lt), [(0, 540, 960, 1.0), (1.8, 560, 960, 1.1)])
@@ -608,9 +637,13 @@ def construire(work):
         paint(ctx, (40, 70, 140), LW, shade=0.9)
         ecrit(ctx, "CCAS", 560, 222, 90, (255, 255, 255), big=True)
         ecrit(ctx, "Centre communal d'action sociale", 560, 292, 26, (220, 230, 250))
+        for x in (150, 540, 930):                                  # plafonniers
+            rrect(ctx, x - 110, 40, 220, 30, 14)
+            flat(ctx, (255, 255, 240))
+            halo(ctx, x, 70, 220, (255, 255, 230), 0.25)
         rrect(ctx, 120, 330, 840, 420, 10)                         # vitre du guichet
         flat(ctx, (220, 240, 240), 0.35)
-        age.draw(ctx, 560, SOL - 120, 0.78, t, regard=0.0)
+        age.draw(ctx, 560, SOL + 160, 0.95, t, regard=0.0)
         rrect(ctx, 60, SOL - 330, 960, 330, 8)                     # comptoir en bois
         paint(ctx, (150, 104, 70), LW, shade=0.85)
         rrect(ctx, 40, SOL - 356, 1000, 34, 8)
@@ -633,7 +666,11 @@ def construire(work):
             rrect(ctx, -120, -80, 240, 160, 10)
             paint(ctx, (196, 150, 100), LW, shade=0.88)
             ctx.rectangle(-10, -80, 20, 160)
-            flat(ctx, (232, 52, 60))
+            flat(ctx, (230, 80, 160))
+            ctx.rectangle(-120, -10, 240, 20)
+            flat(ctx, (230, 80, 160))
+            circle(ctx, 0, -86, 22)
+            paint(ctx, (230, 80, 160), LW * 0.7, shade=1)
             ecrit(ctx, "COLIS DE NOËL", 0, 110, 24, INK, big=True)
             ctx.restore()
         if papiers:
@@ -699,7 +736,7 @@ def construire(work):
             DC.calendrier(ctx, 860, 330, 0.8, "JANV" if jan else "DÉC", "1er" if jan else "31")
             if jan:
                 ecrit(ctx, "année suivante", 860, 470, 26, (255, 255, 255), big=True)
-        lea.draw(ctx, 300, SOL - 20, 0.8, t, bouche=bouche(t, "lea"), regard=0.4)
+        lea.draw(ctx, 330, SOL - 40, 0.9, t, bouche=bouche(t, "lea"), regard=0.4, assis=True)
         rrect(ctx, 60, SOL - 300, 960, 40, 8)
         paint(ctx, (120, 80, 50), LW, shade=0.85)
         rrect(ctx, 120, SOL - 470, 150, 170, 10)                     # cadeau
@@ -710,6 +747,15 @@ def construire(work):
         paint(ctx, (250, 250, 250), LW, shade=0.95)
         V.icone(ctx, "coeur", 570, SOL - 360, 0.7)
         ecrit(ctx, "DON", 680, SOL - 380, 34, INK, big=True)
+        for i in range(6):                                           # pièces et étoiles
+            circle(ctx, 300 + i * 34, SOL - 320, 16)
+            paint(ctx, (230, 190, 70), LW * 0.6, shade=0.9)
+        for i in range(3):
+            x_ = 900 + i * 50
+            poly(ctx, [(x_ + 22 * math.cos(-math.pi / 2 + k * math.pi / 5) * (1 if k % 2 == 0 else 0.45),
+                        SOL - 345 + 22 * math.sin(-math.pi / 2 + k * math.pi / 5) * (1 if k % 2 == 0 else 0.45))
+                       for k in range(10)])
+            paint(ctx, (255, 200, 40), LW * 0.6, shade=1)
         V.billet(ctx, 820, SOL - 330, 1.2, -0.08)
         ecrit(ctx, "100 €", 820, SOL - 330, 30, (30, 100, 50), big=True)
         if recu and t > 100.0:
@@ -774,7 +820,11 @@ def construire(work):
         piece(ctx, mur=(200, 206, 214), mur2=(160, 168, 180), sol=(110, 116, 130))
         rrect(ctx, 220, 260, 640, 470, 12)                           # calendrier mural
         paint(ctx, (252, 252, 252), LW, shade=0.96)
-        ecrit(ctx, "DÉCEMBRE", 540, 310, 50, INK, big=True)
+        ecrit(ctx, "DÉCEMBRE", 540, 310, 50, INK, big=False)
+        for gx_ in range(5):
+            for gy_ in range(3):
+                rrect(ctx, 250 + gx_ * 118, 360 + gy_ * 118, 104, 104, 8)
+                stroke(ctx, LW * 0.5, (200, 204, 212))
         for j in range(3):
             x, y = 330 + j * 90, 400
             if perdu and t > 114.0:
@@ -793,19 +843,27 @@ def construire(work):
             ctx.restore()
         if patron:
             pat.draw(ctx, 900, SOL + 10, 0.8, t, bouche=bouche(t, "pat"), regard=-0.6)
-        rrect(ctx, 380, 780, 420, 300, 14)                            # écran
+        rrect(ctx, 380, 760, 460, 330, 14)                            # écran (plus grand)
         paint(ctx, (40, 44, 56), LW, shade=1)
-        rrect(ctx, 400, 800, 380, 260, 8)
+        rrect(ctx, 400, 780, 420, 290, 8)
         flat(ctx, (250, 250, 252))
+        rrect(ctx, 590, 1090, 40, 60, 4)
+        flat(ctx, (40, 44, 56))
         if ecran_txt is None:
-            ecrit(ctx, "SOLDE RTT", 590, 850, 30, (120, 120, 130), big=True)
-            ecrit(ctx, str(rtt), 590, 960, 120, (40, 160, 90), big=True)
+            ecrit(ctx, "SOLDE RTT", 610, 830, 32, (120, 120, 130), big=False)
+            ecrit(ctx, str(rtt), 610, 960, 150, (40, 160, 90), big=False)
         else:
             ecran_txt(ctx, t)
         rrect(ctx, 0, SOL - 230, 1080, 40, 8)                          # bureau
         paint(ctx, (230, 232, 236), LW, shade=0.9)
         kev.objet = None
-        kev.draw(ctx, 190, SOL + 150, 0.82, t, regard=0.4)
+        rrect(ctx, 150, SOL - 330, 60, 300, 14)                         # dossier de la chaise
+        paint(ctx, (50, 54, 66), LW, shade=0.9)
+        kev.draw(ctx, 280, SOL + 120, 0.95, t, regard=0.4, assis=True)
+        rrect(ctx, 160, SOL - 70, 250, 40, 12)                          # assise
+        paint(ctx, (50, 54, 66), LW, shade=0.9)
+        ctx.rectangle(275, SOL - 30, 20, 140)
+        flat(ctx, (60, 64, 76))
         circle(ctx, 880, SOL - 260, 34)                                 # tasse
         paint(ctx, (250, 250, 250), LW, shade=0.9)
         if gain and t > 121.4:
@@ -862,12 +920,12 @@ def construire(work):
     # ═════════ 134 – 141 : le décret ═════════
     def decret(ctx, t, lt):
         fond_sombre_flou(ctx, t, (20, 30, 60))
-        DC.calendrier(ctx, 300, 560, 0.85, "OCT", "20")
-        DC.calendrier(ctx, 780, 560, 0.85, "DÉC", "31")
+        DC.calendrier(ctx, 300, 470, 0.95, "OCT", "20")
+        DC.calendrier(ctx, 780, 470, 0.95, "DÉC", "31")
         avatar(ctx, 540, 560, 0.8)
-        rrect(ctx, 220, 760, 640, 26, 13)
+        rrect(ctx, 220, 690, 640, 44, 22)
         flat(ctx, (60, 64, 90))
-        rrect(ctx, 220, 760, 640 * ease((t - 134.6) / 2.6), 26, 13)
+        rrect(ctx, 220, 690, 640 * ease((t - 134.6) / 2.6), 44, 22)
         flat(ctx, (255, 214, 60))
         if t > 137.6:
             ecrit(ctx, "par salarié, jusqu'à", 540, 860, 40, (255, 214, 60), big=True, alpha=ease((t - 137.6) / 0.3))
@@ -887,7 +945,9 @@ def construire(work):
         rrect(ctx, 760, SOL - 420, 220, 70, 6)
         paint(ctx, (250, 248, 240), LW, shade=0.95)
         ecrit(ctx, "PRIME TRANSPORT", 870, SOL - 385, 20, INK, big=True)
-        kev.draw(ctx, 160, SOL + 140, 0.86, t, regard=0.5)
+        kev.objet = lambda c, x, y, s_: V.billet(c, x, y - 40, 1.2, -0.2)
+        kev.draw(ctx, 170, SOL + 160, 0.95, t, regard=0.5)
+        kev.objet = None
         if t > 142.0 and t < 143.4:
             traits_choc(ctx, 820, SOL - 60 - 0.8 * 880, 120, t - 142.0, color=(255, 255, 255))
         if t > 145.0:                                                   # la balance
@@ -896,8 +956,8 @@ def construire(work):
             if t > 149.0:
                 pen = -0.18 + 0.18 * ease((t - 149.0) / 0.6)
             ctx.save()
-            ctx.translate(560, SOL - 600)
-            ctx.scale(k, k)
+            ctx.translate(560, SOL - 700)
+            ctx.scale(k * 1.35, k * 1.35)
             ctx.rectangle(-8, 0, 16, 240)
             paint(ctx, (200, 160, 60), LW * 0.6, shade=0.9)
             ctx.rotate(pen)
@@ -978,8 +1038,8 @@ def construire(work):
     # ═════════ écran : compteur, sous-titres ═════════
     cles = [(0, 0), (29.0, 100), (58.0, 148), (98.0, 223), (122.2, 623), (153.5, 1623)]
     f.ecran(lambda ctx, t: ui.compteur(ctx, t, "RÉCUPÉRÉ AVANT LE 31/12", cles, apparition=3.0, toujours_vert=True))
-    groupes = ui.decouper(words)
-    f.ecran(lambda ctx, t: ui.sous_titres(ctx, t, groupes, y=Y_SOUS, size=58) if t < 155.7 else None)
+    groupes = ui.decouper(words, maxi=5)
+    f.ecran(lambda ctx, t: ui.sous_titres(ctx, t, groupes, y=1250, size=64, largeur_max=820) if t < 155.7 else None)
 
     for i in range(5):
         f.son(i * 0.45 + 0.45, "pop", 0.35)

@@ -36,3 +36,15 @@ Comparaison : 16 moments en grand + 1 image par seconde + analyse du son.
 | 117 | stylo rouge sur le bulletin | sans stylo |
 | 136 | calendriers en haut, barre jaune épaisse | calendriers au milieu, barre fine |
 | 146 | balance grande et centrée, billets dans la main de Marc | balance plus petite, pas de billets |
+
+## Tour 2 (après corrections du 20 nov. soir)
+Corrigé : fond musical généré (≈ -35 dB entre les phrases, original -39), sous-titres à 65 % de la hauteur sur 2 lignes
+et plus gros, police ronde pour cartes / chiffres / noms, grands yeux, bonnet de Yanis, personnages assis (Yanis,
+Léa, Kévin au bureau avec sa chaise), stylo rouge sur les documents, vrai portrait dans la vignette du patron, halo
+derrière le domino géant, calendrier qui ne chevauche plus le compteur, patron entier à 3,5 s, pompe en gros plan,
+domino des cartes plus gros, téléphone sans décor parasite, accessoires (tasse, stalactites, cartons LIVRES / CUISINE,
+plafonniers, ruban rose, pièces et étoiles), écran « SOLDE RTT » plus grand, calendrier en grille, calendriers du
+décret en haut + barre épaisse, balance plus grande + billets dans la main de Kévin, 1re image (caméra fixe au début,
+domino qui penche).
+Reste : agente du CCAS un peu trop visible, Yanis assis encore peu lisible, cartons et mairie dessinés (photos chez
+eux), chiffres de nos sources (1 623 € au lieu de 1 721 €), voix de Yann accélérée.

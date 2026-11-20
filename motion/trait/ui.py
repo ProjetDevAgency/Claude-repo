@@ -56,7 +56,8 @@ def decouper(words, maxi=3):
     return groupes
 
 
-def sous_titres(ctx, t, groupes, y=1290, size=58):
+def sous_titres(ctx, t, groupes, y=1290, size=58, largeur_max=None):
+    """Groupe de mots en cours ; s'il dépasse `largeur_max`, il passe sur 2 lignes (comme les vidéos de référence)."""
     g = None
     for i, gr in enumerate(groupes):
         fin = groupes[i + 1][0]["t0"] if i + 1 < len(groupes) else gr[-1]["t1"] + 0.6
@@ -71,23 +72,37 @@ def sous_titres(ctx, t, groupes, y=1290, size=58):
     for w in g:
         coul = (20, 20, 24) if w["mark"] == "y" else (255, 255, 255)
         surfs.append(texte(w["w"], size, coul))
-    tot = sum(s.get_width() for s in surfs) + sp * (len(surfs) - 1)
+    lignes, cur, larg = [], [], 0.0
+    for w, sf in zip(g, surfs):
+        lw_ = sf.get_width()
+        colle = cur and w["w"][:1].isdigit() and cur[-1][0]["w"].rstrip(",.").isdigit()   # « 11 000 » reste entier
+        if cur and largeur_max and larg + sp + lw_ > largeur_max and not colle:
+            lignes.append(cur)
+            cur, larg = [], 0.0
+        cur.append((w, sf))
+        larg += (sp if len(cur) > 1 else 0) + lw_
+    lignes.append(cur)
+    hgt = surfs[0].get_height()
+    inter = hgt * 1.12
+    tots = [sum(sf.get_width() for _, sf in li) + sp * (len(li) - 1) for li in lignes]
     k = back((t - g[0]["t0"]) / 0.18)
     ctx.save()
     ctx.translate(W / 2, y)
     ctx.scale(0.85 + 0.15 * k, 0.85 + 0.15 * k)
-    hgt = surfs[0].get_height()
-    rrect(ctx, -tot / 2 - 22, -hgt / 2 - 12, tot + 44, hgt + 24, 18)
-    ctx.set_source_rgba(0.08, 0.08, 0.1, 0.78)
+    hb = hgt + inter * (len(lignes) - 1)
+    rrect(ctx, -max(tots) / 2 - 24, -hgt / 2 - 14, max(tots) + 48, hb + 28, 18)
+    ctx.set_source_rgba(0.08, 0.08, 0.1, 0.8)
     ctx.fill()
-    x = -tot / 2
-    for w, s in zip(g, surfs):
-        dit = t >= w["t0"] - 0.02
-        if w["mark"] in ("y", "r"):
-            rrect(ctx, x - 8, -hgt / 2 - 4, s.get_width() + 16, hgt + 8, 10)
-            flat(ctx, YEL if w["mark"] == "y" else RED, 1.0 if dit else 0.5)
-        blit(ctx, s, x, 0, ax=0, ay=0.5, alpha=1.0 if dit else 0.45)
-        x += s.get_width() + sp
+    for n, (li, tot) in enumerate(zip(lignes, tots)):
+        x = -tot / 2
+        yy = n * inter
+        for w, sf in li:
+            dit = t >= w["t0"] - 0.02
+            if w["mark"] in ("y", "r"):
+                rrect(ctx, x - 8, yy - hgt / 2 - 4, sf.get_width() + 16, hgt + 8, 10)
+                flat(ctx, YEL if w["mark"] == "y" else RED, 1.0 if dit else 0.5)
+            blit(ctx, sf, x, yy, ax=0, ay=0.5, alpha=1.0 if dit else 0.45)
+            x += sf.get_width() + sp
     ctx.restore()
 
 

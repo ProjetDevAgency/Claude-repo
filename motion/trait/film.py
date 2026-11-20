@@ -140,6 +140,10 @@ class Film:
         mix = sfx.mix(self.voice, evts, sfx_gain=0.5)
         n = int(self.dur * voix.SR)
         mix = np.pad(mix, (0, max(0, n - len(mix))))[:n]
+        if getattr(self, "musique", False):                 # lit musical généré, baissé sous la voix
+            import musique
+            mix = musique.sous_voix(mix, musique.generer(self.dur))
+            mix = mix / max(1.0, float(np.abs(mix).max()) / 0.98)
         pcm = (np.clip(mix, -1, 1) * 32767).astype(np.int16)
         with wave.open(str(path), "wb") as f:
             f.setnchannels(1)

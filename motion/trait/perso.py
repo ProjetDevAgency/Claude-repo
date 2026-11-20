@@ -37,10 +37,12 @@ def _lerp_pose(a, b, k):
 class Perso:
     def __init__(self, peau=(240, 192, 152), cheveux="court", couleur_cheveux=(70, 46, 34),
                  haut="sweat", couleur_haut=(46, 170, 120), bas=(58, 84, 150), chaussures=(245, 245, 245),
-                 barbe=False, moustache=False, lunettes=False, badge=None, seed=0, tete=1.0, mince=1.0):
+                 barbe=False, moustache=False, lunettes=False, badge=None, seed=0, tete=1.0, mince=1.0,
+                 yeux="points", bonnet=None):
         """tete : taille de la tête (0,8 = silhouette plus élancée) ; mince : largeur du corps et des membres."""
         self.peau, self.cheveux, self.cc = peau, cheveux, couleur_cheveux
         self.tete, self.mince = tete, mince
+        self.yeux, self.bonnet = yeux, bonnet          # yeux="grands" : blanc + pupille ; bonnet = couleur
         self.haut, self.ch, self.bas, self.chaus = haut, couleur_haut, bas, chaussures
         self.barbe, self.moustache, self.lunettes, self.badge = barbe, moustache, lunettes, badge
         self.seed = seed
@@ -75,7 +77,7 @@ class Perso:
         return cur, t - tc
 
     # ── dessin ──
-    def draw(self, ctx, x, y, s, t, bouche=0.0, regard=0.0, dos=False):
+    def draw(self, ctx, x, y, s, t, bouche=0.0, regard=0.0, dos=False, assis=False):
         """x, y = milieu des pieds ; s = échelle (1 = 1000 px de haut)."""
         (pg, pd), _, pose_nom = self._pose_at(t)
         emo, de = self._emo_at(t)
@@ -93,11 +95,20 @@ class Perso:
         ctx.translate(0, sursaut)
 
         m = self.mince
-        # jambes + chaussures
-        for sx in (-1, 1):
-            tube(ctx, [(sx * 40 * m, -430), (sx * 42 * m, -40)], 66 * m, self.bas, lw)
-            ellipse(ctx, sx * 52 * m, -22, 52 * (0.5 + 0.5 * m), 26)
-            paint(ctx, self.chaus, lw, shade=0.85)
+        dy = 0.0
+        if assis:                                   # assis de face : cuisses vues en raccourci, tibias verticaux
+            dy = 250.0
+            for sx in (-1, 1):
+                tube(ctx, [(sx * 40 * m, -200), (sx * 92 * m, -205), (sx * 88 * m, -40)], 66 * m, self.bas, lw)
+                ellipse(ctx, sx * 98 * m, -22, 52 * (0.5 + 0.5 * m), 26)
+                paint(ctx, self.chaus, lw, shade=0.85)
+            ctx.translate(0, dy)
+        else:
+            # jambes + chaussures
+            for sx in (-1, 1):
+                tube(ctx, [(sx * 40 * m, -430), (sx * 42 * m, -40)], 66 * m, self.bas, lw)
+                ellipse(ctx, sx * 52 * m, -22, 52 * (0.5 + 0.5 * m), 26)
+                paint(ctx, self.chaus, lw, shade=0.85)
 
         ctx.rotate(math.radians(bal))
         ctx.translate(0, souffle * 0.4)
@@ -144,6 +155,15 @@ class Perso:
         paint(ctx, self.peau, lwt, shade=0.86)
         self._visage(ctx, t, emo, de, bouche, regard, lwt)
         self._cheveux(ctx, lwt)
+        if self.bonnet:                             # bonnet de laine
+            ctx.move_to(-118, -30)
+            ctx.curve_to(-120, -175, 120, -175, 118, -30)
+            ctx.close_path()
+            paint(ctx, self.bonnet, lwt, shade=0.85)
+            rrect(ctx, -124, -58, 248, 46, 18)
+            paint(ctx, dark(self.bonnet, 0.85), lwt, shade=0.9)
+            circle(ctx, 0, -168, 26)
+            paint(ctx, dark(self.bonnet, 0.85), lwt, shade=0.9)
         ctx.restore()
 
         # objet tenu + main droite par-dessus
@@ -161,6 +181,7 @@ class Perso:
             paint(ctx, self.peau, lw, shade=0.85)
         ctx.restore()
         # point d'ancrage pour les badges, bulles, traits de choc (coordonnées monde)
+        hy += dy
         return {"tete": (x, y + (hy - 0 + sursaut) * s), "haut_tete": (x, y + (hy - 150 * kt + sursaut) * s),
                 "main_d": (x + mains[1][0] * s, y + mains[1][1] * s)}
 
@@ -233,6 +254,14 @@ class Perso:
                 ctx.curve_to(x0 - 6, -14, x0 + 6, -14, x0 + 13, 2)
                 stroke(ctx, lw * 0.9)
             else:
+                if self.yeux == "grands":                 # grand œil blanc + pupille
+                    ellipse(ctx, x0, -4, 22, 25)
+                    paint(ctx, (255, 255, 255), lw * 0.7, shade=1)
+                    ellipse(ctx, x0 + regard * 6, -2, 11, 13)
+                    flat(ctx, INK)
+                    circle(ctx, x0 + 4 + regard * 6, -7, 4)
+                    flat(ctx, (255, 255, 255))
+                    continue
                 ellipse(ctx, x0, -2, 11, 14)
                 flat(ctx, INK)
                 circle(ctx, x0 + 4, -7, 4)
