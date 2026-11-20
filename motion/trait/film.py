@@ -71,6 +71,8 @@ class Film:
 
     # ── rendu ──
     def _camera(self, keys, lt):
+        if callable(keys):                      # caméra calculée image par image (travelling qui suit l'action)
+            return keys(lt)
         if lt <= keys[0][0]:
             return keys[0][1:]
         for (ta, *a), (tb, *b) in zip(keys, keys[1:]):

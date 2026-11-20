@@ -35,7 +35,18 @@ PATRON = dict(cheveux="chauve", couleur_cheveux=(150, 150, 156), peau=(236, 186,
 
 PETITS = [("points", "essence"), ("soleil", "flamme"), ("points", "maison"), ("soleil", "coeur"),
           ("points", "calendrier")]
-X0, PAS, XG = 430, 200, 1450          # dominos : premier, écart, domino géant
+
+# Chaque domino est 1,236 fois plus grand que le précédent (comme l'original : le 1er arrive au genou,
+# le 6e dépasse le héros). L'écart = la moitié de la hauteur, pour que chacun tombe pile sur le suivant.
+ECH = [1.16 * 1.236 ** i for i in range(6)]
+HT = [280 * s for s in ECH]
+LG = [150 * s for s in ECH]
+XD = [470.0]
+for _i in range(5):
+    XD.append(XD[-1] + LG[_i] + 0.5 * HT[_i])
+CENTRE = [x + w / 2 for x, w in zip(XD, LG)]
+A_CHOC = math.asin(0.5)            # angle où le haut du domino touche le suivant
+X_PATRON = XD[5] + LG[5] + 250
 
 
 def construire(work):
@@ -43,34 +54,73 @@ def construire(work):
     f = Film(voice, words)
     T = f.t
     kev, pat, kev2 = Perso(**KEVIN), Perso(**PATRON), Perso(**KEVIN)
-    kev.pose(0.15, "pointe").emotion(0, "neutre").emotion(1.4, "content")
+    kev.emotion(0, "neutre").emotion(1.0, "content")
     pat.pose(0, "mains_hanches").emotion(0, "neutre")
     pat.pose(T("patron"), "haussement").emotion(T("patron"), "malin")
     pat.emotion(T("parler"), "content")
     kev2.emotion(T("Kévin"), "neutre").emotion(T("90"), "choc")
     t31 = T("31")
+    # le 1er domino penche déjà à t = 0 ; le 5e frappe le géant pile sur « 31 »
+    DEB = -0.15
+    D = (t31 - DEB) / 5
+
+    def angle(i, t):
+        t0 = DEB + i * D
+        u = (t - t0) / D
+        if u <= 0:
+            return 0.0
+        if u < 1:
+            return A_CHOC * u * u                                    # chute qui accélère
+        v = t - t0 - D
+        rebond = 0.05 * math.exp(-v * 10) * abs(math.sin(v * 24))
+        if i == 4:
+            return A_CHOC - rebond                                   # reste appuyé contre le géant
+        return A_CHOC + (1.36 - A_CHOC) * ease(v / (D * 1.3)) - rebond   # s'affaisse quand le suivant part
+
+    def angle_geant(t):
+        if t < t31:
+            return 0.0
+        v = t - t31
+        return 0.03 * math.exp(-v * 3.5) * math.sin(v * 18)
+
+    def cam_chaine(lt):
+        t = lt
+        fi = min(5.0, max(0.0, (t - DEB) / D - 0.35 + 0.95 * ease(t / 1.6)))   # démarre doucement puis devance la chute
+        i = min(4, int(fi))
+        k = fi - i
+        cx = CENTRE[i] + (CENTRE[i + 1] - CENTRE[i]) * k - 190 * (1 - ease(t / 1.2))   # héros entier au début
+        z = 1.18 * 1.236 ** (-0.35 * fi)
+        if t > t31:
+            cx -= 160 * ease((t - t31) / 0.8)
+            z *= 1 + 0.025 * (t - t31)
+        return cx, V.SOL - 230 / z, z
 
     # ── la chaîne de dominos devant la ville ──
     def chaine_objets(ctx, t):
         for i, (h, b) in enumerate(PETITS):
-            V.domino(ctx, X0 + i * PAS, V.SOL, 1.0, V.chute(t, 0.35 + i * 0.3), h, b)
-        if t >= t31 - 0.25:
-            k = back((t - t31 + 0.25) / 0.4)
-            vac = 0.03 * math.sin(t * 9) if t >= T("patron") else 0.0
-            V.domino(ctx, XG, V.SOL, 2.4 * k, vac, "soleil", "bus", "1 000 €",
-                     lueur=1.0 if t >= T("plus") else 0.4, couleur=(250, 236, 170))
-        kev.draw(ctx, 250, V.SOL, 0.72, t, regard=0.5)
-        pat.draw(ctx, 2020, V.SOL, 0.72, t, regard=-0.6)
+            V.domino(ctx, XD[i], V.SOL, ECH[i], angle(i, t), h, b)
+        V.domino(ctx, XD[5], V.SOL, ECH[5], angle_geant(t), "soleil", "bus", "1 000 €",
+                 lueur=1.0 if t >= T("plus") else 0.0, couleur=(250, 236, 170))
+        kev.draw(ctx, 300, V.SOL, 0.72, t, regard=0.6)
+        pat.draw(ctx, X_PATRON, V.SOL, 0.72, t, regard=-0.6)
 
     def chaine(ctx, t, lt):
-        V.ville_nuit(ctx, t)
+        V.ville_nuit(ctx, t, x1=4700)
         V.reflet(ctx, lambda c: chaine_objets(c, t))
         chaine_objets(ctx, t)
-        if t >= t31:
+        tc = T("avant") - 0.15                                      # le calendrier descend au bout d'une ficelle
+        if t >= tc:
             from decors import calendrier
-            calendrier(ctx, XG - 160, 640, 0.9 * back((t - t31) / 0.3), "DÉC", "31")
+            y = -500 + (V.SOL - HT[5] - 30 + 500) * min(1.2, max(0.0, 1 - math.exp(-(t - tc) * 6)
+                                                              * math.cos((t - tc) * 14)))
+            xc = XD[5] - 170
+            ctx.move_to(xc, -1500)
+            ctx.line_to(xc, y - 150)
+            from dessin import stroke
+            stroke(ctx, 5)
+            calendrier(ctx, xc, y, 1.0, "DÉC", "31")
         if t >= T("patron"):
-            traits_choc(ctx, 2020, V.SOL - 0.72 * 880, 140, t - T("patron"), color=(255, 255, 255))
+            traits_choc(ctx, X_PATRON, V.SOL - 0.72 * 880, 140, t - T("patron"), color=(255, 255, 255))
 
     # ── station-service la nuit ──
     def station(ctx, t, lt):
@@ -100,24 +150,24 @@ def construire(work):
                 V.billet(ctx, 290 + math.cos(a) * r * 0.8, 840 + math.sin(a) * r * 0.6 + 400 * d * d, 1.1,
                          d * (3 + i) * (1 if i % 2 else -1))
 
-    f.plan(0, chaine, [(0, 420, 1080, 1.05), (t31 - 0.1, 1150, 1080, 1.05)], fouet=False)
-    f.plan("31", chaine, [(0, 1560, 1040, 0.95), (1.0, 1600, 1030, 1.0)])
-    f.plan("plus", chaine, [(0, 1640, 1110, 1.25), (1.4, 1660, 1100, 1.35)])
-    f.plan("patron", chaine, [(0, 1880, 1000, 1.35), (1.6, 1900, 980, 1.5)])
+    gx = XD[5] + LG[5] / 2
+    f.plan(0, chaine, cam_chaine, fouet=False)                       # un seul travelling jusqu'à « La plus grosse »
+    f.plan("plus", chaine, [(0, gx + 100, V.SOL - 440, 1.1), (1.4, gx + 120, V.SOL - 450, 1.18)])
+    f.plan("patron", chaine, [(0, X_PATRON - 120, V.SOL - 520, 1.35), (1.6, X_PATRON - 100, V.SOL - 530, 1.45)])
     f.plan("Lundi", station, [(0, 540, 1050, 1.0), (1.2, 540, 1080, 1.12)])
     f.plan("Kévin", pompe, [(0, 560, 1040, 1.0), (2.0, 520, 1000, 1.12)])
     f.plan("90", pompe, [(0, 380, 900, 1.55), (1.2, 380, 900, 1.7)])
     f.plan("20", pompe, [(0, 820, 820, 1.6), (1.0, 820, 840, 1.7)])
 
-    f.ecran(lambda ctx, t: ui.compteur(ctx, t, "RÉCUPÉRÉ AVANT LE 31/12", [(0, 0)], apparition=t31))
+    f.ecran(lambda ctx, t: ui.compteur(ctx, t, "RÉCUPÉRÉ AVANT LE 31/12", [(0, 0)], apparition=T("plus")))
     groupes = ui.decouper(words)
-    f.ecran(lambda ctx, t: ui.sous_titres(ctx, t, groupes, y=1450))
-    for i in range(5):
-        f.son(0.35 + i * 0.3 + 0.3, "pop", 0.5)
+    f.ecran(lambda ctx, t: ui.sous_titres(ctx, t, groupes, y=1300))
+    for i in range(4):
+        f.son(DEB + (i + 1) * D, "pop", 0.45)                       # clac de chaque domino
     for mot, son, g in [("31", "impact", 0.8), ("plus", "succes", 0.5), ("patron", "pop", 0.7),
                         ("parler", "rate", 0.6), ("Kévin", "ticks", 0.5), ("90", "impact", 0.9), ("20", "pop", 0.7)]:
         f.son(mot, son, g)
-    f.secousse("31", 12)
+    f.secousse("31", 8)
     f.secousse("90", 18)
     return f
 
