@@ -23,7 +23,7 @@ MENT_OK = {"honnêtement", "franchement", "exactement", "doucement", "carrément
 MENT_NOMS = {"moment", "comment", "paiement", "appartement", "remboursement", "prélèvement", "logement", "gouvernement",
              "changement", "enterrement", "département", "comportement", "traitement", "équipement", "argument",
              "document", "élément", "segment", "ment", "jument", "serment", "aliment", "vêtement", "bâtiment",
-             "signalement", "embarquement", "abonnement", "règlement", "versement", "jugement", "établissement", "testament"}
+             "signalement", "embarquement", "abonnement", "règlement", "versement", "jugement", "établissement", "testament", "agrément"}
 
 
 def phrases(t):

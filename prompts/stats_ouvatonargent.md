@@ -147,3 +147,11 @@ Total : 3 947 vues, 11 abonnés. 82 % des vues viennent du « Pour toi » (vidé
   contre vendredi midi) et la fin a changé (+22 / -9 % en séance → +17 / -13 % à la clôture).
 - 19 nov. 23 h : v2 terminée (dialogues vivants, illustrations liées au texte, fonds qui dérivent) : 6,2 % de l'image
   qui bouge, 17 % d'images figées (v1 : environ 3 % / 30 % ; La Ficelle : 5–8 % / 4–27 %). Remplace la v2 programmée.
+
+## Boucle — 20 nov. 8 h 35
+- Metricool (relevé 8 h 35) : frais d'agence (19 nov. 18 h, 15 h en ligne) 237 vues, 19 s, 83 % « Pour toi », 0 partage,
+  0 commentaire ; capture client à 2 h 22 : 64 % à 0:01, 27 % regardé. Diagnostic : sujet de niche (premier appart
+  en agence, une partie du public seulement) → confirme le filtre n° 1. Anthropic (14 nov.) monte à 53,5 k, permis 27,7 k.
+- Vidéo Anthropic 1er jour : v1 en privé, v2 (nouveau visuel) programmée par le client le 20 nov. à 12 h (test A/B).
+- Décision : feuilleton du grand frère, épisode 4 (sam. 21 nov. 18 h) — sujet universel (les « plateformes » à gains
+  garantis vues sur les réseaux), gain chiffré (500 € gardés), nouveau visuel. Variable testée : le feuilleton.

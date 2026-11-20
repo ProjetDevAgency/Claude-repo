@@ -202,8 +202,8 @@ def insert_notif(fond, app, titre, msg, heure="12:30", col=(52, 199, 89), mots=N
             d.text((186, y + 70), titre, font=F(40), fill=INK + (255,), anchor="lm")
             d.text((186, y + 140), msg, font=F(36), fill=(90, 90, 100, 255), anchor="lm")
         sc = 0.9 + 0.1 * back(lt / 0.3)
-        _pose(img, lay, W / 2, 1000 + math.sin(lt * 3) * 8, sc, rot=-3 + math.sin(lt * 2) * 1.5)
-        _main(ImageDraw.Draw(img), W / 2 + 40, 1500)
+        _pose(img, lay, W / 2, 1070 + math.sin(lt * 3) * 8, sc * 0.9, rot=-3 + math.sin(lt * 2) * 1.5)
+        _main(ImageDraw.Draw(img), W / 2 + 40, 1540)
         if mots:
             titre_choc(img, mots, lt - 0.35, accent=accent)
         return img
@@ -600,3 +600,153 @@ def echo_vivant(fond, txt, devant=None, **kextra):
 
 
 __all__ += ["cle", "geste_parle", "tags_flottants", "vapeur_devant", "dialogue", "gp_vivant", "echo_vivant"]
+
+
+# ───────────── illustrations « arnaques en ligne » (épisode 4 du feuilleton) ─────────────
+
+def liste_noire(fond, titre="LISTE NOIRE · AMF", trouve=None, t_trouve=0.9, mots=None, accent=None, n=9):
+    """Une liste officielle qui défile (noms masqués) ; trouve=texte → une ligne rouge surlignée + tampon."""
+    def f(lt, dur):
+        img = fond_flou(fond, lt)
+        d = ImageDraw.Draw(img)
+        x0, y0, x1, y1 = 130, 600, 950, 1460
+        d.rounded_rectangle([x0 + 14, y0 + 18, x1 + 14, y1 + 18], radius=24, fill=(0, 0, 0))
+        d.rounded_rectangle([x0, y0, x1, y1], radius=24, fill=(250, 250, 248), outline=INK, width=8)
+        d.rounded_rectangle([x0, y0, x1, y0 + 120], radius=24, fill=(24, 24, 30))
+        d.text((W / 2, y0 + 62), titre, font=FA(58), fill=WHITE, anchor="mm")
+        scroll = (lt * 160) % 90 if trouve is None or lt < t_trouve else 0
+        for j in range(n):
+            yy = y0 + 170 + j * 90 - scroll
+            if yy < y0 + 140 or yy > y1 - 50:
+                continue
+            w = 260 + (j * 137) % 300
+            ligne_trouvee = trouve and lt >= t_trouve and j == 4
+            if ligne_trouvee:
+                k = ease((lt - t_trouve) / 0.25)
+                d.rectangle([x0 + 30, yy - 34, x0 + 30 + (x1 - x0 - 60) * k, yy + 34], fill=RED)
+                d.text((x0 + 60, yy), trouve, font=FA(48), fill=WHITE, anchor="lm")
+            else:
+                d.rounded_rectangle([x0 + 60, yy - 14, x0 + 60 + w, yy + 14], radius=14, fill=(200, 200, 206))
+                d.text((x1 - 60, yy), ".com", font=F(30), fill=(150, 150, 160), anchor="rm")
+        if trouve and lt > t_trouve + 0.4:
+            sk = back((lt - t_trouve - 0.4) / 0.25)
+            sl = Image.new("RGBA", (520, 170), (0, 0, 0, 0))
+            sd = ImageDraw.Draw(sl)
+            sd.rounded_rectangle([8, 8, 511, 161], radius=20, outline=RED + (255,), width=10)
+            sd.text((260, 85), "SUR LA LISTE", font=FA(int(76 * (1.5 - 0.5 * sk))), fill=RED + (255,), anchor="mm")
+            _pose(img, sl, W / 2 + 120, 1320, 1.0, rot=-12)
+        if mots:
+            titre_choc(img, mots, lt - 0.1, accent=accent)
+        return img
+    return f
+
+
+def recherche(fond, champ, texte, resultat=None, col=RED, t_resultat=None, mots=None, accent=None, vitesse=14):
+    """Barre de recherche : le texte se tape lettre par lettre, puis la carte de résultat tombe."""
+    def f(lt, dur):
+        img = fond_flou(fond, lt)
+        rayons(img, lt, alpha=16)
+        d = ImageDraw.Draw(img)
+        d.text((W / 2, 690), champ, font=FA(52), fill=YEL, anchor="mm")
+        d.rounded_rectangle([110, 760, 970, 880], radius=60, fill=WHITE, outline=INK, width=8)
+        d.ellipse([150, 790, 210, 850], outline=(120, 120, 130), width=8)
+        d.line([200, 840, 225, 865], fill=(120, 120, 130), width=8)
+        n = min(len(texte), int(max(0.0, lt - 0.2) * vitesse))
+        t = texte[:n] + ("|" if int(lt * 3) % 2 and n < len(texte) else "")
+        d.text((250, 820), t, font=F(48), fill=INK, anchor="lm")
+        t_r = t_resultat if t_resultat is not None else 0.4 + len(texte) / vitesse
+        if resultat and lt > t_r:
+            k = back((lt - t_r) / 0.3)
+            lay = Image.new("RGBA", (860, 300), (0, 0, 0, 0))
+            ld = ImageDraw.Draw(lay)
+            ld.rounded_rectangle([0, 0, 859, 299], radius=30, fill=(252, 252, 250, 255), outline=col + (255,), width=10)
+            for j, l in enumerate(resultat):
+                ld.text((430, 90 + j * 110), l, font=FA(64 if j == 0 else 48), fill=(col if j == 0 else INK) + (255,), anchor="mm")
+            _pose(img, lay, W / 2, 1120, 0.7 + 0.3 * k)
+        if mots:
+            titre_choc(img, mots, lt - 0.1, accent=accent)
+        return img
+    return f
+
+
+def conversation(fond, contact, messages, mots=None, accent=None):
+    """Téléphone tenu en main avec une messagerie : messages = [(cote 'moi'|'lui'|'info', texte, t0)]."""
+    def f(lt, dur):
+        img = fond_flou(fond, lt)
+        lay = Image.new("RGBA", (640, 1180), (0, 0, 0, 0))
+        d = ImageDraw.Draw(lay)
+        d.rounded_rectangle([0, 0, 639, 1179], radius=80, fill=(20, 20, 26, 255))
+        d.rounded_rectangle([22, 22, 617, 1157], radius=64, fill=(236, 229, 221, 255))
+        d.rectangle([22, 90, 617, 200], fill=(40, 120, 100, 255))
+        d.ellipse([48, 112, 116, 180], fill=(200, 200, 205, 255))
+        d.text((140, 146), contact, font=F(38), fill=WHITE + (255,), anchor="lm")
+        y = 250
+        for cote, txt, t0 in messages:
+            if lt < t0:
+                continue
+            k = back((lt - t0) / 0.25)
+            fnt = F(32)
+            lignes, cur = [], ""
+            for m in txt.split():
+                if fnt.getlength((cur + " " + m).strip()) > 380:
+                    lignes.append(cur)
+                    cur = m
+                else:
+                    cur = (cur + " " + m).strip()
+            lignes.append(cur)
+            h = 30 + 44 * len(lignes)
+            w = max(fnt.getlength(l) for l in lignes) + 50
+            if cote == "info":
+                d.rounded_rectangle([320 - w / 2, y, 320 + w / 2, y + h], radius=20, fill=(255, 236, 200, 255))
+                x = 320 - w / 2 + 25
+                col = (150, 60, 40, 255)
+            elif cote == "moi":
+                d.rounded_rectangle([590 - w, y, 590, y + h], radius=24, fill=(214, 248, 196, 255))
+                x = 590 - w + 25
+                col = INK + (255,)
+            else:
+                d.rounded_rectangle([50, y, 50 + w, y + h], radius=24, fill=(255, 255, 255, 255))
+                x = 75
+                col = INK + (255,)
+            if k > 0.3:
+                for j, l in enumerate(lignes):
+                    d.text((x, y + 37 + j * 44), l, font=fnt, fill=col, anchor="lm")
+            y += h + 24
+        _pose(img, lay, W / 2, 1070 + math.sin(lt * 2.5) * 6, 0.9, rot=-2 + math.sin(lt * 1.8))
+        _main(ImageDraw.Draw(img), W / 2 + 40, 1540)
+        if mots:
+            titre_choc(img, mots, lt - 0.1, accent=accent)
+        return img
+    return f
+
+
+def tel_voiture(fond, legende="+20 % / SEMAINE", mots=None, accent=None):
+    """Le téléphone du frère montre un gars et sa voiture de sport qui défile (vidéo des réseaux)."""
+    def f(lt, dur):
+        img = fond_flou(fond, lt)
+        rayons(img, lt, col=YEL, alpha=18)
+        lay = Image.new("RGBA", (640, 1180), (0, 0, 0, 0))
+        d = ImageDraw.Draw(lay)
+        d.rounded_rectangle([0, 0, 639, 1179], radius=80, fill=(20, 20, 26, 255))
+        d.rounded_rectangle([22, 22, 617, 1157], radius=64, fill=(30, 34, 60, 255))
+        d.rectangle([22, 760, 617, 1157], fill=(60, 60, 70, 255))                     # la route
+        for k in range(6):
+            xx = (k * 160 - lt * 600) % 760 - 80
+            d.rectangle([xx, 900, xx + 90, 915], fill=(230, 230, 230, 255))
+        cx = 320 + math.sin(lt * 2) * 20
+        d.rounded_rectangle([cx - 230, 650, cx + 230, 790], radius=50, fill=(220, 40, 50, 255), outline=INK + (255,), width=6)
+        d.polygon([(cx - 130, 650), (cx - 60, 570), (cx + 90, 570), (cx + 160, 650)], fill=(200, 30, 40, 255), outline=INK + (255,))
+        for wx in (cx - 140, cx + 140):
+            d.ellipse([wx - 50, 740, wx + 50, 840], fill=(30, 30, 34, 255), outline=(120, 120, 120, 255), width=8)
+        d.rounded_rectangle([60, 120, 580, 240], radius=30, fill=(0, 0, 0, 160))
+        d.text((320, 180), legende, font=FA(66), fill=GREEN + (255,), anchor="mm")
+        d.text((320, 1080), "♥  12 k      ➤", font=F(40), fill=WHITE + (255,), anchor="mm")
+        _pose(img, lay, W / 2, 1070, 0.8 + 0.1 * back(lt / 0.3), rot=-3 + math.sin(lt * 2) * 1.5)
+        _main(ImageDraw.Draw(img), W / 2 + 40, 1540)
+        if mots:
+            titre_choc(img, mots, lt - 0.1, accent=accent)
+        return img
+    return f
+
+
+__all__ += ["liste_noire", "recherche", "conversation", "tel_voiture"]

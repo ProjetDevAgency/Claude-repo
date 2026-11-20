@@ -31,9 +31,13 @@ Hypothèse, pas certitude : on la teste.
 3. `37_anthropic_ouverture` — Il achète « au marché » à 111,50 $ (prix d'intro 83 $). Clôture 97,17 $ : −13 % pour lui,
    ≈ −770 € sur 6 000 €. L'ordre limité de Kévin à 83 $ n'est jamais passé ; son livret « dort tranquille ».
 
+4. `38_frere_plateforme` — (sam. 21 nov. 18 h) « Tu me prêtes 500 € pour ma plateforme, sinon tu finis ta vie sur ton
+   livret. » 20 % par semaine « garantis », offre qui finit à minuit. Kévin trouve le site sur la liste noire de l'AMF,
+   écrit au « conseiller » en se faisant passer pour un client (bloqué en 2 minutes) ; le lendemain l'offre est toujours
+   là ; le soir, c'est le frère qui lui demande la liste. Kévin garde ses 500 €.
+
 ## Pistes d'épisodes (toujours : sujet universel, 8/8, faits vérifiés dans 2 sources, une astuce que Kévin applique)
-- **Il veut « se refaire »** : formation de trading ou signaux crypto vendus par un influenceur. Astuce : vérifier la
-  liste noire de l'AMF et le registre des intermédiaires ; ce que la loi influenceurs de 2023 interdit (à vérifier).
+- ~~Il veut « se refaire » : plateforme / liste noire AMF~~ → fait (épisode 4).
 - **Voiture en LOA / crédit** pour frimer : coût total, kilométrage, frais de fin de contrat ; droit de rétractation de
   14 jours sur le crédit (à vérifier).
 - **Paiement en 3 ou 4 fois** pour un téléphone : ce que ça coûte vraiment, fichage en cas d'impayé (à vérifier).
