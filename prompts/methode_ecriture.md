@@ -83,3 +83,9 @@ concurrent La Ficelle (`prompts/analyse_concurrent_laficelle.md`, 15 vidéos à 
 - Jamais de logo de marque réelle.
 - Mesure : ≥ 6 % de l'image qui bouge, ≤ 15 % d'images figées (`scripts/mesure_mouvement.py`).
 Détails techniques : `prompts/boucle_consignes.md`, étape 5.
+
+## Règles apprises par la boucle
+Ajoutées par la boucle quotidienne quand un test de `prompts/tests_boucle.md` est confirmé 3 fois sur 3. Chaque règle :
+date, règle, chiffres, numéro du test. Le client peut en refuser une : elle est alors retirée.
+
+(aucune pour l'instant)

@@ -21,12 +21,15 @@ Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publicati
 1. `getAnalyticsDataByMetrics`, brandId 8206232, du 1er nov. à aujourd'hui, métriques
    TKPO02 (date), TKPO05 (description), TKPO06 (durée), TKPO07 (vues), TKPO08 (j'aime), TKPO09 (commentaires),
    TKPO10 (partages), TKPO11 (portée), TKPO15 (temps moyen regardé), TKPO16 (« Pour toi »), TKPO20 (profil), TKPO21 (recherche).
-   TKPO13 (vue en entier) est incohérent : ne pas l'utiliser. Une vidéo apparaît dans Metricool jusqu'à ~24 h après sa sortie.
+   + TKPO13 (vue en entier) : **fiable**, vérifié par le client le 20 nov. (0,13 point d'écart avec TikTok Studio).
+   Une vidéo apparaît dans Metricool jusqu'à ~24 h après sa sortie.
 2. Mettre à jour `prompts/stats_souslesabot.md` : une section datée avec la vidéo de la veille (à ~24 h), celle de
    J-3 (vues quasi définitives), et ce qu'on en tire. Repères établis le 21 nov. (`prompts/stats_souslesabot_21nov.md`) :
    le **sujet** décide ; temps moyen ≥ 24 s nécessaire mais pas suffisant ; les **partages** séparent les succès ;
    l'heure ne joue pas ; la recherche ramène une longue traîne.
-3. Diagnostic (une seule variable changée par vidéo, une tendance devient règle après 2-3 confirmations) :
+3. Mettre à jour `prompts/tests_boucle.md` (journal des tests, voir « Apprentissage » plus bas) avec les chiffres des
+   vidéos qui appartiennent à un test en cours.
+4. Diagnostic (une seule variable changée par vidéo) :
    | Signal | Changement pour la vidéo du jour |
    |---|---|
    | temps moyen < 18 s | changer le type de choc du hook (prix ↔ mépris), plus concret |
@@ -34,7 +37,8 @@ Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publicati
    | temps moyen ≥ 24 s mais < 1 000 vues | sujet pas assez universel : filtre n° 1 plus strict |
    | 0 partage | gain de Kévin plus clair et chiffré dès l'ouverture |
    | « Pour toi » < 85 % | description et hashtags (mots que les gens cherchent) |
-4. Le **lundi** : bilan des 7 dernières vidéos dans le même fichier.
+   | vue en entier en baisse avec un temps moyen stable | la fin traîne : twist plus tôt, chute plus courte |
+5. Le **lundi** : bilan de la semaine (voir « Apprentissage »).
 
 ## 2. Sujet (≈ 15 min)
 1. **Filtre n° 1 : « est-ce qu'un 18-30 ans l'ENVERRAIT à un pote ou l'ENREGISTRERAIT ? »** Oui seulement si c'est
@@ -89,9 +93,26 @@ Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publicati
 3. Vérifier avec `getScheduledPosts` que la publication est bien là, à 12 h, non brouillon. Ne toucher à aucune autre.
 4. Enregistrer `scripts/trait/<slug>_description.txt` (description, commentaire, réglages).
 
+## Apprentissage : comment la boucle s'améliore seule
+1. **Journal des tests** (`prompts/tests_boucle.md`) : UN test en cours à la fois. Chaque test = une hypothèse
+   (« chiffrer le gain dans la 1re phrase fait monter les partages »), la variable changée, les vidéos testées, les
+   vidéos témoins, le résultat chiffré, la décision. Pas de nouveau test tant que le précédent n'est pas conclu
+   (3 vidéos testées maximum, ou 7 jours).
+2. **Conclusion** : confirmé si l'effet va dans le même sens sur 3 vidéos sur 3 et dépasse l'écart habituel (la médiane
+   hors succès tourne autour de 400 vues : un « succès » d'une seule vidéo ne prouve rien). Sinon : infirmé ou non
+   concluant, et on passe au test suivant.
+3. **Règle confirmée → elle entre dans `prompts/methode_ecriture.md`**, section « Règles apprises par la boucle »
+   (date, règle, chiffres qui la prouvent, numéro du test), et elle est signalée en tête du compte rendu au client.
+   Le client peut la refuser : on la retire alors et on le note dans le journal.
+4. **Ce qu'on ne modifie jamais** : le moteur H1 (`prompts/moteur_script.txt`, PDF de méthode), les règles du client
+   en haut de ce fichier. On adapte la méthode d'écriture et les choix de sujet, pas la référence.
+5. **Le lundi** : bilan des 7 dernières vidéos dans `prompts/stats_souslesabot.md` (par sujet, type de hook, méchant,
+   twist), état du test en cours, prochain test choisi, et demande au client d'une capture TikTok Studio (rétention
+   seconde par seconde, enregistrements : Metricool ne les donne pas) pour la meilleure et la pire vidéo de la semaine.
+
 ## 6. Compte rendu au client
 - `git add` (scripts, motion/trait, prompts) → commit → `git push -u origin ccr-a57d9e9e-flymhr`.
-- Envoyer au client (SendUserFile, status proactive) la vidéo et la miniature, avec un message court : ce que l'analyse
-  a appris, le sujet et pourquoi, l'heure de publication, la description, le commentaire à épingler, les mesures
+- Envoyer au client (SendUserFile, status proactive) la vidéo et la miniature, avec un message court : la règle apprise
+  s'il y en a une (en premier), l'état du test en cours, ce que l'analyse a appris, le sujet et pourquoi, l'heure de publication, la description, le commentaire à épingler, les mesures
   (durée, mouvement, prononciation).
 - En cas d'échec à n'importe quelle étape : ne rien publier, dire au client ce qui bloque et ce qu'il faut de lui.
