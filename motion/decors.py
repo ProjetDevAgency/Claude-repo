@@ -132,8 +132,8 @@ def rue_relais_bg():
             x = 120 + k * 105
             d.polygon([(x * s, 860 * s), ((x + 105) * s, 860 * s), ((x + 115) * s, 960 * s), ((x + 10) * s, 960 * s)],
                       fill=(250, 250, 245) if k % 2 else (40, 140, 100), outline=INK)
-        d.rounded_rectangle([300 * s, 680 * s, 780 * s, 760 * s], radius=12 * s, fill=(250, 200, 40), outline=INK, width=4 * s)
-        d.text((540 * s, 720 * s), "POINT RELAIS COLIS", font=FA(int(46 * s)), fill=INK, anchor="mm")
+        d.rounded_rectangle([560 * s, 680 * s, 1000 * s, 760 * s], radius=12 * s, fill=(250, 200, 40), outline=INK, width=4 * s)
+        d.text((780 * s, 720 * s), "POINT RELAIS COLIS", font=FA(int(46 * s)), fill=INK, anchor="mm")
         d.rectangle([180 * s, 1010 * s, 560 * s, 1440 * s], fill=(255, 226, 160), outline=INK, width=5 * s)  # vitrine éclairée
         rnd = random.Random(3)
         for y in (1180, 1300, 1420):
