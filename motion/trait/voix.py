@@ -72,8 +72,27 @@ def _trim(x, thr=0.012):
     return x[a:b], a / SR
 
 
-def build(lines, voices, work: Path, model="eleven_multilingual_v2", gap=0.22, speed=1.0):
-    """lines : [(clé de voix, texte marqué)] ; voices : {clé: (voice_id, réglages)}."""
+# Réglage par défaut retenu par le client (comparaison du 20 nov., « la version accélérée est mieux ») :
+# Yann, modèle v4, voix générée à vitesse normale sans indication d'émotion, script complet du moteur
+# (1 450 à 1 500 caractères), puis voix accélérée AU MONTAGE pour tenir la durée cible (≈ 64 s).
+YANN = "nr2EGJNe96rzn9FRlTId"
+REGLAGES_YANN = {"stability": 0.5, "similarity_boost": 0.75}
+MODELE = "eleven_v4"
+CIBLE = 64.0             # secondes
+VITESSE_MAX = 1.35       # au-delà, la voix ne sonne plus naturelle
+
+
+def build(lines, voices, work: Path, model=MODELE, gap=0.3, speed=1.0, cible=None, vitesse_max=VITESSE_MAX):
+    """lines : [(clé de voix, texte marqué)] ; voices : {clé: (voice_id, réglages)}.
+    cible : durée voulue en secondes → la voix est accélérée au montage juste ce qu'il faut (sans changer la
+    hauteur), jamais plus que vitesse_max et jamais ralentie."""
+    if cible:
+        brut, _ = build(lines, voices, work, model, gap)
+        speed = max(1.0, min(vitesse_max, len(brut) / SR / cible))
+        if len(brut) / SR / cible > vitesse_max:
+            print(f"  ⚠ voix de {len(brut) / SR:.1f} s : même à ×{vitesse_max} elle dépasse {cible:.0f} s, "
+                  "raccourcir le script")
+        print(f"  voix : {len(brut) / SR:.1f} s brute → ×{speed:.2f} → {len(brut) / SR / speed:.1f} s")
     work.mkdir(parents=True, exist_ok=True)
     pistes, words, t = [], [], 0.0
     for li, (who, text) in enumerate(lines):

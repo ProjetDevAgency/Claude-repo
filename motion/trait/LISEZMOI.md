@@ -34,3 +34,16 @@ Copier `exemple_forfait.py`, puis changer dans l'ordre :
 5. Les sons (`f.son`), secousses (`f.secousse`) et le compteur.
 
 `T("mot", n)` = début du n-ième mot qui commence par « mot ». Attention aux mots courts (« Le » trouve aussi « le »).
+
+## Réglage par défaut de la voix (choix du client, 20 nov.)
+Comparaison faite sur l'histoire du pisciniste : **script complet + voix accélérée au montage** a été préféré à
+« script raccourci + voix à vitesse normale ». Donc, par défaut :
+1. Script complet selon le moteur H1 (`prompts/moteur_script.txt`, bloc 7) : 1 450 à 1 500 caractères,
+   contrôlé par `python3 -m pipeline.script verifier`.
+2. Voix « Yann » (`voix.YANN`), modèle `eleven_v4`, générée à vitesse normale, aucune indication d'émotion.
+3. `voix.build(..., cible=voix.CIBLE)` : la voix est accélérée au montage (sans changer la hauteur) juste ce qu'il
+   faut pour tenir 64 s, jamais plus de ×1,35. Si ça ne suffit pas, le moteur prévient : raccourcir le script.
+4. `voix.verifier(voice, words, work)` : retranscription et liste des mots mal prononcés, à corriger avant le rendu.
+
+Exemple complet : `piscine_dauphin.py` (+ `miniature_piscine.py` pour la couverture). Version courte pour
+comparaison : `piscine_dauphin_court.py`.
