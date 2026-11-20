@@ -123,6 +123,9 @@ class Recit:
                 if self.dyn and k and lt < 0.1:           # chaque coupe : zoom qui claque + coup de fouet
                     from dynamique import claque, fouet, zoom_centre
                     img = fouet(zoom_centre(img, 1 + claque(lt)), 1 - lt / 0.1, 1 if k % 2 else -1)
+                if self.dyn:                                # lumière d'ambiance (vignette + halo chaud)
+                    from dynamique import eclairage
+                    img = eclairage(img)
                 self.compteur(img, t0 + lt)
                 return img
             g.__name__ = fn.__name__

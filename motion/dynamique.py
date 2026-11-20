@@ -771,3 +771,29 @@ def visage_chiffre(fond, look, txt, sous=None, devant=None, couleur=None, mots=N
 
 
 __all__ += ["visage_chiffre"]
+
+
+# ───────────── éclairage (chantier « images travaillées », 20 nov.) ─────────────
+
+_ECL = {}
+
+
+def eclairage(img, chaud=(255, 214, 150), force=1.0):
+    """Lumière d'ambiance sur toute l'image : vignette sombre sur les bords + halo chaud en haut (lampe), comme une
+    vraie scène éclairée au lieu d'aplats plats. Le masque est calculé une seule fois."""
+    import numpy as np
+    if "m" not in _ECL:
+        y, x = np.mgrid[0:H, 0:W].astype(np.float32)
+        r = np.sqrt(((x - W / 2) / (W * 0.62)) ** 2 + ((y - H * 0.48) / (H * 0.62)) ** 2)
+        vign = np.clip(1.0 - 0.55 * np.clip(r - 0.55, 0, 1) ** 1.4, 0.45, 1.0)
+        halo = np.exp(-(((x - W / 2) / (W * 0.55)) ** 2 + ((y - H * 0.18) / (H * 0.35)) ** 2))
+        _ECL["m"] = (vign[..., None], halo[..., None])
+    vign, halo = _ECL["m"]
+    a = np.asarray(img.convert("RGB"), dtype=np.float32)
+    c = np.array(chaud, dtype=np.float32)
+    a = a * (1 - 0.18 * force * halo) + c * 0.18 * force * halo
+    a = a * (1 - force + force * vign)
+    return Image.fromarray(np.clip(a, 0, 255).astype("uint8"))
+
+
+__all__ += ["eclairage"]
