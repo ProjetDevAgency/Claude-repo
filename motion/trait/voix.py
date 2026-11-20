@@ -53,7 +53,6 @@ def _tts(text, voice_id, model, cache: Path, settings):
     d = json.loads(f.read_text())
     mp3 = cache / f"{key}.mp3"
     if not mp3.exists():                     # écrit UNE fois, de façon atomique (rendus en parallèle)
-        import os
         tmp = cache / f"{key}.{os.getpid()}.tmp"
         tmp.write_bytes(base64.b64decode(d["audio_base64"]))
         os.replace(tmp, mp3)
@@ -146,3 +145,24 @@ def enveloppe(voice, fps=30):
     env = np.array([np.sqrt(np.mean(voice[i * hop:(i + 1) * hop] ** 2) + 1e-12) for i in range(n)])
     env = np.nan_to_num(env)
     return np.clip(env / (np.percentile(env, 95) + 1e-9), 0, 1)
+
+
+def build_cale(phrases, voices, work: Path, model="eleven_multilingual_v2", vmax=1.3, fin=None):
+    """Chaque phrase (t0, voix, texte) est posée À SON INSTANT t0 (rythme d'une vidéo de référence).
+    Trop longue pour sa place : accélérée jusqu'à vmax, puis elle déborde (la suite est décalée d'autant)."""
+    pistes, words, t = [], [], 0.0
+    for i, (t0, who, text) in enumerate(phrases):
+        a, w = build([(who, text)], voices, work, model=model)
+        dispo = (phrases[i + 1][0] if i + 1 < len(phrases) else (fin or t0 + 99)) - max(t0, t) - 0.08
+        dur = len(a) / SR
+        v = min(vmax, dur / dispo) if dispo > 0 and dur > dispo else 1.0
+        if v > 1.0:
+            a = _atempo(a, v, work)
+        debut = max(t0, t)
+        if debut > t:
+            pistes.append(np.zeros(int((debut - t) * SR), np.float32))
+        for x in w:
+            words.append({**x, "t0": debut + x["t0"] / v, "t1": debut + x["t1"] / v, "line": i})
+        pistes.append(a)
+        t = debut + len(a) / SR
+    return np.concatenate(pistes), words

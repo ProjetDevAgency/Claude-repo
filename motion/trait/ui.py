@@ -11,7 +11,7 @@ GREEN = (70, 205, 115)
 
 # ───────────── compteur permanent (haut gauche) ─────────────
 
-def compteur(ctx, t, titre, cles, apparition=0.0, prefixe="", suffixe=" €"):
+def compteur(ctx, t, titre, cles, apparition=0.0, prefixe="", suffixe=" €", toujours_vert=False):
     """cles : [(temps, valeur)] ; la valeur défile entre deux clés (0,6 s), en vert quand elle monte."""
     if t < apparition:
         return
@@ -30,9 +30,9 @@ def compteur(ctx, t, titre, cles, apparition=0.0, prefixe="", suffixe=" €"):
     rrect(ctx, 0, 0, 430, 140, 20)
     ctx.set_source_rgba(0.09, 0.08, 0.11, 0.9)
     ctx.fill_preserve()
-    stroke(ctx, 5, GREEN if monte > 0 else RED)
+    stroke(ctx, 5, GREEN if (monte > 0 or toujours_vert) else RED)
     ecrit(ctx, titre, 26, 34, 26, (230, 230, 235), ax=0)
-    col = GREEN if val > 0 else RED
+    col = GREEN if (val > 0 or toujours_vert) else RED
     sc = 1 + 0.18 * monte
     ecrit(ctx, f"{prefixe}{int(round(val))}{suffixe}", 26, 92, 74, col, big=True, ax=0, scale=sc)
     ctx.restore()
