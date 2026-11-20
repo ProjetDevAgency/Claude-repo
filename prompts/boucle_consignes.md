@@ -37,10 +37,11 @@ Ce mode REMPLACE les étapes 2 (sujet), 3 (script), 4 (voix) et 5 (vidéo) ci-de
    20 nov.), lister chaque écart (cadrage, objet manquant, texte trop petit ou caché, marque visible, personnage
    coupé), corriger, refaire la planche. Mesure `scripts/mesure_mouvement.py` : au moins le niveau de l'original.
    Aucun texte sur un visage, aucun texte coupé.
-7. **Publier** (étape 6) : description à nous (accroche, 4 à 6 ✅ avec références, question 👇, « Cas type, montants
+7. **Couverture** comme La Ficelle : une image de l'accroche sans sous-titres ni compteur, caméra fixe, + gros titre en 2 bandeaux (sombre puis rouge, police haute) → `output/trait/couverture_<slug>.jpg`, passée dans `videoThumbnailUrl` (uguu) au moment de programmer.
+8. **Publier** (étape 6) : description à nous (accroche, 4 à 6 ✅ avec références, question 👇, « Cas type, montants
    indicatifs. », 5 hashtags), isAigc true, lendemain 18 h. Ajouter la ligne dans `prompts/remakes/journal.md`
    (date, vidéo d'origine, slug, durée, mouvement, post Metricool) et dans `prompts/videos_index.csv`.
-8. **Compte rendu** : la vidéo + la planche de comparaison + la liste des écarts corrigés et de ceux qui restent.
+9. **Compte rendu** : la vidéo + la planche de comparaison + la liste des écarts corrigés et de ceux qui restent.
 
 ## Règles du client (jamais d'exception)
 - Uniquement des sujets **8/8** (machine à sujets). La loi est vérifiée dans **2 sources**, une officielle si possible.
