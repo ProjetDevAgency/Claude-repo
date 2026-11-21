@@ -168,7 +168,11 @@ les liens uguu : on passe par le dépôt public.
    relancer (`page_stream` en lecture).
 4. Vérifier que la vidéo est en ligne sur YouTube et Facebook, puis `git rm -r publication` + commit + push. Noter l'ID de la vidéo
    YouTube dans `scripts/trait/<slug>_description.txt`.
-5. Zapier gratuit ≈ 100 actions par mois : 2 envois par jour (YouTube + Facebook) ≈ 60 par mois. Si Zapier signale la limite, ne rien forcer et
+5. Zapier : vérifier chaque jour le compteur avec `show_task_usage_info` (tâches utilisées / limite / coût par appel).
+   Relevé du 21 nov. : essai Pro 1 000 tâches jusqu'au 5 déc., puis gratuit 100 tâches/mois ; 2 tâches par appel,
+   et Zapier annonce 0 tâche par appel à partir du 23 nov. (à confirmer le 23). À 3 vidéos par jour, si un envoi
+   coûte encore des tâches après le 5 déc., la limite gratuite ne tient pas : prévenir le client AVANT d'atteindre
+   80 % de la limite, et ne jamais laisser un envoi échouer en silence. Si Zapier signale la limite, ne rien forcer et
    prévenir le client.
 6. Un sujet déjà publié sur YouTube dans l'ancien style (ex. colis, salaire en retard le 19 nov.) est quand même publié
    dans sa nouvelle version, sauf avis contraire du client.
