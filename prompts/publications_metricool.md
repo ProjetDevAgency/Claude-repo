@@ -7,3 +7,4 @@ Metricool pour limite atteinte, appliquer la règle des 20 (paquet manuel).
 |---|---|---|
 | 21/11 12 h | TikTok | colis_perdu |
 | 21/11 20 h | TikTok | salaire_retard (programmée) |
+| 22/11 10 h | TikTok | hausse_loyer (programmée, id 436804909) — YouTube + FB par réveil trig_01QTrykqCXaqkshpCojvTYBc |
