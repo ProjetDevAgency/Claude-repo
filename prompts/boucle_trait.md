@@ -118,6 +118,10 @@ un cadre en haut) : ce sont des TESTS de la file `tests_boucle.md`, pas des règ
   sur l'instant du mot (`W(ligne, "mot") - p["t0"]`), centrée sur l'objet, qui garde le visage de Kévin si possible ;
   1 à 2 s plus tard, une clé qui revient au large ou passe à l'autre personnage ;
 - 1 à 3 gros plans par plan au plus, jamais au hasard : chaque mouvement est justifié par ce qui est dit.
+- **Sur TOUTE la vidéo, pas seulement l'accroche** (client, 21 nov.) : chaque plan, de la 1re à la dernière seconde (montée,
+  conflit, règle, doute, twist, chute), a ses clés écrites à la main avec au moins un gros plan sur un mot clé ; aucune
+  scène ne garde l'ancienne caméra glissée. Contrôle avant rendu : planche d'une image toutes les 0,5 s, chaque plan doit
+  montrer au moins une coupe large → serré calée sur un mot.
 Exemple : `motion/trait/demo_camera_plans.py`.
 - **Modèle à copier : `motion/trait/colis_perdu.py`** (lit le `.dial`, marques de couleur des sous-titres, plans calés
   sur les mots avec `L(réplique, n° du mot)`, compteur, sons). Créer `motion/trait/<slug>.py`, et un module de décors
