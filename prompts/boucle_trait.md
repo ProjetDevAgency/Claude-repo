@@ -17,7 +17,16 @@ Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publicati
 - 2 à 3 entités par histoire (moteur 4.2) ; les autres personnages ne sont que des figurants muets.
 - Contenu IA toujours déclaré (`isAigc true`).
 
-## 1. Analyse Metricool (≈ 10 min)
+## 1. Analyse (≈ 10 min) — Windsor.ai d'abord, Metricool en secours
+0. **Source n° 1 : Windsor.ai** (connecteur « Windsor.ai for Social Media », compte en ESSAI au 21 nov.), connector
+   `tiktok_organic`, `get_data` avec les champs : video_create_datetime, video_duration, video_views_count,
+   video_likes, video_shares, **video_favorites (enregistrements)**, video_comments, video_average_time_watched,
+   video_full_watched_rate (déjà en fraction : 0,34 = 34 %), video_new_followers, video_caption. Chiffres à jour
+   (comme TikTok Studio, vérifié le 21 nov.). Pour comprendre un décrochage : video_view_retention_second +
+   video_view_retention_percentage (rétention seconde par seconde) et video_impression_sources_* (« Pour toi »,
+   profil, recherche). Si Windsor ne répond pas ou si l'essai est fini : Metricool comme ci-dessous.
+   Repère du 21 nov. : les 2 succès ont 383 et 401 enregistrements, les autres 0 à 7 → les enregistrements sont le
+   signal n° 1 à suivre avec les partages.
 1. `getAnalyticsDataByMetrics`, brandId 8206232, du 1er nov. à aujourd'hui, métriques
    TKPO02 (date), TKPO05 (description), TKPO06 (durée), TKPO07 (vues), TKPO08 (j'aime), TKPO09 (commentaires),
    TKPO10 (partages), TKPO11 (portée), TKPO15 (temps moyen regardé), TKPO16 (« Pour toi »), TKPO20 (profil), TKPO21 (recherche).
@@ -131,7 +140,11 @@ les liens uguu : on passe par le dépôt public.
    **Pas de miniature** tant que la chaîne n'est pas vérifiée par téléphone (sinon erreur… et la vidéo part quand
    même : ne JAMAIS relancer l'envoi après une erreur sans avoir vérifié la liste des vidéos de la chaîne,
    `video_in_playlist` avec playlist_id `UUQKeRa6PWJMVmp1jylEM54w`, sinon doublon).
-3 bis. Juste après YouTube, Facebook : Zapier `FacebookV2CLIAPI` / `page_video` (tool_name
+3 bis. Juste après YouTube, Facebook EN REEL via Windsor.ai : `execute_action`, connector `facebook_organic`,
+   account « 1439579452576065 », action `create_reel`, params video_url = la même URL raw, description = la
+   description TikTok + « Vidéo d'animation créée avec l'aide de l'IA. » (Reel : 3 à 90 s, 9:16 : nos vidéos de 64 s
+   conviennent). Si Windsor échoue (essai fini, erreur) et seulement après avoir vérifié que rien n'est parti :
+   secours Zapier `FacebookV2CLIAPI` / `page_video` (tool_name
    `facebook_pages_create_page_video`, connexion par défaut), params : page « 1439579452576065 » (page « Où va ton
    argent ? », la SEULE page autorisée), source = la même URL raw, title = le titre sans « #shorts », description =
    la description TikTok + « Vidéo d'animation créée avec l'aide de l'IA. ». Facebook ne propose pas de brouillon pour

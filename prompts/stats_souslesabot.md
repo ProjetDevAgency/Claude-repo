@@ -66,3 +66,17 @@ temps moyen 22,1 s (sur 157 s, soit 14 %) · vu en entier 6,38 % · 3 nouveaux a
 - Liste d'aides = retient moins mais s'enregistre et s'envoie (utilité concrète, date limite).
 - Hypothèse à tester après T1 : histoire qui retient (raison cachée, twist) + utilité qu'on garde (règle claire,
   date limite, gain chiffré). Le colis est trop jeune (règle des 48 h) ; signal à surveiller : j'aime à 0,8 %.
+
+### 21 nov., 16 h 10 — Windsor.ai connecté (statistiques TikTok à jour, avec les enregistrements)
+| vidéo | vues | j'aime | partages | **enregistrements** | temps moyen | vu en entier | abonnés gagnés |
+|---|---|---|---|---|---|---|---|
+| Anthropic, 4 000 € (14/11) | 55 052 | 1 748 | 106 | **401** | 24,8 s | 24,5 % | 69 |
+| Permis candidat libre (14/11) | 27 879 | 1 325 | 190 | **383** | 26,3 s | 30,6 % | 19 |
+| Anthropic, SpaceX (16/11) | 2 739 | 75 | 11 | 7 | 24,2 s | 25,7 % | 1 |
+| Briefing 8 h 45 (15/11) | 1 466 | 53 | 1 | 2 | 26,7 s | 33,0 % | 0 |
+| Pisciniste (20/11) | 598 | 43 | 0 | 3 | 27,7 s | 34,0 % | 0 |
+| 6 aides avant le 31/12 (20/11, 158 s) | 487 | 34 | 5 | 20 | 22,0 s | 6,3 % | 3 |
+| Colis jamais reçu (21/11, ~5 h) | 152 | 2 | 0 | 0 | 19,7 s | 20,3 % | 0 |
+Les autres vidéos du 15 au 19 nov. : 255 à 562 vues, 0 à 5 enregistrements, 0 à 2 partages.
+- Les enregistrements séparent nettement les succès (≈ 0,7 à 1,4 % des vues) du reste (≈ 0 à 1 %, souvent 0) :
+  signal n° 1 à suivre avec les partages. Le temps moyen ne les sépare pas (briefing et pisciniste au niveau des succès).
