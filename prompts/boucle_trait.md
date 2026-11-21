@@ -5,6 +5,8 @@ Lancée chaque matin par une tâche programmée, dans la session qui a construit
 Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publication le lendemain 18 h) pour cette boucle.
 
 ## Règle de l'avance (décision du client, 21 nov.)
+**Avant de produire, lire `prompts/publications_metricool.md` : un créneau déjà rempli est SAUTÉ** (ex. : le 22/11 20 h est
+déjà pris par la vidéo liste ; ce matin-là, la boucle fait seulement le 10 h et le 15 h du 23/11).
 Chaque matin (jour J), la boucle fabrique et programme 3 vidéos : **le 20 h de J**, puis **le 10 h et le 15 h de J+1**,
 dans cet ordre. Le client garde ainsi environ un jour d'avance (utile quand TikTok passe en manuel : les paquets du
 10 h et du 15 h de J+1 lui arrivent dès J). TikTok : Metricool à chaque créneau (sous 20 par mois), sinon paquet envoyé

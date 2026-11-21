@@ -23,6 +23,7 @@ Dès 10 vidéos mesurées : il faut faire MIEUX que la moyenne des 10 dernières
 | salaire_retard | 21/11 20 h | gain chiffré 1re phrase (« J'ai récupéré 90 €… ») ; image 0 = le méchant seul | carte « LA RÈGLE » + liste ✅ en description | | | | |
 | hausse_loyer | 22/11 10 h | réplique du méchant (« Ton loyer passe à 680 €… ») ; image 0 = le méchant seul | carte règle + calcul 600 × 1,57 % | | | | |
 | garage_travaux | 22/11 15 h | gain chiffré (« J'ai économisé 551 €… ») ; image 0 = Kévin + le garagiste | carte règle + carte « 1. tu paies le signé / 2. le reste par écrit » | | | | |
+| liste_remboursements | 22/11 20 h | liste à rebours « 5 … ; le plus gros vaut 600 € ; la compagnie compte sur ton oubli » ; image 0 = Kévin + 5 enveloppes | liste numérotée de 5 règles + partage glissé dans l'histoire (« il envoie la vidéo à sa sœur ») + « abonné à Où va ton argent » | | | | |
 
 ## Accroches à tester (dans l'ordre ; une par vidéo, à partir du 22/11 20 h)
 1. **Accroche « repost »** : drame de famille à la 1re personne, sans chiffre, phrase coupée par « … », écrite en gros dans un
