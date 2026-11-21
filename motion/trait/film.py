@@ -24,6 +24,8 @@ import sfx  # noqa: E402  (bruitages fabriqués par le code, motion/sfx.py)
 
 # Saturation des couleurs au rendu (client, 21 nov. : « on peut augmenter la saturation ? ») : +35 %.
 SATURATION = float(os.environ.get("TRAIT_SATURATION", "1.35"))
+# Caméra (client, 21 nov.) : « zoom » = zooms et dézooms droits vers le sujet, un plan sur deux ; « libre » = ancien mode.
+CAMERA = os.environ.get("TRAIT_CAMERA", "zoom")
 
 class Film:
     def __init__(self, voice, words, fin=None):
@@ -74,9 +76,11 @@ class Film:
         return 0.0
 
     # ── rendu ──
-    def _camera(self, keys, lt):
+    def _camera(self, keys, lt, idx=0):
         if callable(keys):                      # caméra calculée image par image (travelling qui suit l'action)
             return keys(lt)
+        if CAMERA == "zoom" and len(keys) > 1:
+            return self._zoom(keys, lt, idx)
         if lt <= keys[0][0]:
             return keys[0][1:]
         for (ta, *a), (tb, *b) in zip(keys, keys[1:]):
@@ -85,6 +89,25 @@ class Film:
                 return [x + (y - x) * k for x, y in zip(a, b)]
         return keys[-1][1:]
 
+    @staticmethod
+    def _zoom(keys, lt, idx):
+        """Mode « zoom » (client, 21 nov. : des zooms et des dézooms plutôt que des mouvements au hasard) :
+        la caméra ne glisse plus, elle zoome droit vers le sujet du plan (la clé la plus serrée) ou s'en éloigne,
+        un plan sur deux. Le sujet reste au même endroit de l'écran pendant tout le zoom."""
+        zs = [k[3] for k in keys]
+        kmax = keys[zs.index(max(zs))]
+        kmin = keys[zs.index(min(zs))]
+        px, py = kmax[1], kmax[2]
+        zmin, zmax = kmin[3], max(kmax[3], kmin[3] + 0.18)
+        sx = W / 2 + zmin * (px - kmin[1])          # position à l'écran du sujet, plan large
+        sy = H / 2 + zmin * (py - kmin[2])
+        duree = max(1.6, keys[-1][0])
+        k = ease(min(1.0, lt / duree))
+        if idx % 2:                                 # un plan sur deux : dézoom
+            k = 1 - k
+        z = zmin + (zmax - zmin) * k
+        return [px - (sx - W / 2) / z, py - (sy - H / 2) / z, z]
+
     def frame(self, t):
         surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, W, H)
         ctx = cairo.Context(surf)
@@ -92,7 +115,7 @@ class Film:
         ctx.paint()
         plan = [p for p in self.plans if p["t0"] <= t + 1e-6][-1]
         lt = t - plan["t0"]
-        cx, cy, z = self._camera(plan["cam"], lt)
+        cx, cy, z = self._camera(plan["cam"], lt, self.plans.index(plan))
         sx = sy = 0.0
         for ts, f in self.secousses:
             d = t - ts
