@@ -124,6 +124,17 @@ Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publicati
    twist), état du test en cours, prochain test choisi, et demande au client d'une capture TikTok Studio (rétention
    seconde par seconde, enregistrements : Metricool ne les donne pas) pour la meilleure et la pire vidéo de la semaine.
 
+## 5 ter. Limite Metricool gratuit : 20 publications PUBLIÉES par mois (toutes plateformes Metricool confondues)
+- Avant de programmer TikTok, compter les publications Metricool du mois dans `prompts/publications_metricool.md`
+  (une ligne par publication partie). Seules les publications réellement publiées comptent, pas les brouillons.
+- Si le compte du mois atteint 20 (ou si Metricool refuse pour cause de limite) : NE PAS programmer sur Metricool.
+  Envoyer au client, en `SendUserFile` status proactive, le « paquet TikTok » : la vidéo, la miniature et un message
+  avec la description et le commentaire à épingler prêts à copier, l'heure conseillée (12 h) et le rappel « cocher
+  contenu généré par IA ». YouTube et Facebook partent comme d'habitude.
+- Le 1er du mois, repartir à zéro (nouvelle section datée dans le fichier).
+- Décisions du client (21 nov.) : pas de Make, pas de Composio (trop long), Windsor ne publie pas sur TikTok.
+  Seul Metricool publie TikTok automatiquement ; Metricool Starter (~16 €/mois) lèverait la limite.
+
 ## 5 bis. YouTube à 12 h (Zapier, chaîne « Où va ton argent ? » @ouvatonargent) — décision du client du 21 nov.
 Zapier publie IMMÉDIATEMENT (la programmation YouTube est réservée aux chaînes partenaires) et n'arrive pas à lire
 les liens uguu : on passe par le dépôt public.
