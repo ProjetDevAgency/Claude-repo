@@ -15,4 +15,5 @@ même sens sur 3 vidéos sur 3 et dépasse l'écart habituel (médiane hors succ
 ## Repères de départ (21 nov., 28 vidéos)
 - Partages pour 1 000 vues : succès 1,9 à 6,9 ; autres ≈ 0.
 - Temps moyen regardé : succès 24-26 s ; récits à la 1re personne 20,5 s (médiane).
-- Vue en entier (TKPO13) : à relever à partir de maintenant, fiable selon le client.
+- Vue en entier (TKPO13 × 10 000 = %) : 13 à 16 % sur les vidéos de 62-64 s du 20 nov.
+- Enregistrements (TikTok Studio seulement) : 6 aides avant le 31/12 = 3,9 % des vues, 5 partages pour 467 vues.

@@ -21,7 +21,8 @@ Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publicati
 1. `getAnalyticsDataByMetrics`, brandId 8206232, du 1er nov. à aujourd'hui, métriques
    TKPO02 (date), TKPO05 (description), TKPO06 (durée), TKPO07 (vues), TKPO08 (j'aime), TKPO09 (commentaires),
    TKPO10 (partages), TKPO11 (portée), TKPO15 (temps moyen regardé), TKPO16 (« Pour toi »), TKPO20 (profil), TKPO21 (recherche).
-   + TKPO13 (vue en entier) : **fiable**, vérifié par le client le 20 nov. (0,13 point d'écart avec TikTok Studio).
+   + TKPO13 (vue en entier) : **fiable mais à multiplier par 10 000 pour avoir un %** (0,000558 = 5,6 % ; vérifié
+     avec TikTok Studio les 20 et 21 nov.).
    Une vidéo apparaît dans Metricool jusqu'à ~24 h après sa sortie, et **ses chiffres peuvent rester figés sur une photo
    prise tôt** (21 nov. : 82 vues dans Metricool contre 595 en direct sur TikTok). Donc : AUCUNE conclusion sur une vidéo
    de moins de 48 h à partir de Metricool ; les décisions se prennent sur J-3 ; une capture du profil ou de TikTok Studio

@@ -12,9 +12,9 @@ Point de départ : `prompts/stats_souslesabot_21nov.md` (analyse des 28 premièr
 Vidéos du 20 nov., relevées 10 à 20 h après leur sortie (chiffres encore provisoires) :
 | heure | vidéo | durée | vues | temps moyen | vu en entier | « Pour toi » | profil | recherche |
 |---|---|---|---|---|---|---|---|---|
-| 11 h | Anthropic, cours du 1er jour (le frère, épisode 3) | 62 s | 146 | 13 s | 0,13 % | 61 % | 9 % | 30 % |
-| 18 h | 6 aides avant le 31 décembre (publiée hors boucle) | 157 s | 183 | 17 s | 0,06 % | 79 % | 21 % | 0 % |
-| 21 h | Pisciniste, 6 000 € (hors thème) | 64 s | 82 | 13 s | 0,16 % | 69 % | 31 % | 0 % |
+| 11 h | Anthropic, cours du 1er jour (le frère, épisode 3) | 62 s | 146 | 13 s | 13 % | 61 % | 9 % | 30 % |
+| 18 h | 6 aides avant le 31 décembre (publiée hors boucle) | 157 s | 183 | 17 s | 5,6 % | 79 % | 21 % | 0 % |
+| 21 h | Pisciniste, 6 000 € (hors thème) | 64 s | 82 | 13 s | 16 % | 69 % | 31 % | 0 % |
 J-3 (17 nov.), quasi définitif : prime de fin de CDD 561 vues (24 s), couple 3 000 / 1 500 € 444 vues (24 s).
 
 Ce qu'on en tire :
@@ -45,3 +45,12 @@ Metricool n'avait pris qu'une photo des vidéos du 20 nov., très tôt, et ne l'
 - Anthropic plafonne bien (actu de 2 jours) : conclusion maintenue.
 - La couverture personnalisée du colis s'affiche bien sur le profil.
 - 13,1 k abonnés, 47,7 k j'aime au 21 nov.
+
+### 21 nov., 15 h 18 — TikTok Studio, « 6 aides avant le 31/12 » (capture du client)
+467 vues · 32 j'aime · 0 commentaire · **5 partages (≈ 11 pour 1 000 vues)** · **18 enregistrements (3,9 %)** ·
+temps moyen 22,1 s (sur 157 s, soit 14 %) · vu en entier 6,38 % · 3 nouveaux abonnés · temps de lecture total 3 h 33.
+- Unité de Metricool TKPO13 (vu en entier) : **valeur × 10 000 = %** (0,000558 → 5,6 % sur une photo plus ancienne,
+  6,38 % dans TikTok Studio). Valeurs du tableau du 21 nov. corrigées (13 %, 5,6 %, 16 %).
+- Meilleurs taux de partage et d'enregistrement hors des 2 gros succès : le format « liste d'aides concrètes avec date
+  limite » donne envie de garder et d'envoyer, mais retient mal en 157 s. Piste (à tester après T1) : sujets pratiques
+  avec date limite, au format 60 s.
