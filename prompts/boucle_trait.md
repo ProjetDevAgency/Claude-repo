@@ -1,12 +1,12 @@
 # Boucle quotidienne @souslesabot — moteur « trait » (consignes du 20 nov. 2026, soir)
 
 Lancée chaque matin par une tâche programmée, dans la session qui a construit le moteur (branche
-`ccr-a57d9e9e-flymhr`). **Objectif du jour : trois vidéos publiées à 12 h, 17 h et 20 h (Europe/Paris), sur TikTok (Metricool puis manuel), YouTube (Zapier) et Facebook (Windsor puis Zapier).**
+`ccr-a57d9e9e-flymhr`). **Objectif du jour : trois vidéos publiées à 10 h, 15 h et 20 h (Europe/Paris), sur TikTok (Metricool puis manuel), YouTube (Zapier) et Facebook (Windsor puis Zapier).**
 Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publication le lendemain 18 h) pour cette boucle.
 
 ## Règles du client (jamais d'exception)
-- **TROIS vidéos par jour (décision du 21 nov.), créneaux 12 h, 17 h et 20 h (Europe/Paris)**, chacune publiée à son
-  créneau sur TikTok, YouTube et Facebook. Fabrication dans l'ordre des créneaux (12 h d'abord). Une vidéo qui n'est
+- **TROIS vidéos par jour (décision du 21 nov.), créneaux 10 h, 15 h et 20 h (Europe/Paris), écartés de 5 h (décision du client, 21 nov.)**, chacune publiée à son
+  créneau sur TikTok, YouTube et Facebook. Fabrication dans l'ordre des créneaux (10 h d'abord). Une vidéo qui n'est
   pas prête ET vérifiée 20 min avant son créneau saute ce créneau : on ne programme rien pour lui, on passe à la
   suivante et on prévient le client (jamais de vidéo bâclée, jamais d'heure de remplacement sans son accord).
 - Les 3 vidéos du jour : 3 sujets et 3 thèmes différents (ex. travail, conso, logement), jamais le même méchant.
@@ -146,7 +146,7 @@ les liens uguu : on passe par le dépôt public.
    `publication/<slug>.mp4` sur la branche, commit + push, vérifier que
    `https://raw.githubusercontent.com/ProjetDevAgency/Claude-repo/ccr-a57d9e9e-flymhr/publication/<slug>.mp4`
    répond 200.
-2. Programmer un réveil PAR CRÉNEAU : `send_later` à **12:00, 17:00 et 20:00 Europe/Paris** (un par vidéo prête) (format `AAAA-MM-JJT12:00:00[Europe/Paris]`) avec
+2. Programmer un réveil PAR CRÉNEAU : `send_later` à **10:00, 15:00 et 20:00 Europe/Paris** (un par vidéo prête) (format `AAAA-MM-JJT12:00:00[Europe/Paris]`) avec
    le message « Publie sur YouTube et Facebook la vidéo du jour <slug> (titre, description et tags dans
    scripts/trait/<slug>_description.txt), puis retire publication/ ».
 3. À midi : Zapier `YouTubeV4CLIAPI` / `upload_video` (tool_name `youtube_upload_video`, connexion par défaut), params :
