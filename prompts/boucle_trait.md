@@ -109,6 +109,7 @@ un cadre en haut) : ce sont des TESTS de la file `tests_boucle.md`, pas des règ
   referme une prémisse, test de la banane.
 
 ## 4. Vidéo (≈ 60 min) — moteur `motion/trait/` (notice : `motion/trait/LISEZMOI.md`)
+**VALIDÉ PAR LE CLIENT le 21 nov. : saturation +35 % et caméra « plans » (ne plus y toucher sans son accord).**
 **Caméra (client, 21 nov., d'après La Ficelle) — mode « plans », réglage par défaut du moteur (film.py) :**
 - chaque clé de `cam` est un PLAN : coupe nette d'une clé à l'autre (pas de glissement, pas de fouet visuel), et le plan
   pousse lentement vers son sujet tout seul ;
