@@ -1,0 +1,34 @@
+# MOTEUR H1 complet (méthode du compte). Sujet : le proprio qui annonce plus quatre-vingts euros de loyer en cours de bail.
+# Loi : en cours de bail, une seule révision par an, seulement si le bail prévoit une clause de révision, plafonnée par
+# la variation annuelle de l'IRL (loi du 6 juillet 1989, art. 17-1) ; IRL du 3e trimestre 2026 : plus 1,57 % sur un an
+# (publié le 16/10/2026). Sources : service-public.gouv.fr (F13723 et F36511), economie.gouv.fr (réviser un loyer),
+# anil.org (révision annuelle des loyers), revérifiées le 21 nov. 2026.
+# Calcul : 600 € × 1,0157 = 609,42 €, soit 9 € au lieu de 80 €.
+# Transgression T1 prix aberrant · autorité A3 (le proprio, TIER A, pouvoir sur le logement) · verrou V6 le chiffre
+# qui exige une explication · entrée : un message écrit, dimanche 22 h · axe : mépris (« chambre de bonne ») · twist W6
+# effet de cascade (tout l'immeuble avait reçu le même message) · chute punchline chiffrée · écho sur le coup 1 ·
+# mot-enjeu « chambre de bonne » ×3.
+# 8/8 : client précis (Kévin, premier appart, 2 ans de bail) · prix crédible (600 → 680 €) · choc · cohérence · tiers
+# absent (les voisins) · deadline (le 1er janvier) · zone grise (il lit le calcul devant les voisins, en public) · pas banal.
+# Test T1 : vidéo TÉMOIN (hook classique, réplique du méchant).
+# M = le proprio. N = Kévin.
+M: Ton loyer passe à six cent quatre-vingts euros en janvier, sinon tu cherches ailleurs.
+N: C'est ce que mon proprio m'a écrit, un dimanche soir, à vingt-deux heures.
+N: Mon premier appart. Trente mètres carrés, un velux, et un loyer à six cents euros.
+N: Deux ans que j'y suis. J'ai repeint les murs moi-même. Il m'avait dit, t'es un locataire en or.
+N: Je lui réponds, quatre-vingts euros d'un coup, c'est beaucoup. Il m'envoie un vocal et il me fait,
+M: Les prix montent partout, tu crois que ta chambre de bonne vaut moins que les autres ?
+N: Et une minute après, il en rajoute une couche.
+M: À ton âge, moi j'avais déjà acheté. Toi, tu paies et tu discutes pas.
+N: Je réponds rien.
+N: Ta chambre de bonne.
+N: Sauf qu'en cours de bail, un proprio augmente pas comme il veut.
+N: Ce que peu de gens savent, c'est qu'il y a une seule hausse par an, si le bail le prévoit, et jamais plus que l'indice des loyers.
+N: Mais alors, ça fait combien ? Plus un virgule cinquante-sept pour cent sur un an. Sur six cents euros, neuf euros. Pas quatre-vingts.
+N: Honnêtement, j'ai hésité. Le chauffage a pris cher, lui aussi paie plus.
+N: Samedi, réunion des locataires dans le hall. Il est là. Je lis le calcul à voix haute, devant huit voisins.
+N: Il range son téléphone et il dit plus rien.
+N: Le soir, il m'écrit. Ok pour six cent neuf euros.
+N: Le lendemain, la voisine du troisième sonne. Même message. Tout l'immeuble l'avait reçu.
+N: Maintenant, tout l'immeuble me demande ses calculs.
+N: Six cent quatre-vingts euros, la chambre de bonne.
