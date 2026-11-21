@@ -154,7 +154,22 @@ partage et les enregistrements dans la vidéo. Une vidéo = un test, si un truc 
    Ça rate au réessai → on le teste une 3e fois (« on ne sait jamais ») : s'il marche à la 3e (2 réussites sur 3) →
    VERROUILLÉ ; s'il rate encore → abandonné (noté), on passe au suivant de la file.
 6. Chaque test, son résultat et chaque verrouillage sont notés dans `prompts/tests_boucle.md` et `videos_trait.csv` (colonne test).
-7. Le compte rendu au client dit, pour chaque vidéo : l'accroche testée, l'élément partage testé, les chiffres à 48 h, la décision.
+7. **Seuils qui suivent le compte** (ajout du client, 21 nov.) : les seuils du point 4 ne servent qu'au départ. Dès que 10
+   vidéos ont leurs chiffres à 48 h, « ça marche » = faire MIEUX que la moyenne des 10 dernières vidéos publiées (rétention à
+   3 s et vues pour l'accroche ; (enreg. + partages) / vues pour l'élément partage), en gardant les seuils de départ comme
+   plancher. On ne verrouille que ce qui améliore le compte tel qu'il est devenu.
+8. **Une bonne histoire n'est pas une bonne accroche** (ajout du client, 21 nov.) : le réessai (et le 3e essai) se fait sur
+   un THÈME différent (pas deux fois du logement) ET à un autre créneau horaire que l'essai précédent. Le thème et le
+   créneau de chaque essai sont notés dans `tests_boucle.md`.
+9. **Il n'existe pas d'accroche universelle** (client, 21 nov.) : ce qu'on teste et ce qu'on verrouille, c'est un TYPE
+   d'accroche (un mécanisme : « drame familial à la 1re personne sans chiffre, phrase coupée », « gain chiffré », « réplique
+   du méchant », « insulte citée »…), JAMAIS une phrase. À chaque vidéo, l'accroche est réécrite pour l'histoire avec le
+   moteur H1 (BLOC 2 : 9 types de transgression, l'autorité, 7 types de verrou ; BLOC 3 : les 3 couches choc / verrou /
+   couture) et la méthode d'écriture. Varier : jamais la même formulation, la même structure de phrase ni le même premier
+   mot que dans les 5 vidéos précédentes, et alterner les types de transgression et de verrou même à l'intérieur d'un type
+   d'accroche verrouillé. Même chose pour les éléments partage / enregistrement : on verrouille le mécanisme, la forme change.
+10. Le compte rendu au client dit, pour chaque vidéo : l'accroche testée (type + phrase), l'élément partage testé, les
+   chiffres à 48 h, la décision.
 
 ## Apprentissage accéléré (priorité n° 1 du client, 21 nov. : « le plus important, c'est l'analyse et l'amélioration »)
 1. **Fiche par vidéo** dans `prompts/videos_trait.csv` (une ligne par vidéo, remplie à la fabrication) : date, créneau,
