@@ -36,6 +36,23 @@ Dès 10 vidéos mesurées : il faut faire MIEUX que la moyenne des 10 dernières
 6. **Question directe** au spectateur sur l'enjeu (« Ton proprio peut-il… ? »).
 (Ajouter à la file toute idée tirée de l'analyse quotidienne, avec les chiffres qui la justifient.)
 
+## Accroches VISUELLES inventées (à nous, une NOUVELLE à chaque vidéo, liée à l'objet du sujet ; client, 21 nov.)
+Principe : les 3 premières secondes montrent le conflit ET sa résolution en accéléré, avec l'OBJET du sujet comme héros
+(facture, bail, fiche de paie, colis…), Kévin visible dès l'image 0. Jamais deux fois la même mise en scène d'affilée.
+Démo faite : `motion/trait/accroche_ticket.py` (« le ticket sans fin » : l'imprimante crache la facture sur Kévin, TOTAL
+640 € tombe comme un tampon, Kévin la déchire, derrière : 89 €).
+Réserve d'idées (à adapter, pas à copier telles quelles) :
+- Le ticket sans fin (facture, note d'hôtel, addition) → déchiré.
+- Le chiffre en glace qui fond (680 € → 609 €) sous un sèche-cheveux / au soleil.
+- Le jeu à gratter : une pièce gratte la facture et révèle la vraie somme.
+- La machine à sous : les rouleaux s'arrêtent sur le montant récupéré.
+- La balance : Kévin seul d'un côté, le méchant + ses pièces de l'autre ; la loi (un livre) tombe du côté de Kévin.
+- Le tampon géant « REFUSÉ » qui s'écrase vers la caméra, retourné en « REMBOURSÉ ».
+- La caméra de surveillance (image « REC 22:04 ») qui filme la scène du méchant.
+- La main du méchant qui tend la facture VERS la caméra (vue subjective du spectateur), Kévin la lui reprend.
+- Le compteur de taxi / de pompe qui s'emballe puis redescend.
+- Le contrat dont les petites lignes grossissent jusqu'à remplir l'écran.
+
 ## Éléments partage / enregistrement à tester (un par vidéo)
 1. **Carte récap à garder** : les 3 règles + l'article de loi, à l'écran 3 s pleines juste avant la chute (faite pour la
    capture d'écran / l'enregistrement ; 6 aides = liste = 4 % d'enregistrements).
