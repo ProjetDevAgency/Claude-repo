@@ -4,6 +4,14 @@ Lancée chaque matin par une tâche programmée, dans la session qui a construit
 `ccr-a57d9e9e-flymhr`). **Objectif du jour : trois vidéos publiées à 10 h, 15 h et 20 h (Europe/Paris), sur TikTok (Metricool puis manuel), YouTube (Zapier) et Facebook (Windsor puis Zapier).**
 Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publication le lendemain 18 h) pour cette boucle.
 
+## Règle du jour d'avance (décision du client, 21 nov.)
+La boucle travaille avec UN JOUR D'AVANCE : le matin du jour J, elle fabrique et programme les 3 vidéos de J+1
+(10 h, 15 h, 20 h). TikTok : programmé la veille dans Metricool (sous 20 par mois), sinon paquet envoyé la veille au
+client pour qu'il programme lui-même dans TikTok. YouTube et Facebook : fichiers dans publication/ + réveils
+send_later aux créneaux de J+1. L'analyse du matin porte sur les vidéos publiées jusqu'à J-1. Partout où ces consignes
+disent « aujourd'hui » pour la programmation, lire « demain ». Une vidéo pas prête et vérifiée le soir de J pour son
+créneau de J+1 saute ce créneau (prévenir le client).
+
 ## Règles du client (jamais d'exception)
 - **TROIS vidéos par jour (décision du 21 nov.), créneaux 10 h, 15 h et 20 h (Europe/Paris), écartés de 5 h (décision du client, 21 nov.)**, chacune publiée à son
   créneau sur TikTok, YouTube et Facebook. Fabrication dans l'ordre des créneaux (10 h d'abord). Une vidéo qui n'est
