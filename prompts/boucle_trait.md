@@ -1,7 +1,7 @@
 # Boucle quotidienne @souslesabot — moteur « trait » (consignes du 20 nov. 2026, soir)
 
 Lancée chaque matin par une tâche programmée, dans la session qui a construit le moteur (branche
-`ccr-a57d9e9e-flymhr`). **Objectif du jour : une vidéo publiée à 12 h (Europe/Paris) le jour même, sur TikTok (Metricool) ET YouTube (Zapier).**
+`ccr-a57d9e9e-flymhr`). **Objectif du jour : une vidéo publiée à 12 h (Europe/Paris) le jour même, sur TikTok (Metricool), YouTube et Facebook (Zapier).**
 Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publication le lendemain 18 h) pour cette boucle.
 
 ## Règles du client (jamais d'exception)
@@ -122,7 +122,7 @@ les liens uguu : on passe par le dépôt public.
    `https://raw.githubusercontent.com/ProjetDevAgency/Claude-repo/ccr-a57d9e9e-flymhr/publication/<slug>.mp4`
    répond 200.
 2. Programmer le réveil de midi : `send_later` à **12:00 Europe/Paris** (format `AAAA-MM-JJT12:00:00[Europe/Paris]`) avec
-   le message « Publie sur YouTube la vidéo du jour <slug> (titre, description et tags dans
+   le message « Publie sur YouTube et Facebook la vidéo du jour <slug> (titre, description et tags dans
    scripts/trait/<slug>_description.txt), puis retire publication/ ».
 3. À midi : Zapier `YouTubeV4CLIAPI` / `upload_video` (tool_name `youtube_upload_video`, connexion par défaut), params :
    title (≤ 100 caractères, finit par « #shorts »), description (= description TikTok + « Vidéo d'animation créée avec
@@ -131,9 +131,15 @@ les liens uguu : on passe par le dépôt public.
    **Pas de miniature** tant que la chaîne n'est pas vérifiée par téléphone (sinon erreur… et la vidéo part quand
    même : ne JAMAIS relancer l'envoi après une erreur sans avoir vérifié la liste des vidéos de la chaîne,
    `video_in_playlist` avec playlist_id `UUQKeRa6PWJMVmp1jylEM54w`, sinon doublon).
-4. Vérifier que la vidéo est en ligne (même liste), puis `git rm -r publication` + commit + push. Noter l'ID de la vidéo
+3 bis. Juste après YouTube, Facebook : Zapier `FacebookV2CLIAPI` / `page_video` (tool_name
+   `facebook_pages_create_page_video`, connexion par défaut), params : page « 1439579452576065 » (page « Où va ton
+   argent ? », la SEULE page autorisée), source = la même URL raw, title = le titre sans « #shorts », description =
+   la description TikTok + « Vidéo d'animation créée avec l'aide de l'IA. ». Facebook ne propose pas de brouillon pour
+   une vidéo : l'envoi publie directement. Même règle anti-doublon : après une erreur, vérifier la page avant de
+   relancer (`page_stream` en lecture).
+4. Vérifier que la vidéo est en ligne sur YouTube et Facebook, puis `git rm -r publication` + commit + push. Noter l'ID de la vidéo
    YouTube dans `scripts/trait/<slug>_description.txt`.
-5. Zapier gratuit ≈ 100 actions par mois : 1 envoi par jour suffit. Si Zapier signale la limite, ne rien forcer et
+5. Zapier gratuit ≈ 100 actions par mois : 2 envois par jour (YouTube + Facebook) ≈ 60 par mois. Si Zapier signale la limite, ne rien forcer et
    prévenir le client.
 6. Un sujet déjà publié sur YouTube dans l'ancien style (ex. colis, salaire en retard le 19 nov.) est quand même publié
    dans sa nouvelle version, sauf avis contraire du client.
