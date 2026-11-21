@@ -1,13 +1,17 @@
 # Boucle quotidienne @souslesabot — moteur « trait » (consignes du 20 nov. 2026, soir)
 
 Lancée chaque matin par une tâche programmée, dans la session qui a construit le moteur (branche
-`ccr-a57d9e9e-flymhr`). **Objectif du jour : une vidéo publiée à 12 h (Europe/Paris) le jour même, sur TikTok (Metricool), YouTube et Facebook (Zapier).**
+`ccr-a57d9e9e-flymhr`). **Objectif du jour : trois vidéos publiées à 12 h, 17 h et 20 h (Europe/Paris), sur TikTok (Metricool puis manuel), YouTube (Zapier) et Facebook (Windsor puis Zapier).**
 Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publication le lendemain 18 h) pour cette boucle.
 
 ## Règles du client (jamais d'exception)
-- **Une vidéo par jour, programmée à 12 h le jour même** dans Metricool (brand 8206232), publication automatique.
-  Si elle n'est pas prête et vérifiée à **11 h 40**, on ne programme RIEN et on prévient le client (jamais de vidéo bâclée,
-  jamais d'heure de remplacement sans son accord).
+- **TROIS vidéos par jour (décision du 21 nov.), créneaux 12 h, 17 h et 20 h (Europe/Paris)**, chacune publiée à son
+  créneau sur TikTok, YouTube et Facebook. Fabrication dans l'ordre des créneaux (12 h d'abord). Une vidéo qui n'est
+  pas prête ET vérifiée 20 min avant son créneau saute ce créneau : on ne programme rien pour lui, on passe à la
+  suivante et on prévient le client (jamais de vidéo bâclée, jamais d'heure de remplacement sans son accord).
+- Les 3 vidéos du jour : 3 sujets et 3 thèmes différents (ex. travail, conso, logement), jamais le même méchant.
+- TikTok : Metricool tant que le compteur du mois est sous 20 (section 5 ter), puis paquet manuel envoyé au client
+  pour chaque vidéo (il poste lui-même).
 - **Ne jamais toucher aux autres publications du planning** (le client a passé les anciennes en brouillon).
 - Sujet **universel** (filtre n° 1 ci-dessous) **et 8/8** (machine à sujets). Loi vérifiée dans **2 sources**, une officielle.
 - Script selon `prompts/methode_ecriture.md` (moteur H1 adapté au compte) : Kévin raconte à la 1re personne, le méchant
@@ -142,7 +146,7 @@ les liens uguu : on passe par le dépôt public.
    `publication/<slug>.mp4` sur la branche, commit + push, vérifier que
    `https://raw.githubusercontent.com/ProjetDevAgency/Claude-repo/ccr-a57d9e9e-flymhr/publication/<slug>.mp4`
    répond 200.
-2. Programmer le réveil de midi : `send_later` à **12:00 Europe/Paris** (format `AAAA-MM-JJT12:00:00[Europe/Paris]`) avec
+2. Programmer un réveil PAR CRÉNEAU : `send_later` à **12:00, 17:00 et 20:00 Europe/Paris** (un par vidéo prête) (format `AAAA-MM-JJT12:00:00[Europe/Paris]`) avec
    le message « Publie sur YouTube et Facebook la vidéo du jour <slug> (titre, description et tags dans
    scripts/trait/<slug>_description.txt), puis retire publication/ ».
 3. À midi : Zapier `YouTubeV4CLIAPI` / `upload_video` (tool_name `youtube_upload_video`, connexion par défaut), params :
@@ -175,3 +179,11 @@ les liens uguu : on passe par le dépôt public.
   s'il y en a une (en premier), l'état du test en cours, ce que l'analyse a appris, le sujet et pourquoi, l'heure de publication, la description, le commentaire à épingler, les mesures
   (durée, mouvement, prononciation).
 - En cas d'échec à n'importe quelle étape : ne rien publier, dire au client ce qui bloque et ce qu'il faut de lui.
+
+## Suivi du rythme à 3 vidéos par jour (à partir du 22 nov.)
+- Dans l'analyse quotidienne, comparer la part « Pour toi » (video_impression_sources) et les vues médianes des jours à
+  3 vidéos avec la période 15-19 nov. (1 à 2 vidéos par jour). Si la part « Pour toi » baisse nettement 3 jours de
+  suite (repère : 20 nov., 3 vidéos, 61-79 % contre 83-96 %), le signaler en tête du compte rendu : c'est au client de
+  décider s'il revient à moins de vidéos.
+- Compte rendu : un seul message par jour après la vidéo de 20 h (ou après la dernière vidéo prête), avec les 3 vidéos,
+  plus un message à chaque paquet TikTok manuel.
