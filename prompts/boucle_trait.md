@@ -18,7 +18,8 @@ Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publicati
 - Contenu IA toujours déclaré (`isAigc true`).
 
 ## 1. Analyse (≈ 10 min) — Windsor.ai d'abord, Metricool en secours
-0. **Source n° 1 : Windsor.ai** (connecteur « Windsor.ai for Social Media », compte en ESSAI au 21 nov.), connector
+0. **Source n° 1 : Windsor.ai** (connecteur « Windsor.ai for Social Media » ; ESSAI jusqu'au 20 déc. 2026, puis formule gratuite = 1 source / 1 compte :
+   à partir du 21 déc., on ne garde sur Windsor QUE tiktok_organic, et Facebook repasse sur Zapier), connector
    `tiktok_organic`, `get_data` avec les champs : video_create_datetime, video_duration, video_views_count,
    video_likes, video_shares, **video_favorites (enregistrements)**, video_comments, video_average_time_watched,
    video_full_watched_rate (déjà en fraction : 0,34 = 34 %), video_new_followers, video_caption. Chiffres à jour
@@ -140,7 +141,7 @@ les liens uguu : on passe par le dépôt public.
    **Pas de miniature** tant que la chaîne n'est pas vérifiée par téléphone (sinon erreur… et la vidéo part quand
    même : ne JAMAIS relancer l'envoi après une erreur sans avoir vérifié la liste des vidéos de la chaîne,
    `video_in_playlist` avec playlist_id `UUQKeRa6PWJMVmp1jylEM54w`, sinon doublon).
-3 bis. Juste après YouTube, Facebook EN REEL via Windsor.ai : `execute_action`, connector `facebook_organic`,
+3 bis. Juste après YouTube, Facebook EN REEL via Windsor.ai (jusqu'au 20 déc. 2026 ; à partir du 21 déc., directement Zapier) : `execute_action`, connector `facebook_organic`,
    account « 1439579452576065 », action `create_reel`, params video_url = la même URL raw, description = la
    description TikTok + « Vidéo d'animation créée avec l'aide de l'IA. » (Reel : 3 à 90 s, 9:16 : nos vidéos de 64 s
    conviennent). Si Windsor échoue (essai fini, erreur) et seulement après avoir vérifié que rien n'est parti :
