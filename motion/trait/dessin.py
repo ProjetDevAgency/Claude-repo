@@ -232,3 +232,13 @@ def ecrit(ctx, txt, x, y, size, color=(255, 255, 255), big=False, ax=0.5, ay=0.5
     s = texte(txt, size, tuple(color), big, outline)
     blit(ctx, s, x, y, ax, ay, scale, rot, alpha)
     return s.get_width() * scale, s.get_height() * scale
+
+
+def sauver_miniature(surf, out, saturation=None):
+    """Enregistre une miniature avec la même saturation que les vidéos (+35 %, validé par le client le 21 nov.)."""
+    import os
+    from PIL import Image, ImageEnhance
+    sat = saturation or float(os.environ.get("TRAIT_SATURATION", "1.35"))
+    surf.write_to_png(str(out))
+    im = Image.open(out).convert("RGB")
+    ImageEnhance.Color(im).enhance(sat).save(out)

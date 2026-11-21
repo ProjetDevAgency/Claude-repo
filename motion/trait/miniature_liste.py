@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import decors_liste as L_  # noqa: E402
 import decors_ville as V  # noqa: E402
-from dessin import H, INK, ROOT, W, flat, rrect, stroke, texte, vignette  # noqa: E402
+from dessin import sauver_miniature, H, INK, ROOT, W, flat, rrect, stroke, texte, vignette  # noqa: E402
 from liste_remboursements import KEVIN  # noqa: E402
 from perso import Perso  # noqa: E402
 
@@ -51,7 +51,7 @@ def main():
     ligne("QUE TU LAISSES FILER", 560, 76, (250, 250, 250), INK, 0.02)
     ligne("LE PLUS GROS : 600 €", 710, 64, (232, 52, 60), (255, 255, 255), -0.03)
     out = ROOT / "output/trait/liste_remboursements_miniature.png"
-    surf.write_to_png(str(out))
+    sauver_miniature(surf, out)
     print("→", out)
 
 

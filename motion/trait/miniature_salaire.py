@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import decors as D  # noqa: E402
 import decors_chantier as K  # noqa: E402
-from dessin import H, INK, ROOT, W, flat, rrect, stroke, texte, vignette  # noqa: E402
+from dessin import sauver_miniature, H, INK, ROOT, W, flat, rrect, stroke, texte, vignette  # noqa: E402
 from perso import Perso, traits_choc  # noqa: E402
 from salaire_retard import BEAUPERE, KEVIN  # noqa: E402
 
@@ -53,7 +53,7 @@ def main():
     ligne("PAIE EN RETARD", 560, 86, (250, 250, 250), INK, 0.02)
     ligne("MON BEAU-PÈRE PATRON", 700, 64, (232, 52, 60), (255, 255, 255), -0.03)
     out = ROOT / "output/trait/salaire_retard_miniature.png"
-    surf.write_to_png(str(out))
+    sauver_miniature(surf, out)
     print("→", out)
 
 

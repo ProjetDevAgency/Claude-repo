@@ -13,7 +13,7 @@ import cairo
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import decors_piscine as P  # noqa: E402
-from dessin import H, INK, ROOT, W, ecrit, flat, halo, rrect, stroke, texte, vignette  # noqa: E402
+from dessin import sauver_miniature, H, INK, ROOT, W, ecrit, flat, halo, rrect, stroke, texte, vignette  # noqa: E402
 from perso import Perso, traits_choc  # noqa: E402
 from piscine_dauphin import DAME, FILS  # noqa: E402
 
@@ -68,7 +68,7 @@ def main():
     ligne("« ARNAQUEUR »", 700, 74, (232, 52, 60), (255, 255, 255), -0.03)
 
     out = ROOT / "output/trait/piscine_dauphin_miniature.png"
-    surf.write_to_png(str(out))
+    sauver_miniature(surf, out)
     print("→", out)
 
 
