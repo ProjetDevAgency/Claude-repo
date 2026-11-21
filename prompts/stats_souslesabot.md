@@ -54,3 +54,15 @@ temps moyen 22,1 s (sur 157 s, soit 14 %) · vu en entier 6,38 % · 3 nouveaux a
 - Meilleurs taux de partage et d'enregistrement hors des 2 gros succès : le format « liste d'aides concrètes avec date
   limite » donne envie de garder et d'envoyer, mais retient mal en 157 s. Piste (à tester après T1) : sujets pratiques
   avec date limite, au format 60 s.
+
+### 21 nov., 15 h 20 — TikTok Studio, pisciniste et colis (captures du client)
+| vidéo | âge | vues | j'aime | partages | enreg. | temps moyen | vu en entier |
+|---|---|---|---|---|---|---|---|
+| Pisciniste (64 s) | ~17 h | 595 | 43 (7,2 %) | 0 | 3 (0,5 %) | **27,8 s (43 %)** | **34 %** |
+| Colis jamais reçu (64 s) | ~3 h | 125 | 1 (0,8 %) | 0 | 0 | 20,6 s | 22 % |
+| 6 aides avant le 31/12 (157 s) | ~20 h | 467 | 32 (6,9 %) | 5 | 18 (3,9 %) | 22,1 s | 6,4 % |
+- Pisciniste = meilleure rétention jamais mesurée sur le compte (succès précédents : 24-26 s), mais 0 partage et
+  presque 0 enregistrement : l'histoire émotionnelle à raison cachée RETIENT, elle ne s'envoie pas.
+- Liste d'aides = retient moins mais s'enregistre et s'envoie (utilité concrète, date limite).
+- Hypothèse à tester après T1 : histoire qui retient (raison cachée, twist) + utilité qu'on garde (règle claire,
+  date limite, gain chiffré). Le colis est trop jeune (règle des 48 h) ; signal à surveiller : j'aime à 0,8 %.
