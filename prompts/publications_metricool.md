@@ -6,3 +6,4 @@ Metricool pour limite atteinte, appliquer la règle des 20 (paquet manuel).
 | date | plateforme | vidéo |
 |---|---|---|
 | 21/11 12 h | TikTok | colis_perdu |
+| 21/11 20 h | TikTok | salaire_retard (programmée) |
