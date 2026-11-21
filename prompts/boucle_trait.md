@@ -43,8 +43,8 @@ OBLIGATOIRE à chaque boucle, AVANT d'écrire le moindre script :
 - Écrire dans stats_souslesabot.md ce que la boucle APPREND (une règle nouvelle, confirmée ou infirmée), chiffres à l'appui.
 - Chaque script de la boucle cite dans son en-tête les chiffres qui justifient son sujet, son accroche et son ouverture visuelle.
   Pas de chiffres = pas de production.
-Règles visuelles tirées de l'analyse du 21 nov. (stats_souslesabot.md) : Kévin visible en pied dès l'image 0, avec le
-méchant et l'enjeu ; titre-accroche écrit dans un cadre en haut de l'image au moins pendant les 3 premières secondes.
+Pistes visuelles tirées de l'analyse du 21 nov. (Kévin en pied dès l'image 0 avec le méchant et l'enjeu ; titre écrit dans
+un cadre en haut) : ce sont des TESTS de la file `tests_boucle.md`, pas des règles, tant qu'elles ne sont pas verrouillées.
 (La vidéo d'origine La Ficelle sur le Drive a déjà été analysée : la boucle n'a PAS à la regarder.)
 
 ### Détail des outils — Windsor.ai d'abord, Metricool en secours
@@ -136,6 +136,24 @@ méchant et l'enjeu ; titre-accroche écrit dans un cadre en haut de l'image au 
    « Cas type, montants indicatifs. » (+ limite de la règle si besoin), **5 hashtags** dont des mots que les gens cherchent.
 3. Vérifier avec `getScheduledPosts` que la publication est bien là, à 12 h, non brouillon. Ne toucher à aucune autre.
 4. Enregistrer `scripts/trait/<slug>_description.txt` (description, commentaire, réglages).
+
+## RÈGLE DU CLIENT (21 nov., 20 h) : UNE VIDÉO = UN TEST. Elle REMPLACE les règles de test plus bas (témoins, 3 vidéos, 7 jours).
+« On change rien de ce qui est déjà fait, mais on doit tester une nouvelle accroche à chaque vidéo. Dès que quelque chose
+marche, on le réessaie ; si c'est confirmé, toutes les vidéos doivent faire pareil. Ensuite il faut aussi améliorer le
+partage et les enregistrements dans la vidéo. Une vidéo = un test, si un truc fonctionne on change plus. »
+1. **Ne jamais modifier une vidéo déjà faite ou programmée** pour appliquer un apprentissage : il vaut pour les suivantes.
+2. **Chaque nouvelle vidéo teste une accroche NOUVELLE** (texte dit + ce qu'on voit à l'image 0 et le titre écrit), tirée de la
+   file « Accroches à tester » de `prompts/tests_boucle.md`. Tout le reste = la BASE (les éléments verrouillés).
+3. **Chaque vidéo teste aussi UN élément « partage / enregistrement »** dans la vidéo (file du même nom). Les deux se mesurent
+   séparément : l'accroche sur la rétention à 3 s et les vues, l'élément partage sur (enregistrements + partages) / vues.
+4. **« Ça marche »** (à 48 h, Windsor) :
+   - accroche : rétention à 3 s ≥ 61 % (niveau des succès, 21 nov.) OU vues ≥ 1 000 ;
+   - élément partage / enregistrement : (enregistrements + partages) ≥ 2 % des vues (permis 2,1 %, 6 aides 5,2 %, médiane ≈ 0,7 %).
+5. **Ça marche une fois → la vidéo suivante RÉESSAIE exactement la même chose** (avec une autre histoire).
+   **Ça marche deux fois → CONFIRMÉ et VERROUILLÉ** : ajouté à la BASE, toutes les vidéos le font, on n'y touche plus jamais.
+   Ça rate au réessai → abandonné (noté), on passe au suivant de la file.
+6. Chaque test, son résultat et chaque verrouillage sont notés dans `prompts/tests_boucle.md` et `videos_trait.csv` (colonne test).
+7. Le compte rendu au client dit, pour chaque vidéo : l'accroche testée, l'élément partage testé, les chiffres à 48 h, la décision.
 
 ## Apprentissage accéléré (priorité n° 1 du client, 21 nov. : « le plus important, c'est l'analyse et l'amélioration »)
 1. **Fiche par vidéo** dans `prompts/videos_trait.csv` (une ligne par vidéo, remplie à la fabrication) : date, créneau,
