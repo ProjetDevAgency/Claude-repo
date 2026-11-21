@@ -7,7 +7,7 @@ même sens sur 3 vidéos sur 3 et dépasse l'écart habituel (médiane hors succ
 ## Test en cours
 | n° | hypothèse | variable changée | vidéos testées | témoins | résultat | décision |
 |---|---|---|---|---|---|---|
-| T1 | Chiffrer le gain de Kévin dès la 1re phrase fait monter les partages (0 sur 7 des 10 récits à la 1re personne, 21 nov.) | gain chiffré dans le hook (« … et j'ai récupéré X € ») | à partir du 22/11 | récits du 15 au 19/11 | — | — |
+| T1 | Chiffrer le gain de Kévin dès la 1re phrase fait monter les partages (0 sur 7 des 10 récits à la 1re personne, 21 nov.) | gain chiffré dans le hook (« … et j'ai récupéré X € ») | 22/11 salaire_retard (script 29) | récits du 15 au 19/11 (médiane 418 vues, ~0 partage) | — | en cours |
 
 ## Tests terminés
 (aucun pour l'instant)
