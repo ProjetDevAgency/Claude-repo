@@ -113,3 +113,20 @@ Décisions proposées au client (en attente de son accord pour les vidéos déj�
   (comme les reposts) pendant les 3 premières secondes au moins.
 - T2 après T1 : accroche « repost » (drame familial 1re personne, sans chiffre, « … ») contre accroche « gain chiffré ».
 - Refaire un format liste type La Ficelle (6 aides) avec Kévin dès 0 s : c'est le format qui fait enregistrer et partager.
+
+### 21 nov., ~22 h 45 — nouvelle analyse (données Windsor mises en cache à 21 h 41 Paris ; l'essai ne permet pas de forcer la mise à jour)
+- **Salaire en retard (TikTok 20 h, ~2 h 40 après)** : 95 vues, 7 j'aime, 1 commentaire, 0 partage, 0 enreg., temps moyen
+  12,9 s, vu en entier 9,4 %, 92,5 % « Pour toi ». Rétention : 69 % à 1 s, 58 % à 2 s, **51 % à 3 s**, 35 % à 5 s, 20 % à 10 s,
+  8 % à 45 s. Plus forte chute entre 3 et 7 s (51 → 28 %) : « …qui est aussi mon patron. Et j'ai gardé le vocal qu'il a effacé. »
+  À l'image 0 on voit le beau-père SEUL pendant que Kévin dit « J'ai récupéré… » (décalage voix / image). Trop tôt pour conclure
+  (règle des 48 h), mais le départ est sous les vidéos de la semaine.
+- **Colis (TikTok 12 h, ~11 h après)** : 297 vues (+31 en 2 h), 2 enreg., 0 partage, 22,2 s de moyenne, 23 % en entier ;
+  51 % à 3 s, 42 % à 5 s, puis courbe très plate (24 % à 25 s, 14 % à 60 s). Le milieu tient, c'est l'ouverture qui perd.
+- **Le même constat pour les deux vidéos « trait » du jour : 51 % à 3 s** (succès du compte : 61-66 %). Dans les deux, Kévin
+  n'est pas à l'image 0. Ça renforce l'hypothèse du 21 nov. (ouverture), testée sur les vidéos à venir.
+- Toutes les autres vidéos ont à peine bougé depuis 20 h (6 aides 584 vues / 24 enreg. ; pisciniste 608 ; Anthropic 55,2 k ;
+  permis 27,9 k).
+- **YouTube** : la colonne « vues » de Windsor compte les vues DANS la période demandée, pas depuis la publication : les chiffres
+  ne se comparent qu'à période égale. Le salaire n'y apparaît pas encore (cache).
+- **Facebook** : Reel colis 14 affichages, Reel salaire 1 affichage, 0 vue de 3 s : la page est neuve, sans abonnés ; rien à
+  analyser avant plusieurs jours.
