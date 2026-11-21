@@ -22,7 +22,10 @@ Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publicati
    TKPO02 (date), TKPO05 (description), TKPO06 (durée), TKPO07 (vues), TKPO08 (j'aime), TKPO09 (commentaires),
    TKPO10 (partages), TKPO11 (portée), TKPO15 (temps moyen regardé), TKPO16 (« Pour toi »), TKPO20 (profil), TKPO21 (recherche).
    + TKPO13 (vue en entier) : **fiable**, vérifié par le client le 20 nov. (0,13 point d'écart avec TikTok Studio).
-   Une vidéo apparaît dans Metricool jusqu'à ~24 h après sa sortie.
+   Une vidéo apparaît dans Metricool jusqu'à ~24 h après sa sortie, et **ses chiffres peuvent rester figés sur une photo
+   prise tôt** (21 nov. : 82 vues dans Metricool contre 595 en direct sur TikTok). Donc : AUCUNE conclusion sur une vidéo
+   de moins de 48 h à partir de Metricool ; les décisions se prennent sur J-3 ; une capture du profil ou de TikTok Studio
+   envoyée par le client fait foi quand elle est plus récente.
 2. Mettre à jour `prompts/stats_souslesabot.md` : une section datée avec la vidéo de la veille (à ~24 h), celle de
    J-3 (vues quasi définitives), et ce qu'on en tire. Repères établis le 21 nov. (`prompts/stats_souslesabot_21nov.md`) :
    le **sujet** décide ; temps moyen ≥ 24 s nécessaire mais pas suffisant ; les **partages** séparent les succès ;

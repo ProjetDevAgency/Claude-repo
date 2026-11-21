@@ -31,3 +31,17 @@ Sujet de demain (22 nov., 12 h) : salaire en retard (script 29, n° 5 chez La Fi
 patron = méchant proche ET avec du pouvoir. Hook modifié pour T1 (gain au lieu de perte). Loi revérifiée (C. civ.
 1231-6 ; Cass. soc. 6 mai 2025, n° 23-17.005 : intérêts dès la mise en demeure, frais en plus seulement avec un
 préjudice distinct ET la mauvaise foi).
+
+### 21 nov., 14 h 56 — correction avec la capture du profil TikTok (client)
+Metricool n'avait pris qu'une photo des vidéos du 20 nov., très tôt, et ne l'avait pas actualisée :
+| vidéo | Metricool (relevé du matin) | TikTok (capture 14 h 56) |
+|---|---|---|
+| Pisciniste (20/11 21 h) | 82 | 595 |
+| 6 aides avant le 31/12 (20/11 18 h) | 183 | 461 |
+| Anthropic, cours du 1er jour (20/11 11 h) | 146 | 185 |
+| Colis jamais reçu (21/11 12 h) | pas encore remonté | 105 à ~3 h |
+- Les conclusions du matin sur ces 3 vidéos étaient prématurées. Le pisciniste (hors thème, format histoire avec twist)
+  est la meilleure des trois et au-dessus de la médiane : le hors-thème ne l'a pas coulé. Une seule vidéo : à confirmer.
+- Anthropic plafonne bien (actu de 2 jours) : conclusion maintenue.
+- La couverture personnalisée du colis s'affiche bien sur le profil.
+- 13,1 k abonnés, 47,7 k j'aime au 21 nov.
