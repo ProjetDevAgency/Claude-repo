@@ -1,7 +1,7 @@
 # Boucle quotidienne @souslesabot — moteur « trait » (consignes du 20 nov. 2026, soir)
 
 Lancée chaque matin par une tâche programmée, dans la session qui a construit le moteur (branche
-`ccr-a57d9e9e-flymhr`). **Objectif du jour : une vidéo publiée à 12 h (Europe/Paris) le jour même.**
+`ccr-a57d9e9e-flymhr`). **Objectif du jour : une vidéo publiée à 12 h (Europe/Paris) le jour même, sur TikTok (Metricool) ET YouTube (Zapier).**
 Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publication le lendemain 18 h) pour cette boucle.
 
 ## Règles du client (jamais d'exception)
@@ -113,6 +113,30 @@ Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publicati
 5. **Le lundi** : bilan des 7 dernières vidéos dans `prompts/stats_souslesabot.md` (par sujet, type de hook, méchant,
    twist), état du test en cours, prochain test choisi, et demande au client d'une capture TikTok Studio (rétention
    seconde par seconde, enregistrements : Metricool ne les donne pas) pour la meilleure et la pire vidéo de la semaine.
+
+## 5 bis. YouTube à 12 h (Zapier, chaîne « Où va ton argent ? » @ouvatonargent) — décision du client du 21 nov.
+Zapier publie IMMÉDIATEMENT (la programmation YouTube est réservée aux chaînes partenaires) et n'arrive pas à lire
+les liens uguu : on passe par le dépôt public.
+1. Le matin, après la programmation TikTok : copier la vidéo (≤ 10 Mo si possible, sinon telle quelle) dans
+   `publication/<slug>.mp4` sur la branche, commit + push, vérifier que
+   `https://raw.githubusercontent.com/ProjetDevAgency/Claude-repo/ccr-a57d9e9e-flymhr/publication/<slug>.mp4`
+   répond 200.
+2. Programmer le réveil de midi : `send_later` à **12:00 Europe/Paris** (format `AAAA-MM-JJT12:00:00[Europe/Paris]`) avec
+   le message « Publie sur YouTube la vidéo du jour <slug> (titre, description et tags dans
+   scripts/trait/<slug>_description.txt), puis retire publication/ ».
+3. À midi : Zapier `YouTubeV4CLIAPI` / `upload_video` (tool_name `youtube_upload_video`, connexion par défaut), params :
+   title (≤ 100 caractères, finit par « #shorts »), description (= description TikTok + « Vidéo d'animation créée avec
+   l'IA. »), video = l'URL raw ci-dessus, privacy_status « public », made_for_kids « false », notify_subscribers
+   « true », tags (5 à 8 mots que les gens cherchent), default_language « fr », default_audio_language « fr ».
+   **Pas de miniature** tant que la chaîne n'est pas vérifiée par téléphone (sinon erreur… et la vidéo part quand
+   même : ne JAMAIS relancer l'envoi après une erreur sans avoir vérifié la liste des vidéos de la chaîne,
+   `video_in_playlist` avec playlist_id `UUQKeRa6PWJMVmp1jylEM54w`, sinon doublon).
+4. Vérifier que la vidéo est en ligne (même liste), puis `git rm -r publication` + commit + push. Noter l'ID de la vidéo
+   YouTube dans `scripts/trait/<slug>_description.txt`.
+5. Zapier gratuit ≈ 100 actions par mois : 1 envoi par jour suffit. Si Zapier signale la limite, ne rien forcer et
+   prévenir le client.
+6. Un sujet déjà publié sur YouTube dans l'ancien style (ex. colis, salaire en retard le 19 nov.) est quand même publié
+   dans sa nouvelle version, sauf avis contraire du client.
 
 ## 6. Compte rendu au client
 - `git add` (scripts, motion/trait, prompts) → commit → `git push -u origin ccr-a57d9e9e-flymhr`.
