@@ -151,7 +151,8 @@ partage et les enregistrements dans la vidéo. Une vidéo = un test, si un truc 
    - élément partage / enregistrement : (enregistrements + partages) ≥ 2 % des vues (permis 2,1 %, 6 aides 5,2 %, médiane ≈ 0,7 %).
 5. **Ça marche une fois → la vidéo suivante RÉESSAIE exactement la même chose** (avec une autre histoire).
    **Ça marche deux fois → CONFIRMÉ et VERROUILLÉ** : ajouté à la BASE, toutes les vidéos le font, on n'y touche plus jamais.
-   Ça rate au réessai → abandonné (noté), on passe au suivant de la file.
+   Ça rate au réessai → on le teste une 3e fois (« on ne sait jamais ») : s'il marche à la 3e (2 réussites sur 3) →
+   VERROUILLÉ ; s'il rate encore → abandonné (noté), on passe au suivant de la file.
 6. Chaque test, son résultat et chaque verrouillage sont notés dans `prompts/tests_boucle.md` et `videos_trait.csv` (colonne test).
 7. Le compte rendu au client dit, pour chaque vidéo : l'accroche testée, l'élément partage testé, les chiffres à 48 h, la décision.
 

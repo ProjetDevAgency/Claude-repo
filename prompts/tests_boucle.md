@@ -2,7 +2,8 @@
 
 Règle complète : `prompts/boucle_trait.md`, section « RÈGLE DU CLIENT ». Résumé : chaque vidéo teste une accroche nouvelle
 ET un élément « partage / enregistrement ». Ça marche (à 48 h) → on réessaie à la vidéo suivante. Ça marche 2 fois →
-VERROUILLÉ dans la BASE, toutes les vidéos le font, on n'y touche plus. On ne modifie jamais une vidéo déjà faite.
+VERROUILLÉ dans la BASE, toutes les vidéos le font, on n'y touche plus. Ça marche puis rate → 3e essai : 2 sur 3 =
+verrouillé, 1 sur 3 = abandonné. On ne modifie jamais une vidéo déjà faite.
 
 Seuils « ça marche » (repères du 21 nov., stats_souslesabot.md) :
 - accroche : rétention à 3 s ≥ 61 % OU vues ≥ 1 000 à 48 h ;
