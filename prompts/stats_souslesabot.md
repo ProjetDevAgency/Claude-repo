@@ -80,3 +80,36 @@ temps moyen 22,1 s (sur 157 s, soit 14 %) · vu en entier 6,38 % · 3 nouveaux a
 Les autres vidéos du 15 au 19 nov. : 255 à 562 vues, 0 à 5 enregistrements, 0 à 2 partages.
 - Les enregistrements séparent nettement les succès (≈ 0,7 à 1,4 % des vues) du reste (≈ 0 à 1 %, souvent 0) :
   signal n° 1 à suivre avec les partages. Le temps moyen ne les sépare pas (briefing et pisciniste au niveau des succès).
+
+### 21 nov., ~20 h — ANALYSE COMPLÈTE (demandée par le client : toutes les vidéos, scripts, accroches, visuels)
+Sources : Windsor tiktok_organic (32 vidéos publiques, 30 jours max sur l'essai), rétention seconde par seconde (8 vidéos),
+origine des vues (toutes), Windsor youtube (27 vidéos), facebook_organic (1 Reel, 14 impressions : rien à tirer), captures
+TikTok Studio des reposts du 4-5 nov. (passés en privé, plus dans l'API), vidéo d'origine La Ficelle (Drive) vs notre copie.
+
+1. **Les 3 premières secondes décident des vues.** Rétention à 3 s : permis 62 %, Anthropic 65 %, briefing 66 %, congés 61 %,
+   pisciniste 61 % → contre colis 50 %, frais d'agence 48 %, 6 aides 42 %. Sous 50 % à 3 s, la vidéo reste à 250-600 vues.
+2. **À l'image 0 des vidéos « trait », on voit le méchant seul** (colis, loyer, salaire) ou pas de personnage du tout (6 aides :
+   Kévin arrive à 7 s). Dans la vidéo d'origine La Ficelle, le héros est en pied dès 0 s, le méchant à côté de l'enjeu à 2 s.
+   Seul le garage montre Kévin dès 0 s. Et aucune vidéo trait n'a de TITRE écrit à l'écran à 0 s (seulement les sous-titres mot à mot).
+3. **Les reposts améliorés (pareur, 4-5 nov.) ont les accroches qui ramènent le plus de vues** : « Mon client est mort avant de
+   m'avoir payé… » 10 k vues TikTok (183 j'aime, 3 partages, 8 enreg.) ; « Ma belle-mère a envoyé la vache de ma fille à
+   l'abattoir pendant nos vacances… » 7,2 k (195 j'aime, 18 enreg.). YouTube : « Il m'a payé pour mentir à son père… » 11 k vues,
+   83 % regardés, 35 abonnés (record) ; « Il est mort avant de m'avoir payé… » 4 k ; « Elle a envoyé la vache… » 4,4 k.
+   Forme commune : 1re personne, drame familial ou mort / trahison, AUCUN chiffre, phrase coupée par « … », titre écrit en
+   gros dans un cadre blanc en haut de l'image pendant toute la vidéo. Point faible : peu d'enregistrements (0,1-0,25 %).
+4. **Les listes de règles « type La Ficelle » font le plus d'interactions par vue** : 6 aides = 4,0 % d'enregistrements et 1,2 %
+   de partages (records du compte), vol retardé (liste ✅, 88 s) 2,9 % d'enreg. Permis 1,4 % / 0,7 %, Anthropic 0,7 % / 0,2 %.
+   Leur problème : la rétention du début (6 aides : 42 % à 3 s), pas le fond.
+5. **Les deux succès (permis 27,9 k, Anthropic 55 k) = accroche 1re personne + proche ou autorité + prix qui choque + gain** :
+   « L'auto-école m'a réclamé 1 800 €… je l'ai eu pour 650 € » ; « Mon grand frère voulait que je mette mes 4 000 €… ». 96 % et
+   90 % « Pour toi ».
+6. **YouTube** : plus régulier (1,4 à 3,4 k vues par vidéo « droits », 60-84 % regardés). Meilleurs : prime d'activité 3,4 k,
+   permis 2,6 k. Les titres avec la réplique entre « » tiennent 1,6-1,9 k.
+7. Pisciniste (histoire pure) : meilleure fin de vidéo (24 % encore là à 60 s) mais 0 partage → l'histoire seule retient,
+   la règle utile fait partager. Il faut les deux.
+
+Décisions proposées au client (en attente de son accord pour les vidéos déjà programmées) :
+- Kévin visible en pied dès l'image 0, avec le méchant ET l'enjeu (comme La Ficelle) ; titre-accroche écrit dans un cadre en haut
+  (comme les reposts) pendant les 3 premières secondes au moins.
+- T2 après T1 : accroche « repost » (drame familial 1re personne, sans chiffre, « … ») contre accroche « gain chiffré ».
+- Refaire un format liste type La Ficelle (6 aides) avec Kévin dès 0 s : c'est le format qui fait enregistrer et partager.

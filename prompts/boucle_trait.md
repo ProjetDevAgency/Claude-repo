@@ -29,7 +29,25 @@ créneau saute ce créneau (prévenir le client).
 - 2 à 3 entités par histoire (moteur 4.2) ; les autres personnages ne sont que des figurants muets.
 - Contenu IA toujours déclaré (`isAigc true`).
 
-## 1. Analyse (≈ 10 min) — Windsor.ai d'abord, Metricool en secours
+## 1. Analyse COMPLÈTE avant tout script (ordre du client, 21 nov. : « tu le fais sur tous les stats, de toutes les vidéos accessibles ; sans données tu n'apprends rien »)
+OBLIGATOIRE à chaque boucle, AVANT d'écrire le moindre script :
+- TOUTES les vidéos accessibles, pas seulement celles de la veille : TikTok (Windsor, 30 derniers jours max sur l'essai, + Metricool),
+  YouTube (Windsor `youtube` : video_title, views, likes, shares, average_view_duration, average_view_percentage,
+  subscribers_gained), Facebook (Windsor `facebook_organic` : post_video_views, post_impressions, post_video_avg_time_watched).
+- Rétention seconde par seconde (video_view_retention_*) de chaque vidéo de plus de 48 h pas encore diagnostiquée, avec le
+  chiffre à 3 s (repère : succès ≥ 61 %, échecs ≤ 50 %) et l'endroit du décrochage.
+- Origine des vues (« Pour toi », profil, recherche) de chaque vidéo.
+- Comparer les SCRIPTS (accroche écrite, 1re phrase, structure), les ACCROCHES VISUELLES (ce qu'on voit à l'image 0 et à 3 s :
+  Kévin ou pas, méchant, enjeu, titre écrit) et les stats, en mettant côte à côte les meilleures et les pires vidéos. Inclure
+  les reposts du 4-5 nov. (privés : chiffres dans stats_souslesabot.md) et les vidéos YouTube.
+- Écrire dans stats_souslesabot.md ce que la boucle APPREND (une règle nouvelle, confirmée ou infirmée), chiffres à l'appui.
+- Chaque script de la boucle cite dans son en-tête les chiffres qui justifient son sujet, son accroche et son ouverture visuelle.
+  Pas de chiffres = pas de production.
+Règles visuelles tirées de l'analyse du 21 nov. (stats_souslesabot.md) : Kévin visible en pied dès l'image 0, avec le
+méchant et l'enjeu ; titre-accroche écrit dans un cadre en haut de l'image au moins pendant les 3 premières secondes.
+(La vidéo d'origine La Ficelle sur le Drive a déjà été analysée : la boucle n'a PAS à la regarder.)
+
+### Détail des outils — Windsor.ai d'abord, Metricool en secours
 0. **Source n° 1 : Windsor.ai** (connecteur « Windsor.ai for Social Media » ; ESSAI jusqu'au 20 déc. 2026, puis formule gratuite = 1 source / 1 compte :
    à partir du 21 déc., on ne garde sur Windsor QUE tiktok_organic, et Facebook repasse sur Zapier), connector
    `tiktok_organic`, `get_data` avec les champs : video_create_datetime, video_duration, video_views_count,
