@@ -111,6 +111,25 @@ Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publicati
 3. Vérifier avec `getScheduledPosts` que la publication est bien là, à 12 h, non brouillon. Ne toucher à aucune autre.
 4. Enregistrer `scripts/trait/<slug>_description.txt` (description, commentaire, réglages).
 
+## Apprentissage accéléré (priorité n° 1 du client, 21 nov. : « le plus important, c'est l'analyse et l'amélioration »)
+1. **Fiche par vidéo** dans `prompts/videos_trait.csv` (une ligne par vidéo, remplie à la fabrication) : date, créneau,
+   slug, thème, type de hook (prix / mépris / enjeu…), prix dans le hook (oui/non), méchant (lien + tier), twist,
+   durée, variable testée (n° du test ou « témoin »). Les chiffres à 48 h sont ajoutés ensuite : vues, enregistrements,
+   partages, j'aime, commentaires, temps moyen, vue en entier, % « Pour toi », abonnés gagnés (TikTok via Windsor),
+   + vues YouTube et Facebook (Windsor `youtube` / `facebook_organic` si disponibles).
+2. **Tests avec témoins le même jour** : sur les 3 vidéos du jour, 1 ou 2 portent la variable du test en cours, les
+   autres sont des témoins (même jour, créneaux alternés d'un jour à l'autre pour neutraliser l'heure). Un test se
+   conclut sur 6 à 9 vidéos (2 à 3 jours) : confirmé seulement si les vidéos testées battent leurs témoins du jour sur
+   le signal visé (enregistrements + partages d'abord, puis vues et temps moyen) dans la grande majorité des
+   comparaisons, sans dégrader le reste. Toujours UN seul test à la fois.
+3. **Diagnostic par la rétention** : pour chaque vidéo à 48 h, lire video_view_retention_second / _percentage (Windsor),
+   repérer la plus forte chute après la 3e seconde et la relier à la phrase du script prononcée à cet instant (temps des
+   mots du .dial). Noter « décroche à Xs sur : <phrase> » dans la fiche. Une chute qui revient au même endroit sur
+   plusieurs vidéos (couture, bloc technique, doute…) devient l'hypothèse du test suivant.
+4. **Lundi : bilan sur les 21 vidéos de la semaine** dans `prompts/stats_souslesabot.md` : comparer les combinaisons de
+   la fiche (thème × hook × méchant × twist), sortir les 3 meilleures et les 3 pires, choisir les 1 ou 2 prochains tests,
+   et proposer au client les règles confirmées pour `prompts/methode_ecriture.md`.
+
 ## Apprentissage : comment la boucle s'améliore seule
 1. **Journal des tests** (`prompts/tests_boucle.md`) : UN test en cours à la fois. Chaque test = une hypothèse
    (« chiffrer le gain dans la 1re phrase fait monter les partages »), la variable changée, les vidéos testées, les
