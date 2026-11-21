@@ -109,6 +109,15 @@ un cadre en haut) : ce sont des TESTS de la file `tests_boucle.md`, pas des règ
   referme une prémisse, test de la banane.
 
 ## 4. Vidéo (≈ 60 min) — moteur `motion/trait/` (notice : `motion/trait/LISEZMOI.md`)
+**Caméra (client, 21 nov., d'après La Ficelle) — mode « plans », réglage par défaut du moteur (film.py) :**
+- chaque clé de `cam` est un PLAN : coupe nette d'une clé à l'autre (pas de glissement, pas de fouet visuel), et le plan
+  pousse lentement vers son sujet tout seul ;
+- plan de base = large ou moyen, cadré sur QUI PARLE ou sur l'action ;
+- sur chaque mot clé (le montant, l'échéance, l'objet du litige, le panneau qui apparaît), une clé SERRÉE (×1,5 à ×2) posée
+  sur l'instant du mot (`W(ligne, "mot") - p["t0"]`), centrée sur l'objet, qui garde le visage de Kévin si possible ;
+  1 à 2 s plus tard, une clé qui revient au large ou passe à l'autre personnage ;
+- 1 à 3 gros plans par plan au plus, jamais au hasard : chaque mouvement est justifié par ce qui est dit.
+Exemple : `motion/trait/demo_camera_plans.py`.
 - **Modèle à copier : `motion/trait/colis_perdu.py`** (lit le `.dial`, marques de couleur des sous-titres, plans calés
   sur les mots avec `L(réplique, n° du mot)`, compteur, sons). Créer `motion/trait/<slug>.py`, et un module de décors
   `motion/trait/decors_<slug>.py` si le sujet en demande de nouveaux (réutiliser d'abord `decors.py`, `decors_colis.py`,

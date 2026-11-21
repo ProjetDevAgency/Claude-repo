@@ -6,6 +6,7 @@ Un plan démarre sur un mot, dessine sa scène dans le monde (1080x1920) et a sa
 La caméra glisse entre ses clés (zoom lent, recadrage), chaque coupe arrive avec un coup de fouet
 (flou de mouvement + whoosh), et les éléments d'interface (compteur, sous-titres) sont posés à l'écran.
 """
+import math
 import os
 import subprocess
 import sys
@@ -24,8 +25,10 @@ import sfx  # noqa: E402  (bruitages fabriqués par le code, motion/sfx.py)
 
 # Saturation des couleurs au rendu (client, 21 nov. : « on peut augmenter la saturation ? ») : +35 %.
 SATURATION = float(os.environ.get("TRAIT_SATURATION", "1.35"))
-# Caméra (client, 21 nov.) : « zoom » = zooms et dézooms droits vers le sujet, un plan sur deux ; « libre » = ancien mode.
-CAMERA = os.environ.get("TRAIT_CAMERA", "zoom")
+# Caméra (client, 21 nov.) : « plans » = coupes nettes + poussée lente + gros plans sur les mots (défaut, style La Ficelle) ;
+# « zoom » = zooms / dézooms continus (refusé) ; « libre » = ancien mode glissé.
+CAMERA = os.environ.get("TRAIT_CAMERA", "plans")
+PUSH = 0.035
 
 class Film:
     def __init__(self, voice, words, fin=None):
@@ -79,6 +82,8 @@ class Film:
     def _camera(self, keys, lt, idx=0):
         if callable(keys):                      # caméra calculée image par image (travelling qui suit l'action)
             return keys(lt)
+        if CAMERA == "plans":
+            return self._plans_cam(keys, lt)
         if CAMERA == "zoom" and len(keys) > 1:
             return self._zoom(keys, lt, idx)
         if lt <= keys[0][0]:
@@ -88,6 +93,26 @@ class Film:
                 k = ease((lt - ta) / (tb - ta))
                 return [x + (y - x) * k for x, y in zip(a, b)]
         return keys[-1][1:]
+
+    @staticmethod
+    def _plans_cam(keys, lt):
+        """Mode « plans » (client, 21 nov., d'après La Ficelle) : chaque clé est un PLAN. On coupe net d'un plan à
+        l'autre (pas de glissement), et pendant le plan la caméra pousse très lentement vers le sujet (+3,5 % par
+        seconde, 12 % maximum). Gros plan sur un mot = une clé serrée posée sur ce mot, puis une clé qui revient au
+        large. Deux clés presque identiques (moins de 20 % de zoom et 150 px d'écart) ne font pas de coupe."""
+        garde = [keys[0]]
+        for k in keys[1:]:
+            _, x0, y0, z0 = garde[-1]
+            _, x1, y1, z1 = k
+            if abs(z1 - z0) / z0 >= 0.2 or math.hypot(x1 - x0, y1 - y0) * z0 >= 150:
+                garde.append(k)
+        cur = garde[0]
+        for k in garde[1:]:
+            if lt >= k[0]:
+                cur = k
+        ta, x, y, z = cur
+        pousse = 1 + min(0.12, PUSH * max(0.0, lt - max(0.0, ta)))
+        return [x, y, z * pousse]
 
     @staticmethod
     def _zoom(keys, lt, idx):
@@ -132,7 +157,7 @@ class Film:
         vignette(ctx, 0.5)
         if plan["hud"]:
             plan["hud"](ctx, t, lt)
-        if plan["fouet"] and plan["t0"] > 0 and lt < 0.16:
+        if plan["fouet"] and plan["t0"] > 0 and lt < 0.16 and CAMERA != "plans":
             surf = self._fouet(surf, 1 - lt / 0.16)
             ctx = cairo.Context(surf)
         for fn in self.hud:
