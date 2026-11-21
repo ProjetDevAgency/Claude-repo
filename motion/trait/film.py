@@ -6,6 +6,7 @@ Un plan démarre sur un mot, dessine sa scène dans le monde (1080x1920) et a sa
 La caméra glisse entre ses clés (zoom lent, recadrage), chaque coupe arrive avec un coup de fouet
 (flou de mouvement + whoosh), et les éléments d'interface (compteur, sous-titres) sont posés à l'écran.
 """
+import os
 import subprocess
 import sys
 import wave
@@ -20,6 +21,9 @@ import voix
 sys.path.append(str(Path(__file__).resolve().parents[1]))   # après motion/trait : motion/decors.py ne doit pas masquer le nôtre
 import sfx  # noqa: E402  (bruitages fabriqués par le code, motion/sfx.py)
 
+
+# Saturation des couleurs au rendu (client, 21 nov. : « on peut augmenter la saturation ? ») : +35 %.
+SATURATION = float(os.environ.get("TRAIT_SATURATION", "1.35"))
 
 class Film:
     def __init__(self, voice, words, fin=None):
@@ -144,7 +148,7 @@ class Film:
         self.audio(wav)
         n = int(self.dur * FPS)
         cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "bgra", "-s", f"{W}x{H}", "-r", str(FPS),
-               "-i", "-", "-i", str(wav), "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
+               "-i", "-", "-i", str(wav), "-vf", f"eq=saturation={SATURATION}", "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
                "-c:a", "aac", "-b:a", "192k", "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-shortest",
                "-movflags", "+faststart", str(out)]
         p = subprocess.Popen(cmd, stdin=subprocess.PIPE)
