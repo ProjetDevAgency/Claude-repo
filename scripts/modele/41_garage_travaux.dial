@@ -1,0 +1,33 @@
+# MOTEUR H1 complet. Sujet : le garagiste qui facture 640 € au lieu de la vidange à 89 € signée.
+# Loi : le garagiste peut faire payer que les travaux acceptés ; pour des travaux en plus, c'est à lui de prouver
+# l'accord du client (C. civ. art. 1353 ; Cass. civ. 1re 25 mars 1997 n° 95-15.766 et 2 nov. 2005 n° 02-18.723).
+# Le client paie ce qu'il a signé et conteste le reste par écrit. Sources : inc-conso.fr (réparations non prévues),
+# quechoisir.org (réparation automobile, vos droits), DDPP des Hauts-de-Seine (fiche réparation automobile), vérifiées
+# le 21 nov. 2026. Calcul : 640 − 89 = 551 €.
+# Transgression T1 prix aberrant · autorité A3 (le garagiste de la mère depuis 20 ans, TIER A, il a la voiture) ·
+# verrou V3 preuve conservée (la fiche signée « vidange seule ») · entrée : l'appel du soir · axe : mépris (« les jeunes »)
+# · twist W5 raison cachée (11 fois des plaquettes sur la voiture de la mère) · chute punchline chiffrée · écho sur le
+# coup 1 · mot-enjeu « carton » ×3.
+# 8/8 : client précis (Kévin, sa Clio) · prix crédible (89 → 640 €) · choc · cohérence · tiers absent (la mère) ·
+# deadline (la voiture pour le travail) · zone grise (il lit la fiche devant les clients en salle d'attente) · pas banal.
+# Test T1 : bras TEST (gain chiffré dans le hook). M = le garagiste. N = Kévin.
+N: J'ai économisé cinq cent cinquante et un euros sur le garagiste de ma mère.
+N: Il répare sa voiture depuis vingt ans. Je lui avais laissé ma Clio pour une vidange. Quatre-vingt-neuf euros, écrit sur la fiche que j'ai signée.
+N: Le soir, il m'appelle. C'est prêt. Six cent quarante euros.
+N: Plaquettes, disques, essuie-glaces, et une batterie. J'avais rien demandé.
+N: Je passe au garage. Trois clients attendent sur les chaises. Je lui dis, j'avais signé pour une vidange. Il rigole et il me fait,
+M: Je t'ai sauvé la vie, mon grand. Tes freins, c'était du carton.
+N: Et devant les clients, il en rajoute une couche.
+M: Les jeunes, vous connaissez rien aux voitures. Ta mère, elle discute jamais, elle.
+N: Je réponds rien.
+N: Du carton.
+N: Sauf qu'un garagiste peut faire payer que ce que t'as accepté.
+N: Ce que peu de gens savent, c'est que pour des travaux en plus, c'est à lui de prouver que t'as dit oui. Pas à toi de prouver le contraire.
+N: Mais alors, s'il appelle pas avant ? Tu paies ce que t'as signé, et le reste, tu le contestes par écrit.
+N: Honnêtement, j'ai hésité. Des freins neufs, ça se refuse pas.
+N: Je pose la fiche signée sur le comptoir. Je lis à voix haute, vidange seule, devant les trois clients.
+N: Il regarde la fiche. Il dit plus rien.
+N: Je paie quatre-vingt-neuf euros. Il me rend les clés.
+N: Le soir, ma mère sort ses factures. Vingt ans de garage. Onze fois des plaquettes, sur une voiture qui roule le dimanche.
+N: Elle m'a demandé de l'accompagner lundi.
+N: Cinq cent cinquante et un euros, le carton.
