@@ -9,6 +9,7 @@
 | 22/11 15 h | garage_travaux | vidange à 89 € facturée 640 €, travaux non demandés | script 41, test T1 |
 | 22/11 20 h | liste_remboursements | 5 remboursements : train G30, tickets resto, frais bancaires, garantie légale, retard d'avion | script 50, format La Ficelle |
 | 23/11 10 h | erreur_caisse | la tante patronne retient l'erreur de caisse de sa fille sur la paie de Kévin | script 42, La Ficelle n° 12 (134 k) |
+| 23/11 15 h | colis_abime | console de Noël livrée cassée, bon signé sans réserve, la sœur se moque | script 43, La Ficelle n° 14 (106 k) |
 
 Sujets déjà traités dans l'ANCIEN style (peuvent être refaits en trait s'ils passent le filtre n° 1) : voir la dernière
 colonne de `prompts/sujets_laficelle.md` et `prompts/videos_index.csv`.
