@@ -116,6 +116,12 @@ moyen sur celui qui parle) ; passage d'un personnage à l'autre par PANORAMIQUE 
 caméra, flou de mouvement) ; plan de réaction de 0,5 s sur le visage de celui qui écoute après une phrase forte ; gros plan
 sur chaque mot clé ; objets qui glissent dans le cadre ; fonds calmes (pas de fond qui grouille derrière les cartes).
 Modèle : `motion/trait/ficelle_scolarite.py`. Contrôle : coupes comptées (une toutes les 1,2 à 1,8 s).
+**RÈGLE DU CLIENT (22 nov.) : un changement de plan OU une animation visible toutes les 1 à 2 secondes, du début à la fin**
+(coupe, panoramique, gros plan, geste d'un personnage, objet qui entre / tombe / vole, panneau qui apparaît, compteur qui
+monte). Sur les 3 premières secondes : un changement au moins chaque seconde. Contrôle OBLIGATOIRE avant publication :
+`python3 scripts/analyse_mouvement.py --regle <vidéo>` doit afficher « 0 passage(s) de plus de 2 s sans changement » ;
+sinon ajouter une coupe ou une animation à chaque passage signalé et refaire le rendu. (Repère : la vidéo liste du 22/11
+restait figée sur ses premières secondes ; La Ficelle a encore 9 passages de 2 à 3 s, on vise mieux.)
 **Profondeur et cadrage (client, 22 nov., comparaison image par image avec La Ficelle) :** des objets passent DEVANT les
 personnages (page de calendrier arrachée qui vole vers la caméra, rideau de guichet qui tombe devant l'agent, poteau / corde
 au premier plan) : les dessiner APRÈS les personnages. Plans moyens calculés (`pm(x, y, échelle)` : de la tête aux genoux,

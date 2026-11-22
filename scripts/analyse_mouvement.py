@@ -65,6 +65,29 @@ def analyse(path, fps=30):
         "éléments_dessinés_par_image_médiane": float(np.median(el)),
     }
 
-if __name__ == "__main__":
+if __name__ == "__main__" and (len(sys.argv) < 2 or sys.argv[1] != "--regle"):
     out = {p.split("/")[-1]: analyse(p) for p in sys.argv[1:]}
     print(json.dumps(out, ensure_ascii=False, indent=1))
+
+
+def trous(path, fps=30, seuil=0.03, maxi=2.0):
+    """Règle « un changement toutes les 1 à 2 s » : renvoie les passages de plus de `maxi` secondes sans coupe ni
+    animation visible (part de l'image qui bouge > seuil, bande des sous-titres exclue)."""
+    F = frames(path)
+    ev = []
+    for i in range(len(F) - 1):
+        a, b = F[i].astype(np.int16), F[i + 1].astype(np.int16)
+        d = np.abs(b - a)
+        d[300:360] = 0                                  # bande des sous-titres (y ≈ 1200-1440 sur 1920)
+        if d.mean() > 18 or (d > 25).mean() > seuil:
+            ev.append((i + 1) / fps)
+    ev = [0.0] + ev + [len(F) / fps]
+    gaps = [(a, b - a) for a, b in zip(ev, ev[1:]) if b - a > maxi]
+    return ev, gaps
+
+
+if __name__ == "__main__" and len(sys.argv) > 2 and sys.argv[1] == "--regle":
+    for p in sys.argv[2:]:
+        ev, gaps = trous(p)
+        print(p.split("/")[-1], f"{len(gaps)} passage(s) de plus de 2 s sans changement",
+              [f"{a:.1f}s ({g:.1f}s)" for a, g in gaps])
