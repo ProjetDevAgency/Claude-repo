@@ -116,6 +116,12 @@ moyen sur celui qui parle) ; passage d'un personnage à l'autre par PANORAMIQUE 
 caméra, flou de mouvement) ; plan de réaction de 0,5 s sur le visage de celui qui écoute après une phrase forte ; gros plan
 sur chaque mot clé ; objets qui glissent dans le cadre ; fonds calmes (pas de fond qui grouille derrière les cartes).
 Modèle : `motion/trait/ficelle_scolarite.py`. Contrôle : coupes comptées (une toutes les 1,2 à 1,8 s).
+**Profondeur et cadrage (client, 22 nov., comparaison image par image avec La Ficelle) :** des objets passent DEVANT les
+personnages (page de calendrier arrachée qui vole vers la caméra, rideau de guichet qui tombe devant l'agent, poteau / corde
+au premier plan) : les dessiner APRÈS les personnages. Plans moyens calculés (`pm(x, y, échelle)` : de la tête aux genoux,
+air au-dessus de la tête, jamais de tête coupée) ; le plan large et le demi-ensemble dominent, gros plans courts sur les
+objets. Les personnages AGISSENT sur les objets (arracher, tendre, fermer). Décor calme mais fourni (~60-70 éléments
+dessinés : mesure `scripts/analyse_mouvement.py`), pas de mur de couleurs qui écrase tout.
 **Utilité (22 nov.) : TikTok a boosté la copie « 6 aides » parce qu'elle est jugée utile (recherches + partages) : chaque
 vidéo doit avoir un élément « à garder » et une description / un titre avec les mots que les gens cherchent.**
 **Miniatures aussi à +35 %** : toujours enregistrer avec `sauver_miniature(surf, out)` (dessin.py), jamais `write_to_png`.
