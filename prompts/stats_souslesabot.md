@@ -145,3 +145,13 @@ permis 27,9 k.
 - Partages : 0 sur les trois vidéos trait ; enregistrements 1-2. L'élément partage / enregistrement reste à trouver :
   d'où les tests « carte récap à garder » et « pote concerné » sur les vidéos du 23/11.
 - Facebook : le Reel loyer est parti ~11 h 55 ; la page n'a encore aucune vue (aucun abonné).
+
+### 22 nov., 18 h 32 — TikTok a BOOSTÉ la vidéo « 6 aides avant le 31/12 » (copie La Ficelle, 20/11)
+Notification TikTok « Crée des publications utiles » : « Ta publication a été boostée ! +148 vues supplémentaires. Pourquoi
+elle s'est démarquée : ~1 personne a trouvé ta publication utile grâce aux recherches et aux partages. »
+- C'est la seule de nos vidéos à recevoir ce boost, et c'est aussi celle qui a les meilleurs taux du compte (4,3 %
+  d'enregistrements, 1,3 % de partages). TikTok pousse en plus les contenus jugés UTILES, mesurés par la recherche et les
+  partages.
+- Conséquence pour la boucle : la vidéo « Ficelle » quotidienne (liste / démarche utile, modèle de message à l'écran) est
+  justifiée ; dans les vidéos H1 aussi, viser l'utilité « à garder » (carte récap, démarche, modèle) et des mots que les gens
+  cherchent (description et titre avec les termes de recherche : « réduction d'impôt lycée », « colis abîmé que faire »…).

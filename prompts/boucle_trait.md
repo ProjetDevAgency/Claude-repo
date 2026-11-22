@@ -110,6 +110,14 @@ un cadre en haut) : ce sont des TESTS de la file `tests_boucle.md`, pas des règ
 
 ## 4. Vidéo (≈ 60 min) — moteur `motion/trait/` (notice : `motion/trait/LISEZMOI.md`)
 **VALIDÉ PAR LE CLIENT le 21 nov. : saturation +35 % et caméra « plans » (ne plus y toucher sans son accord).**
+**Grammaire de caméra (client, 22 nov., d'après la mesure de La Ficelle) pour TOUTES les vidéos, H1 et Ficelle :** une coupe
+toutes les ~1,5 s (jamais plus de 3 s sur le même cadrage) ; dialogues en champ / contrechamp (plan d'ensemble puis plan
+moyen sur celui qui parle) ; passage d'un personnage à l'autre par PANORAMIQUE ÉCLAIR (5e élément "pan" dans la clé de
+caméra, flou de mouvement) ; plan de réaction de 0,5 s sur le visage de celui qui écoute après une phrase forte ; gros plan
+sur chaque mot clé ; objets qui glissent dans le cadre ; fonds calmes (pas de fond qui grouille derrière les cartes).
+Modèle : `motion/trait/ficelle_scolarite.py`. Contrôle : coupes comptées (une toutes les 1,2 à 1,8 s).
+**Utilité (22 nov.) : TikTok a boosté la copie « 6 aides » parce qu'elle est jugée utile (recherches + partages) : chaque
+vidéo doit avoir un élément « à garder » et une description / un titre avec les mots que les gens cherchent.**
 **Miniatures aussi à +35 %** : toujours enregistrer avec `sauver_miniature(surf, out)` (dessin.py), jamais `write_to_png`.
 **Caméra (client, 21 nov., d'après La Ficelle) — mode « plans », réglage par défaut du moteur (film.py) :**
 - chaque clé de `cam` est un PLAN : coupe nette d'une clé à l'autre (pas de glissement, pas de fouet visuel), et le plan
