@@ -29,26 +29,60 @@ def horloge(ctx, x, y, r, t):
 
 
 def accueil(ctx, t, rideau=0.0):
-    """Le fond derrière le guichet : mur bleu-gris, étagères de classeurs colorés, horloge, rideau métallique."""
-    _deg(ctx, -600, -600, 1700, SOL, (150, 166, 186), (120, 136, 158))
+    """Fond derrière le guichet, calme et profond (corrigé le 22 nov. d'après La Ficelle) : mur gris-bleu, cloison vitrée,
+    petite étagère de 5 classeurs, horloge, casier à courrier, lampe et son faisceau, rideau métallique qui descend."""
+    _deg(ctx, -600, -600, 1700, SOL, (176, 186, 200), (150, 160, 176))
+    # cloison vitrée du bureau du fond
+    rrect(ctx, 120, 330, 840, 700, 8)
+    paint(ctx, (120, 136, 156), LW, shade=0.95)
+    rrect(ctx, 150, 360, 780, 640, 6)
+    flat(ctx, (96, 112, 134))
+    for k in range(2):
+        ctx.move_to(220 + k * 160, 380)
+        ctx.line_to(360 + k * 160, 560)
+    stroke(ctx, 8, (255, 255, 255), alpha=0.22)
+    # petite étagère : 5 classeurs
+    ctx.rectangle(200, 610, 300, 16)
+    flat(ctx, (90, 72, 60))
+    for i, c in enumerate(((220, 70, 60), (240, 180, 40), (60, 130, 210), (70, 170, 110), (160, 90, 180))):
+        rrect(ctx, 212 + i * 56, 470, 46, 140, 5)
+        paint(ctx, c, 3, shade=0.85)
+    # casier à courrier
+    rrect(ctx, 760, 420, 170, 220, 6)
+    paint(ctx, (200, 196, 186), LW * 0.8, shade=0.9)
+    ecrit(ctx, "COURRIER", 845, 445, 22, INK, big=True)
     for r in range(3):
-        y = 260 + r * 230
-        ctx.rectangle(-300, y + 170, 1700, 18)
-        flat(ctx, (90, 70, 60))
-        for i in range(-6, 26):
-            c = [(220, 70, 60), (240, 180, 40), (60, 130, 210), (70, 170, 110), (160, 90, 180)][(i * 3 + r) % 5]
-            rrect(ctx, -300 + i * 62, y + 20, 52, 150, 5)
-            paint(ctx, c, 3, shade=0.85)
-    horloge(ctx, 880, 150, 70, t)
-    if rideau > 0:
-        h = 1000 * ease(min(1.0, rideau))
-        ctx.rectangle(-300, 0, 1700, h)
-        flat(ctx, (170, 174, 182))
-        for k in range(int(h // 40)):
-            ctx.move_to(-300, k * 40)
-            ctx.line_to(1400, k * 40)
-        stroke(ctx, 3, (130, 134, 142))
-    _deg(ctx, -600, SOL - 40, 1700, 2600, (110, 100, 96), (80, 72, 70))
+        for c in range(2):
+            rrect(ctx, 775 + c * 75, 470 + r * 55, 65, 45, 4)
+            stroke(ctx, 4, (120, 116, 110))
+    # horloge et lampe avec son faisceau
+    horloge(ctx, 540, 190, 62, t)
+    poly(ctx, [(500, -40), (580, -40), (600, 30), (480, 30)])
+    paint(ctx, (70, 74, 86), LW * 0.8, shade=1)
+    poly(ctx, [(490, 30), (590, 30), (760, 1100), (320, 1100)])
+    flat(ctx, (255, 250, 230), 0.10)
+    # écran « numéro appelé », affiche, plante
+    rrect(ctx, -180, 380, 230, 150, 10)
+    paint(ctx, (30, 34, 44), LW * 0.8, shade=1)
+    ecrit(ctx, "N°", -120, 425, 30, (255, 120, 80), big=True)
+    ecrit(ctx, str(47 + int(t // 9) % 3), -40, 465, 70, (255, 120, 80), big=True)
+    rrect(ctx, 1000, 380, 220, 300, 6)
+    paint(ctx, (250, 246, 236), LW * 0.8, shade=0.95)
+    ecrit(ctx, "IMPÔT 2026", 1110, 420, 28, (200, 40, 50), big=True)
+    for k in range(5):
+        rrect(ctx, 1025, 460 + k * 38, 170, 12, 6)
+        flat(ctx, (200, 200, 206))
+    rrect(ctx, 1040, 1180, 120, 140, 14)
+    paint(ctx, (180, 110, 70), LW * 0.8, shade=0.85)
+    for k in range(6):
+        a = -2.4 + k * 0.33
+        ctx.save()
+        ctx.translate(1100, 1180)
+        ctx.rotate(a + 1.57)
+        poly(ctx, [(0, 0), (30, -170), (0, -250), (-30, -170)])
+        paint(ctx, (70, 150, 90), 4, shade=0.85)
+        ctx.restore()
+    _deg(ctx, -600, SOL - 40, 1700, 2600, (120, 116, 112), (92, 88, 86))
 
 
 def guichet(ctx, x, y, w=760):
@@ -190,3 +224,92 @@ def certificats(ctx, x, y, s, n, t):
         circle(ctx, 90, 140, 50)
         stroke(ctx, 5, (40, 80, 160))
         ctx.restore()
+
+
+def page_volante(ctx, x, y, s, jour, k):
+    """Page arrachée qui vole VERS la caméra, devant les personnages (k 0 → 1) : à dessiner en DERNIER."""
+    if not 0 <= k < 1:
+        return
+    ctx.save()
+    ctx.translate(x - 420 * k, y - 260 * k + 520 * k * k)
+    ctx.rotate(-0.4 - 1.6 * k)
+    sc = s * (1 + 2.2 * k)
+    ctx.scale(sc, sc)
+    rrect(ctx, -150, -160, 300, 320, 14)
+    paint(ctx, (252, 252, 252), LW, shade=0.92)
+    rrect(ctx, -150, -160, 300, 80, 14)
+    paint(ctx, (220, 50, 60), LW, shade=0.9)
+    ecrit(ctx, "AVANT LE 31/12", 0, -120, 34, (255, 255, 255), big=True)
+    ecrit(ctx, f"J-{jour}", 0, 30, 130, INK, big=True)
+    ctx.restore()
+
+
+def plaque(ctx, x, y, s, txt):
+    """Plaque de prix posée sur le comptoir (présentoir jaune)."""
+    ctx.save()
+    ctx.translate(x, y)
+    ctx.scale(s, s)
+    poly(ctx, [(-150, 0), (150, 0), (120, -70), (-120, -70)])
+    paint(ctx, (230, 180, 60), LW, shade=0.85)
+    rrect(ctx, -110, -62, 220, 54, 8)
+    paint(ctx, (255, 220, 60), 4, shade=0.95)
+    ecrit(ctx, txt, 0, -35, 44, INK, big=True)
+    ctx.restore()
+
+
+def rideau_guichet(ctx, x, w, y_haut, y_bas, k):
+    """Rideau métallique du guichet, qui descend DEVANT l'agent (à dessiner après lui, avant le comptoir)."""
+    if k <= 0:
+        return
+    h = (y_bas - y_haut) * ease(min(1.0, k))
+    rrect(ctx, x - w / 2 - 14, y_haut - 40, w + 28, 46, 8)
+    paint(ctx, (110, 114, 124), LW * 0.8, shade=1)
+    ctx.rectangle(x - w / 2, y_haut, w, h)
+    flat(ctx, (186, 190, 198))
+    for i in range(int(h // 34)):
+        ctx.move_to(x - w / 2, y_haut + i * 34)
+        ctx.line_to(x + w / 2, y_haut + i * 34)
+    stroke(ctx, 3, (146, 150, 158))
+    rrect(ctx, x - w / 2, y_haut + h - 22, w, 22, 4)
+    paint(ctx, (150, 154, 164), 4, shade=0.9)
+    rrect(ctx, x - 40, y_haut + h - 18, 80, 14, 6)
+    flat(ctx, (70, 70, 80))
+
+
+def accessoires_comptoir(ctx, t):
+    """Sur le comptoir : présentoir à dépliants, stylo à chaînette, tampon."""
+    rrect(ctx, 920, 1200, 120, 110, 6)
+    paint(ctx, (90, 100, 120), 4, shade=0.9)
+    for i, c in enumerate(((240, 200, 80), (120, 180, 230), (240, 140, 120))):
+        rrect(ctx, 932 + i * 34, 1170 - i * 6, 30, 90, 3)
+        paint(ctx, c, 3, shade=0.9)
+    ctx.move_to(260, 1302)
+    ctx.curve_to(280, 1270, 320, 1290, 340, 1262)
+    stroke(ctx, 3, (120, 120, 130))
+    poly(ctx, [(330, 1270), (420, 1236), (426, 1248), (336, 1282)])
+    paint(ctx, (40, 60, 120), 3, shade=0.9)
+    rrect(ctx, 560, 1268, 70, 34, 6)
+    paint(ctx, (200, 50, 60), 3, shade=0.9)
+    rrect(ctx, 582, 1240, 26, 30, 4)
+    paint(ctx, (80, 60, 50), 3, shade=0.9)
+
+
+def poteau_file(ctx, x, y, s, t):
+    """Poteau de file d'attente avec corde rouge (premier plan, à dessiner en dernier)."""
+    ctx.save()
+    ctx.translate(x, y)
+    ctx.scale(s, s)
+    ellipse = None
+    rrect(ctx, -60, -20, 120, 30, 12)
+    paint(ctx, (150, 150, 160), LW, shade=0.85)
+    rrect(ctx, -16, -560, 32, 545, 10)
+    paint(ctx, (190, 190, 200), LW, shade=0.85)
+    circle(ctx, 0, -575, 26)
+    paint(ctx, (210, 210, 220), LW, shade=0.85)
+    ctx.move_to(-10, -520)
+    ctx.curve_to(-200, -380 + 6 * math.sin(t * 2), -420, -380, -620, -520)
+    stroke(ctx, 26, INK)
+    ctx.move_to(-10, -520)
+    ctx.curve_to(-200, -380 + 6 * math.sin(t * 2), -420, -380, -620, -520)
+    stroke(ctx, 16, (200, 40, 50))
+    ctx.restore()

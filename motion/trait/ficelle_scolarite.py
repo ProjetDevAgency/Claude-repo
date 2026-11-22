@@ -87,7 +87,7 @@ def construire(work):
     kev.objet = objet_kev
     agent.objet = lambda c, x, y, s: None
     sofia.objet = lambda c, x, y, s: None
-    kev.pose(0, "mains_hanches").emotion(0, "malin").pose(L(2, 0), "pointe").emotion(L(2, 0), "content")
+    kev.pose(0, "pointe").emotion(0, "malin").pose(0.9, "mains_hanches").pose(L(2, 0), "pointe").emotion(L(2, 0), "content")
     kev.pose(L(9, 0), "objet").emotion(L(9, 0), "neutre").emotion(L(10, 0), "choc").emotion(L(13, 0), "triste")
     kev.pose(L(14, 0), "leve").emotion(L(14, 0), "content").pose(L(15, 0), "repos")
     kev.pose(L(28, 0), "pointe").emotion(L(28, 0), "neutre").pose(L(30, 0), "telephone").emotion(L(30, 0), "malin")
@@ -107,16 +107,30 @@ def construire(work):
                 return j
         return 43
 
-    def s_guichet(ctx, t, lt, rideau=0.0, kev_x=230):
+    # rideau : descend sur « janvier » (l'agent ferme), remonte sur « Vous aurez tout remboursé »
+    def rideau_at(t):
+        td, tm = W(1, "janvier"), L(3, 0)
+        if td <= t < tm:
+            return (t - td) / 0.35
+        if tm <= t < tm + 0.35:
+            return 1 - (t - tm) / 0.35
+        return 0.0
+
+    def s_guichet(ctx, t, lt, rideau=None, kev_x=150):
         f_t[0] = t
-        I.accueil(ctx, t, rideau=rideau)
-        agent.draw(ctx, 640, 1700, 0.85, t, bouche=bouche(t, "A"))
-        I.guichet(ctx, 640, 1330)
-        I.calendrier(ctx, 470, 1170, 0.7, jour(t), t, t_arrache=0.25 if t < 2 else
-                     (L(22, 0) if L(22, 0) <= t < L(22, 0) + 1 else (L(33, 0) if L(33, 0) <= t < L(33, 0) + 1 else
-                                                                       (L(37, 0) if t >= L(37, 0) else None))))
-        D.etiquette(ctx, 800, 1260, 0.6, "367 €", t)
-        kev.draw(ctx, kev_x, 1880, 0.92, t, bouche=bouche(t, "K"))
+        r = rideau_at(t) if rideau is None else rideau
+        I.accueil(ctx, t)
+        agent.draw(ctx, 680, 1660, 0.82, t, bouche=bouche(t, "A"))
+        I.rideau_guichet(ctx, 600, 860, 760, 1300, r)          # le rideau tombe DEVANT l'agent
+        I.guichet(ctx, 600, 1330, w=860)
+        I.accessoires_comptoir(ctx, t)
+        I.calendrier(ctx, 440, 1180, 0.62, jour(t), t)
+        I.plaque(ctx, 760, 1312, 0.9, "367 €")
+        kev.draw(ctx, kev_x, 1900, 0.95, t, bouche=bouche(t, "K"))
+        I.poteau_file(ctx, 1010, 2000, 1.0, t)                   # premier plan, devant tout le monde
+        # pages arrachées : elles volent DEVANT Kévin, vers la caméra
+        for ta, j in ((0.3, 44), (L(22, 0) + 0.1, 43), (L(33, 0) + 0.1, 42), (L(37, 0) + 0.1, 41)):
+            I.page_volante(ctx, 440, 1180, 0.62, j, (t - ta) / 0.7)
 
     def s_hook(ctx, t, lt):
         s_guichet(ctx, t, lt)
@@ -173,8 +187,9 @@ def construire(work):
 
     def s_fond(ctx, t, lt):
         I.accueil(ctx, t)
-        agent.draw(ctx, 640, 1700, 0.85, t)
-        I.guichet(ctx, 640, 1330)
+        agent.draw(ctx, 680, 1660, 0.82, t)
+        I.guichet(ctx, 600, 1330, w=860)
+        I.accessoires_comptoir(ctx, t)
         ctx.rectangle(-600, -600, 2400, 3200)
         flat(ctx, (12, 14, 26), 0.62)
 
@@ -210,7 +225,7 @@ def construire(work):
         if L(17, 0) <= t < L(18, 0) and t >= W(17, "personne"):
             ui.panneau(ctx, 540, 520, "PERSONNE NE COCHE LA CASE", t - W(17, "personne"), rot=-0.04, size=58)
         if L(18, 0) <= t < L(19, 0) and t >= W(18, "l'erreur"):
-            ui.bulle(ctx, 600, 760, "L'erreur est chez vous.", t - W(18, "l'erreur"), size=48, cote=-1)
+            ui.bulle(ctx, 620, 880, "L'erreur est chez vous.", t - W(18, "l'erreur"), size=48, cote=-1)
 
     def s_faux(ctx, t, lt):
         s_fond(ctx, t, lt)
@@ -241,7 +256,7 @@ def construire(work):
     def s_rdv(ctx, t, lt):
         s_guichet(ctx, t, lt)
         if t >= L(29, 0):
-            ui.bulle(ctx, 600, 760, "Pas besoin de rendez-vous.", t - L(29, 0), size=48, cote=-1)
+            ui.bulle(ctx, 620, 880, "Pas besoin de rendez-vous.", t - L(29, 0), size=48, cote=-1)
 
     def s_reclam(ctx, t, lt):
         f_t[0] = t
@@ -252,7 +267,7 @@ def construire(work):
     def s_objection(ctx, t, lt):
         s_guichet(ctx, t, lt)
         if L(33, 0) <= t < L(34, 0):
-            ui.bulle(ctx, 600, 760, "Elle paie des impôts ?", t - L(33, 0), size=44, cote=-1)
+            ui.bulle(ctx, 620, 880, "Elle paie des impôts ?", t - L(33, 0), size=44, cote=-1)
 
     def s_limite(ctx, t, lt):
         s_fond(ctx, t, lt)
@@ -262,48 +277,54 @@ def construire(work):
     def s_preuve(ctx, t, lt):
         s_guichet(ctx, t, lt)
         if L(37, 0) <= t < L(38, 0):
-            ui.bulle(ctx, 600, 760, "Vous pouvez le prouver ?", t - L(37, 0), size=44, cote=-1)
+            ui.bulle(ctx, 620, 880, "Vous pouvez le prouver ?", t - L(37, 0), size=44, cote=-1)
         if t >= L(39, 0):
             k = ease((t - L(39, 0)) / 0.4)
             I.certificats(ctx, 540, 760 + 1000 * (1 - k), 0.8, 3, t)
 
-    # ── plans : grammaire La Ficelle (champ / contrechamp, panoramique éclair entre personnages, réactions,
-    #    gros plan sur chaque mot clé, une coupe toutes les ~1,6 s) ──
-    LARGE = (540, 1150, 1.0)
-    CAG = (640, 1080, 1.5)          # plan moyen sur l'agent (taille → tête)
-    CKV = (320, 1210, 1.5)           # plan moyen sur Kévin
-    CAL = (470, 1170, 2.3)            # gros plan calendrier
-    TAG = (770, 1250, 2.4)            # gros plan étiquette 367 €
-    plan(0, s_hook, (None, *LARGE), (0.8, 600, 1200, 1.9), (W(0, "trois") - 0.05, *TAG),
-         (L(1, 0), *CAG, "pan"), (W(1, "et") - 0.05, *CAL), (L(2, 0), *CKV, "pan"),
-         (W(3, "avant") - 0.05, *CAG, "pan"), (W(3, "réveillon"), *CKV, "pan"))
-    plan(4, s_rideau, (None, *LARGE), (W(4, "un") - 0.05, 290, 1160, 1.8), (W(4, "que", 1), *LARGE),
-         (L(5, 0), 640, 1050, 1.35), (W(5, "céder") - 0.05, *CAG, "pan"))
-    plan(6, s_urgence, (None, *LARGE), (W(6, "un"), *CAL), (W(6, "perdu") - 0.05, 540, 820, 1.4),
-         (W(6, "sans"), *CKV, "pan"))
-    plan(7, s_pause, (None, 540, 1150, 1.0), (W(7, "avec"), 560, 1150, 1.12), (L(8, 0), 760, 1120, 1.55, "pan"),
-         (W(8, "cent") - 0.05, 640, 820, 1.5), (W(8, "par"), 360, 1150, 1.55, "pan"))
-    plan(9, s_avis, (None, 540, 1100, 1.0), (W(9, "l'avis"), 720, 1000, 1.45), (L(10, 0), 720, 1050, 1.9),
-         (L(11, 0), 300, 1240, 1.7), (W(11, "kévin"), 640, 1050, 1.2), (L(12, 0), 700, 1080, 1.8),
-         (L(13, 0), 300, 1090, 2.1))
-    plan(14, s_abo, (None, 300, 1200, 1.7), (W(14, "kévin"), 540, 1050, 1.0), (W(14, "où"), 700, 860, 1.55, "pan"))
-    plan(15, s_loi1, (None, 540, 760, 1.0), (W(15, "un"), 540, 680, 1.25), (L(16, 0), 540, 740, 1.05),
+    # ── plans : grammaire La Ficelle, cadrages calculés (corrigé le 22 nov. après comparaison image par image) ──
+    def pm(x, y, sc):
+        """Plan moyen : de la tête aux genoux, avec de l'air au-dessus de la tête (jamais de tête coupée)."""
+        return (x, y - sc * 1000 * 0.56, 1120 / (sc * 1000 * 0.66))
+
+    LARGE = (540, 980, 1.0)                     # tout le décor, comme leur plan d'ensemble
+    MI = (560, 1180, 1.35)                      # plan de demi-ensemble : guichet + agent + Kévin à gauche
+    CKV = pm(150, 1900, 0.95)
+    CAG = pm(680, 1660, 0.82)
+    CAL = (440, 1185, 2.4)                      # gros plan calendrier
+    OBJ = (600, 1230, 1.75)                     # calendrier + plaque 367 €
+    PLQ = (760, 1285, 2.6)                      # gros plan plaque
+    PAU_L = (540, 1000, 1.0)
+    SOF = pm(760, 1840, 0.88)
+    KVP = pm(360, 1860, 0.88)
+    plan(0, s_hook, (None, *LARGE), (0.85, *OBJ), (W(0, "trois") - 0.05, *PLQ), (L(1, 0), *MI),
+         (W(1, "et"), *CAG, "pan"), (W(1, "janvier") - 0.15, *MI), (W(2, "créneau"), *CKV),
+         (W(3, "avant"), *CAG, "pan"), (W(3, "réveillon"), *MI))
+    plan(4, s_rideau, (None, *LARGE), (W(4, "un") - 0.05, *CKV), (W(4, "que", 1), *MI),
+         (L(5, 0), *LARGE), (W(5, "céder") - 0.05, *CAG, "pan"))
+    plan(6, s_urgence, (None, *LARGE), (W(6, "un"), *CAL), (W(6, "perdu") - 0.05, *LARGE), (W(6, "sans"), *CKV, "pan"))
+    plan(7, s_pause, (None, *PAU_L), (L(8, 0), *SOF, "pan"), (W(8, "cent") - 0.05, 640, 900, 1.4),
+         (W(8, "par"), *KVP, "pan"))
+    plan(9, s_avis, (None, 540, 1000, 1.0), (W(9, "l'avis"), 720, 1000, 1.45), (L(10, 0), 720, 1050, 1.9),
+         (L(11, 0), *pm(300, 1880, 0.9)), (W(11, "kévin"), 560, 1050, 1.15), (L(12, 0), 700, 1080, 1.8),
+         (L(13, 0), *pm(300, 1880, 0.9)))
+    plan(14, s_abo, (None, *pm(300, 1880, 0.9)), (W(14, "kévin"), 540, 1000, 1.0), (W(14, "où"), 700, 880, 1.5, "pan"))
+    plan(15, s_loi1, (None, 540, 760, 1.0), (W(15, "un"), 540, 700, 1.2), (L(16, 0), 540, 740, 1.05),
          (W(16, "cent") - 0.05, 540, 770, 1.3), (W(16, "cent", 1) - 0.05, 540, 860, 1.4), (W(16, "sans"), 540, 1000, 1.25))
-    plan(17, s_case, (None, *LARGE), (W(17, "personne"), 540, 760, 1.3), (L(18, 0), *CAG, "pan"),
-         (W(18, "l'erreur"), 620, 900, 1.35))
+    plan(17, s_case, (None, *LARGE), (W(17, "personne"), *MI), (L(18, 0), *CAG, "pan"), (W(18, "l'erreur"), *MI))
     plan(19, s_faux, (None, 540, 820, 1.25))
-    plan(20, s_loi2, (None, 540, 760, 1.0), (L(21, 0), 540, 680, 1.25), (W(21, "deux"), 540, 760, 1.45))
-    plan(22, s_compte, (None, 540, 900, 1.0), (L(23, 0) + 0.3, 300, 800, 1.6), (L(24, 0) + 0.3, 540, 860, 1.6, "pan"),
-         (L(25, 0) + 0.3, 780, 920, 1.6, "pan"), (L(26, 0), 540, 1000, 1.05), (W(26, "trois"), 540, 1220, 1.6),
+    plan(20, s_loi2, (None, 540, 760, 1.0), (L(21, 0), 540, 700, 1.2), (W(21, "deux"), 540, 760, 1.4))
+    plan(22, s_compte, (None, 540, 900, 1.0), (L(23, 0) + 0.3, 300, 800, 1.5), (L(24, 0) + 0.3, 540, 860, 1.5, "pan"),
+         (L(25, 0) + 0.3, 780, 920, 1.5, "pan"), (L(26, 0), 540, 1000, 1.05), (W(26, "trois"), 540, 1220, 1.6),
          (L(27, 0), 860, 420, 1.8), (W(27, "expire"), 300, 400, 1.7, "pan"))
-    plan(28, s_rdv, (None, *CKV), (L(29, 0), *CAG, "pan"), (W(29, "rendez-vous"), 600, 820, 1.5))
+    plan(28, s_rdv, (None, *CKV), (L(29, 0), *CAG, "pan"), (W(29, "rendez-vous"), *MI))
     plan(30, s_reclam, (None, 540, 820, 1.0), (W(30, "un"), 540, 520, 1.6), (L(31, 0), 540, 600, 1.7),
          (L(32, 0), 540, 820, 1.7), (W(32, "l'article"), 540, 1000, 1.25))
-    plan(33, s_objection, (None, *CAG), (W(33, "au"), 600, 820, 1.4))
+    plan(33, s_objection, (None, *MI), (W(33, "elle"), *CAG, "pan"), (W(33, "au"), *MI))
     plan(34, s_limite, (None, 540, 760, 1.0), (L(35, 0), 540, 700, 1.3), (W(35, "si"), 540, 760, 1.45),
          (L(36, 0), 540, 860, 1.45))
-    plan(37, s_preuve, (None, *CAG), (W(37, "lycée"), 600, 820, 1.4), (L(38, 0), *LARGE),
-         (W(38, "grâce"), 300, 1160, 1.7, "pan"), (L(39, 0), 540, 860, 1.3), (W(39, "pour"), 540, 760, 1.6))
+    plan(37, s_preuve, (None, *MI), (W(37, "lycée"), *CAG, "pan"), (L(38, 0), *LARGE),
+         (W(38, "grâce"), *CKV, "pan"), (L(39, 0), *LARGE), (W(39, "pour"), 540, 820, 1.5))
 
     # ── compteur, sous-titres, sons ──
     f.ecran(lambda ctx, t: ui.compteur(ctx, t, "CE QUE L'ÉTAT DOIT À SA MÈRE",
