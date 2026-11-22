@@ -130,3 +130,18 @@ Décisions proposées au client (en attente de son accord pour les vidéos déj�
   ne se comparent qu'à période égale. Le salaire n'y apparaît pas encore (cache).
 - **Facebook** : Reel colis 14 affichages, Reel salaire 1 affichage, 0 vue de 3 s : la page est neuve, sans abonnés ; rien à
   analyser avant plusieurs jours.
+
+## 22 nov. 2026 — boucle du matin (relancée à ~12 h ; données Windsor du 22/11 à 11 h UTC)
+| vidéo | publiée | âge | vues | enreg. | partages | temps moyen | en entier | 3 s | 5 s | 10 s | 30 s | 60 s |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| colis_perdu | 21/11 12 h | ~24 h | 382 | 2 | 0 | 23,1 s | 25 % | 53 % | 44 % | 34 % | 25 % | 15 % |
+| salaire_retard (test gain chiffré) | 21/11 20 h | ~16 h | 368 | 1 | 0 | 17,5 s | 17 % | 58 % | 42 % | 28 % | 21 % | 13 % |
+| hausse_loyer (réplique du méchant) | 22/11 10 h | ~2 h | 141 | 2 | 0 | 20,7 s | 23 % | 55 % | 46 % | 36 % | 31 % | 17 % |
+Autres : 6 aides 602 vues / 26 enreg. / 8 partages (la liste continue d'être enregistrée) ; pisciniste 608 ; Anthropic 55,3 k ;
+permis 27,9 k.
+- Aucune des trois n'atteint encore 61 % à 3 s ni 1 000 vues. Trop tôt pour juger (règle des 48 h : mesure lundi soir pour
+  le salaire, mardi pour colis/loyer) ; le salaire est remonté de 51 à 58 % à 3 s avec plus de vues.
+- Le loyer tient le mieux le milieu (31 % encore là à 30 s, record des vidéos trait) : la carte du calcul retient.
+- Partages : 0 sur les trois vidéos trait ; enregistrements 1-2. L'élément partage / enregistrement reste à trouver :
+  d'où les tests « carte récap à garder » et « pote concerné » sur les vidéos du 23/11.
+- Facebook : le Reel loyer est parti ~11 h 55 ; la page n'a encore aucune vue (aucun abonné).

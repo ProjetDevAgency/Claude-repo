@@ -293,5 +293,5 @@ def pieces_flottantes(ctx, t, n=14, couleur=(230, 190, 60)):
         k = (t * 0.12 + i / n) % 1
         x = (i * 173) % 1180 - 50 + 30 * math.sin(t + i)
         y = 2000 - k * 2400
-        ellipse(ctx, x, y, 30, 30 * abs(math.cos(t * 2 + i)) + 3)
-        paint(ctx, couleur, 4, shade=0.85, alpha=0.5)
+        ellipse(ctx, x, y, 38, 38 * abs(math.cos(t * 2 + i)) + 3)
+        paint(ctx, couleur, 4, shade=0.85, alpha=0.7)
