@@ -192,6 +192,28 @@ class Film:
 
     _flou_courant = 0.0
 
+    def combler(self, trous, pas=1.4):
+        """Règle des 1 à 2 s : dans chaque passage trop long sans changement [(début, durée)], ajoute des coupes à
+        intervalle `pas`, en alternant un gros plan (×1,3 sur le centre du cadrage en cours) et le retour au cadrage
+        de départ. Les clés sont ajoutées au plan qui contient l'instant."""
+        for a, g in trous:
+            k, t = 0, a + pas
+            while t < a + g - 0.4:
+                plan = [p for p in self.plans if p["t0"] <= t][-1]
+                cam = plan["cam"]
+                if callable(cam):
+                    break
+                lt = t - plan["t0"]
+                base = [c for c in cam if c[0] <= lt][-1] if any(c[0] <= lt for c in cam) else cam[0]
+                _, x, y, z = base[:4]
+                nz = z * 1.3 if k % 2 == 0 else z
+                cam.append((lt, x, y - (60 if k % 2 == 0 else 0), nz))
+                cam.sort(key=lambda c: c[0])
+                k += 1
+                t += pas
+        return self
+
+
     @staticmethod
     def _flou_h(src, dx):
         """Flou de mouvement horizontal (panoramique éclair), dx en pixels (signe = sens)."""
