@@ -69,7 +69,7 @@ def construire(work):
 
     def plan(li, scene, *plans, hud=None):
         t0 = L(li, 0)
-        cam = [(0 if ta is None else max(0.0, ta - t0 - 0.04), x, y, z) for ta, x, y, z in plans]
+        cam = [(0 if k[0] is None else max(0.0, k[0] - t0 - 0.04), *k[1:]) for k in plans]
         f.plan(L(li, 0) if li else 0, scene, cam, fouet=bool(li), hud=hud)
 
     kev, agent, sofia = Perso(**KEVIN), Perso(**AGENT), Perso(**SOFIA)
@@ -148,7 +148,10 @@ def construire(work):
         kev.draw(ctx, 300, 1880, 0.9, t, bouche=bouche(t, "N"))
         n = 1 if t < L(11, 0) else 3
         for i in range(n):
-            I.avis(ctx, 720 - i * 40, 800 + i * 50, 0.75, 2026 - i, f"Revenus {2025 - i}", rot=0.05 - i * 0.06)
+            t_in = L(9, 0) if i == 0 else L(11, 0) + 0.3 + 0.15 * i
+            k = ease((t - t_in) / 0.35)
+            I.avis(ctx, 720 - i * 40, 800 + i * 50 + 1000 * (1 - k), 0.75, 2026 - i, f"Revenus {2025 - i}",
+                   rot=0.05 - i * 0.06)
         if L(10, 0) <= t < L(11, 0) or L(12, 0) <= t < L(13, 0):
             ui.panneau(ctx, 720, 1300, "RIEN", t - (L(10, 0) if t < L(11, 0) else L(12, 0)), rot=-0.05, size=110)
 
@@ -169,9 +172,11 @@ def construire(work):
         C.grand_tel(ctx, 700, 900, 0.7, "TikTok", couleur=(20, 20, 26), contenu=lambda c, *a: ecran_abo(c, *a, t), t=t)
 
     def s_fond(ctx, t, lt):
-        D.fond_sombre(ctx, t, (26, 40, 44))
-        __import__("decors_liste").rayons(ctx, 540, 700, t * 2.5, (120, 200, 190), alpha=0.12)
-        __import__("decors_liste").pieces_flottantes(ctx, t * 2.0, n=26)
+        I.accueil(ctx, t)
+        agent.draw(ctx, 640, 1700, 0.85, t)
+        I.guichet(ctx, 640, 1330)
+        ctx.rectangle(-600, -600, 2400, 3200)
+        flat(ctx, (12, 14, 26), 0.62)
 
     def carte_loi(ctx, t, t0, titre, sous, lignes_):
         k = back((t - t0) / 0.3)
@@ -224,8 +229,9 @@ def construire(work):
                                                     (24, 2025, "Revenus 2024 · Seconde", "+153 €"),
                                                     (25, 2024, "Revenus 2023 · Collège", "+61 €"))):
             if t >= L(li, 0):
-                k = back((t - L(li, 0)) / 0.3)
-                I.avis(ctx, 300 + i * 240, 760 + i * 60, 0.62 * k, annee, rev, valeur=val, rot=-0.08 + i * 0.08)
+                k = ease((t - L(li, 0)) / 0.35)
+                I.avis(ctx, 300 + i * 240, 760 + i * 60 + 900 * (1 - k), 0.62, annee, rev, valeur=val,
+                       rot=-0.08 + i * 0.08)
         if t >= W(26, "trois") - 0.1:
             ui.panneau(ctx, 540, 1250, "TOTAL : 367 €", t - W(26, "trois") + 0.1, rot=-0.04, size=100,
                        fond=(255, 210, 40), bord=INK, col=INK)
@@ -259,29 +265,46 @@ def construire(work):
         if L(37, 0) <= t < L(38, 0):
             ui.bulle(ctx, 600, 760, "Vous pouvez le prouver ?", t - L(37, 0), size=44, cote=-1)
         if t >= L(39, 0):
-            I.certificats(ctx, 540, 760, 0.8 * back((t - L(39, 0)) / 0.35), 3, t)
+            k = ease((t - L(39, 0)) / 0.4)
+            I.certificats(ctx, 540, 760 + 1000 * (1 - k), 0.8, 3, t)
 
-    # ── plans (calqués sur leurs coupes : large → gros plan sur le mot → large) ──
+    # ── plans : grammaire La Ficelle (champ / contrechamp, panoramique éclair entre personnages, réactions,
+    #    gros plan sur chaque mot clé, une coupe toutes les ~1,6 s) ──
     LARGE = (540, 1150, 1.0)
-    plan(0, s_hook, (None, *LARGE), (W(0, "trois") - 0.1, 620, 1180, 1.9), (L(1, 0), *LARGE))
-    plan(2, s_hook, (None, 300, 1300, 1.35), (L(3, 0), 360, 1250, 1.45))
-    plan(4, s_rideau, (None, *LARGE), (W(4, "un"), 560, 900, 1.3), (L(5, 0), 640, 1100, 1.25))
-    plan(6, s_urgence, (None, *LARGE), (W(6, "perdu"), 540, 800, 1.35))
-    plan(7, s_pause, (None, 540, 1150, 1.0), (L(8, 0), 760, 1100, 1.4), (W(8, "cent"), 640, 800, 1.35))
-    plan(9, s_avis, (None, 540, 1100, 1.0), (L(10, 0), 720, 1000, 1.6), (L(11, 0), 600, 1100, 1.1),
-         (L(12, 0), 700, 1050, 1.5), (L(13, 0), 300, 1100, 1.4))
-    plan(14, s_abo, (None, 540, 1050, 1.0), (W(14, "où"), 700, 800, 1.5))
-    plan(15, s_loi1, (None, 540, 800, 1.0), (L(16, 0), 540, 760, 1.15), (W(16, "sans"), 540, 1000, 1.3))
-    plan(17, s_case, (None, *LARGE), (L(18, 0), 620, 1080, 1.25))
-    plan(19, s_faux, (None, 540, 900, 1.0))
-    plan(20, s_loi2, (None, 540, 800, 1.0), (W(21, "deux"), 540, 680, 1.3))
-    plan(22, s_compte, (None, 540, 900, 1.0), (L(23, 0), 300, 800, 1.5), (L(24, 0), 540, 850, 1.5),
-         (L(25, 0), 780, 900, 1.5), (L(26, 0), 540, 1000, 1.05), (L(27, 0), 600, 500, 1.4))
-    plan(28, s_rdv, (None, 300, 1300, 1.4), (L(29, 0), 620, 1080, 1.25))
-    plan(30, s_reclam, (None, 540, 900, 1.0), (L(31, 0), 540, 700, 1.3), (L(32, 0), 540, 900, 1.3))
-    plan(33, s_objection, (None, 620, 1080, 1.25))
-    plan(34, s_limite, (None, 540, 800, 1.0), (L(36, 0), 540, 850, 1.3))
-    plan(37, s_preuve, (None, 620, 1080, 1.25), (L(38, 0), *LARGE), (L(39, 0), 540, 900, 1.3))
+    CAG = (640, 1080, 1.5)          # plan moyen sur l'agent (taille → tête)
+    CKV = (320, 1210, 1.5)           # plan moyen sur Kévin
+    CAL = (470, 1170, 2.3)            # gros plan calendrier
+    TAG = (770, 1250, 2.4)            # gros plan étiquette 367 €
+    plan(0, s_hook, (None, *LARGE), (0.8, 600, 1200, 1.9), (W(0, "trois") - 0.05, *TAG),
+         (L(1, 0), *CAG, "pan"), (W(1, "et") - 0.05, *CAL), (L(2, 0), *CKV, "pan"),
+         (W(3, "avant") - 0.05, *CAG, "pan"), (W(3, "réveillon"), *CKV, "pan"))
+    plan(4, s_rideau, (None, *LARGE), (W(4, "un") - 0.05, 290, 1160, 1.8), (W(4, "que", 1), *LARGE),
+         (L(5, 0), 640, 1050, 1.35), (W(5, "céder") - 0.05, *CAG, "pan"))
+    plan(6, s_urgence, (None, *LARGE), (W(6, "un"), *CAL), (W(6, "perdu") - 0.05, 540, 820, 1.4),
+         (W(6, "sans"), *CKV, "pan"))
+    plan(7, s_pause, (None, 540, 1150, 1.0), (W(7, "avec"), 560, 1150, 1.12), (L(8, 0), 760, 1120, 1.55, "pan"),
+         (W(8, "cent") - 0.05, 640, 820, 1.5), (W(8, "par"), 360, 1150, 1.55, "pan"))
+    plan(9, s_avis, (None, 540, 1100, 1.0), (W(9, "l'avis"), 720, 1000, 1.45), (L(10, 0), 720, 1050, 1.9),
+         (L(11, 0), 300, 1240, 1.7), (W(11, "kévin"), 640, 1050, 1.2), (L(12, 0), 700, 1080, 1.8),
+         (L(13, 0), 300, 1090, 2.1))
+    plan(14, s_abo, (None, 300, 1200, 1.7), (W(14, "kévin"), 540, 1050, 1.0), (W(14, "où"), 700, 860, 1.55, "pan"))
+    plan(15, s_loi1, (None, 540, 760, 1.0), (W(15, "un"), 540, 680, 1.25), (L(16, 0), 540, 740, 1.05),
+         (W(16, "cent") - 0.05, 540, 770, 1.3), (W(16, "cent", 1) - 0.05, 540, 860, 1.4), (W(16, "sans"), 540, 1000, 1.25))
+    plan(17, s_case, (None, *LARGE), (W(17, "personne"), 540, 760, 1.3), (L(18, 0), *CAG, "pan"),
+         (W(18, "l'erreur"), 620, 900, 1.35))
+    plan(19, s_faux, (None, 540, 820, 1.25))
+    plan(20, s_loi2, (None, 540, 760, 1.0), (L(21, 0), 540, 680, 1.25), (W(21, "deux"), 540, 760, 1.45))
+    plan(22, s_compte, (None, 540, 900, 1.0), (L(23, 0) + 0.3, 300, 800, 1.6), (L(24, 0) + 0.3, 540, 860, 1.6, "pan"),
+         (L(25, 0) + 0.3, 780, 920, 1.6, "pan"), (L(26, 0), 540, 1000, 1.05), (W(26, "trois"), 540, 1220, 1.6),
+         (L(27, 0), 860, 420, 1.8), (W(27, "expire"), 300, 400, 1.7, "pan"))
+    plan(28, s_rdv, (None, *CKV), (L(29, 0), *CAG, "pan"), (W(29, "rendez-vous"), 600, 820, 1.5))
+    plan(30, s_reclam, (None, 540, 820, 1.0), (W(30, "un"), 540, 520, 1.6), (L(31, 0), 540, 600, 1.7),
+         (L(32, 0), 540, 820, 1.7), (W(32, "l'article"), 540, 1000, 1.25))
+    plan(33, s_objection, (None, *CAG), (W(33, "au"), 600, 820, 1.4))
+    plan(34, s_limite, (None, 540, 760, 1.0), (L(35, 0), 540, 700, 1.3), (W(35, "si"), 540, 760, 1.45),
+         (L(36, 0), 540, 860, 1.45))
+    plan(37, s_preuve, (None, *CAG), (W(37, "lycée"), 600, 820, 1.4), (L(38, 0), *LARGE),
+         (W(38, "grâce"), 300, 1160, 1.7, "pan"), (L(39, 0), 540, 860, 1.3), (W(39, "pour"), 540, 760, 1.6))
 
     # ── compteur, sous-titres, sons ──
     f.ecran(lambda ctx, t: ui.compteur(ctx, t, "CE QUE L'ÉTAT DOIT À SA MÈRE",

@@ -29,6 +29,7 @@ SATURATION = float(os.environ.get("TRAIT_SATURATION", "1.35"))
 # « zoom » = zooms / dézooms continus (refusé) ; « libre » = ancien mode glissé.
 CAMERA = os.environ.get("TRAIT_CAMERA", "plans")
 PUSH = 0.035
+DUREE_PAN = 0.22
 
 class Film:
     def __init__(self, voice, words, fin=None):
@@ -100,18 +101,28 @@ class Film:
         l'autre (pas de glissement), et pendant le plan la caméra pousse très lentement vers le sujet (+3,5 % par
         seconde, 12 % maximum). Gros plan sur un mot = une clé serrée posée sur ce mot, puis une clé qui revient au
         large. Deux clés presque identiques (moins de 20 % de zoom et 150 px d'écart) ne font pas de coupe."""
+        # Une clé peut porter un 5e élément « pan » : au lieu d'une coupe, PANORAMIQUE ÉCLAIR de 0,22 s depuis le plan
+        # précédent, avec flou de mouvement (passage d'un personnage à l'autre, comme La Ficelle).
         garde = [keys[0]]
         for k in keys[1:]:
-            _, x0, y0, z0 = garde[-1]
-            _, x1, y1, z1 = k
-            if abs(z1 - z0) / z0 >= 0.2 or math.hypot(x1 - x0, y1 - y0) * z0 >= 150:
+            _, x0, y0, z0 = garde[-1][:4]
+            _, x1, y1, z1 = k[:4]
+            if len(k) > 4 or abs(z1 - z0) / z0 >= 0.2 or math.hypot(x1 - x0, y1 - y0) * z0 >= 150:
                 garde.append(k)
-        cur = garde[0]
-        for k in garde[1:]:
+        i = 0
+        for j, k in enumerate(garde):
             if lt >= k[0]:
-                cur = k
-        ta, x, y, z = cur
+                i = j
+        ta, x, y, z = garde[i][:4]
         pousse = 1 + min(0.12, PUSH * max(0.0, lt - max(0.0, ta)))
+        Film._flou_courant = 0.0
+        if i > 0 and len(garde[i]) > 4 and lt < ta + DUREE_PAN:
+            _, xp, yp, zp = garde[i - 1][:4]
+            pp = 1 + min(0.12, PUSH * max(0.0, ta - max(0.0, garde[i - 1][0])))
+            u = (lt - ta) / DUREE_PAN
+            k = u * u * (3 - 2 * u)
+            Film._flou_courant = (x - xp) * z * 4 * u * (1 - u) / DUREE_PAN * 0.06
+            return [xp + (x - xp) * k, yp + (y - yp) * k, zp * pp + (z * pousse - zp * pp) * k]
         return [x, y, z * pousse]
 
     @staticmethod
@@ -152,8 +163,18 @@ class Film:
         ctx.translate(W / 2 + sx, H / 2 + sy)
         ctx.scale(z, z)
         ctx.translate(-cx, -cy)
+        Film._flou_courant = 0.0
+        cx, cy, z = self._camera(plan["cam"], lt, self.plans.index(plan))
+        ctx.restore()
+        ctx.save()
+        ctx.translate(W / 2 + sx, H / 2 + sy)
+        ctx.scale(z, z)
+        ctx.translate(-cx, -cy)
         plan["scene"](ctx, t, lt)
         ctx.restore()
+        if abs(Film._flou_courant) > 1:
+            surf = self._flou_h(surf, Film._flou_courant)
+            ctx = cairo.Context(surf)
         vignette(ctx, 0.5)
         if plan["hud"]:
             plan["hud"](ctx, t, lt)
@@ -164,6 +185,19 @@ class Film:
             fn(ctx, t)
         surf.flush()
         return surf
+
+    _flou_courant = 0.0
+
+    @staticmethod
+    def _flou_h(src, dx):
+        """Flou de mouvement horizontal (panoramique éclair), dx en pixels (signe = sens)."""
+        out = cairo.ImageSurface(cairo.FORMAT_ARGB32, W, H)
+        c = cairo.Context(out)
+        n = 8
+        for j in range(n):
+            c.set_source_surface(src, -dx * (j / (n - 1) - 0.5), 0)
+            c.paint_with_alpha(1.0 / (j + 1))
+        return out
 
     @staticmethod
     def _fouet(src, k):
