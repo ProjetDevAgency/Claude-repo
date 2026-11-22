@@ -7,7 +7,7 @@ Ces consignes REMPLACENT `prompts/boucle_consignes.md` (ancien moteur, publicati
 ## Règle de l'avance (décision du client, 21 nov.)
 **Avant de produire, lire `prompts/publications_metricool.md` : un créneau déjà rempli est SAUTÉ** (ex. : le 22/11 20 h est
 déjà pris par la vidéo liste ; ce matin-là, la boucle fait seulement le 10 h et le 15 h du 23/11).
-Chaque matin (jour J), la boucle fabrique et programme 3 vidéos : **le 20 h de J**, puis **le 10 h et le 15 h de J+1**,
+Chaque matin (jour J), la boucle fabrique et programme 3 vidéos (dont 1 vidéo « Ficelle », voir plus bas) : **le 20 h de J**, puis **le 10 h et le 15 h de J+1**,
 dans cet ordre. Le client garde ainsi environ un jour d'avance (utile quand TikTok passe en manuel : les paquets du
 10 h et du 15 h de J+1 lui arrivent dès J). TikTok : Metricool à chaque créneau (sous 20 par mois), sinon paquet envoyé
 dès que la vidéo est prête. YouTube et Facebook : fichiers dans publication/ + réveils send_later aux 3 créneaux.
@@ -153,6 +153,33 @@ Exemple : `motion/trait/demo_camera_plans.py`.
    « Cas type, montants indicatifs. » (+ limite de la règle si besoin), **5 hashtags** dont des mots que les gens cherchent.
 3. Vérifier avec `getScheduledPosts` que la publication est bien là, à 12 h, non brouillon. Ne toucher à aucune autre.
 4. Enregistrer `scripts/trait/<slug>_description.txt` (description, commentaire, réglages).
+
+## VIDÉO « FICELLE » : 1 vidéo sur 3 chaque jour (client, 22 nov.)
+Objectif : améliorer le moteur H1 en comparant chaque jour 2 vidéos H1 et 1 vidéo calquée sur La Ficelle. Notre copie des
+« 6 aides » (mal faite) a les meilleurs taux du compte : 4,3 % d'enregistrements, 1,3 % de partages.
+1. **Créneau** : il tourne (jour 1 : 20 h, jour 2 : 10 h, jour 3 : 15 h, puis on recommence) pour que l'heure ne fausse pas la
+   comparaison. Première vidéo Ficelle : le 23/11 à 20 h.
+2. **Choix** : `yt-dlp --flat-playlist --playlist-end 30 --print "%(id)s | %(view_count)s | %(title)s"
+   https://www.tiktok.com/@laficelle_off` ; prendre leur vidéo la plus vue (≥ 100 k) des 30 dernières dont le sujet n'est
+   pas dans `sujets_faits_trait.md`.
+3. **Analyse de leur vidéo** (la boucle la télécharge avec yt-dlp, dans le scratchpad) : transcription horodatée (Scribe),
+   une image toutes les 0,5 s sur les 15 premières secondes puis toutes les 2 s. Noter dans `prompts/ficelle/<id>.md` :
+   chaque temps fort (début, durée, ce qui est dit, ce qu'on voit, cadrage : large / gros plan / coupe), le compteur, les
+   cartes, le titre écrit, la durée totale, et **chaque appel à l'action** avec sa forme et son moment (abonnement,
+   partage, question pour les commentaires).
+4. **Script calque** (`scripts/modele/F<n>_<slug>.dial`) : même déroulé temps fort par temps fort, même ordre, même durée
+   (PAS la règle des 64 s ni le vérificateur H1), mêmes appels à l'action aux mêmes moments et sous la même forme
+   (« … est abonné à Où va ton argent », envoyer la vidéo à un proche, question finale), mêmes faits vérifiés dans
+   2 sources. Les phrases sont réécrites avec nos mots et nos personnages (Kévin et ses proches) : jamais plus de 5 mots
+   d'affilée identiques à leur texte (hors termes de loi, chiffres et noms d'aides), pour que TikTok ne la classe pas en
+   copie et qu'ils ne puissent pas la signaler.
+5. **Vidéo** : même mise en scène (type d'ouverture, coupes et gros plans aux mêmes instants, cartes, compteur), avec notre
+   moteur (dessin trait, saturation +35 %, caméra « plans », Kévin dès l'image 0), prononciation vérifiée, mouvement ≥ 6 %.
+6. **Description** calquée sur la leur (structure, liste, question finale), réécrite.
+7. **Suivi** : `videos_trait.csv`, colonne test = « FICELLE <id> » (pas de test d'accroche dessus). Chaque jour, comparer
+   la Ficelle aux 2 H1 du même jour (rétention à 3 s, vues, (enreg. + partages) / vues, commentaires, abonnés gagnés).
+   Le lundi : lister ce que la structure Ficelle fait mieux que H1, chiffres à l'appui, et PROPOSER au client les
+   changements du moteur H1 (`methode_ecriture.md`) ; ne rien changer sans son accord.
 
 ## RÈGLE DU CLIENT (21 nov., 20 h) : UNE VIDÉO = UN TEST. Elle REMPLACE les règles de test plus bas (témoins, 3 vidéos, 7 jours).
 « On change rien de ce qui est déjà fait, mais on doit tester une nouvelle accroche à chaque vidéo. Dès que quelque chose
