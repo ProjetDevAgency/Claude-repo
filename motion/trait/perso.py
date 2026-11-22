@@ -12,6 +12,11 @@ import math
 from dessin import INK, LW, circle, dark, ease, ellipse, flat, mix, ombre_sol, paint, poly, rrect, stroke, tube
 
 # angles en degrés : (épaule, coude) ; épaule 0 = bras le long du corps, + = vers l'extérieur / le haut
+import os as _os
+# Mouvement de repos (respiration, balancement, tête) : 0,25 = calme comme La Ficelle (mesure du 22 nov. : chez eux un
+# personnage ne bouge que la bouche entre deux gestes) ; 1 = ancien réglage.
+CALME = float(_os.environ.get("TRAIT_CALME", "0.25"))
+
 POSES = {
     "repos": ((8, 6), (8, 6)),
     "mains_hanches": ((38, -95), (38, -95)),
@@ -78,8 +83,8 @@ class Perso:
         (pg, pd), _, pose_nom = self._pose_at(t)
         emo, de = self._emo_at(t)
         ph = self.seed * 1.7
-        souffle = math.sin(t * 2.2 + ph) * 5
-        bal = math.sin(t * 1.1 + ph) * 1.6
+        souffle = math.sin(t * 2.2 + ph) * 5 * CALME
+        bal = math.sin(t * 1.1 + ph) * 1.6 * CALME
         sursaut = 0.0
         if emo == "choc":
             sursaut = -28 * math.exp(-de * 7) * math.cos(de * 22)      # petit saut de surprise
@@ -126,7 +131,7 @@ class Perso:
             hy -= 4
         ctx.save()
         ctx.translate(hx, hy)
-        ctx.rotate(math.radians(math.sin(t * 0.9 + ph) * 2.5 + regard * 4))
+        ctx.rotate(math.radians(math.sin(t * 0.9 + ph) * 2.5 * CALME + regard * 4))
         rrect(ctx, -26, 70, 52, 50, 10)
         paint(ctx, dark(self.peau, 0.9), lw, shade=1)
         for sx in (-1, 1):

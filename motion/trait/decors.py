@@ -201,7 +201,7 @@ def contrat(ctx, x, y, s, rot=0.0, lignes=None, tampon=None, tampon_k=0.0):
 
 def etiquette(ctx, x, y, s, txt, t, couleur=(255, 214, 60), txt_col=INK):
     """Étiquette de prix accrochée par une ficelle, qui se balance."""
-    a = math.sin(t * 3.1) * 0.12 * math.exp(-t * 0.4) + math.sin(t * 1.3) * 0.04
+    a = math.sin(t * 3.1) * 0.12 * math.exp(-t * 0.4) + math.sin(t * 1.3) * 0.01
     ctx.save()
     ctx.translate(x, y)
     ctx.rotate(a)

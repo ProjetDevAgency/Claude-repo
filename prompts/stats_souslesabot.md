@@ -155,3 +155,17 @@ elle s'est démarquée : ~1 personne a trouvé ta publication utile grâce aux r
 - Conséquence pour la boucle : la vidéo « Ficelle » quotidienne (liste / démarche utile, modèle de message à l'écran) est
   justifiée ; dans les vidéos H1 aussi, viser l'utilité « à garder » (carte récap, démarche, modèle) et des mots que les gens
   cherchent (description et titre avec les termes de recherche : « réduction d'impôt lycée », « colis abîmé que faire »…).
+
+### 22 nov. au soir — analyse image par image (30 images/s) : La Ficelle contre notre calque
+Outil : `scripts/analyse_mouvement.py <vidéo> [<vidéo>]` (flux optique, mouvement de caméra retiré).
+| mesure | La Ficelle | nous avant | nous après correction |
+|---|---|---|---|
+| éléments qui bougent en même temps (médiane) | 8 | 20 (30 sur les 20 premières s) | 7 |
+| images où au moins 3 éléments bougent | 80 % | 98 % | 73 % |
+| durée médiane d'un mouvement | 0,10 s | 0,07 s | 0,07 s |
+| éléments dessinés par image | 70 | 67 | 64 |
+Cause trouvée : la poussée continue de la caméra (+3,5 %/s) faisait glisser toute l'image en permanence (sans elle : 6
+éléments), plus la « vie » des personnages (respiration ±5 px, balancement, tête) et les cartes qui flottaient. Chez eux,
+entre deux gestes, seule la bouche bouge ; les zooms sont des petits coups (31 % des images).
+Corrections dans le moteur (toutes les vidéos) : zoom d'entrée de plan court (+2,5 % en 0,6 s) puis plan fixe ; mouvement de
+repos des personnages ×0,25 (perso.CALME) ; étiquettes et cartes qui ne flottent plus.

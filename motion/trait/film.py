@@ -29,6 +29,10 @@ SATURATION = float(os.environ.get("TRAIT_SATURATION", "1.35"))
 # « zoom » = zooms / dézooms continus (refusé) ; « libre » = ancien mode glissé.
 CAMERA = os.environ.get("TRAIT_CAMERA", "plans")
 PUSH = 0.035
+# Mesure du 22 nov. : une poussée continue fait glisser toute l'image (30 éléments qui bougent contre 15 chez La Ficelle).
+# On la remplace par un petit zoom d'entrée de plan (+2,5 % en 0,6 s), puis plan FIXE.
+ZOOM_ENTREE = 0.025
+DUREE_ENTREE = 0.6
 DUREE_PAN = 0.22
 
 class Film:
@@ -114,11 +118,11 @@ class Film:
             if lt >= k[0]:
                 i = j
         ta, x, y, z = garde[i][:4]
-        pousse = 1 + min(0.12, PUSH * max(0.0, lt - max(0.0, ta)))
+        pousse = 1 + ZOOM_ENTREE * ease(min(1.0, max(0.0, lt - max(0.0, ta)) / DUREE_ENTREE))
         Film._flou_courant = 0.0
         if i > 0 and len(garde[i]) > 4 and lt < ta + DUREE_PAN:
             _, xp, yp, zp = garde[i - 1][:4]
-            pp = 1 + min(0.12, PUSH * max(0.0, ta - max(0.0, garde[i - 1][0])))
+            pp = 1 + ZOOM_ENTREE * ease(min(1.0, max(0.0, ta - max(0.0, garde[i - 1][0])) / DUREE_ENTREE))
             u = (lt - ta) / DUREE_PAN
             k = u * u * (3 - 2 * u)
             Film._flou_courant = (x - xp) * z * 4 * u * (1 - u) / DUREE_PAN * 0.06

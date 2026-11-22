@@ -181,8 +181,7 @@ def construire(work):
     def carte_loi(ctx, t, t0, titre, sous, lignes_):
         k = back((t - t0) / 0.3)
         ctx.save()
-        ctx.translate(540 + 16 * math.sin(t * 1.6), 620 + 18 * math.sin(t * 1.1))
-        ctx.rotate(0.015 * math.sin(t * 1.3))
+        ctx.translate(540, 620)
         ctx.scale(k, k)
         rrect(ctx, -420, -260, 840, 520, 24)
         paint(ctx, (252, 250, 244), 6, shade=0.95)
@@ -201,7 +200,7 @@ def construire(work):
                       ["Enfant scolarisé", "= impôt en moins"])
         else:
             n = 1 + (t >= W(16, "cent")) + (t >= W(16, "cent", 1) - 0.1)
-            I.tableau(ctx, 540 + 16 * math.sin(t * 1.4), 700, 1.2, n, t)
+            I.tableau(ctx, 540, 700, 1.2, n, t)
             if t >= W(16, "sans"):
                 ui.panneau(ctx, 540, 1100, "SANS FACTURE", t - W(16, "sans"), rot=-0.04, size=80, fond=(70, 205, 115),
                            bord=INK, col=INK)
@@ -248,7 +247,7 @@ def construire(work):
         f_t[0] = t
         s_fond(ctx, t, lt)
         n = 1 + (t >= L(31, 0)) + (t >= L(32, 0))
-        I.reclamation(ctx, 540 + 14 * math.sin(t * 1.3), 820, 1.0 * back(lt / 0.3), n, t)
+        I.reclamation(ctx, 540, 820, 1.0 * back(lt / 0.3), n, t)
 
     def s_objection(ctx, t, lt):
         s_guichet(ctx, t, lt)
