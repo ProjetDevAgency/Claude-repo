@@ -24,6 +24,7 @@ Dès 10 vidéos mesurées : il faut faire MIEUX que la moyenne des 10 dernières
 | hausse_loyer | 22/11 10 h | réplique du méchant (« Ton loyer passe à 680 €… ») ; image 0 = le méchant seul | carte règle + calcul 600 × 1,57 % | | | | |
 | garage_travaux | 22/11 15 h | gain chiffré (« J'ai économisé 551 €… ») ; image 0 = Kévin + le garagiste | carte règle + carte « 1. tu paies le signé / 2. le reste par écrit » | | | | |
 | liste_remboursements | 22/11 20 h | liste à rebours « 5 … ; le plus gros vaut 600 € ; la compagnie compte sur ton oubli » ; image 0 = Kévin + 5 enveloppes | liste numérotée de 5 règles + partage glissé dans l'histoire (« il envoie la vidéo à sa sœur ») + « abonné à Où va ton argent » | | | | |
+| erreur_caisse | 23/11 10 h | « repost » : drame familial 1re personne sans chiffre (« Ma tante m'a fait payer l'erreur de caisse de sa propre fille »), titre écrit en haut 3,5 s, Kévin à l'image 0, accroche visuelle « le tiroir-caisse qui crache la fiche de paie » | carte « À GARDER » (3 règles) 3,4 s avant la chute | | | | |
 
 ## Accroches à tester (dans l'ordre ; une par vidéo, à partir du 22/11 20 h)
 1. **Accroche « repost »** : drame de famille à la 1re personne, sans chiffre, phrase coupée par « … », écrite en gros dans un
